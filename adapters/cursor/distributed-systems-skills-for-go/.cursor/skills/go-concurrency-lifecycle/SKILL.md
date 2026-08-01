@@ -1,6 +1,6 @@
 ---
 name: go-concurrency-lifecycle
-description: "Use for Go goroutines, channels, mutexes, cancellation, races, leaks, and worker bounds. Do not use for brokers."
+description: "Use for in-process Go concurrency ownership, cancellation, races, leaks, synchronization, and bounds. Do not use for broker semantics."
 license: Apache-2.0
 compatibility: "Go 1.24 or newer. Guidance targets the stable Go 1.25 and 1.26 families and degrades to older repository versions when required."
 ---
@@ -64,7 +64,7 @@ Read [references/lifecycles.md](references/lifecycles.md) for worker, pipeline, 
 
 ## Bound work before spawning
 
-Prefer admission control before goroutine creation:
+Prefer admission control before goroutine creation. If the caller owns the operation or must observe failure, join the work and propagate its error; a detached goroutine is valid only under the process-owned contract above. This fragment demonstrates admission only, not a complete request-scoped lifecycle:
 
 ```go
 select {

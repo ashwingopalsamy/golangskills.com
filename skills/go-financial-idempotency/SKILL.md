@@ -1,6 +1,6 @@
 ---
 name: go-financial-idempotency
-description: "Use for Go financial idempotency, key scope, fingerprints, replay, retention, and ambiguity. Do not use for read caching."
+description: "Use for financial request identity, fingerprints, replay, retention, and ambiguity. Do not use for broker dedupe."
 license: Apache-2.0
 compatibility: "Go 1.24 or newer; external idempotency guarantees must match the active provider contract."
 ---
@@ -15,11 +15,13 @@ Scope the key by tenant/principal, operation type, and target resource. Bind it 
 
 ## Serialize first use
 
-Use a durable unique constraint or equivalent atomic claim. Store state such as processing, succeeded, failed-final, and ambiguous; include response/result evidence and canonical fingerprint. Check-then-insert without a constraint races. A process-local mutex or cache cannot survive replicas and crashes.
+Use a durable unique constraint or equivalent atomic claim. Store state such as processing, succeeded, failed-final, and ambiguous; include response/result evidence, canonical fingerprint, attempt owner, lease/version, and provider operation identity. Check-then-insert without a constraint races. A process-local mutex or cache cannot survive replicas and crashes.
 
 ## Couple effect and record
 
 When local state is the effect, write idempotency record, domain transition, ledger journal, and stored result in one transaction. For an external provider, persist the attempt before calling, reuse the same provider identity, and reconcile ambiguity before issuing a new operation.
+
+Recover abandoned `processing` ownership with a bounded lease and compare-and-swap or fencing transition. Lease expiry proves only that the prior worker lost local ownership; it never proves an external effect failed. A taker-over must first query or reconcile using the stable provider identity, then either record the discovered result or repeat only under the provider's same-identity guarantee.
 
 ## Retention and replay
 

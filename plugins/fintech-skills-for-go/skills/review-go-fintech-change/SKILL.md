@@ -1,6 +1,6 @@
 ---
 name: review-go-fintech-change
-description: "Use for Go diff review across money, ledgers, payments, settlement, reconciliation, and audit. Do not use for general work."
+description: "Use as lead for fintech Go diff/PR review: money, payments, settlement, payment data, and audit. Do not use for general work."
 license: Apache-2.0
 compatibility: "Go 1.24 or newer; product, provider, rail, and compliance contracts control the review."
 ---
@@ -12,6 +12,8 @@ Treat any path that can invent, duplicate, lose, misstate, or conceal money as f
 ## Trace the financial effect
 
 Follow authenticated command, money representation, idempotency identity, state transition, provider attempt, ledger posting, event, settlement evidence, reconciliation, response, and audit record. Identify exact transaction boundaries and unknown-outcome windows.
+
+Load the focused skills that own the changed invariant. Common compositions are payment lifecycle + financial idempotency + data consistency for money-moving mutations; settlement + money/ledger + message processing for replayed adjustments; and fintech security/compliance + security hardening for payment-data code with an implementation exploit.
 
 ## Critical schedules
 

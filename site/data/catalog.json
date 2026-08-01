@@ -69,7 +69,7 @@
       "name": "go-clearing-settlement-reconciliation",
       "collection": "fintech-skills-for-go",
       "path": "skills/go-clearing-settlement-reconciliation",
-      "description": "Use for Go clearing, settlement, payouts, statements, and item reconciliation. Do not use for payment authorization.",
+      "description": "Use after capture for Go settlement, reconciliation, exceptions, and repair. Do not use for initial authorization.",
       "compatibility": "Go 1.24 or newer; rail cutoffs, calendars, reports, and finality come from current provider and scheme contracts.",
       "display_name": "Go Settlement and Reconciliation",
       "short_description": "Match every external money movement",
@@ -164,7 +164,7 @@
       "name": "go-concurrency-lifecycle",
       "collection": "distributed-systems-skills-for-go",
       "path": "skills/go-concurrency-lifecycle",
-      "description": "Use for Go goroutines, channels, mutexes, cancellation, races, leaks, and worker bounds. Do not use for brokers.",
+      "description": "Use for in-process Go concurrency ownership, cancellation, races, leaks, synchronization, and bounds. Do not use for broker semantics.",
       "compatibility": "Go 1.24 or newer. Guidance targets the stable Go 1.25 and 1.26 families and degrades to older repository versions when required.",
       "display_name": "Go Concurrency Lifecycle",
       "short_description": "Own goroutines, capacity, and shutdown",
@@ -259,7 +259,7 @@
       "name": "go-data-consistency",
       "collection": "distributed-systems-skills-for-go",
       "path": "skills/go-data-consistency",
-      "description": "Use for Go transactions, isolation, constraints, ambiguous commits, caches, and migrations. Do not use for brokers.",
+      "description": "Use for Go transaction, cache, migration, and DB/broker consistency. Do not use for broker ACK or replay.",
       "compatibility": "Go 1.24 or newer; database, driver, and cache semantics must be verified against deployed versions.",
       "display_name": "Go Data Consistency",
       "short_description": "Preserve durable invariants under races",
@@ -354,7 +354,7 @@
       "name": "go-distributed-coordination",
       "collection": "distributed-systems-skills-for-go",
       "path": "skills/go-distributed-coordination",
-      "description": "Use for Go leases, fencing, distributed locks, sagas, and multi-service recovery. Do not use for local mutexes.",
+      "description": "Use for Go cross-process ownership, leases, fencing, locks, sagas, and recovery. Do not use for local mutexes.",
       "compatibility": "Go 1.24 or newer; coordination guarantees are specific to the deployed service and client version.",
       "display_name": "Go Distributed Coordination",
       "short_description": "Fence stale distributed owners",
@@ -450,7 +450,7 @@
       "name": "go-financial-idempotency",
       "collection": "fintech-skills-for-go",
       "path": "skills/go-financial-idempotency",
-      "description": "Use for Go financial idempotency, key scope, fingerprints, replay, retention, and ambiguity. Do not use for read caching.",
+      "description": "Use for financial request identity, fingerprints, replay, retention, and ambiguity. Do not use for broker dedupe.",
       "compatibility": "Go 1.24 or newer; external idempotency guarantees must match the active provider contract.",
       "display_name": "Go Financial Idempotency",
       "short_description": "Prevent duplicate financial effects",
@@ -545,7 +545,7 @@
       "name": "go-fintech-security-compliance",
       "collection": "fintech-skills-for-go",
       "path": "skills/go-fintech-security-compliance",
-      "description": "Use for Go payment-data scope, tokenization, authorization, audit, retention, and PCI controls. Do not use as certification.",
+      "description": "Use for Go payment-data governance, tokenization, audit, retention, and PCI. Do not use for generic exploits or certification.",
       "compatibility": "Go 1.24 or newer; standards and regulatory obligations require current qualified interpretation for the actual system.",
       "display_name": "Go Fintech Security and Compliance",
       "short_description": "Constrain financial trust and data scope",
@@ -641,7 +641,7 @@
       "name": "go-language-engineering",
       "collection": "engineering-skills-for-go",
       "path": "skills/go-language-engineering",
-      "description": "Use for Go semantics, ownership, errors, interfaces, generics, and data. Do not use for service design.",
+      "description": "Use for local Go semantics, errors, interfaces, generics, and data. Do not use for exported API evolution.",
       "compatibility": "Go 1.24 or newer; current guidance targets Go 1.25 and 1.26, with older forms labeled legacy.",
       "display_name": "Go Language Engineering",
       "short_description": "Make Go semantics and ownership explicit",
@@ -737,7 +737,7 @@
       "name": "go-message-processing",
       "collection": "distributed-systems-skills-for-go",
       "path": "skills/go-message-processing",
-      "description": "Use for Go broker delivery, deduplication, ordering, acknowledgements, outbox, and inbox. Do not use for channels.",
+      "description": "Use for Go broker delivery, ACK, replay, ordering, poison recovery, outbox, or inbox. Do not use for in-process channels.",
       "compatibility": "Go 1.24 or newer. Broker guarantees and client APIs are version-specific and must be verified against the deployed system.",
       "display_name": "Go Message Processing",
       "short_description": "Make redelivery and ordering safe",
@@ -834,7 +834,7 @@
       "name": "go-money-and-ledgers",
       "collection": "fintech-skills-for-go",
       "path": "skills/go-money-and-ledgers",
-      "description": "Use for Go money, currency, rounding, allocation, journals, balances, and reversals. Do not use for provider states.",
+      "description": "Use for Go money, rounding, allocation, journal, balance, and reversal invariants. Do not use for provider state.",
       "compatibility": "Go 1.24 or newer; currency and accounting rules require current product and jurisdiction evidence.",
       "display_name": "Go Money and Ledgers",
       "short_description": "Keep monetary and ledger state exact",
@@ -920,16 +920,27 @@
             "currency digits",
             "cash rounding"
           ]
+        },
+        {
+          "title": "Modern Treasury: How to Scale a Ledger",
+          "url": "https://www.moderntreasury.com/journal/how-to-scale-a-ledger-part-i",
+          "publisher": "Modern Treasury",
+          "kind": "operational",
+          "verified_on": "2026-08-18",
+          "supports": [
+            "journal immutability",
+            "ledger invariants"
+          ]
         }
       ],
-      "source_count": 2,
+      "source_count": 3,
       "evaluation_count": 4
     },
     {
       "name": "go-payment-lifecycles",
       "collection": "fintech-skills-for-go",
       "path": "skills/go-payment-lifecycles",
-      "description": "Use for Go payment authorization, capture, refund, disputes, webhooks, and ambiguity. Do not use for ledger arithmetic.",
+      "description": "Use for provider/rail payment authorization, capture, refund, webhook, and ambiguous states. Do not use for request replay identity.",
       "compatibility": "Go 1.24 or newer; provider, rail, and scheme state semantics are version- and region-specific.",
       "display_name": "Go Payment Lifecycles",
       "short_description": "Model payment evidence and transitions",
@@ -1118,7 +1129,7 @@
       "name": "go-production-operations",
       "collection": "engineering-skills-for-go",
       "path": "skills/go-production-operations",
-      "description": "Use for Go startup, telemetry, health, shutdown, containers, Kubernetes, and releases. Do not use for domain logic.",
+      "description": "Use for Go process/deployment lifecycle, health, telemetry, drain, Kubernetes, and releases. Do not use for domain logic.",
       "compatibility": "Go 1.24 or newer; deployment-platform behavior must be verified against the active environment.",
       "display_name": "Go Production Operations",
       "short_description": "Own Go process and incident lifecycles",
@@ -1213,7 +1224,7 @@
       "name": "go-project-and-api-design",
       "collection": "engineering-skills-for-go",
       "path": "skills/go-project-and-api-design",
-      "description": "Use for Go packages, modules, APIs, dependencies, and evolution. Do not use for local code or protocols.",
+      "description": "Use for exported Go APIs, packages, modules, versioning, and compatibility. Do not use for local semantics or wire protocols.",
       "compatibility": "Go 1.24 or newer; module and toolchain behavior must match the repository's declared versions.",
       "display_name": "Go Project and API Design",
       "short_description": "Shape packages, APIs, and dependencies",
@@ -1309,7 +1320,7 @@
       "name": "go-security-hardening",
       "collection": "engineering-skills-for-go",
       "path": "skills/go-security-hardening",
-      "description": "Use for Go authorization, SSRF, files, commands, crypto, secrets, or supply chain. Do not use for PCI scope.",
+      "description": "Use for generic Go exploit prevention: authz, SSRF, files, commands, crypto, secrets, and supply chain. Do not use for PCI scope.",
       "compatibility": "Go 1.24 or newer; security-sensitive APIs and dependency advisories require current verification.",
       "display_name": "Go Security Hardening",
       "short_description": "Trace and close Go trust-boundary paths",
@@ -1404,7 +1415,7 @@
       "name": "go-service-boundaries",
       "collection": "engineering-skills-for-go",
       "path": "skills/go-service-boundaries",
-      "description": "Use for Go HTTP, gRPC, GraphQL, or OpenAPI boundaries and streams. Do not use for domain or retry policy.",
+      "description": "Use for Go HTTP/gRPC/GraphQL/OpenAPI resources, bodies, streams, and shutdown. Do not use for retry policy.",
       "compatibility": "Go 1.24 or newer; protocol and library behavior must be verified against deployed versions.",
       "display_name": "Go Service Boundaries",
       "short_description": "Protect network protocol boundaries",
@@ -1503,7 +1514,7 @@
       "name": "go-service-resilience",
       "collection": "distributed-systems-skills-for-go",
       "path": "skills/go-service-resilience",
-      "description": "Use for Go deadlines, retries, admission, load shedding, fallbacks, and recovery. Do not use for local speed or brokers.",
+      "description": "Use for cross-service Go deadlines, retries, admission, shedding, and recovery. Do not use for commits, brokers, or local speed.",
       "compatibility": "Go 1.24 or newer. Policies are transport-neutral; verify client and dependency behavior against repository versions.",
       "display_name": "Go Service Resilience",
       "short_description": "Bound retries, deadlines, and overload",
@@ -1601,7 +1612,7 @@
       "name": "go-testing-and-verification",
       "collection": "engineering-skills-for-go",
       "path": "skills/go-testing-and-verification",
-      "description": "Use for Go integration, fuzz, race, leak, property, or deterministic tests. Do not use for profiling.",
+      "description": "Use when asked to design or debug Go tests, fuzzing, race/leak checks, or deterministic verification. Do not use for profiling.",
       "compatibility": "Go 1.24 or newer; testing/synctest guidance targets Go 1.25 and 1.26.",
       "display_name": "Go Testing and Verification",
       "short_description": "Build executable Go correctness evidence",
@@ -1696,7 +1707,7 @@
       "name": "review-go-distributed-change",
       "collection": "distributed-systems-skills-for-go",
       "path": "skills/review-go-distributed-change",
-      "description": "Use for Go diff review across stores, brokers, retries, leases, ordering, and recovery. Do not use for general or fintech work.",
+      "description": "Use for distributed Go diff/PR review. Do not use when fintech correctness dominates.",
       "compatibility": "Go 1.24 or newer; repository and deployed-system guarantees control the review.",
       "display_name": "Review Go Distributed Change",
       "short_description": "Find distributed failure schedules",
@@ -1786,16 +1797,27 @@
           "supports": [
             "concurrent transaction schedules"
           ]
+        },
+        {
+          "title": "OpenAI Evals design guide",
+          "url": "https://platform.openai.com/docs/guides/evals",
+          "publisher": "OpenAI",
+          "kind": "primary",
+          "verified_on": "2026-08-18",
+          "supports": [
+            "evaluation methodology",
+            "reproducibility"
+          ]
         }
       ],
-      "source_count": 2,
+      "source_count": 3,
       "evaluation_count": 4
     },
     {
       "name": "review-go-engineering-change",
       "collection": "engineering-skills-for-go",
       "path": "skills/review-go-engineering-change",
-      "description": "Use for Go diff review across language, APIs, security, compatibility, and operations. Do not use for distributed or fintech work.",
+      "description": "Use for general Go diff/PR review. Do not use when distributed-systems or fintech correctness dominates.",
       "compatibility": "Go 1.24 or newer; changed repository contracts outrank generic conventions.",
       "display_name": "Review Go Engineering Change",
       "short_description": "Find causal defects in a Go diff",
@@ -1889,16 +1911,27 @@
             "language correctness",
             "compatibility"
           ]
+        },
+        {
+          "title": "OpenAI Evals design guide",
+          "url": "https://platform.openai.com/docs/guides/evals",
+          "publisher": "OpenAI",
+          "kind": "primary",
+          "verified_on": "2026-08-18",
+          "supports": [
+            "evaluation methodology",
+            "reproducibility"
+          ]
         }
       ],
-      "source_count": 2,
+      "source_count": 3,
       "evaluation_count": 4
     },
     {
       "name": "review-go-fintech-change",
       "collection": "fintech-skills-for-go",
       "path": "skills/review-go-fintech-change",
-      "description": "Use for Go diff review across money, ledgers, payments, settlement, reconciliation, and audit. Do not use for general work.",
+      "description": "Use as lead for fintech Go diff/PR review: money, payments, settlement, payment data, and audit. Do not use for general work.",
       "compatibility": "Go 1.24 or newer; product, provider, rail, and compliance contracts control the review.",
       "display_name": "Review Go Fintech Change",
       "short_description": "Find financial-integrity defects",
@@ -1991,9 +2024,20 @@
             "payment-data boundaries",
             "audit"
           ]
+        },
+        {
+          "title": "OpenAI Evals design guide",
+          "url": "https://platform.openai.com/docs/guides/evals",
+          "publisher": "OpenAI",
+          "kind": "primary",
+          "verified_on": "2026-08-18",
+          "supports": [
+            "evaluation methodology",
+            "reproducibility"
+          ]
         }
       ],
-      "source_count": 2,
+      "source_count": 3,
       "evaluation_count": 4
     }
   ],

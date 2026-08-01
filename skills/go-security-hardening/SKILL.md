@@ -1,6 +1,6 @@
 ---
 name: go-security-hardening
-description: "Use for Go authorization, SSRF, files, commands, crypto, secrets, or supply chain. Do not use for PCI scope."
+description: "Use for generic Go exploit prevention: authz, SSRF, files, commands, crypto, secrets, and supply chain. Do not use for PCI scope."
 license: Apache-2.0
 compatibility: "Go 1.24 or newer; security-sensitive APIs and dependency advisories require current verification."
 ---

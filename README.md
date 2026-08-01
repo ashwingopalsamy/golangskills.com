@@ -1,78 +1,69 @@
-# Engineering Skills for Go
+# Go Engineering Skills by Ashwin Gopalsamy
 
-Focused Agent Skills for production Go systems. The initial collection targets failure boundaries where generic coding advice is least reliable: goroutine lifecycles, HTTP boundaries, SQL transactions, message delivery, distributed-call resilience, and production change review.
+Evidence-backed Agent Skills for production Go, distributed systems, and fintech—authored by [Ashwin Gopalsamy](https://ashwingopalsamy.in).
 
-This project is independent and is not affiliated with or endorsed by the Go project or Google. “Go” refers to the Go programming language; no Go logo is used.
+The ecosystem ships three non-overlapping installable collections:
 
-## Why this collection exists
+| Collection | Skills | Owns |
+|---|---:|---|
+| [Engineering Skills for Go](docs/collections/engineering.md) | 8 | Language, APIs, service boundaries, tests, performance, security, operations, general review |
+| [Distributed Systems Skills for Go](docs/collections/distributed-systems.md) | 6 | Concurrency, consistency, messaging, resilience, coordination, distributed review |
+| [Fintech Skills for Go](docs/collections/fintech.md) | 6 | Money, ledgers, payment lifecycles, idempotency, settlement, reconciliation, compliance, fintech review |
 
-More skills are not automatically better. Every installed skill spends discovery context, every activated skill can conflict with repository evidence, and executable resources expand the trust boundary. This repository therefore optimizes for measurable marginal value:
+Install one, two, or all three. No skill appears in more than one collection.
 
-- six narrow skills instead of an always-on style encyclopedia;
-- under 4,000 total discovery characters, including names and paths;
-- source claims classified as normative, primary, operational, or organization-specific;
-- one eval suite per skill, including negative-routing cases;
-- no executable code inside published skills;
-- generated catalogs and plugin packages checked against canonical source;
-- explicit compatibility levels instead of “works everywhere” claims.
+## Why this is different
 
-The design and comparative baseline are recorded in [docs/architecture.md](docs/architecture.md) and [docs/benchmark.md](docs/benchmark.md).
+- 20 focused skills with progressive one-hop references, not a monolithic prompt.
+- 7,746 conservative discovery characters for all three collections, including a 160-character path allowance per skill; every collection is below 4,000.
+- 80 development scenarios covering routing, confusion negatives, and deterministic quality criteria, including 12 executable failure-mode fixtures.
+- 21 primary-evidence claims with scope, qualifications, counterexamples, Go versions, owners, and provenance.
+- All six local Go reference snapshots locked by remote, commit, license, 729 file hashes, 98 canonical skill entrypoints, and 10,165 material-item dispositions.
+- One canonical corpus generates Codex, Claude Code, Cursor, OpenCode, catalog, search, site, and `llms.txt` artifacts.
+- Published skills contain no executable resources or portable tool grants.
 
-## Skills
-
-| Skill | Use it for |
-| --- | --- |
-| `go-concurrency-lifecycle` | Goroutine ownership, cancellation, bounded work, synchronization, races, and leaks |
-| `go-http-boundaries` | `net/http` server/client timeouts, body ownership, shutdown, middleware, and overload behavior |
-| `go-sql-transactions` | Transaction boundaries, isolation, retries, connection pools, and commit ambiguity |
-| `go-message-processing` | At-least-once consumers, idempotency, ordering, acknowledgments, poison messages, and outbox/inbox design |
-| `go-service-resilience` | Deadlines, retry budgets, backoff, jitter, load shedding, and partial failure across remote calls |
-| `review-go-production-change` | Risk-driven review of a Go change that touches concurrency, persistence, remote calls, or operability |
-
-The generated machine catalog is [catalog/catalog.json](catalog/catalog.json).
-
-The [agent-evaluation protocol and exploratory results](docs/evaluations.md) separate structural quality from observed model improvement. The initial single-model run found precise routing and only a small quality delta, so the collection does not claim universal task-performance superiority.
+These are verified structural properties, not a claim of empirical superiority. `catalog/benchmark-status.json` remains `evidence-pending`, and `skillctl release check` refuses a category-leadership release until the benchmark gates pass.
 
 ## Install
 
-### Codex plugin
+See [docs/install.md](docs/install.md) for client-specific layouts. The repository marketplace contains:
 
-```text
-codex plugin marketplace add ashwingopalsamy/golangskills.com
-codex plugin add engineering-skills-for-go@golangskills
-```
+- `engineering-skills-for-go`
+- `distributed-systems-skills-for-go`
+- `fintech-skills-for-go`
 
-The Codex package includes per-skill `agents/openai.yaml` metadata and otherwise uses the same portable skill content.
-
-### Skills CLI
-
-Use the open ecosystem installer and select only the skills relevant to the repository:
+The canonical root also supports selected-skill installation through open Agent Skills tooling:
 
 ```text
 npx skills add ashwingopalsamy/golangskills.com
 ```
 
-The installer maps canonical skills to the supported location for Codex, Claude Code, GitHub Copilot, Gemini CLI, Cursor, OpenCode, Windsurf, Cline, and Roo Code. Platform behavior and evidence are documented in [docs/compatibility.md](docs/compatibility.md).
-
-### Manual installation
-
-Copy individual directories from `skills/` to the agent’s documented project skill directory. Avoid installing the entire collection when one or two skills cover the work.
-
-## Repository checks
+## Engineer the corpus
 
 ```text
+go run ./cmd/skillctl audit refs -refs /path/to/go-refs
 go run ./cmd/skillctl check
 go run ./cmd/skillctl generate
-go test ./...
-go vet ./...
+go run ./cmd/skillctl package
+go run ./cmd/skillctl eval preflight
+go run ./cmd/skillctl eval run -runner codex -arm ours -kind routing -output evaluations/runs/ours-routing.jsonl
+go run ./cmd/skillctl eval score -input evaluations/runs/ours-routing.jsonl -output evaluations/scores/ours-routing.jsonl
+go run ./cmd/skillctl eval report -input evaluations/scores/ours-routing.jsonl
+go run ./cmd/skillctl release check
 ```
 
-`check` validates the open specification subset, metadata budgets, source provenance, routing eval coverage, relative links, cross-skill relations, and generated output freshness. `generate` updates OpenAI UI metadata, the public catalog, and the Codex/Claude plugin package.
+`check` validates schema v2, claim ownership and exposed evidence, complete reference disposition coverage, source freshness, discovery budgets, activation overlap, fixture paths, links, relations, licenses, and generated freshness. The eval harness creates a new isolated directory and ephemeral session per cell, randomizes order, uses opaque arm labels, resumes JSONL artifacts, scores deterministic graders first, and reports Wilson confidence intervals. Fixture cells preserve edited Go sources and allowlisted `go test` output. Competitor routing requires a committed `-routing-map`; explicit competitor runs require a committed `-skill-map`.
 
-## Contributing
+## Evidence boundary
 
-Start with [CONTRIBUTING.md](CONTRIBUTING.md). A new skill must identify a failure mode that existing agents handle inconsistently, own a non-overlapping job, cite primary evidence, stay within the repository budgets, and include paired evaluation scenarios. Generic style preferences do not qualify as language requirements. The [naming decision](docs/naming.md) and [coverage roadmap](docs/roadmap.md) record the public identity and concrete gaps.
+Codex is the primary behaviorally validated client. Other generated adapters have structural compatibility evidence; cross-client behavioral claims require equivalent authenticated runners. See [docs/compatibility.md](docs/compatibility.md).
+
+## Attribution and independence
+
+Canonical prose is original writing derived from primary sources. Competitor text and code are not copied. Reference licenses and policies are recorded in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) and [research/corpus-lock.json](research/corpus-lock.json).
+
+This independent project is not affiliated with or endorsed by Google or the Go project. “Go” and the Go gopher are trademarks of Google LLC; no Go logo is used.
 
 ## License
 
-Apache-2.0. External sources are linked, not copied. Their trademarks and copyrights remain with their owners.
+Apache-2.0.

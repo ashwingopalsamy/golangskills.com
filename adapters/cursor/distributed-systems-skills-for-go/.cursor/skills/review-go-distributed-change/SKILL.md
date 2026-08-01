@@ -1,6 +1,6 @@
 ---
 name: review-go-distributed-change
-description: "Use for Go diff review across stores, brokers, retries, leases, ordering, and recovery. Do not use for general or fintech work."
+description: "Use for distributed Go diff/PR review. Do not use when fintech correctness dominates."
 license: Apache-2.0
 compatibility: "Go 1.24 or newer; repository and deployed-system guarantees control the review."
 ---
@@ -12,6 +12,8 @@ Find the failure schedule that violates a system invariant.
 ## Build the state/effect graph
 
 Trace admission, local reads, decisions, durable writes, remote calls, publication, acknowledgement, response, and recovery. Mark transaction boundaries, goroutine owners, retry owners, ordering keys, leases, queues, and version transitions.
+
+Load the focused distributed skills for the changed path; this review skill coordinates findings rather than replacing their protocol and storage references.
 
 ## Test causal schedules
 

@@ -1,6 +1,6 @@
 ---
 name: review-go-engineering-change
-description: "Use for Go diff review across language, APIs, security, compatibility, and operations. Do not use for distributed or fintech work."
+description: "Use for general Go diff/PR review. Do not use when distributed-systems or fintech correctness dominates."
 license: Apache-2.0
 compatibility: "Go 1.24 or newer; changed repository contracts outrank generic conventions."
 ---
@@ -12,6 +12,8 @@ Review behavior created by the diff, not resemblance to a checklist.
 ## Establish scope
 
 Inspect changed code and only the callers, callees, schemas, configs, tests, and history needed to determine the changed contract. State the input, decision, side effects, output, and compatibility surfaces.
+
+Load the focused engineering skills for the risks actually present; this review skill sets finding quality and precedence rather than duplicating their conditional guidance.
 
 ## Trace applicable risk
 

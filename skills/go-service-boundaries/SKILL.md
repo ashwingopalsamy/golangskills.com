@@ -1,6 +1,6 @@
 ---
 name: go-service-boundaries
-description: "Use for Go HTTP, gRPC, GraphQL, or OpenAPI boundaries and streams. Do not use for domain or retry policy."
+description: "Use for Go HTTP/gRPC/GraphQL/OpenAPI resources, bodies, streams, and shutdown. Do not use for retry policy."
 license: Apache-2.0
 compatibility: "Go 1.24 or newer; protocol and library behavior must be verified against deployed versions."
 ---

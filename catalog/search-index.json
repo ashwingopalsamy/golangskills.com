@@ -1,7 +1,7 @@
 [
   {
     "collection": "fintech-skills-for-go",
-    "description": "Use for Go clearing, settlement, payouts, statements, and item reconciliation. Do not use for payment authorization.",
+    "description": "Use after capture for Go settlement, reconciliation, exceptions, and repair. Do not use for initial authorization.",
     "name": "go-clearing-settlement-reconciliation",
     "risk_domains": [
       "settlement",
@@ -19,7 +19,7 @@
   },
   {
     "collection": "distributed-systems-skills-for-go",
-    "description": "Use for Go goroutines, channels, mutexes, cancellation, races, leaks, and worker bounds. Do not use for brokers.",
+    "description": "Use for in-process Go concurrency ownership, cancellation, races, leaks, synchronization, and bounds. Do not use for broker semantics.",
     "name": "go-concurrency-lifecycle",
     "risk_domains": [
       "concurrency",
@@ -37,7 +37,7 @@
   },
   {
     "collection": "distributed-systems-skills-for-go",
-    "description": "Use for Go transactions, isolation, constraints, ambiguous commits, caches, and migrations. Do not use for brokers.",
+    "description": "Use for Go transaction, cache, migration, and DB/broker consistency. Do not use for broker ACK or replay.",
     "name": "go-data-consistency",
     "risk_domains": [
       "consistency",
@@ -55,7 +55,7 @@
   },
   {
     "collection": "distributed-systems-skills-for-go",
-    "description": "Use for Go leases, fencing, distributed locks, sagas, and multi-service recovery. Do not use for local mutexes.",
+    "description": "Use for Go cross-process ownership, leases, fencing, locks, sagas, and recovery. Do not use for local mutexes.",
     "name": "go-distributed-coordination",
     "risk_domains": [
       "coordination",
@@ -74,7 +74,7 @@
   },
   {
     "collection": "fintech-skills-for-go",
-    "description": "Use for Go financial idempotency, key scope, fingerprints, replay, retention, and ambiguity. Do not use for read caching.",
+    "description": "Use for financial request identity, fingerprints, replay, retention, and ambiguity. Do not use for broker dedupe.",
     "name": "go-financial-idempotency",
     "risk_domains": [
       "financial-integrity",
@@ -92,7 +92,7 @@
   },
   {
     "collection": "fintech-skills-for-go",
-    "description": "Use for Go payment-data scope, tokenization, authorization, audit, retention, and PCI controls. Do not use as certification.",
+    "description": "Use for Go payment-data governance, tokenization, audit, retention, and PCI. Do not use for generic exploits or certification.",
     "name": "go-fintech-security-compliance",
     "risk_domains": [
       "security",
@@ -111,7 +111,7 @@
   },
   {
     "collection": "engineering-skills-for-go",
-    "description": "Use for Go semantics, ownership, errors, interfaces, generics, and data. Do not use for service design.",
+    "description": "Use for local Go semantics, errors, interfaces, generics, and data. Do not use for exported API evolution.",
     "name": "go-language-engineering",
     "risk_domains": [
       "correctness",
@@ -129,7 +129,7 @@
   },
   {
     "collection": "distributed-systems-skills-for-go",
-    "description": "Use for Go broker delivery, deduplication, ordering, acknowledgements, outbox, and inbox. Do not use for channels.",
+    "description": "Use for Go broker delivery, ACK, replay, ordering, poison recovery, outbox, or inbox. Do not use for in-process channels.",
     "name": "go-message-processing",
     "risk_domains": [
       "delivery",
@@ -148,7 +148,7 @@
   },
   {
     "collection": "fintech-skills-for-go",
-    "description": "Use for Go money, currency, rounding, allocation, journals, balances, and reversals. Do not use for provider states.",
+    "description": "Use for Go money, rounding, allocation, journal, balance, and reversal invariants. Do not use for provider state.",
     "name": "go-money-and-ledgers",
     "risk_domains": [
       "financial-integrity",
@@ -166,7 +166,7 @@
   },
   {
     "collection": "fintech-skills-for-go",
-    "description": "Use for Go payment authorization, capture, refund, disputes, webhooks, and ambiguity. Do not use for ledger arithmetic.",
+    "description": "Use for provider/rail payment authorization, capture, refund, webhook, and ambiguous states. Do not use for request replay identity.",
     "name": "go-payment-lifecycles",
     "risk_domains": [
       "financial-integrity",
@@ -202,7 +202,7 @@
   },
   {
     "collection": "engineering-skills-for-go",
-    "description": "Use for Go startup, telemetry, health, shutdown, containers, Kubernetes, and releases. Do not use for domain logic.",
+    "description": "Use for Go process/deployment lifecycle, health, telemetry, drain, Kubernetes, and releases. Do not use for domain logic.",
     "name": "go-production-operations",
     "risk_domains": [
       "availability",
@@ -220,7 +220,7 @@
   },
   {
     "collection": "engineering-skills-for-go",
-    "description": "Use for Go packages, modules, APIs, dependencies, and evolution. Do not use for local code or protocols.",
+    "description": "Use for exported Go APIs, packages, modules, versioning, and compatibility. Do not use for local semantics or wire protocols.",
     "name": "go-project-and-api-design",
     "risk_domains": [
       "compatibility",
@@ -238,7 +238,7 @@
   },
   {
     "collection": "engineering-skills-for-go",
-    "description": "Use for Go authorization, SSRF, files, commands, crypto, secrets, or supply chain. Do not use for PCI scope.",
+    "description": "Use for generic Go exploit prevention: authz, SSRF, files, commands, crypto, secrets, and supply chain. Do not use for PCI scope.",
     "name": "go-security-hardening",
     "risk_domains": [
       "security",
@@ -256,7 +256,7 @@
   },
   {
     "collection": "engineering-skills-for-go",
-    "description": "Use for Go HTTP, gRPC, GraphQL, or OpenAPI boundaries and streams. Do not use for domain or retry policy.",
+    "description": "Use for Go HTTP/gRPC/GraphQL/OpenAPI resources, bodies, streams, and shutdown. Do not use for retry policy.",
     "name": "go-service-boundaries",
     "risk_domains": [
       "correctness",
@@ -275,7 +275,7 @@
   },
   {
     "collection": "distributed-systems-skills-for-go",
-    "description": "Use for Go deadlines, retries, admission, load shedding, fallbacks, and recovery. Do not use for local speed or brokers.",
+    "description": "Use for cross-service Go deadlines, retries, admission, shedding, and recovery. Do not use for commits, brokers, or local speed.",
     "name": "go-service-resilience",
     "risk_domains": [
       "availability",
@@ -294,7 +294,7 @@
   },
   {
     "collection": "engineering-skills-for-go",
-    "description": "Use for Go integration, fuzz, race, leak, property, or deterministic tests. Do not use for profiling.",
+    "description": "Use when asked to design or debug Go tests, fuzzing, race/leak checks, or deterministic verification. Do not use for profiling.",
     "name": "go-testing-and-verification",
     "risk_domains": [
       "correctness",
@@ -312,7 +312,7 @@
   },
   {
     "collection": "distributed-systems-skills-for-go",
-    "description": "Use for Go diff review across stores, brokers, retries, leases, ordering, and recovery. Do not use for general or fintech work.",
+    "description": "Use for distributed Go diff/PR review. Do not use when fintech correctness dominates.",
     "name": "review-go-distributed-change",
     "risk_domains": [
       "concurrency",
@@ -331,7 +331,7 @@
   },
   {
     "collection": "engineering-skills-for-go",
-    "description": "Use for Go diff review across language, APIs, security, compatibility, and operations. Do not use for distributed or fintech work.",
+    "description": "Use for general Go diff/PR review. Do not use when distributed-systems or fintech correctness dominates.",
     "name": "review-go-engineering-change",
     "risk_domains": [
       "correctness",
@@ -350,7 +350,7 @@
   },
   {
     "collection": "fintech-skills-for-go",
-    "description": "Use for Go diff review across money, ledgers, payments, settlement, reconciliation, and audit. Do not use for general work.",
+    "description": "Use as lead for fintech Go diff/PR review: money, payments, settlement, payment data, and audit. Do not use for general work.",
     "name": "review-go-fintech-change",
     "risk_domains": [
       "financial-integrity",

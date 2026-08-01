@@ -145,7 +145,10 @@ func runEval(arguments []string, output io.Writer) error {
 		model := flags.String("model", "", "runner model")
 		arm := flags.String("arm", "ours", "benchmark arm")
 		skillsRoot := flags.String("skills-root", "", "skills directory for the arm")
+		routingMapPath := flags.String("routing-map", "", "locked JSON map from canonical skill/case to accepted arm routes")
+		skillMapPath := flags.String("skill-map", "", "locked JSON map from canonical skill IDs to arm skill IDs")
 		kind := flags.String("kind", "all", "routing, quality, or all")
+		selectedCase := flags.String("case", "", "one canonical skill/case key to execute")
 		explicit := flags.Bool("explicit", false, "install and invoke only the expected canonical skill")
 		limit := flags.Int("limit", 0, "maximum cases")
 		seed := flags.Int64("seed", 1, "randomization seed")
@@ -158,9 +161,20 @@ func runEval(arguments []string, output io.Writer) error {
 		if err != nil {
 			return err
 		}
+		if _, err := corpus.Validate(collection); err != nil {
+			return err
+		}
+		routingMap, err := loadRoutingMap(*routingMapPath)
+		if err != nil {
+			return err
+		}
+		skillMap, err := loadSkillMap(*skillMapPath)
+		if err != nil {
+			return err
+		}
 		written, err := evaluation.Run(context.Background(), collection, evaluation.RunOptions{
-			Runner: *runner, Model: *model, Arm: *arm, SkillsRoot: *skillsRoot, Kind: *kind,
-			ExplicitSkill: *explicit, Limit: *limit, Seed: *seed, Timeout: *timeout,
+			Runner: *runner, Model: *model, Arm: *arm, SkillsRoot: *skillsRoot, Kind: *kind, Case: *selectedCase,
+			ExplicitSkill: *explicit, RoutingMap: routingMap, SkillMap: skillMap, Limit: *limit, Seed: *seed, Timeout: *timeout,
 			OutputPath: filepath.Join(collection.RepoRoot, filepath.FromSlash(*outputPath)),
 		})
 		if err != nil {
@@ -203,6 +217,46 @@ func runEval(arguments []string, output io.Writer) error {
 	default:
 		return fmt.Errorf("unknown eval command %q", arguments[0])
 	}
+}
+
+func loadSkillMap(path string) (map[string]string, error) {
+	if path == "" {
+		return nil, nil
+	}
+	content, err := os.ReadFile(path)
+	if err != nil {
+		return nil, fmt.Errorf("read skill map: %w", err)
+	}
+	var result map[string]string
+	if err := json.Unmarshal(content, &result); err != nil {
+		return nil, fmt.Errorf("decode skill map: %w", err)
+	}
+	for canonical, armSkill := range result {
+		if canonical == "" || armSkill == "" {
+			return nil, fmt.Errorf("skill map entry %q must name a non-empty arm skill", canonical)
+		}
+	}
+	return result, nil
+}
+
+func loadRoutingMap(path string) (map[string][]string, error) {
+	if path == "" {
+		return nil, nil
+	}
+	content, err := os.ReadFile(path)
+	if err != nil {
+		return nil, fmt.Errorf("read routing map: %w", err)
+	}
+	var result map[string][]string
+	if err := json.Unmarshal(content, &result); err != nil {
+		return nil, fmt.Errorf("decode routing map: %w", err)
+	}
+	for key, routes := range result {
+		if key == "" || len(routes) == 0 {
+			return nil, fmt.Errorf("routing map entry %q must have at least one route", key)
+		}
+	}
+	return result, nil
 }
 
 func runRelease(arguments []string, output io.Writer) error {

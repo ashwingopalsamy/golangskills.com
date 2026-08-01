@@ -26,7 +26,7 @@ Budgets enforced by `skillctl`:
 
 - name: at most 64 characters and equal to the directory name;
 - description: at most 500 characters in this repository;
-- conservative serialized discovery payload: at most 6,000 characters, including a 160-character location allowance per skill and below Codex’s 8,000-character cap;
+- conservative serialized discovery payload: at most 4,000 characters per collection and 7,800 for all collections, including a 160-character location allowance per skill;
 - `SKILL.md`: at most 300 lines and 3,000 words;
 - at least two positive routing cases, two negative routing cases, and two quality cases;
 - every material technical claim traceable to a current primary source or explicitly scoped operational source.
