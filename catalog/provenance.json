@@ -1,0 +1,7 @@
+{
+  "claim_count": 21,
+  "claim_ledger": "knowledge/claims/canonical.json",
+  "corpus_lock": "research/corpus-lock.json",
+  "notices": "THIRD_PARTY_NOTICES.md",
+  "schema_version": 2
+}

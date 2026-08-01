@@ -1,0 +1,58 @@
+[
+  {
+    "name": "engineering-skills-for-go",
+    "display_name": "Engineering Skills for Go",
+    "description": "Evidence-backed Go language, API, service, testing, performance, security, operations, and engineering-review skills.",
+    "version": "0.2.0",
+    "skill_count": 8,
+    "skills": [
+      "go-language-engineering",
+      "go-performance-and-diagnostics",
+      "go-production-operations",
+      "go-project-and-api-design",
+      "go-security-hardening",
+      "go-service-boundaries",
+      "go-testing-and-verification",
+      "review-go-engineering-change"
+    ],
+    "plugin_path": "plugins/engineering-skills-for-go",
+    "discovery_path": "skills/",
+    "installation_path": "plugins/engineering-skills-for-go"
+  },
+  {
+    "name": "distributed-systems-skills-for-go",
+    "display_name": "Distributed Systems Skills for Go",
+    "description": "Invariant-driven Go concurrency, consistency, messaging, resilience, coordination, and distributed-change review skills.",
+    "version": "0.2.0",
+    "skill_count": 6,
+    "skills": [
+      "go-concurrency-lifecycle",
+      "go-data-consistency",
+      "go-distributed-coordination",
+      "go-message-processing",
+      "go-service-resilience",
+      "review-go-distributed-change"
+    ],
+    "plugin_path": "plugins/distributed-systems-skills-for-go",
+    "discovery_path": "skills/",
+    "installation_path": "plugins/distributed-systems-skills-for-go"
+  },
+  {
+    "name": "fintech-skills-for-go",
+    "display_name": "Fintech Skills for Go",
+    "description": "Financial-integrity skills for money, ledgers, payment lifecycles, idempotency, settlement, reconciliation, security, and compliance.",
+    "version": "0.2.0",
+    "skill_count": 6,
+    "skills": [
+      "go-clearing-settlement-reconciliation",
+      "go-financial-idempotency",
+      "go-fintech-security-compliance",
+      "go-money-and-ledgers",
+      "go-payment-lifecycles",
+      "review-go-fintech-change"
+    ],
+    "plugin_path": "plugins/fintech-skills-for-go",
+    "discovery_path": "skills/",
+    "installation_path": "plugins/fintech-skills-for-go"
+  }
+]

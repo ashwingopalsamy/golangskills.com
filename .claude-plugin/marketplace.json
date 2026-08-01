@@ -1,0 +1,64 @@
+{
+  "$schema": "https://raw.githubusercontent.com/anthropics/claude-code/main/schemas/marketplace.schema.json",
+  "metadata": {
+    "description": "Go Engineering Skills by Ashwin Gopalsamy."
+  },
+  "name": "golangskills",
+  "owner": {
+    "name": "Ashwin Gopalsamy",
+    "url": "https://ashwingopalsamy.in"
+  },
+  "plugins": [
+    {
+      "category": "language-skills",
+      "description": "Evidence-backed Go language, API, service, testing, performance, security, operations, and engineering-review skills.",
+      "homepage": "https://golangskills.com",
+      "license": "Apache-2.0",
+      "name": "engineering-skills-for-go",
+      "source": "./plugins/engineering-skills-for-go",
+      "tags": [
+        "go",
+        "golang",
+        "software-engineering",
+        "testing",
+        "performance",
+        "security"
+      ],
+      "version": "0.2.0"
+    },
+    {
+      "category": "language-skills",
+      "description": "Invariant-driven Go concurrency, consistency, messaging, resilience, coordination, and distributed-change review skills.",
+      "homepage": "https://golangskills.com",
+      "license": "Apache-2.0",
+      "name": "distributed-systems-skills-for-go",
+      "source": "./plugins/distributed-systems-skills-for-go",
+      "tags": [
+        "go",
+        "golang",
+        "distributed-systems",
+        "concurrency",
+        "messaging",
+        "reliability"
+      ],
+      "version": "0.2.0"
+    },
+    {
+      "category": "language-skills",
+      "description": "Financial-integrity skills for money, ledgers, payment lifecycles, idempotency, settlement, reconciliation, security, and compliance.",
+      "homepage": "https://golangskills.com",
+      "license": "Apache-2.0",
+      "name": "fintech-skills-for-go",
+      "source": "./plugins/fintech-skills-for-go",
+      "tags": [
+        "go",
+        "golang",
+        "fintech",
+        "payments",
+        "ledger",
+        "financial-integrity"
+      ],
+      "version": "0.2.0"
+    }
+  ]
+}

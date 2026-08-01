@@ -1,0 +1,9 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "author": {
+    "name": "Ashwin Gopalsamy"
+  },
+  "description": "Invariant-driven Go concurrency, consistency, messaging, resilience, coordination, and distributed-change review skills.",
+  "name": "distributed-systems-skills-for-go",
+  "version": "0.2.0"
+}

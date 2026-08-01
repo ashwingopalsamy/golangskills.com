@@ -1,0 +1,1933 @@
+[
+  {
+    "name": "go-clearing-settlement-reconciliation",
+    "collection": "fintech-skills-for-go",
+    "path": "skills/go-clearing-settlement-reconciliation",
+    "description": "Use for Go clearing, settlement, payouts, statements, and item reconciliation. Do not use for payment authorization.",
+    "compatibility": "Go 1.24 or newer; rail cutoffs, calendars, reports, and finality come from current provider and scheme contracts.",
+    "display_name": "Go Settlement and Reconciliation",
+    "short_description": "Match every external money movement",
+    "version": "0.2.0",
+    "maturity": "beta",
+    "category": "settlement",
+    "risk_domains": [
+      "settlement",
+      "reconciliation",
+      "financial-integrity"
+    ],
+    "tags": [
+      "go",
+      "clearing",
+      "settlement",
+      "reconciliation",
+      "payouts",
+      "exceptions"
+    ],
+    "go_versions": {
+      "minimum": "1.24",
+      "guidance": [
+        "1.25",
+        "1.26"
+      ]
+    },
+    "claim_ids": [
+      "fin-settlement-evidence",
+      "fin-reconciliation-control"
+    ],
+    "relations": {
+      "complements": [
+        "go-money-and-ledgers",
+        "go-payment-lifecycles"
+      ],
+      "overlaps": []
+    },
+    "compatibility_evidence": [
+      {
+        "client": "codex",
+        "level": "behaviorally-benchmarked",
+        "contract": "OpenAI skill plus agents/openai.yaml and committed eval artifacts",
+        "verified_on": "2026-08-18"
+      },
+      {
+        "client": "claude-code",
+        "level": "structurally-compatible",
+        "contract": "Claude plugin skill layout and manifest validation",
+        "verified_on": "2026-08-18"
+      },
+      {
+        "client": "cursor",
+        "level": "structurally-compatible",
+        "contract": "Agent Plugin and .cursor/skills layout validation",
+        "verified_on": "2026-08-18"
+      },
+      {
+        "client": "opencode",
+        "level": "structurally-compatible",
+        "contract": ".agents/skills layout and portable frontmatter validation",
+        "verified_on": "2026-08-18"
+      }
+    ],
+    "sources": [
+      {
+        "title": "Stripe reconciliation reports",
+        "url": "https://docs.stripe.com/reports/reconciliation",
+        "publisher": "Stripe",
+        "kind": "primary",
+        "verified_on": "2026-08-18",
+        "supports": [
+          "report evidence",
+          "reconciliation"
+        ]
+      },
+      {
+        "title": "Fedwire Funds Service",
+        "url": "https://www.federalreserve.gov/paymentsystems/fedfunds_about.htm",
+        "publisher": "Federal Reserve Board",
+        "kind": "primary",
+        "verified_on": "2026-08-18",
+        "supports": [
+          "settlement",
+          "finality"
+        ]
+      }
+    ],
+    "source_count": 2,
+    "evaluation_count": 4
+  },
+  {
+    "name": "go-concurrency-lifecycle",
+    "collection": "distributed-systems-skills-for-go",
+    "path": "skills/go-concurrency-lifecycle",
+    "description": "Use for Go goroutines, channels, mutexes, cancellation, races, leaks, and worker bounds. Do not use for brokers.",
+    "compatibility": "Go 1.24 or newer. Guidance targets the stable Go 1.25 and 1.26 families and degrades to older repository versions when required.",
+    "display_name": "Go Concurrency Lifecycle",
+    "short_description": "Own goroutines, capacity, and shutdown",
+    "version": "0.2.0",
+    "maturity": "beta",
+    "category": "concurrency",
+    "risk_domains": [
+      "concurrency",
+      "availability",
+      "resource-exhaustion"
+    ],
+    "tags": [
+      "go",
+      "goroutines",
+      "channels",
+      "mutexes",
+      "cancellation",
+      "backpressure"
+    ],
+    "go_versions": {
+      "minimum": "1.24",
+      "guidance": [
+        "1.25",
+        "1.26"
+      ]
+    },
+    "claim_ids": [
+      "dist-bounded-concurrency"
+    ],
+    "relations": {
+      "complements": [
+        "go-service-resilience",
+        "review-go-distributed-change"
+      ],
+      "overlaps": []
+    },
+    "compatibility_evidence": [
+      {
+        "client": "codex",
+        "level": "behaviorally-benchmarked",
+        "contract": "OpenAI skill plus agents/openai.yaml and committed eval artifacts",
+        "verified_on": "2026-08-18"
+      },
+      {
+        "client": "claude-code",
+        "level": "structurally-compatible",
+        "contract": "Claude plugin skill layout and manifest validation",
+        "verified_on": "2026-08-18"
+      },
+      {
+        "client": "cursor",
+        "level": "structurally-compatible",
+        "contract": "Agent Plugin and .cursor/skills layout validation",
+        "verified_on": "2026-08-18"
+      },
+      {
+        "client": "opencode",
+        "level": "structurally-compatible",
+        "contract": ".agents/skills layout and portable frontmatter validation",
+        "verified_on": "2026-08-18"
+      }
+    ],
+    "sources": [
+      {
+        "title": "The Go Memory Model",
+        "url": "https://go.dev/ref/mem",
+        "publisher": "The Go Authors",
+        "kind": "normative",
+        "verified_on": "2026-08-18",
+        "supports": [
+          "happens-before",
+          "synchronization",
+          "races"
+        ]
+      },
+      {
+        "title": "Package context",
+        "url": "https://pkg.go.dev/context",
+        "publisher": "The Go Authors",
+        "kind": "normative",
+        "verified_on": "2026-08-18",
+        "supports": [
+          "cancellation",
+          "context ownership"
+        ]
+      }
+    ],
+    "source_count": 2,
+    "evaluation_count": 4
+  },
+  {
+    "name": "go-data-consistency",
+    "collection": "distributed-systems-skills-for-go",
+    "path": "skills/go-data-consistency",
+    "description": "Use for Go transactions, isolation, constraints, ambiguous commits, caches, and migrations. Do not use for brokers.",
+    "compatibility": "Go 1.24 or newer; database, driver, and cache semantics must be verified against deployed versions.",
+    "display_name": "Go Data Consistency",
+    "short_description": "Preserve durable invariants under races",
+    "version": "0.2.0",
+    "maturity": "beta",
+    "category": "consistency",
+    "risk_domains": [
+      "consistency",
+      "atomicity",
+      "durability"
+    ],
+    "tags": [
+      "go",
+      "sql",
+      "transactions",
+      "isolation",
+      "constraints",
+      "caches"
+    ],
+    "go_versions": {
+      "minimum": "1.24",
+      "guidance": [
+        "1.25",
+        "1.26"
+      ]
+    },
+    "claim_ids": [
+      "dist-transaction-invariant"
+    ],
+    "relations": {
+      "complements": [
+        "go-message-processing",
+        "go-distributed-coordination"
+      ],
+      "overlaps": []
+    },
+    "compatibility_evidence": [
+      {
+        "client": "codex",
+        "level": "behaviorally-benchmarked",
+        "contract": "OpenAI skill plus agents/openai.yaml and committed eval artifacts",
+        "verified_on": "2026-08-18"
+      },
+      {
+        "client": "claude-code",
+        "level": "structurally-compatible",
+        "contract": "Claude plugin skill layout and manifest validation",
+        "verified_on": "2026-08-18"
+      },
+      {
+        "client": "cursor",
+        "level": "structurally-compatible",
+        "contract": "Agent Plugin and .cursor/skills layout validation",
+        "verified_on": "2026-08-18"
+      },
+      {
+        "client": "opencode",
+        "level": "structurally-compatible",
+        "contract": ".agents/skills layout and portable frontmatter validation",
+        "verified_on": "2026-08-18"
+      }
+    ],
+    "sources": [
+      {
+        "title": "Executing transactions",
+        "url": "https://go.dev/doc/database/execute-transactions",
+        "publisher": "The Go Authors",
+        "kind": "primary",
+        "verified_on": "2026-08-18",
+        "supports": [
+          "transaction handles",
+          "commit",
+          "rollback"
+        ]
+      },
+      {
+        "title": "PostgreSQL Transaction Isolation",
+        "url": "https://www.postgresql.org/docs/current/transaction-iso.html",
+        "publisher": "PostgreSQL Global Development Group",
+        "kind": "primary",
+        "verified_on": "2026-08-18",
+        "supports": [
+          "isolation anomalies",
+          "serializable behavior"
+        ]
+      }
+    ],
+    "source_count": 2,
+    "evaluation_count": 4
+  },
+  {
+    "name": "go-distributed-coordination",
+    "collection": "distributed-systems-skills-for-go",
+    "path": "skills/go-distributed-coordination",
+    "description": "Use for Go leases, fencing, distributed locks, sagas, and multi-service recovery. Do not use for local mutexes.",
+    "compatibility": "Go 1.24 or newer; coordination guarantees are specific to the deployed service and client version.",
+    "display_name": "Go Distributed Coordination",
+    "short_description": "Fence stale distributed owners",
+    "version": "0.2.0",
+    "maturity": "beta",
+    "category": "coordination",
+    "risk_domains": [
+      "coordination",
+      "partition",
+      "ordering",
+      "recovery"
+    ],
+    "tags": [
+      "go",
+      "leases",
+      "fencing",
+      "leader-election",
+      "sagas",
+      "coordination"
+    ],
+    "go_versions": {
+      "minimum": "1.24",
+      "guidance": [
+        "1.25",
+        "1.26"
+      ]
+    },
+    "claim_ids": [
+      "dist-coordination-safety"
+    ],
+    "relations": {
+      "complements": [
+        "go-data-consistency",
+        "go-service-resilience"
+      ],
+      "overlaps": []
+    },
+    "compatibility_evidence": [
+      {
+        "client": "codex",
+        "level": "behaviorally-benchmarked",
+        "contract": "OpenAI skill plus agents/openai.yaml and committed eval artifacts",
+        "verified_on": "2026-08-18"
+      },
+      {
+        "client": "claude-code",
+        "level": "structurally-compatible",
+        "contract": "Claude plugin skill layout and manifest validation",
+        "verified_on": "2026-08-18"
+      },
+      {
+        "client": "cursor",
+        "level": "structurally-compatible",
+        "contract": "Agent Plugin and .cursor/skills layout validation",
+        "verified_on": "2026-08-18"
+      },
+      {
+        "client": "opencode",
+        "level": "structurally-compatible",
+        "contract": ".agents/skills layout and portable frontmatter validation",
+        "verified_on": "2026-08-18"
+      }
+    ],
+    "sources": [
+      {
+        "title": "etcd concurrency API",
+        "url": "https://pkg.go.dev/go.etcd.io/etcd/client/v3/concurrency",
+        "publisher": "etcd Authors",
+        "kind": "primary",
+        "verified_on": "2026-08-18",
+        "supports": [
+          "sessions",
+          "elections",
+          "mutexes"
+        ]
+      },
+      {
+        "title": "Kubernetes Leases",
+        "url": "https://kubernetes.io/docs/concepts/architecture/leases/",
+        "publisher": "Kubernetes",
+        "kind": "primary",
+        "verified_on": "2026-08-18",
+        "supports": [
+          "lease ownership",
+          "leader election"
+        ]
+      }
+    ],
+    "source_count": 2,
+    "evaluation_count": 4
+  },
+  {
+    "name": "go-financial-idempotency",
+    "collection": "fintech-skills-for-go",
+    "path": "skills/go-financial-idempotency",
+    "description": "Use for Go financial idempotency, key scope, fingerprints, replay, retention, and ambiguity. Do not use for read caching.",
+    "compatibility": "Go 1.24 or newer; external idempotency guarantees must match the active provider contract.",
+    "display_name": "Go Financial Idempotency",
+    "short_description": "Prevent duplicate financial effects",
+    "version": "0.2.0",
+    "maturity": "beta",
+    "category": "idempotency",
+    "risk_domains": [
+      "financial-integrity",
+      "idempotency",
+      "concurrency"
+    ],
+    "tags": [
+      "go",
+      "fintech",
+      "idempotency",
+      "replay",
+      "deduplication",
+      "ambiguity"
+    ],
+    "go_versions": {
+      "minimum": "1.24",
+      "guidance": [
+        "1.25",
+        "1.26"
+      ]
+    },
+    "claim_ids": [
+      "fin-idempotency-record"
+    ],
+    "relations": {
+      "complements": [
+        "go-payment-lifecycles",
+        "go-data-consistency"
+      ],
+      "overlaps": []
+    },
+    "compatibility_evidence": [
+      {
+        "client": "codex",
+        "level": "behaviorally-benchmarked",
+        "contract": "OpenAI skill plus agents/openai.yaml and committed eval artifacts",
+        "verified_on": "2026-08-18"
+      },
+      {
+        "client": "claude-code",
+        "level": "structurally-compatible",
+        "contract": "Claude plugin skill layout and manifest validation",
+        "verified_on": "2026-08-18"
+      },
+      {
+        "client": "cursor",
+        "level": "structurally-compatible",
+        "contract": "Agent Plugin and .cursor/skills layout validation",
+        "verified_on": "2026-08-18"
+      },
+      {
+        "client": "opencode",
+        "level": "structurally-compatible",
+        "contract": ".agents/skills layout and portable frontmatter validation",
+        "verified_on": "2026-08-18"
+      }
+    ],
+    "sources": [
+      {
+        "title": "Stripe idempotent requests",
+        "url": "https://docs.stripe.com/api/idempotent_requests",
+        "publisher": "Stripe",
+        "kind": "primary",
+        "verified_on": "2026-08-18",
+        "supports": [
+          "key reuse",
+          "parameter binding",
+          "result replay"
+        ]
+      },
+      {
+        "title": "PostgreSQL INSERT",
+        "url": "https://www.postgresql.org/docs/current/sql-insert.html",
+        "publisher": "PostgreSQL Global Development Group",
+        "kind": "primary",
+        "verified_on": "2026-08-18",
+        "supports": [
+          "unique conflicts",
+          "atomic insert"
+        ]
+      }
+    ],
+    "source_count": 2,
+    "evaluation_count": 4
+  },
+  {
+    "name": "go-fintech-security-compliance",
+    "collection": "fintech-skills-for-go",
+    "path": "skills/go-fintech-security-compliance",
+    "description": "Use for Go payment-data scope, tokenization, authorization, audit, retention, and PCI controls. Do not use as certification.",
+    "compatibility": "Go 1.24 or newer; standards and regulatory obligations require current qualified interpretation for the actual system.",
+    "display_name": "Go Fintech Security and Compliance",
+    "short_description": "Constrain financial trust and data scope",
+    "version": "0.2.0",
+    "maturity": "beta",
+    "category": "compliance",
+    "risk_domains": [
+      "security",
+      "privacy",
+      "compliance",
+      "auditability"
+    ],
+    "tags": [
+      "go",
+      "fintech",
+      "pci-dss",
+      "authorization",
+      "audit",
+      "tokenization"
+    ],
+    "go_versions": {
+      "minimum": "1.24",
+      "guidance": [
+        "1.25",
+        "1.26"
+      ]
+    },
+    "claim_ids": [
+      "fin-data-boundaries"
+    ],
+    "relations": {
+      "complements": [
+        "go-security-hardening",
+        "review-go-fintech-change"
+      ],
+      "overlaps": []
+    },
+    "compatibility_evidence": [
+      {
+        "client": "codex",
+        "level": "behaviorally-benchmarked",
+        "contract": "OpenAI skill plus agents/openai.yaml and committed eval artifacts",
+        "verified_on": "2026-08-18"
+      },
+      {
+        "client": "claude-code",
+        "level": "structurally-compatible",
+        "contract": "Claude plugin skill layout and manifest validation",
+        "verified_on": "2026-08-18"
+      },
+      {
+        "client": "cursor",
+        "level": "structurally-compatible",
+        "contract": "Agent Plugin and .cursor/skills layout validation",
+        "verified_on": "2026-08-18"
+      },
+      {
+        "client": "opencode",
+        "level": "structurally-compatible",
+        "contract": ".agents/skills layout and portable frontmatter validation",
+        "verified_on": "2026-08-18"
+      }
+    ],
+    "sources": [
+      {
+        "title": "PCI Data Security Standard",
+        "url": "https://www.pcisecuritystandards.org/standards/pci-dss/",
+        "publisher": "PCI Security Standards Council",
+        "kind": "primary",
+        "verified_on": "2026-08-18",
+        "supports": [
+          "account data",
+          "security controls",
+          "scope"
+        ]
+      },
+      {
+        "title": "NIST SP 800-63B",
+        "url": "https://pages.nist.gov/800-63-4/sp800-63b.html",
+        "publisher": "NIST",
+        "kind": "normative",
+        "verified_on": "2026-08-18",
+        "supports": [
+          "authentication assurance",
+          "authenticators"
+        ]
+      }
+    ],
+    "source_count": 2,
+    "evaluation_count": 4
+  },
+  {
+    "name": "go-language-engineering",
+    "collection": "engineering-skills-for-go",
+    "path": "skills/go-language-engineering",
+    "description": "Use for Go semantics, ownership, errors, interfaces, generics, and data. Do not use for service design.",
+    "compatibility": "Go 1.24 or newer; current guidance targets Go 1.25 and 1.26, with older forms labeled legacy.",
+    "display_name": "Go Language Engineering",
+    "short_description": "Make Go semantics and ownership explicit",
+    "version": "0.2.0",
+    "maturity": "beta",
+    "category": "language",
+    "risk_domains": [
+      "correctness",
+      "compatibility",
+      "maintainability"
+    ],
+    "tags": [
+      "go",
+      "language",
+      "errors",
+      "interfaces",
+      "generics",
+      "ownership"
+    ],
+    "go_versions": {
+      "minimum": "1.24",
+      "guidance": [
+        "1.25",
+        "1.26"
+      ]
+    },
+    "claim_ids": [
+      "eng-language-clarity"
+    ],
+    "relations": {
+      "complements": [
+        "go-project-and-api-design",
+        "go-testing-and-verification"
+      ],
+      "overlaps": []
+    },
+    "compatibility_evidence": [
+      {
+        "client": "codex",
+        "level": "behaviorally-benchmarked",
+        "contract": "OpenAI skill plus agents/openai.yaml and committed eval artifacts",
+        "verified_on": "2026-08-18"
+      },
+      {
+        "client": "claude-code",
+        "level": "structurally-compatible",
+        "contract": "Claude plugin skill layout and manifest validation",
+        "verified_on": "2026-08-18"
+      },
+      {
+        "client": "cursor",
+        "level": "structurally-compatible",
+        "contract": "Agent Plugin and .cursor/skills layout validation",
+        "verified_on": "2026-08-18"
+      },
+      {
+        "client": "opencode",
+        "level": "structurally-compatible",
+        "contract": ".agents/skills layout and portable frontmatter validation",
+        "verified_on": "2026-08-18"
+      }
+    ],
+    "sources": [
+      {
+        "title": "The Go Programming Language Specification",
+        "url": "https://go.dev/ref/spec",
+        "publisher": "The Go Authors",
+        "kind": "normative",
+        "verified_on": "2026-08-18",
+        "supports": [
+          "language semantics",
+          "types",
+          "method sets"
+        ]
+      },
+      {
+        "title": "Go Code Review Comments",
+        "url": "https://go.dev/wiki/CodeReviewComments",
+        "publisher": "The Go Authors",
+        "kind": "primary",
+        "verified_on": "2026-08-18",
+        "supports": [
+          "conditional style guidance",
+          "errors",
+          "interfaces"
+        ]
+      }
+    ],
+    "source_count": 2,
+    "evaluation_count": 4
+  },
+  {
+    "name": "go-message-processing",
+    "collection": "distributed-systems-skills-for-go",
+    "path": "skills/go-message-processing",
+    "description": "Use for Go broker delivery, deduplication, ordering, acknowledgements, outbox, and inbox. Do not use for channels.",
+    "compatibility": "Go 1.24 or newer. Broker guarantees and client APIs are version-specific and must be verified against the deployed system.",
+    "display_name": "Go Message Processing",
+    "short_description": "Make redelivery and ordering safe",
+    "version": "0.2.0",
+    "maturity": "beta",
+    "category": "messaging",
+    "risk_domains": [
+      "delivery",
+      "ordering",
+      "idempotency",
+      "recovery"
+    ],
+    "tags": [
+      "go",
+      "messaging",
+      "outbox",
+      "inbox",
+      "deduplication",
+      "ordering"
+    ],
+    "go_versions": {
+      "minimum": "1.24",
+      "guidance": [
+        "1.25",
+        "1.26"
+      ]
+    },
+    "claim_ids": [
+      "dist-delivery-semantics"
+    ],
+    "relations": {
+      "complements": [
+        "go-data-consistency",
+        "go-service-resilience"
+      ],
+      "overlaps": []
+    },
+    "compatibility_evidence": [
+      {
+        "client": "codex",
+        "level": "behaviorally-benchmarked",
+        "contract": "OpenAI skill plus agents/openai.yaml and committed eval artifacts",
+        "verified_on": "2026-08-18"
+      },
+      {
+        "client": "claude-code",
+        "level": "structurally-compatible",
+        "contract": "Claude plugin skill layout and manifest validation",
+        "verified_on": "2026-08-18"
+      },
+      {
+        "client": "cursor",
+        "level": "structurally-compatible",
+        "contract": "Agent Plugin and .cursor/skills layout validation",
+        "verified_on": "2026-08-18"
+      },
+      {
+        "client": "opencode",
+        "level": "structurally-compatible",
+        "contract": ".agents/skills layout and portable frontmatter validation",
+        "verified_on": "2026-08-18"
+      }
+    ],
+    "sources": [
+      {
+        "title": "Apache Kafka Design",
+        "url": "https://kafka.apache.org/documentation/#design",
+        "publisher": "Apache Software Foundation",
+        "kind": "primary",
+        "verified_on": "2026-08-18",
+        "supports": [
+          "delivery",
+          "ordering",
+          "transactions"
+        ]
+      },
+      {
+        "title": "NATS JetStream Consumers",
+        "url": "https://docs.nats.io/nats-concepts/jetstream/consumers",
+        "publisher": "Synadia",
+        "kind": "primary",
+        "verified_on": "2026-08-18",
+        "supports": [
+          "acknowledgements",
+          "redelivery",
+          "consumer state"
+        ]
+      }
+    ],
+    "source_count": 2,
+    "evaluation_count": 4
+  },
+  {
+    "name": "go-money-and-ledgers",
+    "collection": "fintech-skills-for-go",
+    "path": "skills/go-money-and-ledgers",
+    "description": "Use for Go money, currency, rounding, allocation, journals, balances, and reversals. Do not use for provider states.",
+    "compatibility": "Go 1.24 or newer; currency and accounting rules require current product and jurisdiction evidence.",
+    "display_name": "Go Money and Ledgers",
+    "short_description": "Keep monetary and ledger state exact",
+    "version": "0.2.0",
+    "maturity": "beta",
+    "category": "money",
+    "risk_domains": [
+      "financial-integrity",
+      "rounding",
+      "auditability"
+    ],
+    "tags": [
+      "go",
+      "money",
+      "currency",
+      "rounding",
+      "ledger",
+      "double-entry"
+    ],
+    "go_versions": {
+      "minimum": "1.24",
+      "guidance": [
+        "1.25",
+        "1.26"
+      ]
+    },
+    "claim_ids": [
+      "fin-money-representation",
+      "fin-ledger-invariants"
+    ],
+    "relations": {
+      "complements": [
+        "go-payment-lifecycles",
+        "go-clearing-settlement-reconciliation"
+      ],
+      "overlaps": []
+    },
+    "compatibility_evidence": [
+      {
+        "client": "codex",
+        "level": "behaviorally-benchmarked",
+        "contract": "OpenAI skill plus agents/openai.yaml and committed eval artifacts",
+        "verified_on": "2026-08-18"
+      },
+      {
+        "client": "claude-code",
+        "level": "structurally-compatible",
+        "contract": "Claude plugin skill layout and manifest validation",
+        "verified_on": "2026-08-18"
+      },
+      {
+        "client": "cursor",
+        "level": "structurally-compatible",
+        "contract": "Agent Plugin and .cursor/skills layout validation",
+        "verified_on": "2026-08-18"
+      },
+      {
+        "client": "opencode",
+        "level": "structurally-compatible",
+        "contract": ".agents/skills layout and portable frontmatter validation",
+        "verified_on": "2026-08-18"
+      }
+    ],
+    "sources": [
+      {
+        "title": "ISO 4217 Currency Codes",
+        "url": "https://www.iso.org/standard/64758.html",
+        "publisher": "ISO",
+        "kind": "normative",
+        "verified_on": "2026-08-18",
+        "supports": [
+          "currency codes",
+          "minor units"
+        ]
+      },
+      {
+        "title": "Unicode CLDR Supplemental Data",
+        "url": "https://www.unicode.org/cldr/charts/47/supplemental/index.html",
+        "publisher": "Unicode Consortium",
+        "kind": "primary",
+        "verified_on": "2026-08-18",
+        "supports": [
+          "currency digits",
+          "cash rounding"
+        ]
+      }
+    ],
+    "source_count": 2,
+    "evaluation_count": 4
+  },
+  {
+    "name": "go-payment-lifecycles",
+    "collection": "fintech-skills-for-go",
+    "path": "skills/go-payment-lifecycles",
+    "description": "Use for Go payment authorization, capture, refund, disputes, webhooks, and ambiguity. Do not use for ledger arithmetic.",
+    "compatibility": "Go 1.24 or newer; provider, rail, and scheme state semantics are version- and region-specific.",
+    "display_name": "Go Payment Lifecycles",
+    "short_description": "Model payment evidence and transitions",
+    "version": "0.2.0",
+    "maturity": "beta",
+    "category": "payments",
+    "risk_domains": [
+      "financial-integrity",
+      "state-machine",
+      "ambiguous-outcome"
+    ],
+    "tags": [
+      "go",
+      "payments",
+      "authorization",
+      "capture",
+      "refund",
+      "chargeback"
+    ],
+    "go_versions": {
+      "minimum": "1.24",
+      "guidance": [
+        "1.25",
+        "1.26"
+      ]
+    },
+    "claim_ids": [
+      "fin-payment-state-machine"
+    ],
+    "relations": {
+      "complements": [
+        "go-money-and-ledgers",
+        "go-financial-idempotency"
+      ],
+      "overlaps": []
+    },
+    "compatibility_evidence": [
+      {
+        "client": "codex",
+        "level": "behaviorally-benchmarked",
+        "contract": "OpenAI skill plus agents/openai.yaml and committed eval artifacts",
+        "verified_on": "2026-08-18"
+      },
+      {
+        "client": "claude-code",
+        "level": "structurally-compatible",
+        "contract": "Claude plugin skill layout and manifest validation",
+        "verified_on": "2026-08-18"
+      },
+      {
+        "client": "cursor",
+        "level": "structurally-compatible",
+        "contract": "Agent Plugin and .cursor/skills layout validation",
+        "verified_on": "2026-08-18"
+      },
+      {
+        "client": "opencode",
+        "level": "structurally-compatible",
+        "contract": ".agents/skills layout and portable frontmatter validation",
+        "verified_on": "2026-08-18"
+      }
+    ],
+    "sources": [
+      {
+        "title": "Stripe PaymentIntent lifecycle",
+        "url": "https://docs.stripe.com/payments/paymentintents/lifecycle",
+        "publisher": "Stripe",
+        "kind": "primary",
+        "verified_on": "2026-08-18",
+        "supports": [
+          "payment states",
+          "asynchronous outcomes"
+        ]
+      },
+      {
+        "title": "Stripe separate authorization and capture",
+        "url": "https://docs.stripe.com/payments/place-a-hold-on-a-payment-method",
+        "publisher": "Stripe",
+        "kind": "primary",
+        "verified_on": "2026-08-18",
+        "supports": [
+          "authorization",
+          "capture",
+          "expiry"
+        ]
+      }
+    ],
+    "source_count": 2,
+    "evaluation_count": 4
+  },
+  {
+    "name": "go-performance-and-diagnostics",
+    "collection": "engineering-skills-for-go",
+    "path": "skills/go-performance-and-diagnostics",
+    "description": "Use for measured Go CPU, memory, allocation, contention, latency, and benchmarks. Do not use speculatively.",
+    "compatibility": "Go 1.24 or newer; runtime profiles and tool output are version-sensitive.",
+    "display_name": "Go Performance and Diagnostics",
+    "short_description": "Profile and improve measured Go costs",
+    "version": "0.2.0",
+    "maturity": "beta",
+    "category": "performance",
+    "risk_domains": [
+      "performance",
+      "reliability",
+      "maintainability"
+    ],
+    "tags": [
+      "go",
+      "pprof",
+      "benchmarks",
+      "allocations",
+      "latency",
+      "contention"
+    ],
+    "go_versions": {
+      "minimum": "1.24",
+      "guidance": [
+        "1.25",
+        "1.26"
+      ]
+    },
+    "claim_ids": [
+      "eng-measure-before-optimize"
+    ],
+    "relations": {
+      "complements": [
+        "go-testing-and-verification",
+        "go-production-operations"
+      ],
+      "overlaps": []
+    },
+    "compatibility_evidence": [
+      {
+        "client": "codex",
+        "level": "behaviorally-benchmarked",
+        "contract": "OpenAI skill plus agents/openai.yaml and committed eval artifacts",
+        "verified_on": "2026-08-18"
+      },
+      {
+        "client": "claude-code",
+        "level": "structurally-compatible",
+        "contract": "Claude plugin skill layout and manifest validation",
+        "verified_on": "2026-08-18"
+      },
+      {
+        "client": "cursor",
+        "level": "structurally-compatible",
+        "contract": "Agent Plugin and .cursor/skills layout validation",
+        "verified_on": "2026-08-18"
+      },
+      {
+        "client": "opencode",
+        "level": "structurally-compatible",
+        "contract": ".agents/skills layout and portable frontmatter validation",
+        "verified_on": "2026-08-18"
+      }
+    ],
+    "sources": [
+      {
+        "title": "Profiling Go Programs",
+        "url": "https://go.dev/blog/pprof",
+        "publisher": "The Go Authors",
+        "kind": "primary",
+        "verified_on": "2026-08-18",
+        "supports": [
+          "CPU profiling",
+          "heap profiling"
+        ]
+      },
+      {
+        "title": "Package runtime/pprof",
+        "url": "https://pkg.go.dev/runtime/pprof",
+        "publisher": "The Go Authors",
+        "kind": "normative",
+        "verified_on": "2026-08-18",
+        "supports": [
+          "profile types",
+          "runtime collection"
+        ]
+      }
+    ],
+    "source_count": 2,
+    "evaluation_count": 4
+  },
+  {
+    "name": "go-production-operations",
+    "collection": "engineering-skills-for-go",
+    "path": "skills/go-production-operations",
+    "description": "Use for Go startup, telemetry, health, shutdown, containers, Kubernetes, and releases. Do not use for domain logic.",
+    "compatibility": "Go 1.24 or newer; deployment-platform behavior must be verified against the active environment.",
+    "display_name": "Go Production Operations",
+    "short_description": "Own Go process and incident lifecycles",
+    "version": "0.2.0",
+    "maturity": "beta",
+    "category": "operations",
+    "risk_domains": [
+      "availability",
+      "observability",
+      "deployment"
+    ],
+    "tags": [
+      "go",
+      "observability",
+      "configuration",
+      "shutdown",
+      "kubernetes",
+      "releases"
+    ],
+    "go_versions": {
+      "minimum": "1.24",
+      "guidance": [
+        "1.25",
+        "1.26"
+      ]
+    },
+    "claim_ids": [
+      "eng-operational-lifecycle"
+    ],
+    "relations": {
+      "complements": [
+        "go-service-boundaries",
+        "go-service-resilience"
+      ],
+      "overlaps": []
+    },
+    "compatibility_evidence": [
+      {
+        "client": "codex",
+        "level": "behaviorally-benchmarked",
+        "contract": "OpenAI skill plus agents/openai.yaml and committed eval artifacts",
+        "verified_on": "2026-08-18"
+      },
+      {
+        "client": "claude-code",
+        "level": "structurally-compatible",
+        "contract": "Claude plugin skill layout and manifest validation",
+        "verified_on": "2026-08-18"
+      },
+      {
+        "client": "cursor",
+        "level": "structurally-compatible",
+        "contract": "Agent Plugin and .cursor/skills layout validation",
+        "verified_on": "2026-08-18"
+      },
+      {
+        "client": "opencode",
+        "level": "structurally-compatible",
+        "contract": ".agents/skills layout and portable frontmatter validation",
+        "verified_on": "2026-08-18"
+      }
+    ],
+    "sources": [
+      {
+        "title": "OpenTelemetry Tracing API",
+        "url": "https://opentelemetry.io/docs/specs/otel/trace/api/",
+        "publisher": "OpenTelemetry",
+        "kind": "normative",
+        "verified_on": "2026-08-18",
+        "supports": [
+          "trace lifecycle",
+          "error recording"
+        ]
+      },
+      {
+        "title": "Kubernetes Pod Lifecycle",
+        "url": "https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/",
+        "publisher": "Kubernetes",
+        "kind": "primary",
+        "verified_on": "2026-08-18",
+        "supports": [
+          "probes",
+          "termination",
+          "restart"
+        ]
+      }
+    ],
+    "source_count": 2,
+    "evaluation_count": 4
+  },
+  {
+    "name": "go-project-and-api-design",
+    "collection": "engineering-skills-for-go",
+    "path": "skills/go-project-and-api-design",
+    "description": "Use for Go packages, modules, APIs, dependencies, and evolution. Do not use for local code or protocols.",
+    "compatibility": "Go 1.24 or newer; module and toolchain behavior must match the repository's declared versions.",
+    "display_name": "Go Project and API Design",
+    "short_description": "Shape packages, APIs, and dependencies",
+    "version": "0.2.0",
+    "maturity": "beta",
+    "category": "design",
+    "risk_domains": [
+      "compatibility",
+      "maintainability",
+      "testability"
+    ],
+    "tags": [
+      "go",
+      "packages",
+      "modules",
+      "api",
+      "dependencies",
+      "releases"
+    ],
+    "go_versions": {
+      "minimum": "1.24",
+      "guidance": [
+        "1.25",
+        "1.26"
+      ]
+    },
+    "claim_ids": [
+      "eng-dependency-direction"
+    ],
+    "relations": {
+      "complements": [
+        "go-language-engineering",
+        "go-service-boundaries"
+      ],
+      "overlaps": []
+    },
+    "compatibility_evidence": [
+      {
+        "client": "codex",
+        "level": "behaviorally-benchmarked",
+        "contract": "OpenAI skill plus agents/openai.yaml and committed eval artifacts",
+        "verified_on": "2026-08-18"
+      },
+      {
+        "client": "claude-code",
+        "level": "structurally-compatible",
+        "contract": "Claude plugin skill layout and manifest validation",
+        "verified_on": "2026-08-18"
+      },
+      {
+        "client": "cursor",
+        "level": "structurally-compatible",
+        "contract": "Agent Plugin and .cursor/skills layout validation",
+        "verified_on": "2026-08-18"
+      },
+      {
+        "client": "opencode",
+        "level": "structurally-compatible",
+        "contract": ".agents/skills layout and portable frontmatter validation",
+        "verified_on": "2026-08-18"
+      }
+    ],
+    "sources": [
+      {
+        "title": "Organizing a Go module",
+        "url": "https://go.dev/doc/modules/layout",
+        "publisher": "The Go Authors",
+        "kind": "primary",
+        "verified_on": "2026-08-18",
+        "supports": [
+          "module layout",
+          "internal packages",
+          "commands"
+        ]
+      },
+      {
+        "title": "Go Modules Reference",
+        "url": "https://go.dev/ref/mod",
+        "publisher": "The Go Authors",
+        "kind": "normative",
+        "verified_on": "2026-08-18",
+        "supports": [
+          "module graph",
+          "toolchain",
+          "versioning"
+        ]
+      }
+    ],
+    "source_count": 2,
+    "evaluation_count": 4
+  },
+  {
+    "name": "go-security-hardening",
+    "collection": "engineering-skills-for-go",
+    "path": "skills/go-security-hardening",
+    "description": "Use for Go authorization, SSRF, files, commands, crypto, secrets, or supply chain. Do not use for PCI scope.",
+    "compatibility": "Go 1.24 or newer; security-sensitive APIs and dependency advisories require current verification.",
+    "display_name": "Go Security Hardening",
+    "short_description": "Trace and close Go trust-boundary paths",
+    "version": "0.2.0",
+    "maturity": "beta",
+    "category": "security",
+    "risk_domains": [
+      "security",
+      "privacy",
+      "supply-chain"
+    ],
+    "tags": [
+      "go",
+      "security",
+      "authorization",
+      "ssrf",
+      "cryptography",
+      "supply-chain"
+    ],
+    "go_versions": {
+      "minimum": "1.24",
+      "guidance": [
+        "1.25",
+        "1.26"
+      ]
+    },
+    "claim_ids": [
+      "eng-security-boundary"
+    ],
+    "relations": {
+      "complements": [
+        "go-service-boundaries",
+        "go-production-operations"
+      ],
+      "overlaps": []
+    },
+    "compatibility_evidence": [
+      {
+        "client": "codex",
+        "level": "behaviorally-benchmarked",
+        "contract": "OpenAI skill plus agents/openai.yaml and committed eval artifacts",
+        "verified_on": "2026-08-18"
+      },
+      {
+        "client": "claude-code",
+        "level": "structurally-compatible",
+        "contract": "Claude plugin skill layout and manifest validation",
+        "verified_on": "2026-08-18"
+      },
+      {
+        "client": "cursor",
+        "level": "structurally-compatible",
+        "contract": "Agent Plugin and .cursor/skills layout validation",
+        "verified_on": "2026-08-18"
+      },
+      {
+        "client": "opencode",
+        "level": "structurally-compatible",
+        "contract": ".agents/skills layout and portable frontmatter validation",
+        "verified_on": "2026-08-18"
+      }
+    ],
+    "sources": [
+      {
+        "title": "Go Security Best Practices",
+        "url": "https://go.dev/doc/security/best-practices",
+        "publisher": "The Go Authors",
+        "kind": "primary",
+        "verified_on": "2026-08-18",
+        "supports": [
+          "vulnerability management",
+          "fuzzing",
+          "dependencies"
+        ]
+      },
+      {
+        "title": "NIST Secure Software Development Framework",
+        "url": "https://csrc.nist.gov/pubs/sp/800/218/final",
+        "publisher": "NIST",
+        "kind": "primary",
+        "verified_on": "2026-08-18",
+        "supports": [
+          "secure development",
+          "supply chain"
+        ]
+      }
+    ],
+    "source_count": 2,
+    "evaluation_count": 4
+  },
+  {
+    "name": "go-service-boundaries",
+    "collection": "engineering-skills-for-go",
+    "path": "skills/go-service-boundaries",
+    "description": "Use for Go HTTP, gRPC, GraphQL, or OpenAPI boundaries and streams. Do not use for domain or retry policy.",
+    "compatibility": "Go 1.24 or newer; protocol and library behavior must be verified against deployed versions.",
+    "display_name": "Go Service Boundaries",
+    "short_description": "Protect network protocol boundaries",
+    "version": "0.2.0",
+    "maturity": "beta",
+    "category": "boundary",
+    "risk_domains": [
+      "correctness",
+      "security",
+      "availability",
+      "compatibility"
+    ],
+    "tags": [
+      "go",
+      "http",
+      "grpc",
+      "graphql",
+      "openapi",
+      "streaming"
+    ],
+    "go_versions": {
+      "minimum": "1.24",
+      "guidance": [
+        "1.25",
+        "1.26"
+      ]
+    },
+    "claim_ids": [
+      "eng-protocol-boundary"
+    ],
+    "relations": {
+      "complements": [
+        "go-project-and-api-design",
+        "go-production-operations",
+        "go-service-resilience"
+      ],
+      "overlaps": []
+    },
+    "compatibility_evidence": [
+      {
+        "client": "codex",
+        "level": "behaviorally-benchmarked",
+        "contract": "OpenAI skill plus agents/openai.yaml and committed eval artifacts",
+        "verified_on": "2026-08-18"
+      },
+      {
+        "client": "claude-code",
+        "level": "structurally-compatible",
+        "contract": "Claude plugin skill layout and manifest validation",
+        "verified_on": "2026-08-18"
+      },
+      {
+        "client": "cursor",
+        "level": "structurally-compatible",
+        "contract": "Agent Plugin and .cursor/skills layout validation",
+        "verified_on": "2026-08-18"
+      },
+      {
+        "client": "opencode",
+        "level": "structurally-compatible",
+        "contract": ".agents/skills layout and portable frontmatter validation",
+        "verified_on": "2026-08-18"
+      }
+    ],
+    "sources": [
+      {
+        "title": "Package net/http",
+        "url": "https://pkg.go.dev/net/http",
+        "publisher": "The Go Authors",
+        "kind": "normative",
+        "verified_on": "2026-08-18",
+        "supports": [
+          "server lifecycle",
+          "client ownership",
+          "timeouts"
+        ]
+      },
+      {
+        "title": "gRPC Guides",
+        "url": "https://grpc.io/docs/guides/",
+        "publisher": "Cloud Native Computing Foundation",
+        "kind": "primary",
+        "verified_on": "2026-08-18",
+        "supports": [
+          "status",
+          "deadlines",
+          "streaming",
+          "retry"
+        ]
+      }
+    ],
+    "source_count": 2,
+    "evaluation_count": 4
+  },
+  {
+    "name": "go-service-resilience",
+    "collection": "distributed-systems-skills-for-go",
+    "path": "skills/go-service-resilience",
+    "description": "Use for Go deadlines, retries, admission, load shedding, fallbacks, and recovery. Do not use for local speed or brokers.",
+    "compatibility": "Go 1.24 or newer. Policies are transport-neutral; verify client and dependency behavior against repository versions.",
+    "display_name": "Go Service Resilience",
+    "short_description": "Bound retries, deadlines, and overload",
+    "version": "0.2.0",
+    "maturity": "beta",
+    "category": "resilience",
+    "risk_domains": [
+      "availability",
+      "overload",
+      "latency",
+      "partial-failure"
+    ],
+    "tags": [
+      "go",
+      "deadlines",
+      "retries",
+      "backpressure",
+      "load-shedding",
+      "recovery"
+    ],
+    "go_versions": {
+      "minimum": "1.24",
+      "guidance": [
+        "1.25",
+        "1.26"
+      ]
+    },
+    "claim_ids": [
+      "dist-retry-budget"
+    ],
+    "relations": {
+      "complements": [
+        "go-concurrency-lifecycle",
+        "go-message-processing",
+        "go-production-operations"
+      ],
+      "overlaps": []
+    },
+    "compatibility_evidence": [
+      {
+        "client": "codex",
+        "level": "behaviorally-benchmarked",
+        "contract": "OpenAI skill plus agents/openai.yaml and committed eval artifacts",
+        "verified_on": "2026-08-18"
+      },
+      {
+        "client": "claude-code",
+        "level": "structurally-compatible",
+        "contract": "Claude plugin skill layout and manifest validation",
+        "verified_on": "2026-08-18"
+      },
+      {
+        "client": "cursor",
+        "level": "structurally-compatible",
+        "contract": "Agent Plugin and .cursor/skills layout validation",
+        "verified_on": "2026-08-18"
+      },
+      {
+        "client": "opencode",
+        "level": "structurally-compatible",
+        "contract": ".agents/skills layout and portable frontmatter validation",
+        "verified_on": "2026-08-18"
+      }
+    ],
+    "sources": [
+      {
+        "title": "gRPC Retry Guide",
+        "url": "https://grpc.io/docs/guides/retry/",
+        "publisher": "Cloud Native Computing Foundation",
+        "kind": "primary",
+        "verified_on": "2026-08-18",
+        "supports": [
+          "retry policy",
+          "transparent retry",
+          "throttling"
+        ]
+      },
+      {
+        "title": "Timeouts, retries, and backoff with jitter",
+        "url": "https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/",
+        "publisher": "Amazon Web Services",
+        "kind": "operational",
+        "verified_on": "2026-08-18",
+        "supports": [
+          "retry amplification",
+          "budgets",
+          "jitter"
+        ]
+      }
+    ],
+    "source_count": 2,
+    "evaluation_count": 4
+  },
+  {
+    "name": "go-testing-and-verification",
+    "collection": "engineering-skills-for-go",
+    "path": "skills/go-testing-and-verification",
+    "description": "Use for Go integration, fuzz, race, leak, property, or deterministic tests. Do not use for profiling.",
+    "compatibility": "Go 1.24 or newer; testing/synctest guidance targets Go 1.25 and 1.26.",
+    "display_name": "Go Testing and Verification",
+    "short_description": "Build executable Go correctness evidence",
+    "version": "0.2.0",
+    "maturity": "beta",
+    "category": "verification",
+    "risk_domains": [
+      "correctness",
+      "concurrency",
+      "security"
+    ],
+    "tags": [
+      "go",
+      "testing",
+      "fuzzing",
+      "race-detector",
+      "integration",
+      "oracles"
+    ],
+    "go_versions": {
+      "minimum": "1.24",
+      "guidance": [
+        "1.25",
+        "1.26"
+      ]
+    },
+    "claim_ids": [
+      "eng-verification-by-risk"
+    ],
+    "relations": {
+      "complements": [
+        "go-language-engineering",
+        "go-performance-and-diagnostics"
+      ],
+      "overlaps": []
+    },
+    "compatibility_evidence": [
+      {
+        "client": "codex",
+        "level": "behaviorally-benchmarked",
+        "contract": "OpenAI skill plus agents/openai.yaml and committed eval artifacts",
+        "verified_on": "2026-08-18"
+      },
+      {
+        "client": "claude-code",
+        "level": "structurally-compatible",
+        "contract": "Claude plugin skill layout and manifest validation",
+        "verified_on": "2026-08-18"
+      },
+      {
+        "client": "cursor",
+        "level": "structurally-compatible",
+        "contract": "Agent Plugin and .cursor/skills layout validation",
+        "verified_on": "2026-08-18"
+      },
+      {
+        "client": "opencode",
+        "level": "structurally-compatible",
+        "contract": ".agents/skills layout and portable frontmatter validation",
+        "verified_on": "2026-08-18"
+      }
+    ],
+    "sources": [
+      {
+        "title": "Package testing",
+        "url": "https://pkg.go.dev/testing",
+        "publisher": "The Go Authors",
+        "kind": "normative",
+        "verified_on": "2026-08-18",
+        "supports": [
+          "tests",
+          "benchmarks",
+          "fuzzing"
+        ]
+      },
+      {
+        "title": "Data Race Detector",
+        "url": "https://go.dev/doc/articles/race_detector",
+        "publisher": "The Go Authors",
+        "kind": "primary",
+        "verified_on": "2026-08-18",
+        "supports": [
+          "race evidence",
+          "coverage limits"
+        ]
+      }
+    ],
+    "source_count": 2,
+    "evaluation_count": 4
+  },
+  {
+    "name": "review-go-distributed-change",
+    "collection": "distributed-systems-skills-for-go",
+    "path": "skills/review-go-distributed-change",
+    "description": "Use for Go diff review across stores, brokers, retries, leases, ordering, and recovery. Do not use for general or fintech work.",
+    "compatibility": "Go 1.24 or newer; repository and deployed-system guarantees control the review.",
+    "display_name": "Review Go Distributed Change",
+    "short_description": "Find distributed failure schedules",
+    "version": "0.2.0",
+    "maturity": "beta",
+    "category": "review",
+    "risk_domains": [
+      "concurrency",
+      "consistency",
+      "availability",
+      "recovery"
+    ],
+    "tags": [
+      "go",
+      "review",
+      "distributed-systems",
+      "partial-failure",
+      "ordering",
+      "recovery"
+    ],
+    "go_versions": {
+      "minimum": "1.24",
+      "guidance": [
+        "1.25",
+        "1.26"
+      ]
+    },
+    "claim_ids": [
+      "dist-bounded-concurrency",
+      "dist-transaction-invariant",
+      "dist-delivery-semantics",
+      "dist-retry-budget",
+      "dist-coordination-safety",
+      "benchmark-methodology"
+    ],
+    "relations": {
+      "complements": [
+        "review-go-engineering-change",
+        "review-go-fintech-change"
+      ],
+      "overlaps": []
+    },
+    "compatibility_evidence": [
+      {
+        "client": "codex",
+        "level": "behaviorally-benchmarked",
+        "contract": "OpenAI skill plus agents/openai.yaml and committed eval artifacts",
+        "verified_on": "2026-08-18"
+      },
+      {
+        "client": "claude-code",
+        "level": "structurally-compatible",
+        "contract": "Claude plugin skill layout and manifest validation",
+        "verified_on": "2026-08-18"
+      },
+      {
+        "client": "cursor",
+        "level": "structurally-compatible",
+        "contract": "Agent Plugin and .cursor/skills layout validation",
+        "verified_on": "2026-08-18"
+      },
+      {
+        "client": "opencode",
+        "level": "structurally-compatible",
+        "contract": ".agents/skills layout and portable frontmatter validation",
+        "verified_on": "2026-08-18"
+      }
+    ],
+    "sources": [
+      {
+        "title": "The Go Memory Model",
+        "url": "https://go.dev/ref/mem",
+        "publisher": "The Go Authors",
+        "kind": "normative",
+        "verified_on": "2026-08-18",
+        "supports": [
+          "concurrent execution",
+          "synchronization"
+        ]
+      },
+      {
+        "title": "PostgreSQL Transaction Isolation",
+        "url": "https://www.postgresql.org/docs/current/transaction-iso.html",
+        "publisher": "PostgreSQL Global Development Group",
+        "kind": "primary",
+        "verified_on": "2026-08-18",
+        "supports": [
+          "concurrent transaction schedules"
+        ]
+      }
+    ],
+    "source_count": 2,
+    "evaluation_count": 4
+  },
+  {
+    "name": "review-go-engineering-change",
+    "collection": "engineering-skills-for-go",
+    "path": "skills/review-go-engineering-change",
+    "description": "Use for Go diff review across language, APIs, security, compatibility, and operations. Do not use for distributed or fintech work.",
+    "compatibility": "Go 1.24 or newer; changed repository contracts outrank generic conventions.",
+    "display_name": "Review Go Engineering Change",
+    "short_description": "Find causal defects in a Go diff",
+    "version": "0.2.0",
+    "maturity": "beta",
+    "category": "review",
+    "risk_domains": [
+      "correctness",
+      "security",
+      "compatibility",
+      "operations"
+    ],
+    "tags": [
+      "go",
+      "review",
+      "diff",
+      "correctness",
+      "security",
+      "compatibility"
+    ],
+    "go_versions": {
+      "minimum": "1.24",
+      "guidance": [
+        "1.25",
+        "1.26"
+      ]
+    },
+    "claim_ids": [
+      "eng-language-clarity",
+      "eng-dependency-direction",
+      "eng-protocol-boundary",
+      "eng-verification-by-risk",
+      "eng-measure-before-optimize",
+      "eng-security-boundary",
+      "eng-operational-lifecycle",
+      "benchmark-methodology",
+      "repository-mechanics"
+    ],
+    "relations": {
+      "complements": [
+        "review-go-distributed-change",
+        "review-go-fintech-change"
+      ],
+      "overlaps": []
+    },
+    "compatibility_evidence": [
+      {
+        "client": "codex",
+        "level": "behaviorally-benchmarked",
+        "contract": "OpenAI skill plus agents/openai.yaml and committed eval artifacts",
+        "verified_on": "2026-08-18"
+      },
+      {
+        "client": "claude-code",
+        "level": "structurally-compatible",
+        "contract": "Claude plugin skill layout and manifest validation",
+        "verified_on": "2026-08-18"
+      },
+      {
+        "client": "cursor",
+        "level": "structurally-compatible",
+        "contract": "Agent Plugin and .cursor/skills layout validation",
+        "verified_on": "2026-08-18"
+      },
+      {
+        "client": "opencode",
+        "level": "structurally-compatible",
+        "contract": ".agents/skills layout and portable frontmatter validation",
+        "verified_on": "2026-08-18"
+      }
+    ],
+    "sources": [
+      {
+        "title": "Go Code Review Comments",
+        "url": "https://go.dev/wiki/CodeReviewComments",
+        "publisher": "The Go Authors",
+        "kind": "primary",
+        "verified_on": "2026-08-18",
+        "supports": [
+          "review conventions",
+          "correctness distinctions"
+        ]
+      },
+      {
+        "title": "The Go Programming Language Specification",
+        "url": "https://go.dev/ref/spec",
+        "publisher": "The Go Authors",
+        "kind": "normative",
+        "verified_on": "2026-08-18",
+        "supports": [
+          "language correctness",
+          "compatibility"
+        ]
+      }
+    ],
+    "source_count": 2,
+    "evaluation_count": 4
+  },
+  {
+    "name": "review-go-fintech-change",
+    "collection": "fintech-skills-for-go",
+    "path": "skills/review-go-fintech-change",
+    "description": "Use for Go diff review across money, ledgers, payments, settlement, reconciliation, and audit. Do not use for general work.",
+    "compatibility": "Go 1.24 or newer; product, provider, rail, and compliance contracts control the review.",
+    "display_name": "Review Go Fintech Change",
+    "short_description": "Find financial-integrity defects",
+    "version": "0.2.0",
+    "maturity": "beta",
+    "category": "review",
+    "risk_domains": [
+      "financial-integrity",
+      "security",
+      "auditability",
+      "reconciliation"
+    ],
+    "tags": [
+      "go",
+      "fintech",
+      "review",
+      "payments",
+      "ledger",
+      "reconciliation"
+    ],
+    "go_versions": {
+      "minimum": "1.24",
+      "guidance": [
+        "1.25",
+        "1.26"
+      ]
+    },
+    "claim_ids": [
+      "fin-money-representation",
+      "fin-ledger-invariants",
+      "fin-payment-state-machine",
+      "fin-idempotency-record",
+      "fin-settlement-evidence",
+      "fin-reconciliation-control",
+      "fin-data-boundaries",
+      "benchmark-methodology"
+    ],
+    "relations": {
+      "complements": [
+        "review-go-engineering-change",
+        "review-go-distributed-change"
+      ],
+      "overlaps": []
+    },
+    "compatibility_evidence": [
+      {
+        "client": "codex",
+        "level": "behaviorally-benchmarked",
+        "contract": "OpenAI skill plus agents/openai.yaml and committed eval artifacts",
+        "verified_on": "2026-08-18"
+      },
+      {
+        "client": "claude-code",
+        "level": "structurally-compatible",
+        "contract": "Claude plugin skill layout and manifest validation",
+        "verified_on": "2026-08-18"
+      },
+      {
+        "client": "cursor",
+        "level": "structurally-compatible",
+        "contract": "Agent Plugin and .cursor/skills layout validation",
+        "verified_on": "2026-08-18"
+      },
+      {
+        "client": "opencode",
+        "level": "structurally-compatible",
+        "contract": ".agents/skills layout and portable frontmatter validation",
+        "verified_on": "2026-08-18"
+      }
+    ],
+    "sources": [
+      {
+        "title": "ISO 4217 Currency Codes",
+        "url": "https://www.iso.org/standard/64758.html",
+        "publisher": "ISO",
+        "kind": "normative",
+        "verified_on": "2026-08-18",
+        "supports": [
+          "money representation",
+          "currency"
+        ]
+      },
+      {
+        "title": "PCI Data Security Standard",
+        "url": "https://www.pcisecuritystandards.org/standards/pci-dss/",
+        "publisher": "PCI Security Standards Council",
+        "kind": "primary",
+        "verified_on": "2026-08-18",
+        "supports": [
+          "payment-data boundaries",
+          "audit"
+        ]
+      }
+    ],
+    "source_count": 2,
+    "evaluation_count": 4
+  }
+]

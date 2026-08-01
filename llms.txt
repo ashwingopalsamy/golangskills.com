@@ -1,0 +1,27 @@
+# Go Engineering Skills by Ashwin Gopalsamy
+
+> Evidence-backed Agent Skills for production Go, distributed systems, and fintech. Not affiliated with Google or the Go project.
+
+## Engineering Skills for Go
+
+Evidence-backed Go language, API, service, testing, performance, security, operations, and engineering-review skills.
+
+Canonical catalog: catalog/catalog.json
+
+## Distributed Systems Skills for Go
+
+Invariant-driven Go concurrency, consistency, messaging, resilience, coordination, and distributed-change review skills.
+
+Canonical catalog: catalog/catalog.json
+
+## Fintech Skills for Go
+
+Financial-integrity skills for money, ledgers, payment lifecycles, idempotency, settlement, reconciliation, security, and compliance.
+
+Canonical catalog: catalog/catalog.json
+
+## Evidence
+
+- Claim ledger: knowledge/claims/canonical.json
+- Reference lock: research/corpus-lock.json
+- Benchmark status: catalog/benchmark-status.json
