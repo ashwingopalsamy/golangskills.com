@@ -14,4 +14,6 @@ Canonical frontmatter uses `name`, `description`, `license`, and `compatibility`
 
 The current tree passes the pinned official Agent Skills validator for all 20 canonical skills, the Codex plugin validator for all three packages, and Claude Code manifest validation for all three packages plus its marketplace. Cursor and OpenCode have structural schema/layout evidence; behavioral validation depends on authenticated runners.
 
+A clean local clone at commit `bb68087` reproduced all three archive checksums, registered the Codex marketplace, installed and enabled all three plugins, and routed a future payment-event prompt to `fintech-skills-for-go:go-payment-lifecycles`. The temporary installations and marketplace registration were removed after the check.
+
 Run `skillctl eval preflight` for the active runner environment. See [install.md](install.md) for layouts.

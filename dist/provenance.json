@@ -1,0 +1,13 @@
+{
+  "archives": {
+    "distributed-systems-skills-for-go-0.2.0.tar.gz": "1cefc454262333489d63a59bc16642afb2bc981247dedc4d5cb5b522df5235b3",
+    "engineering-skills-for-go-0.2.0.tar.gz": "d11762e40486b28c85189c0dc7cd517c317a4494c8b8f7199b417b8c8b806b5a",
+    "fintech-skills-for-go-0.2.0.tar.gz": "1cd882f753dde92203dcea9163a31ec734e8ebd3d7447a9f411f34bd521192d5"
+  },
+  "claims": "knowledge/claims/canonical.json",
+  "corpus_lock": "research/corpus-lock.json",
+  "reproducible": true,
+  "schema_version": 1,
+  "source_commit": "0d811bd5c899c41cddbbf82e2e563e47bd96220f",
+  "version": "0.2.0"
+}
