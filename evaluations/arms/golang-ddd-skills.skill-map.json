@@ -1,0 +1,22 @@
+{
+  "go-language-engineering": "golang-ddd-refactor",
+  "go-project-and-api-design": "golang-ddd-architecture",
+  "go-service-boundaries": "golang-ddd-architecture",
+  "go-testing-and-verification": "golang-ddd-infrastructure",
+  "go-performance-and-diagnostics": "NONE",
+  "go-security-hardening": "golang-ddd-infrastructure",
+  "go-production-operations": "golang-ddd-infrastructure",
+  "review-go-engineering-change": "golang-ddd",
+  "go-concurrency-lifecycle": "NONE",
+  "go-data-consistency": "golang-ddd-architecture",
+  "go-message-processing": "golang-ddd-cqrs",
+  "go-service-resilience": "golang-ddd-architecture",
+  "go-distributed-coordination": "NONE",
+  "review-go-distributed-change": "golang-ddd",
+  "go-money-and-ledgers": "golang-ddd-refactor",
+  "go-payment-lifecycles": "golang-ddd-refactor",
+  "go-financial-idempotency": "golang-ddd-refactor",
+  "go-clearing-settlement-reconciliation": "golang-ddd-cqrs",
+  "go-fintech-security-compliance": "golang-ddd-infrastructure",
+  "review-go-fintech-change": "golang-ddd"
+}

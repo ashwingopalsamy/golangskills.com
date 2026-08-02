@@ -1,0 +1,79 @@
+{
+  "schema_version": 2,
+  "generated_on": "2026-08-18",
+  "leadership_claim_eligible": false,
+  "gates": [
+    {
+      "id": "reference-inventory",
+      "status": "pass",
+      "summary": "Every material item in all seven locked reference snapshots has a disposition.",
+      "evidence": ["research/corpus-lock.json", "knowledge/claims/reference-dispositions.json"]
+    },
+    {
+      "id": "claim-evidence",
+      "status": "pass",
+      "summary": "Canonical normative claims have primary evidence, qualifications, versions, counterexamples, and owners.",
+      "evidence": ["knowledge/claims/canonical.json"]
+    },
+    {
+      "id": "structural-validation",
+      "status": "pass",
+      "summary": "Canonical skills, four-client packaging, archives, and clean-clone Codex installation have structural evidence.",
+      "evidence": ["docs/compatibility.md", "dist/provenance.json", "evaluations/reports/latest.json"]
+    },
+    {
+      "id": "hidden-routing",
+      "status": "blocked",
+      "summary": "A private release holdout with unrelated prompts has not been frozen and scored.",
+      "evidence": ["evaluations/reports/latest.json"]
+    },
+    {
+      "id": "discovery-budget",
+      "status": "pass",
+      "summary": "All collection and combined discovery footprints are within the conservative serialized limits.",
+      "evidence": ["catalog/catalog.json", "docs/compatibility.md"]
+    },
+    {
+      "id": "critical-correctness",
+      "status": "blocked",
+      "summary": "Zero critical failures is not established across the full quality and holdout matrix.",
+      "evidence": ["evaluations/reports/latest.json"]
+    },
+    {
+      "id": "fixture-superiority",
+      "status": "blocked",
+      "summary": "All 12 deterministic fixtures have not been scored across baseline and every competitor arm.",
+      "evidence": ["docs/evaluations.md", "evaluations/reports/latest.json"]
+    },
+    {
+      "id": "paired-superiority",
+      "status": "blocked",
+      "summary": "The current ten-pair development screens have overlapping intervals and do not clear release thresholds.",
+      "evidence": ["evaluations/reports/development/ours-vs-cxuu-golang-skills-routing.json", "evaluations/reports/latest.json"]
+    },
+    {
+      "id": "domain-non-inferiority",
+      "status": "blocked",
+      "summary": "Collection-level non-inferiority is not established on the complete quality matrix.",
+      "evidence": ["evaluations/reports/latest.json"]
+    },
+    {
+      "id": "baseline-improvement",
+      "status": "blocked",
+      "summary": "A statistically positive paired improvement over the no-skill baseline is not established.",
+      "evidence": ["evaluations/reports/latest.json"]
+    },
+    {
+      "id": "token-efficiency",
+      "status": "blocked",
+      "summary": "Routing screens expose token rates, but the full quality frontier is not established.",
+      "evidence": ["evaluations/reports/development/ours-routing.json", "evaluations/reports/latest.json"]
+    },
+    {
+      "id": "artifact-traceability",
+      "status": "blocked",
+      "summary": "Development artifacts are traceable, but the complete release and holdout artifacts do not yet exist.",
+      "evidence": ["evaluations/reports/latest.json", "dist/provenance.json"]
+    }
+  ]
+}

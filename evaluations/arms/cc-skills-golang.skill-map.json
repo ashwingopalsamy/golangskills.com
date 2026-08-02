@@ -1,0 +1,22 @@
+{
+  "go-language-engineering": "golang-code-style",
+  "go-project-and-api-design": "golang-project-layout",
+  "go-service-boundaries": "golang-grpc",
+  "go-testing-and-verification": "golang-testing",
+  "go-performance-and-diagnostics": "golang-performance",
+  "go-security-hardening": "golang-security",
+  "go-production-operations": "golang-observability",
+  "review-go-engineering-change": "golang-code-style",
+  "go-concurrency-lifecycle": "golang-concurrency",
+  "go-data-consistency": "golang-database",
+  "go-message-processing": "NONE",
+  "go-service-resilience": "golang-context",
+  "go-distributed-coordination": "NONE",
+  "review-go-distributed-change": "golang-concurrency",
+  "go-money-and-ledgers": "NONE",
+  "go-payment-lifecycles": "NONE",
+  "go-financial-idempotency": "NONE",
+  "go-clearing-settlement-reconciliation": "NONE",
+  "go-fintech-security-compliance": "golang-security",
+  "review-go-fintech-change": "golang-code-style"
+}

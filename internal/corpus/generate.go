@@ -347,8 +347,13 @@ func buildCatalog(collection Collection) catalog {
 		Benchmark: benchmarkStatus{
 			LeadershipClaimEligible: false,
 			Status:                  "evidence-pending",
-			BlockingGates:           []string{"full multi-arm benchmark not yet completed", "confidence intervals not yet established"},
-			EvidencePath:            "evaluations/reports/latest.json",
+			BlockingGates: []string{
+				"private holdout and unrelated-prompt routing evidence pending",
+				"full baseline and competitor fixture matrix pending",
+				"paired superiority, domain non-inferiority, and baseline improvement pending",
+				"quality token-efficiency frontier and complete traceability pending",
+			},
+			EvidencePath: "evaluations/reports/release-gates.json",
 		},
 	}
 	byCollection := skillsByCollection(collection.Skills)

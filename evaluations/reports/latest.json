@@ -7,13 +7,44 @@
     "model": "gpt-5.6-sol",
     "client_version": "codex-cli 0.148.0-alpha.9",
     "cases": 10,
-    "passed": 9,
-    "pass_rate": 0.9,
-    "ci_lower_95": 0.5958499732047615,
-    "ci_upper_95": 0.9821237869049271,
+    "fixture_commit": "3365b989b4e39c4e2bc0a2a97689ba4aaaf06ced",
+    "scorer_version": "skillctl-eval-v2",
+    "passed": 10,
+    "pass_rate": 1.0,
+    "ci_lower_95": 0.7224672001371107,
+    "ci_upper_95": 0.9999999999999999,
     "critical_failures": 0,
-    "raw_artifact": "evaluations/runs/2026-08-18-ours-routing-screen-v2.jsonl",
-    "score_artifact": "evaluations/scores/2026-08-18-ours-routing-screen-v2.jsonl"
+    "raw_artifact": "evaluations/runs/2026-08-18-ours-routing-screen-v4.jsonl",
+    "score_artifact": "evaluations/scores/2026-08-18-ours-routing-screen-v4.jsonl"
+  },
+  "competitor_routing_screen": {
+    "cases_per_arm": 10,
+    "results": [
+      {"arm": "cxuu-golang-skills", "model": "gpt-5.6-sol", "client_version": "codex-cli 0.148.0-alpha.9", "fixture_commit": "3365b989b4e39c4e2bc0a2a97689ba4aaaf06ced", "scorer_version": "skillctl-eval-v2", "passed": 7, "pass_rate": 0.7, "ci_lower_95": 0.39677814746114537, "ci_upper_95": 0.8922087325936989, "critical_failures": 1, "raw_artifact": "evaluations/runs/2026-08-18-cxuu-golang-skills-routing-screen.jsonl", "score_artifact": "evaluations/scores/2026-08-18-cxuu-golang-skills-routing-screen.jsonl"},
+      {"arm": "gophers", "model": "gpt-5.6-sol", "client_version": "codex-cli 0.148.0-alpha.9", "fixture_commit": "3365b989b4e39c4e2bc0a2a97689ba4aaaf06ced", "scorer_version": "skillctl-eval-v2", "passed": 6, "pass_rate": 0.6, "ci_lower_95": 0.31267376973365824, "ci_upper_95": 0.8318196702937638, "critical_failures": 1, "raw_artifact": "evaluations/runs/2026-08-18-gophers-routing-screen-v2.jsonl", "score_artifact": "evaluations/scores/2026-08-18-gophers-routing-screen-v2.jsonl"},
+      {"arm": "go-skills", "model": "gpt-5.6-sol", "client_version": "codex-cli 0.148.0-alpha.9", "fixture_commit": "3365b989b4e39c4e2bc0a2a97689ba4aaaf06ced", "scorer_version": "skillctl-eval-v2", "passed": 6, "pass_rate": 0.6, "ci_lower_95": 0.31267376973365824, "ci_upper_95": 0.8318196702937638, "critical_failures": 2, "raw_artifact": "evaluations/runs/2026-08-18-go-skills-routing-screen.jsonl", "score_artifact": "evaluations/scores/2026-08-18-go-skills-routing-screen.jsonl"},
+      {"arm": "cc-skills-golang", "model": "gpt-5.6-sol", "client_version": "codex-cli 0.148.0-alpha.9", "fixture_commit": "3365b989b4e39c4e2bc0a2a97689ba4aaaf06ced", "scorer_version": "skillctl-eval-v2", "passed": 5, "pass_rate": 0.5, "ci_lower_95": 0.236593090512564, "ci_upper_95": 0.7634069094874361, "critical_failures": 1, "raw_artifact": "evaluations/runs/2026-08-18-cc-skills-golang-routing-screen-v2.jsonl", "score_artifact": "evaluations/scores/2026-08-18-cc-skills-golang-routing-screen-v2.jsonl"},
+      {"arm": "golang-ddd-skills", "model": "gpt-5.6-sol", "client_version": "codex-cli 0.148.0-alpha.9", "fixture_commit": "115dc00fc136635e3409b07eb0bac760b66cf683", "scorer_version": "skillctl-eval-v2", "passed": 4, "pass_rate": 0.4, "ci_lower_95": 0.16818032970623614, "ci_upper_95": 0.6873262302663417, "critical_failures": 3, "raw_artifact": "evaluations/runs/2026-08-18-golang-ddd-skills-routing-screen.jsonl", "score_artifact": "evaluations/scores/2026-08-18-golang-ddd-skills-routing-screen.jsonl"}
+    ],
+    "qualification": "Development screen only; confidence intervals overlap and no superiority claim is permitted."
+  },
+  "computed_routing_reports": {
+    "arm_reports": [
+      "evaluations/reports/development/ours-routing.json",
+      "evaluations/reports/development/cxuu-golang-skills-routing.json",
+      "evaluations/reports/development/gophers-routing.json",
+      "evaluations/reports/development/go-skills-routing.json",
+      "evaluations/reports/development/cc-skills-golang-routing.json",
+      "evaluations/reports/development/golang-ddd-skills-routing.json"
+    ],
+    "paired_reports": [
+      "evaluations/reports/development/ours-vs-cxuu-golang-skills-routing.json",
+      "evaluations/reports/development/ours-vs-gophers-routing.json",
+      "evaluations/reports/development/ours-vs-go-skills-routing.json",
+      "evaluations/reports/development/ours-vs-cc-skills-golang-routing.json",
+      "evaluations/reports/development/ours-vs-golang-ddd-skills-routing.json"
+    ],
+    "qualification": "These reports expose routing and token metrics, but zero unrelated-prompt cases and ten pairs make every release threshold ineligible."
   },
   "targeted_rerun": {
     "case": "go-clearing-settlement-reconciliation/avoid-initial-auth",

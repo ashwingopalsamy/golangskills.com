@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "frozen_on": "2026-08-18",
+  "arms": [
+    {
+      "name": "cc-skills-golang",
+      "repository_commit": "30cdf15cde8db8730c42a2918d7cdb4505f5ff54",
+      "skills_root": "/reference-checkouts/cc-skills-golang/skills",
+      "skill_map": "evaluations/arms/cc-skills-golang.skill-map.json"
+    },
+    {
+      "name": "cxuu-golang-skills",
+      "repository_commit": "91f0c2eef559a3168f9d3c38f5f99936d472b508",
+      "skills_root": "/reference-checkouts/cxuu-golang-skills/skills",
+      "skill_map": "evaluations/arms/cxuu-golang-skills.skill-map.json"
+    },
+    {
+      "name": "go-skills",
+      "repository_commit": "e67851cfcca008592c7c4965b8220c7cb37e2f1c",
+      "skills_root": "/reference-checkouts/go-skills",
+      "skill_map": "evaluations/arms/go-skills.skill-map.json"
+    },
+    {
+      "name": "gophers",
+      "repository_commit": "d4bc22a03ccb4550fcd148b7ad56250624799c72",
+      "skills_root": "/reference-checkouts/gophers/skills",
+      "skill_map": "evaluations/arms/gophers.skill-map.json"
+    },
+    {
+      "name": "golang-ddd-skills",
+      "repository_commit": "0cf1ee4d7facd50d1f25cce956dcc2fe252bf29d",
+      "skills_root": "/reference-checkouts/golang-ddd-skills/skills",
+      "skill_map": "evaluations/arms/golang-ddd-skills.skill-map.json"
+    }
+  ]
+}

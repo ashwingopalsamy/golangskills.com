@@ -1,0 +1,22 @@
+{
+  "go-language-engineering": "go-style-core",
+  "go-project-and-api-design": "go-packages",
+  "go-service-boundaries": "NONE",
+  "go-testing-and-verification": "go-testing",
+  "go-performance-and-diagnostics": "go-performance",
+  "go-security-hardening": "go-defensive",
+  "go-production-operations": "go-logging",
+  "review-go-engineering-change": "go-code-review",
+  "go-concurrency-lifecycle": "go-concurrency",
+  "go-data-consistency": "NONE",
+  "go-message-processing": "NONE",
+  "go-service-resilience": "go-context",
+  "go-distributed-coordination": "NONE",
+  "review-go-distributed-change": "go-code-review",
+  "go-money-and-ledgers": "NONE",
+  "go-payment-lifecycles": "NONE",
+  "go-financial-idempotency": "NONE",
+  "go-clearing-settlement-reconciliation": "NONE",
+  "go-fintech-security-compliance": "go-defensive",
+  "review-go-fintech-change": "go-code-review"
+}

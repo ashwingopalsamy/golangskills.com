@@ -1,0 +1,55 @@
+{
+  "schema_version": 2,
+  "arm": "cxuu-golang-skills",
+  "cases": 10,
+  "passed": 7,
+  "pass_rate": 0.7,
+  "mean_score": 0.7,
+  "ci_lower_95": 0.39677814746114537,
+  "ci_upper_95": 0.8922087325936989,
+  "critical_failures": 1,
+  "collections": [
+    {
+      "collection": "distributed-systems-skills-for-go",
+      "cases": 2,
+      "passed": 1,
+      "pass_rate": 0.5,
+      "mean_score": 0.5
+    },
+    {
+      "collection": "engineering-skills-for-go",
+      "cases": 2,
+      "passed": 1,
+      "pass_rate": 0.5,
+      "mean_score": 0.5
+    },
+    {
+      "collection": "fintech-skills-for-go",
+      "cases": 6,
+      "passed": 5,
+      "pass_rate": 0.8333333333333334,
+      "mean_score": 0.8333333333333334
+    }
+  ],
+  "routing": {
+    "cases": 10,
+    "macro_f1": 0.5656565656565656,
+    "unrelated_cases": 4,
+    "false_activations": 0,
+    "false_activation_rate": 0
+  },
+  "tokens": {
+    "input_tokens": 156626,
+    "cached_input_tokens": 103936,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 166,
+    "reasoning_output_tokens": 110,
+    "score_per_k_input_tokens": 0.04469245208330673
+  },
+  "failure_cases": [
+    "go-fintech-security-compliance/avoid-generic-ssrf",
+    "go-message-processing/avoid-channel-pipeline",
+    "go-service-boundaries/avoid-retry-storm"
+  ],
+  "input": "evaluations/scores/2026-08-18-cxuu-golang-skills-routing-screen.jsonl"
+}

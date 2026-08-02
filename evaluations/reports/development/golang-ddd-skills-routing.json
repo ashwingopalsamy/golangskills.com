@@ -1,0 +1,58 @@
+{
+  "schema_version": 2,
+  "arm": "golang-ddd-skills",
+  "cases": 10,
+  "passed": 4,
+  "pass_rate": 0.4,
+  "mean_score": 0.4,
+  "ci_lower_95": 0.16818032970623614,
+  "ci_upper_95": 0.6873262302663417,
+  "critical_failures": 4,
+  "collections": [
+    {
+      "collection": "distributed-systems-skills-for-go",
+      "cases": 2,
+      "passed": 1,
+      "pass_rate": 0.5,
+      "mean_score": 0.5
+    },
+    {
+      "collection": "engineering-skills-for-go",
+      "cases": 2,
+      "passed": 1,
+      "pass_rate": 0.5,
+      "mean_score": 0.5
+    },
+    {
+      "collection": "fintech-skills-for-go",
+      "cases": 6,
+      "passed": 2,
+      "pass_rate": 0.3333333333333333,
+      "mean_score": 0.3333333333333333
+    }
+  ],
+  "routing": {
+    "cases": 10,
+    "macro_f1": 0.3444444444444444,
+    "unrelated_cases": 1,
+    "false_activations": 0,
+    "false_activation_rate": 0
+  },
+  "tokens": {
+    "input_tokens": 152806,
+    "cached_input_tokens": 99840,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 333,
+    "reasoning_output_tokens": 251,
+    "score_per_k_input_tokens": 0.02617698257921809
+  },
+  "failure_cases": [
+    "go-clearing-settlement-reconciliation/avoid-initial-auth",
+    "go-financial-idempotency/avoid-broker-offset",
+    "go-fintech-security-compliance/avoid-generic-ssrf",
+    "go-payment-lifecycles/route-payment-machine",
+    "go-service-resilience/route-amplification",
+    "go-testing-and-verification/route-flaky-race-test"
+  ],
+  "input": "evaluations/scores/2026-08-18-golang-ddd-skills-routing-screen.jsonl"
+}

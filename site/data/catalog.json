@@ -2067,9 +2067,11 @@
     "leadership_claim_eligible": false,
     "status": "evidence-pending",
     "blocking_gates": [
-      "full multi-arm benchmark not yet completed",
-      "confidence intervals not yet established"
+      "private holdout and unrelated-prompt routing evidence pending",
+      "full baseline and competitor fixture matrix pending",
+      "paired superiority, domain non-inferiority, and baseline improvement pending",
+      "quality token-efficiency frontier and complete traceability pending"
     ],
-    "evidence_path": "evaluations/reports/latest.json"
+    "evidence_path": "evaluations/reports/release-gates.json"
   }
 }
