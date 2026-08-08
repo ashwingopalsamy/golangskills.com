@@ -21,6 +21,8 @@ import (
 	"github.com/ashwingopalsamy/golangskills.com/internal/corpus"
 )
 
+const runnerGraderVersion = "skillctl-runner-v2-hidden-oracle"
+
 // ClientStatus is a read-only runner availability and authentication result.
 type ClientStatus struct {
 	Client        string `json:"client"`
@@ -108,7 +110,21 @@ type Score struct {
 	Passed        bool            `json:"passed"`
 	Score         float64         `json:"score"`
 	GraderScore   map[string]bool `json:"grader_score"`
+	Semantic      *SemanticScore  `json:"semantic,omitempty"`
 	Failures      []string        `json:"failures,omitempty"`
+}
+
+// SemanticScore is the compact, traceable semantic component merged into a
+// score. Full evaluator evidence remains in the separate judgment artifact.
+type SemanticScore struct {
+	JudgmentID    string  `json:"judgment_id"`
+	RubricVersion string  `json:"rubric_version"`
+	Runner        string  `json:"runner"`
+	Model         string  `json:"model"`
+	SamePlatform  bool    `json:"same_platform"`
+	Score         float64 `json:"score"`
+	Passed        bool    `json:"passed"`
+	Critical      bool    `json:"critical"`
 }
 
 // Preflight inspects supported local runners without changing authentication.
@@ -248,13 +264,14 @@ func flattenCases(collection corpus.Collection, kind, selectedCase string, fixtu
 
 func runCase(parent context.Context, repoRoot string, options RunOptions, runID, opaqueArm, clientVersion string, item caseItem) Result {
 	started := time.Now()
+	graders := normalizedGraders(item.eval)
 	result := Result{
 		SchemaVersion: 1, RunID: runID, OpaqueArm: opaqueArm, Arm: options.Arm,
 		Runner: options.Runner, Model: options.Model, ClientVersion: clientVersion,
 		Skill: item.skill.Name, Collection: item.skill.Metadata.Collection, RiskDomains: append([]string(nil), item.skill.Metadata.RiskDomains...),
 		CaseID: item.eval.ID, Mode: benchmarkMode(options.ExplicitSkill), Repetition: options.Repetition, Kind: item.eval.Kind, Prompt: item.eval.Prompt,
-		Graders: item.eval.Graders, Invariants: item.eval.ExpectedInvariants, Forbidden: item.eval.ForbiddenOutcomes,
-		Metadata: map[string]string{"fixture_commit": gitHead(repoRoot), "grader_version": "skillctl-eval-v1"},
+		Graders: graders, Invariants: item.eval.ExpectedInvariants, Forbidden: item.eval.ForbiddenOutcomes,
+		Metadata: map[string]string{"fixture_commit": gitHead(repoRoot), "grader_version": runnerGraderVersion},
 	}
 	if item.eval.Kind == "routing" {
 		result.ExpectedRoutes = expectedRoutes(options, item)
@@ -326,11 +343,24 @@ func runCase(parent context.Context, repoRoot string, options RunOptions, runID,
 		result.Error = readErr.Error()
 	}
 	if item.eval.Fixture != "" {
-		result.GraderRuns = runFixtureGraders(parent, worktree, item.eval.Graders)
+		result.GraderRuns = runFixtureGraders(parent, repoRoot, worktree, graders)
 		result.FixtureFiles = snapshotFixture(worktree)
 	}
 	result.DurationMS = time.Since(started).Milliseconds()
 	return result
+}
+
+func normalizedGraders(eval corpus.EvalCase) []corpus.Grader {
+	graders := append([]corpus.Grader(nil), eval.Graders...)
+	if eval.Fixture == "" {
+		return graders
+	}
+	for index := range graders {
+		if graders[index].Kind == "go-test" && graders[index].Oracle == "" {
+			graders[index].Oracle = filepath.ToSlash(filepath.Join("evaluations", "oracles", filepath.Base(eval.Fixture), "hidden_test.go"))
+		}
+	}
+	return graders
 }
 
 func expectedRoutes(options RunOptions, item caseItem) []string {
@@ -368,11 +398,28 @@ func canonicalExpectedRoutes(item caseItem) []string {
 
 // ScoreFile applies only deterministic graders and writes JSONL scores.
 func ScoreFile(inputPath, outputPath string) (int, error) {
+	return scoreFile(inputPath, "", outputPath)
+}
+
+// ScoreFileWithJudgments combines deterministic graders with a complete
+// semantic judgment artifact. Missing required judgments fail closed.
+func ScoreFileWithJudgments(inputPath, judgmentsPath, outputPath string) (int, error) {
+	if judgmentsPath == "" {
+		return 0, errors.New("judgments path is required")
+	}
+	return scoreFile(inputPath, judgmentsPath, outputPath)
+}
+
+func scoreFile(inputPath, judgmentsPath, outputPath string) (int, error) {
 	input, err := os.Open(inputPath)
 	if err != nil {
 		return 0, err
 	}
 	defer input.Close()
+	judgments, err := readJudgments(judgmentsPath)
+	if err != nil {
+		return 0, err
+	}
 	if err := os.MkdirAll(filepath.Dir(outputPath), 0o755); err != nil {
 		return 0, err
 	}
@@ -391,12 +438,143 @@ func ScoreFile(inputPath, outputPath string) (int, error) {
 			return count, err
 		}
 		score := scoreResult(result)
+		if judgmentsPath != "" && requiresSemanticJudgment(result) {
+			judgmentID := semanticJudgmentID(result, judgments.runner, judgments.model)
+			judgment, exists := judgments.byID[judgmentID]
+			if !exists {
+				applyMissingJudgment(&score)
+			} else {
+				applyJudgment(&score, judgment)
+			}
+		}
 		if err := encoder.Encode(score); err != nil {
 			return count, err
 		}
 		count++
 	}
 	return count, scanner.Err()
+}
+
+type judgmentIndex struct {
+	runner string
+	model  string
+	byID   map[string]Judgment
+}
+
+func readJudgments(path string) (judgmentIndex, error) {
+	index := judgmentIndex{byID: make(map[string]Judgment)}
+	if path == "" {
+		return index, nil
+	}
+	file, err := os.Open(path)
+	if err != nil {
+		return index, err
+	}
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+	scanner.Buffer(make([]byte, 64*1024), 16*1024*1024)
+	for scanner.Scan() {
+		var judgment Judgment
+		if err := json.Unmarshal(scanner.Bytes(), &judgment); err != nil {
+			return index, err
+		}
+		if judgment.JudgmentID == "" || judgment.Runner == "" || judgment.Model == "" {
+			return index, errors.New("judgment artifact is missing identity fields")
+		}
+		if index.runner == "" {
+			index.runner, index.model = judgment.Runner, judgment.Model
+		}
+		if judgment.Runner != index.runner || judgment.Model != index.model {
+			return index, errors.New("judgment artifact mixes evaluator runner or model")
+		}
+		if previous, duplicate := index.byID[judgment.JudgmentID]; duplicate {
+			switch {
+			case previous.Error != "" && judgment.Error == "":
+				index.byID[judgment.JudgmentID] = judgment
+			case previous.Error != "" && judgment.Error != "":
+				index.byID[judgment.JudgmentID] = judgment
+			default:
+				return index, fmt.Errorf("duplicate successful judgment_id %q", judgment.JudgmentID)
+			}
+			continue
+		}
+		index.byID[judgment.JudgmentID] = judgment
+	}
+	return index, scanner.Err()
+}
+
+func applyMissingJudgment(score *Score) {
+	score.Semantic = &SemanticScore{}
+	score.ScorerVersion = "skillctl-eval-v3-semantic"
+	score.Score = 0
+	score.Passed = false
+	score.Failures = append(score.Failures, "semantic judgment missing")
+}
+
+func applyJudgment(score *Score, judgment Judgment) {
+	semanticScore, semanticPassed, semanticCritical := computeRubricScore(judgment.Verdict)
+	semantic := &SemanticScore{
+		JudgmentID: judgment.JudgmentID, RubricVersion: judgment.RubricVersion,
+		Runner: judgment.Runner, Model: judgment.Model, SamePlatform: judgment.SamePlatform,
+		Score: semanticScore, Passed: semanticPassed, Critical: semanticCritical,
+	}
+	score.Semantic = semantic
+	score.ScorerVersion = "skillctl-eval-v3-semantic"
+	if err := validateJudgment(score.Result, judgment, semanticScore, semanticPassed, semanticCritical); err != nil {
+		semantic.Score, semantic.Passed, semantic.Critical = 0, false, false
+		score.Score = 0
+		score.Passed = false
+		score.Failures = append(score.Failures, "semantic judgment invalid: "+err.Error())
+		return
+	}
+	score.Score = semanticScore
+	score.Passed = semanticPassed
+	score.Failures = withoutResponseGraderFailures(score.Failures)
+	if !semanticPassed {
+		score.Failures = append(score.Failures, "semantic rubric failed")
+	}
+}
+
+func withoutResponseGraderFailures(failures []string) []string {
+	filtered := failures[:0]
+	for _, failure := range failures {
+		if !strings.HasPrefix(failure, "grader ") {
+			filtered = append(filtered, failure)
+		}
+	}
+	return filtered
+}
+
+func validateJudgment(result Result, judgment Judgment, score float64, passed, critical bool) error {
+	if judgment.Error != "" {
+		return errors.New("evaluator failed")
+	}
+	if judgment.SchemaVersion != judgmentSchemaVersion || judgment.RubricVersion != rubricVersion {
+		return errors.New("schema or rubric version mismatch")
+	}
+	if judgment.Arm != result.Arm || judgment.Skill != result.Skill || judgment.CaseID != result.CaseID || judgment.Mode != result.Mode || judgment.Repetition != result.Repetition {
+		return errors.New("candidate identity mismatch")
+	}
+	if judgment.JudgmentID != semanticJudgmentID(result, judgment.Runner, judgment.Model) {
+		return errors.New("judgment ID does not bind the candidate")
+	}
+	if judgment.SamePlatform != strings.EqualFold(result.Runner, judgment.Runner) {
+		return errors.New("same-platform label mismatch")
+	}
+	if judgment.Metadata["source_digest"] != semanticSourceDigest(result) {
+		return errors.New("source digest mismatch")
+	}
+	if !gitCommitPattern.MatchString(judgment.Metadata["evaluator_commit"]) {
+		return errors.New("evaluator commit missing or invalid")
+	}
+	if err := validateRubricVerdict(result, judgment.Verdict); err != nil {
+		return err
+	}
+	if judgment.Score != score || judgment.Passed != passed || judgment.Critical != critical {
+		return errors.New("stored semantic totals do not match rubric booleans")
+	}
+	return nil
 }
 
 func scoreResult(result Result) Score {
@@ -507,10 +685,14 @@ func copySkills(source, destination string, explicit bool, skillName string) err
 	return nil
 }
 
-func runFixtureGraders(parent context.Context, worktree string, graders []corpus.Grader) map[string]GraderRun {
+func runFixtureGraders(parent context.Context, repoRoot, worktree string, graders []corpus.Grader) map[string]GraderRun {
 	runs := make(map[string]GraderRun)
 	for _, grader := range graders {
 		if grader.Kind != "go-test" {
+			continue
+		}
+		if err := installOracle(repoRoot, worktree, grader.Oracle); err != nil {
+			runs[grader.ID] = GraderRun{Passed: false, ExitCode: -1, Output: "install post-edit oracle: " + err.Error()}
 			continue
 		}
 		args := []string{"test", "-mod=readonly", "./..."}
@@ -530,6 +712,32 @@ func runFixtureGraders(parent context.Context, worktree string, graders []corpus
 		runs[grader.ID] = run
 	}
 	return runs
+}
+
+func installOracle(repoRoot, worktree, relative string) error {
+	clean := filepath.ToSlash(filepath.Clean(filepath.FromSlash(relative)))
+	if clean != relative || !strings.HasPrefix(clean, "evaluations/oracles/") || !strings.HasSuffix(clean, "_test.go") {
+		return fmt.Errorf("unsafe oracle path %q", relative)
+	}
+	source := filepath.Join(repoRoot, filepath.FromSlash(clean))
+	info, err := os.Lstat(source)
+	if err != nil {
+		return err
+	}
+	if !info.Mode().IsRegular() {
+		return fmt.Errorf("oracle %s is not a regular file", relative)
+	}
+	content, err := os.ReadFile(source)
+	if err != nil {
+		return err
+	}
+	destination := filepath.Join(worktree, filepath.Base(source))
+	if _, err := os.Lstat(destination); err == nil {
+		return fmt.Errorf("oracle destination %s already exists", filepath.Base(destination))
+	} else if !errors.Is(err, os.ErrNotExist) {
+		return err
+	}
+	return os.WriteFile(destination, content, 0o444)
 }
 
 func snapshotFixture(root string) map[string]string {

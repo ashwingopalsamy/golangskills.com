@@ -1,5 +1,7 @@
 # Go Engineering Skills by Ashwin Gopalsamy
 
+Current implementation status and benchmark evidence are tracked in the public catalog and evaluation reports.
+
 Evidence-backed Agent Skills for production Go, distributed systems, and fintech—authored by [Ashwin Gopalsamy](https://ashwingopalsamy.in).
 
 The ecosystem ships three non-overlapping installable collections:
@@ -49,12 +51,13 @@ go run ./cmd/skillctl eval preflight
 go run ./cmd/skillctl eval run -runner codex -arm ours -kind routing -output evaluations/runs/ours-routing.jsonl
 go run ./cmd/skillctl eval matrix -runner codex -model gpt-5.6-sol -fixtures-only -output evaluations/runs/fixture-matrix.jsonl
 go run ./cmd/skillctl eval score -input evaluations/runs/ours-routing.jsonl -output evaluations/scores/ours-routing.jsonl
+go run ./cmd/skillctl eval score -input evaluations/runs/quality-matrix.jsonl -judgments evaluations/judgments/quality-matrix-codex.jsonl -judge-model gpt-5.6-sol -output evaluations/scores/quality-matrix-semantic.jsonl
 go run ./cmd/skillctl eval report -input evaluations/scores/ours-routing.jsonl
 go run ./cmd/skillctl eval report -input evaluations/scores/ours-routing.jsonl -against evaluations/scores/competitor-routing.jsonl
 go run ./cmd/skillctl release check
 ```
 
-`check` validates schema v2, claim ownership and exposed evidence, complete reference disposition coverage, source freshness, discovery budgets, activation overlap, fixture paths, links, relations, licenses, and generated freshness. The eval harness creates a new isolated directory and ephemeral session per cell, globally randomizes mixed-arm matrices, uses distinct opaque arm labels, resumes by mode and repetition, scores deterministic graders first, and reports Wilson confidence intervals, routing macro-F1, unrelated-prompt false activation, collection scores, token efficiency, paired bootstrap intervals, and Pareto relations. Fixture cells preserve edited Go sources and allowlisted `go test` output. Competitor routing requires a committed `-routing-map`; explicit competitor runs require a committed `-skill-map`.
+`check` validates schema v2, claim ownership and exposed evidence, complete reference disposition coverage, source freshness, discovery budgets, activation overlap, fixture/oracle paths, links, relations, licenses, and generated freshness. The eval harness creates a new isolated directory and ephemeral session per cell, globally randomizes mixed-arm matrices, uses distinct opaque arm labels, resumes by mode and repetition, scores deterministic graders first, and reports Wilson confidence intervals, routing macro-F1, unrelated-prompt false activation, collection scores, token efficiency, paired bootstrap intervals, and Pareto relations. Fixture cells hide the decisive test until the agent exits, then preserve edited Go sources, the injected oracle, and allowlisted offline `go test` output. Non-executable quality cases can use schema-constrained, identity-redacted, resumable semantic judgments; Codex-on-Codex results are labeled same-platform rather than independent. Competitor routing requires a committed `-routing-map`; explicit competitor runs require a committed `-skill-map`.
 
 Frozen local competitor mappings live under `evaluations/arms/`. A per-case routing map can override the canonical-to-arm skill map; otherwise the harness derives accepted arm-local IDs and accepts their isolated plugin namespace prefix.
 

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_on": "2026-08-18",
+  "generated_on": "2026-08-24",
   "leadership_claim_eligible": false,
   "status": "development-screen-only",
   "codex_screen": {
@@ -154,6 +154,80 @@
     ],
     "qualification": "Every arm passed every visible-test fixture. This is valid harness evidence but a failed benchmark design with zero discriminatory value; post-edit hidden oracles are required before rerunning."
   },
+  "hidden_oracle_smoke_matrix": {
+    "fixture_commit": "6c1c473b272cb048408f685f118c409c58761672",
+    "model": "gpt-5.6-sol",
+    "client_version": "codex-cli 0.148.0-alpha.9",
+    "scorer_version": "skillctl-eval-v2",
+    "cases": [
+      "go-testing-and-verification/quality-fuzz-parser",
+      "go-clearing-settlement-reconciliation/quality-item-match",
+      "go-concurrency-lifecycle/quality-compound-state"
+    ],
+    "arms": 7,
+    "cells": 21,
+    "runner_errors": 0,
+    "pass_rates": {
+      "baseline": 1.0,
+      "ours": 1.0,
+      "cc-skills-golang": 1.0,
+      "cxuu-golang-skills": 1.0,
+      "go-skills": 1.0,
+      "gophers": 1.0,
+      "golang-ddd-skills": 1.0
+    },
+    "raw_artifacts": [
+      "evaluations/runs/2026-08-18-hidden-oracle-smoke.jsonl",
+      "evaluations/runs/2026-08-18-hidden-oracle-reconciliation-smoke.jsonl",
+      "evaluations/runs/2026-08-18-hidden-oracle-race-smoke.jsonl"
+    ],
+    "score_artifacts": [
+      "evaluations/scores/2026-08-18-hidden-oracle-smoke.jsonl",
+      "evaluations/scores/2026-08-18-hidden-oracle-reconciliation-smoke.jsonl",
+      "evaluations/scores/2026-08-18-hidden-oracle-race-smoke.jsonl"
+    ],
+    "qualification": "Post-edit oracle isolation is operational, but all three cases saturated across all arms. These cells are harness and minimum-competence evidence only; they provide no fixture-superiority inference."
+  },
+  "semantic_judgment_smoke": {
+    "source_fixture_commit": "16cf9bf2a8315cc52ac8fc30e6f36c0e8e3a2ee7",
+    "evaluator_commit": "5a33e126b2fabeda3a74c2df0579a44e7cc4d82e",
+    "model": "gpt-5.6-sol",
+    "client_version": "codex-cli 0.149.0-alpha.4.1",
+    "scorer_version": "skillctl-eval-v3-semantic",
+    "judgment_schema_version": 2,
+    "rubric_version": "skillctl-rubric-v2-explicit-support",
+    "case": "review-go-fintech-change/quality-duplicate-charge",
+    "mode": "native",
+    "arms": 7,
+    "cells": 7,
+    "runner_errors": 0,
+    "judgment_errors": 0,
+    "same_platform": true,
+    "resumed_judgments_on_identical_rerun": 0,
+    "semantic_scores": {
+      "ours": 1.0,
+      "baseline": 0.6666666666666666,
+      "cc-skills-golang": 0.6666666666666666,
+      "golang-ddd-skills": 0.6666666666666666,
+      "cxuu-golang-skills": 0.3333333333333333,
+      "go-skills": 0.3333333333333333,
+      "gophers": 0.3333333333333333
+    },
+    "raw_artifact": "evaluations/runs/2026-08-24-semantic-judge-smoke-native.jsonl",
+    "judgment_artifact": "evaluations/judgments/2026-08-24-semantic-judge-smoke-native-codex.jsonl",
+    "score_artifact": "evaluations/scores/2026-08-24-semantic-judge-smoke-native.jsonl",
+    "arm_report": "evaluations/reports/development/semantic-judge-smoke-ours.json",
+    "paired_reports": [
+      "evaluations/reports/development/semantic-judge-smoke-ours-vs-baseline.json",
+      "evaluations/reports/development/semantic-judge-smoke-ours-vs-cc-skills-golang.json",
+      "evaluations/reports/development/semantic-judge-smoke-ours-vs-cxuu-golang-skills.json",
+      "evaluations/reports/development/semantic-judge-smoke-ours-vs-go-skills.json",
+      "evaluations/reports/development/semantic-judge-smoke-ours-vs-gophers.json",
+      "evaluations/reports/development/semantic-judge-smoke-ours-vs-golang-ddd-skills.json"
+    ],
+    "superseded_attempts_retained": "The append-only judgment artifact retains 14 schema-v1 attempts that exposed and then rechecked a leniency defect; scoring selects the seven current schema-v2 judgments.",
+    "qualification": "Development harness evidence only. One public case has no comparative or statistical inferential value, and Codex-on-Codex judgment is same-platform rather than independent."
+  },
   "targeted_rerun": {
     "case": "go-clearing-settlement-reconciliation/avoid-initial-auth",
     "passed": true,
@@ -184,7 +258,8 @@
     "full baseline and multi-competitor behavioral quality matrix not yet completed",
     "the quality half of the 80-scenario full-arm matrix and hard-case repetitions are not yet completed",
     "public routing macro-F1 clears its threshold, but private unrelated-prompt false activation is not established",
-    "visible-test fixtures tied every arm; the post-edit hidden-oracle fixture matrix is not yet scored",
+    "three post-edit hidden-oracle cases tied every arm; harder frozen fixtures are required before a full quality matrix",
+    "the semantic judge is operational, but only one public quality case has current schema-v2 judgment evidence",
     "paired win-rate confidence intervals and token-efficiency frontier not yet established"
   ]
 }

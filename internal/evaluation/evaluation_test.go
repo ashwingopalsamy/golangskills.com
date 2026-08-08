@@ -32,12 +32,63 @@ func TestRunFixtureGradersExecutesGoTest(t *testing.T) {
 	if err := os.WriteFile(filepath.Join(root, "go.mod"), []byte("module fixture/test\n\ngo 1.24\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(filepath.Join(root, "fixture_test.go"), []byte("package fixture_test\nimport \"testing\"\nfunc TestPass(t *testing.T) {}\n"), 0o644); err != nil {
+	if err := os.WriteFile(filepath.Join(root, "fixture.go"), []byte("package fixture\n\nfunc Value() int { return 1 }\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	runs := runFixtureGraders(context.Background(), root, []corpus.Grader{{ID: "tests", Kind: "go-test", Target: "./..."}})
+	repository := t.TempDir()
+	oracleDir := filepath.Join(repository, "evaluations", "oracles", "fixture")
+	if err := os.MkdirAll(oracleDir, 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(oracleDir, "hidden_test.go"), []byte("package fixture\nimport \"testing\"\nfunc TestHidden(t *testing.T) { if Value() != 1 { t.Fatal(Value()) } }\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := os.Stat(filepath.Join(root, "hidden_test.go")); !os.IsNotExist(err) {
+		t.Fatalf("oracle visible before grading: %v", err)
+	}
+	runs := runFixtureGraders(context.Background(), repository, root, []corpus.Grader{{ID: "tests", Kind: "go-test", Target: "./...", Oracle: "evaluations/oracles/fixture/hidden_test.go"}})
 	if !runs["tests"].Passed {
 		t.Fatalf("grader run = %#v", runs["tests"])
+	}
+	info, err := os.Stat(filepath.Join(root, "hidden_test.go"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if info.Mode().Perm() != 0o444 {
+		t.Fatalf("oracle mode = %o, want 444", info.Mode().Perm())
+	}
+}
+
+func TestNormalizedGradersInfersLockedOracle(t *testing.T) {
+	t.Parallel()
+	graders := normalizedGraders(corpus.EvalCase{
+		Fixture: "evaluations/fixtures/race-counter",
+		Graders: []corpus.Grader{{ID: "race", Kind: "go-test", Target: "-race ./...", Weight: 1}},
+	})
+	if len(graders) != 1 || graders[0].Oracle != "evaluations/oracles/race-counter/hidden_test.go" {
+		t.Fatalf("normalizedGraders() = %#v", graders)
+	}
+}
+
+func TestInstallOracleRejectsNonCanonicalPathAndCollision(t *testing.T) {
+	t.Parallel()
+	repository := t.TempDir()
+	oracleDir := filepath.Join(repository, "evaluations", "oracles", "fixture")
+	if err := os.MkdirAll(oracleDir, 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(oracleDir, "hidden_test.go"), []byte("package fixture\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	worktree := t.TempDir()
+	if err := installOracle(repository, worktree, "evaluations/oracles/fixture/../fixture/hidden_test.go"); err == nil {
+		t.Fatal("installOracle() accepted a non-canonical path")
+	}
+	if err := os.WriteFile(filepath.Join(worktree, "hidden_test.go"), []byte("agent-controlled\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	if err := installOracle(repository, worktree, "evaluations/oracles/fixture/hidden_test.go"); err == nil {
+		t.Fatal("installOracle() overwrote an existing destination")
 	}
 }
 
