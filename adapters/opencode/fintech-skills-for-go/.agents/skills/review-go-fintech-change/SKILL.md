@@ -13,6 +13,8 @@ Treat any path that can invent, duplicate, lose, misstate, or conceal money as f
 
 Follow authenticated command, money representation, idempotency identity, state transition, provider attempt, ledger posting, event, settlement evidence, reconciliation, response, and audit record. Identify exact transaction boundaries and unknown-outcome windows.
 
+For every caller, payment, provider, or replay identity, verify its authority scope and canonical payload binding. State all three behaviors explicitly: equivalent input replays the same outcome; different input is rejected before a new effect or prior-result disclosure; wrong authority learns nothing. Saying an identity is “bound to a fingerprint” is not an enforceable finding unless the mismatch path is defined.
+
 Load the focused skills that own the changed invariant. Common compositions are payment lifecycle + financial idempotency + data consistency for money-moving mutations; settlement + money/ledger + message processing for replayed adjustments; and fintech security/compliance + security hardening for payment-data code with an implementation exploit.
 
 ## Critical schedules
