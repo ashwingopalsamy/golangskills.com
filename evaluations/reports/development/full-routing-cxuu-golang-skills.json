@@ -1,0 +1,67 @@
+{
+  "schema_version": 2,
+  "arm": "cxuu-golang-skills",
+  "cases": 40,
+  "passed": 25,
+  "pass_rate": 0.625,
+  "mean_score": 0.625,
+  "ci_lower_95": 0.47032439137301096,
+  "ci_upper_95": 0.7577702083276673,
+  "critical_failures": 2,
+  "collections": [
+    {
+      "collection": "distributed-systems-skills-for-go",
+      "cases": 12,
+      "passed": 8,
+      "pass_rate": 0.6666666666666666,
+      "mean_score": 0.6666666666666666
+    },
+    {
+      "collection": "engineering-skills-for-go",
+      "cases": 16,
+      "passed": 7,
+      "pass_rate": 0.4375,
+      "mean_score": 0.4375
+    },
+    {
+      "collection": "fintech-skills-for-go",
+      "cases": 12,
+      "passed": 10,
+      "pass_rate": 0.8333333333333334,
+      "mean_score": 0.8333333333333334
+    }
+  ],
+  "routing": {
+    "cases": 40,
+    "macro_f1": 0.453046953046953,
+    "unrelated_cases": 17,
+    "false_activations": 2,
+    "false_activation_rate": 0.11764705882352941
+  },
+  "tokens": {
+    "input_tokens": 647134,
+    "cached_input_tokens": 442368,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 488,
+    "reasoning_output_tokens": 245,
+    "score_per_k_input_tokens": 0.03863187531484978
+  },
+  "failure_cases": [
+    "go-distributed-coordination/avoid-local-mutex",
+    "go-fintech-security-compliance/avoid-generic-ssrf",
+    "go-fintech-security-compliance/route-card-data",
+    "go-language-engineering/avoid-http-shutdown",
+    "go-language-engineering/route-aliasing-errors",
+    "go-message-processing/avoid-channel-pipeline",
+    "go-performance-and-diagnostics/avoid-overload-policy",
+    "go-production-operations/route-readiness-shutdown",
+    "go-project-and-api-design/avoid-local-error",
+    "go-security-hardening/avoid-pci-scope",
+    "go-security-hardening/route-ssrf-command",
+    "go-service-boundaries/avoid-retry-storm",
+    "go-service-resilience/avoid-http-body",
+    "go-service-resilience/route-amplification",
+    "review-go-engineering-change/avoid-ledger-diff"
+  ],
+  "input": "evaluations/scores/2026-08-18-full-routing-matrix-native.jsonl"
+}

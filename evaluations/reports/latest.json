@@ -46,6 +46,114 @@
     ],
     "qualification": "These reports expose routing and token metrics, but zero unrelated-prompt cases and ten pairs make every release threshold ineligible."
   },
+  "mixed_matrix_smoke": {
+    "fixture_commit": "5f5bbb0001e6adeab7622553db75eb367e7056aa",
+    "cells": 7,
+    "canonical_cases": 1,
+    "arms": 7,
+    "globally_randomized": true,
+    "distinct_opaque_arm_labels": true,
+    "raw_artifact": "evaluations/runs/2026-08-18-mixed-matrix-smoke.jsonl",
+    "score_artifact": "evaluations/scores/2026-08-18-mixed-matrix-smoke.jsonl",
+    "arm_report": "evaluations/reports/development/matrix-smoke-ours.json",
+    "paired_report": "evaluations/reports/development/matrix-smoke-ours-vs-gophers.json",
+    "qualification": "Harness integration evidence only; one canonical case has no comparative inferential value."
+  },
+  "full_public_routing_matrix": {
+    "fixture_commit": "2e264813d73bcae521e2863094f580a618763ddf",
+    "model": "gpt-5.6-sol",
+    "client_version": "codex-cli 0.148.0-alpha.9",
+    "scorer_version": "skillctl-eval-v2",
+    "canonical_cases": 40,
+    "arms": 7,
+    "cells": 280,
+    "runner_errors": 0,
+    "resumed_cells_on_identical_rerun": 0,
+    "ours": {
+      "passed": 38,
+      "pass_rate": 0.95,
+      "macro_f1": 0.9533333333333335,
+      "critical_failures": 0,
+      "collection_pass_rates": {
+        "engineering-skills-for-go": 0.9375,
+        "distributed-systems-skills-for-go": 0.9166666666666666,
+        "fintech-skills-for-go": 1.0
+      },
+      "unrelated_cases": 0,
+      "score_per_k_input_tokens": 0.05776691354421297
+    },
+    "competitor_pass_rates": {
+      "cxuu-golang-skills": 0.625,
+      "go-skills": 0.6,
+      "gophers": 0.6,
+      "cc-skills-golang": 0.425,
+      "golang-ddd-skills": 0.425
+    },
+    "paired_win_rate_ci_lower_bounds": {
+      "cxuu-golang-skills": 0.5875,
+      "go-skills": 0.5875,
+      "gophers": 0.6,
+      "cc-skills-golang": 0.6875,
+      "golang-ddd-skills": 0.675
+    },
+    "raw_artifact": "evaluations/runs/2026-08-18-full-routing-matrix-native.jsonl",
+    "score_artifact": "evaluations/scores/2026-08-18-full-routing-matrix-native.jsonl",
+    "arm_report": "evaluations/reports/development/full-routing-ours.json",
+    "paired_reports": [
+      "evaluations/reports/development/full-routing-ours-vs-cc-skills-golang.json",
+      "evaluations/reports/development/full-routing-ours-vs-cxuu-golang-skills.json",
+      "evaluations/reports/development/full-routing-ours-vs-go-skills.json",
+      "evaluations/reports/development/full-routing-ours-vs-gophers.json",
+      "evaluations/reports/development/full-routing-ours-vs-golang-ddd-skills.json"
+    ],
+    "qualification": "Complete public native-discovery routing evidence. It has no unrelated holdout prompts and is not behavioral quality or no-skill improvement evidence; leadership remains ineligible."
+  },
+  "fixture_matrix_smoke": {
+    "fixture_commit": "065007ea2a8fb5bb2db0879ee63a895e551ece1c",
+    "case": "go-service-boundaries/quality-http-body",
+    "arms": 7,
+    "cells": 7,
+    "runner_errors": 0,
+    "passed_arms": 7,
+    "resumed_cells_on_identical_rerun": 0,
+    "raw_artifact": "evaluations/runs/2026-08-18-fixture-matrix-smoke.jsonl",
+    "score_artifact": "evaluations/scores/2026-08-18-fixture-matrix-smoke.jsonl",
+    "arm_report": "evaluations/reports/development/fixture-matrix-smoke-ours.json",
+    "paired_report": "evaluations/reports/development/fixture-matrix-smoke-ours-vs-baseline.json",
+    "qualification": "Executable isolation and grading evidence only; one fixture passed by every arm and has no comparative inferential value."
+  },
+  "full_visible_fixture_matrix": {
+    "fixture_commit": "d5c6da70a3cdb963e4cf4c5d7a55793c6e936161",
+    "model": "gpt-5.6-sol",
+    "client_version": "codex-cli 0.148.0-alpha.9",
+    "scorer_version": "skillctl-eval-v2",
+    "fixture_cases": 12,
+    "arms": 7,
+    "cells": 84,
+    "runner_errors": 0,
+    "resumed_cells_on_identical_rerun": 0,
+    "pass_rates": {
+      "baseline": 1.0,
+      "ours": 1.0,
+      "cc-skills-golang": 1.0,
+      "cxuu-golang-skills": 1.0,
+      "go-skills": 1.0,
+      "gophers": 1.0,
+      "golang-ddd-skills": 1.0
+    },
+    "raw_artifact": "evaluations/runs/2026-08-18-full-fixture-matrix-native.jsonl",
+    "score_artifact": "evaluations/scores/2026-08-18-full-fixture-matrix-native.jsonl",
+    "arm_report": "evaluations/reports/development/full-fixtures-ours.json",
+    "paired_reports": [
+      "evaluations/reports/development/full-fixtures-ours-vs-baseline.json",
+      "evaluations/reports/development/full-fixtures-ours-vs-cc-skills-golang.json",
+      "evaluations/reports/development/full-fixtures-ours-vs-cxuu-golang-skills.json",
+      "evaluations/reports/development/full-fixtures-ours-vs-go-skills.json",
+      "evaluations/reports/development/full-fixtures-ours-vs-gophers.json",
+      "evaluations/reports/development/full-fixtures-ours-vs-golang-ddd-skills.json"
+    ],
+    "qualification": "Every arm passed every visible-test fixture. This is valid harness evidence but a failed benchmark design with zero discriminatory value; post-edit hidden oracles are required before rerunning."
+  },
   "targeted_rerun": {
     "case": "go-clearing-settlement-reconciliation/avoid-initial-auth",
     "passed": true,
@@ -73,10 +181,10 @@
   },
   "blocking_gates": [
     "private release holdout not yet frozen and scored",
-    "full baseline and multi-competitor treatment matrix not yet completed",
-    "the 80-scenario full-arm matrix and hard-case repetitions are not yet completed",
-    "routing macro-F1 and false-activation gates not yet established",
-    "deterministic fixture superiority and domain non-inferiority not yet established",
+    "full baseline and multi-competitor behavioral quality matrix not yet completed",
+    "the quality half of the 80-scenario full-arm matrix and hard-case repetitions are not yet completed",
+    "public routing macro-F1 clears its threshold, but private unrelated-prompt false activation is not established",
+    "visible-test fixtures tied every arm; the post-edit hidden-oracle fixture matrix is not yet scored",
     "paired win-rate confidence intervals and token-efficiency frontier not yet established"
   ]
 }

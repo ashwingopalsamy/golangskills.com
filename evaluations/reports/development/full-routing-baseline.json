@@ -1,0 +1,50 @@
+{
+  "schema_version": 2,
+  "arm": "baseline",
+  "cases": 40,
+  "passed": 40,
+  "pass_rate": 1,
+  "mean_score": 1,
+  "ci_lower_95": 0.9123783988027135,
+  "ci_upper_95": 1,
+  "critical_failures": 0,
+  "collections": [
+    {
+      "collection": "distributed-systems-skills-for-go",
+      "cases": 12,
+      "passed": 12,
+      "pass_rate": 1,
+      "mean_score": 1
+    },
+    {
+      "collection": "engineering-skills-for-go",
+      "cases": 16,
+      "passed": 16,
+      "pass_rate": 1,
+      "mean_score": 1
+    },
+    {
+      "collection": "fintech-skills-for-go",
+      "cases": 12,
+      "passed": 12,
+      "pass_rate": 1,
+      "mean_score": 1
+    }
+  ],
+  "routing": {
+    "cases": 40,
+    "macro_f1": 1,
+    "unrelated_cases": 40,
+    "false_activations": 0,
+    "false_activation_rate": 0
+  },
+  "tokens": {
+    "input_tokens": 584894,
+    "cached_input_tokens": 478208,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 200,
+    "reasoning_output_tokens": 0,
+    "score_per_k_input_tokens": 0.06838846013123745
+  },
+  "input": "evaluations/scores/2026-08-18-full-routing-matrix-native.jsonl"
+}

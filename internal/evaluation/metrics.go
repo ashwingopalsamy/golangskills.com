@@ -112,10 +112,29 @@ func ReportFile(inputPath string) (Report, error) {
 	if err != nil {
 		return Report{}, err
 	}
+	return reportScores(scores, inputPath, "")
+}
+
+// ReportFileForArm selects one arm from a mixed matrix score artifact.
+func ReportFileForArm(inputPath, arm string) (Report, error) {
+	scores, err := readScores(inputPath)
+	if err != nil {
+		return Report{}, err
+	}
+	return reportScores(scores, inputPath, arm)
+}
+
+func reportScores(scores []Score, inputPath, selectedArm string) (Report, error) {
 	report := Report{SchemaVersion: 2, Input: inputPath}
+	if selectedArm != "" {
+		report.Arm = selectedArm
+	}
 	collections := make(map[string]*reportAccumulator)
 	var expectedLabels, predictedLabels []string
 	for _, score := range scores {
+		if selectedArm != "" && score.Arm != selectedArm {
+			continue
+		}
 		if report.Arm == "" {
 			report.Arm = score.Arm
 		} else if score.Arm != report.Arm {
@@ -167,6 +186,9 @@ func ReportFile(inputPath string) (Report, error) {
 			}
 		}
 	}
+	if report.Cases == 0 {
+		return Report{}, fmt.Errorf("%s contains no scores for arm %q", inputPath, selectedArm)
+	}
 	if report.Cases > 0 {
 		report.PassRate = float64(report.Passed) / float64(report.Cases)
 		report.MeanScore /= float64(report.Cases)
@@ -192,6 +214,11 @@ func ReportFile(inputPath string) (Report, error) {
 
 // CompareFiles constructs a paired comparison from two scored artifacts.
 func CompareFiles(candidatePath, competitorPath string) (ComparisonReport, error) {
+	return CompareArms(candidatePath, "", competitorPath, "")
+}
+
+// CompareArms selects named arms from separate or shared mixed score files.
+func CompareArms(candidatePath, candidateArm, competitorPath, competitorArm string) (ComparisonReport, error) {
 	candidateScores, err := readScores(candidatePath)
 	if err != nil {
 		return ComparisonReport{}, err
@@ -200,11 +227,17 @@ func CompareFiles(candidatePath, competitorPath string) (ComparisonReport, error
 	if err != nil {
 		return ComparisonReport{}, err
 	}
-	candidateReport, err := ReportFile(candidatePath)
+	if candidateArm != "" {
+		candidateScores = scoresForArm(candidateScores, candidateArm)
+	}
+	if competitorArm != "" {
+		competitorScores = scoresForArm(competitorScores, competitorArm)
+	}
+	candidateReport, err := reportScores(candidateScores, candidatePath, candidateArm)
 	if err != nil {
 		return ComparisonReport{}, err
 	}
-	competitorReport, err := ReportFile(competitorPath)
+	competitorReport, err := reportScores(competitorScores, competitorPath, competitorArm)
 	if err != nil {
 		return ComparisonReport{}, err
 	}
@@ -276,6 +309,16 @@ func CompareFiles(candidatePath, competitorPath string) (ComparisonReport, error
 	return report, nil
 }
 
+func scoresForArm(scores []Score, arm string) []Score {
+	result := make([]Score, 0, len(scores))
+	for _, score := range scores {
+		if score.Arm == arm {
+			result = append(result, score)
+		}
+	}
+	return result
+}
+
 func readScores(path string) ([]Score, error) {
 	file, err := os.Open(path)
 	if err != nil {
@@ -310,7 +353,14 @@ func indexScores(scores []Score) map[string]Score {
 }
 
 func caseKey(score Score) string {
-	return score.Skill + "/" + score.CaseID
+	key := score.Skill + "/" + score.CaseID
+	if score.Mode == "explicit" {
+		key += "@explicit"
+	}
+	if score.Repetition > 0 {
+		key += fmt.Sprintf("#r%d", score.Repetition)
+	}
+	return key
 }
 
 func isCritical(score Score) bool {

@@ -5,6 +5,7 @@ package evaluation
 import (
 	"bufio"
 	"context"
+	"crypto/sha256"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -38,7 +39,9 @@ type RunOptions struct {
 	SkillsRoot    string
 	Kind          string
 	Case          string
+	FixturesOnly  bool
 	ExplicitSkill bool
+	Repetition    int
 	RoutingMap    map[string][]string
 	SkillMap      map[string]string
 	Limit         int
@@ -60,6 +63,8 @@ type Result struct {
 	Collection     string               `json:"collection,omitempty"`
 	RiskDomains    []string             `json:"risk_domains,omitempty"`
 	CaseID         string               `json:"case_id"`
+	Mode           string               `json:"mode,omitempty"`
+	Repetition     int                  `json:"repetition,omitempty"`
 	Kind           string               `json:"kind"`
 	Prompt         string               `json:"prompt"`
 	ExpectedRoute  string               `json:"expected_route,omitempty"`
@@ -156,7 +161,10 @@ func Run(ctx context.Context, collection corpus.Collection, options RunOptions) 
 	if options.Seed == 0 {
 		options.Seed = 1
 	}
-	cases := flattenCases(collection, options.Kind, options.Case)
+	if options.Repetition < 0 {
+		return 0, errors.New("repetition must be non-negative")
+	}
+	cases := flattenCases(collection, options.Kind, options.Case, options.FixturesOnly)
 	if err := validateArmMaps(options, cases); err != nil {
 		return 0, err
 	}
@@ -181,11 +189,11 @@ func Run(ctx context.Context, collection corpus.Collection, options RunOptions) 
 	defer file.Close()
 	encoder := json.NewEncoder(file)
 	runID := fmt.Sprintf("%s-%d", time.Now().UTC().Format("20060102T150405Z"), options.Seed)
-	opaqueArm := fmt.Sprintf("arm-%08x", rand.New(rand.NewSource(options.Seed)).Uint32())
+	opaqueArm := opaqueLabel(options.Seed, options.Arm)
 	clientVersion := commandOutput(ctx, "codex", "--version")
 	written := 0
 	for _, item := range cases {
-		key := options.Arm + "/" + item.skill.Name + "/" + item.eval.ID
+		key := benchmarkKey(options.Arm, item.skill.Name, item.eval.ID, benchmarkMode(options.ExplicitSkill), options.Repetition)
 		if completed[key] {
 			continue
 		}
@@ -225,12 +233,12 @@ type caseItem struct {
 	eval  corpus.EvalCase
 }
 
-func flattenCases(collection corpus.Collection, kind, selectedCase string) []caseItem {
+func flattenCases(collection corpus.Collection, kind, selectedCase string, fixturesOnly bool) []caseItem {
 	var result []caseItem
 	for _, skill := range collection.Skills {
 		for _, eval := range skill.Evaluations.Cases {
 			caseKey := skill.Name + "/" + eval.ID
-			if (selectedCase == "" || selectedCase == caseKey) && (kind == "" || kind == "all" || eval.Kind == kind) {
+			if (selectedCase == "" || selectedCase == caseKey) && (kind == "" || kind == "all" || eval.Kind == kind) && (!fixturesOnly || eval.Fixture != "") {
 				result = append(result, caseItem{skill: skill, eval: eval})
 			}
 		}
@@ -244,7 +252,7 @@ func runCase(parent context.Context, repoRoot string, options RunOptions, runID,
 		SchemaVersion: 1, RunID: runID, OpaqueArm: opaqueArm, Arm: options.Arm,
 		Runner: options.Runner, Model: options.Model, ClientVersion: clientVersion,
 		Skill: item.skill.Name, Collection: item.skill.Metadata.Collection, RiskDomains: append([]string(nil), item.skill.Metadata.RiskDomains...),
-		CaseID: item.eval.ID, Kind: item.eval.Kind, Prompt: item.eval.Prompt,
+		CaseID: item.eval.ID, Mode: benchmarkMode(options.ExplicitSkill), Repetition: options.Repetition, Kind: item.eval.Kind, Prompt: item.eval.Prompt,
 		Graders: item.eval.Graders, Invariants: item.eval.ExpectedInvariants, Forbidden: item.eval.ForbiddenOutcomes,
 		Metadata: map[string]string{"fixture_commit": gitHead(repoRoot), "grader_version": "skillctl-eval-v1"},
 	}
@@ -473,7 +481,7 @@ func completedCases(path string) (map[string]bool, error) {
 		if err := json.Unmarshal(scanner.Bytes(), &result); err != nil {
 			return nil, err
 		}
-		completed[result.Arm+"/"+result.Skill+"/"+result.CaseID] = true
+		completed[benchmarkKey(result.Arm, result.Skill, result.CaseID, result.Mode, result.Repetition)] = true
 	}
 	return completed, scanner.Err()
 }
@@ -596,6 +604,29 @@ func exitCode(err error) int {
 		return exitError.ExitCode()
 	}
 	return -1
+}
+
+func benchmarkMode(explicit bool) string {
+	if explicit {
+		return "explicit"
+	}
+	return "native"
+}
+
+func benchmarkKey(arm, skill, caseID, mode string, repetition int) string {
+	if mode == "" {
+		mode = "native"
+	}
+	key := arm + "/" + mode + "/" + skill + "/" + caseID
+	if repetition > 0 {
+		key += fmt.Sprintf("@%d", repetition)
+	}
+	return key
+}
+
+func opaqueLabel(seed int64, arm string) string {
+	digest := sha256.Sum256([]byte(fmt.Sprintf("%d\x00%s", seed, arm)))
+	return fmt.Sprintf("arm-%x", digest[:4])
 }
 
 func parseUsage(events string) Usage {

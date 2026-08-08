@@ -130,7 +130,7 @@ func runPackage(arguments []string, output io.Writer) error {
 
 func runEval(arguments []string, output io.Writer) error {
 	if len(arguments) == 0 {
-		return errors.New("usage: skillctl eval <preflight|run|score|report> [options]")
+		return errors.New("usage: skillctl eval <preflight|run|matrix|score|report> [options]")
 	}
 	switch arguments[0] {
 	case "preflight":
@@ -152,7 +152,9 @@ func runEval(arguments []string, output io.Writer) error {
 		skillMapPath := flags.String("skill-map", "", "locked JSON map from canonical skill IDs to arm skill IDs")
 		kind := flags.String("kind", "all", "routing, quality, or all")
 		selectedCase := flags.String("case", "", "one canonical skill/case key to execute")
+		fixturesOnly := flags.Bool("fixtures-only", false, "select only quality cases with executable fixtures")
 		explicit := flags.Bool("explicit", false, "install and invoke only the expected canonical skill")
+		repetition := flags.Int("repetition", 0, "non-negative repeat index recorded in cell identity")
 		limit := flags.Int("limit", 0, "maximum cases")
 		seed := flags.Int64("seed", 1, "randomization seed")
 		timeout := flags.Duration("timeout", 5*time.Minute, "per-case timeout")
@@ -177,13 +179,53 @@ func runEval(arguments []string, output io.Writer) error {
 		}
 		written, err := evaluation.Run(context.Background(), collection, evaluation.RunOptions{
 			Runner: *runner, Model: *model, Arm: *arm, SkillsRoot: *skillsRoot, Kind: *kind, Case: *selectedCase,
-			ExplicitSkill: *explicit, RoutingMap: routingMap, SkillMap: skillMap, Limit: *limit, Seed: *seed, Timeout: *timeout,
+			FixturesOnly: *fixturesOnly, ExplicitSkill: *explicit, Repetition: *repetition,
+			RoutingMap: routingMap, SkillMap: skillMap, Limit: *limit, Seed: *seed, Timeout: *timeout,
 			OutputPath: filepath.Join(collection.RepoRoot, filepath.FromSlash(*outputPath)),
 		})
 		if err != nil {
 			return err
 		}
 		fmt.Fprintf(output, "wrote %d isolated evaluation cells\n", written)
+		return nil
+	case "matrix":
+		flags := flag.NewFlagSet("eval matrix", flag.ContinueOnError)
+		flags.SetOutput(io.Discard)
+		root := flags.String("root", "", "repository root")
+		runner := flags.String("runner", "codex", "agent runner")
+		model := flags.String("model", "", "runner model")
+		kind := flags.String("kind", "all", "routing, quality, or all")
+		selectedCase := flags.String("case", "", "one canonical skill/case key to execute")
+		fixturesOnly := flags.Bool("fixtures-only", false, "select only quality cases with executable fixtures")
+		explicit := flags.Bool("explicit", false, "install and invoke only the mapped skill")
+		repetition := flags.Int("repetition", 0, "non-negative repeat index recorded in cell identity")
+		limit := flags.Int("limit", 0, "maximum canonical cases selected for every arm")
+		seed := flags.Int64("seed", 1, "case and global cell randomization seed")
+		timeout := flags.Duration("timeout", 5*time.Minute, "per-cell timeout")
+		outputPath := flags.String("output", "evaluations/runs/matrix.jsonl", "resumable mixed-arm JSONL artifact")
+		if err := flags.Parse(arguments[1:]); err != nil {
+			return err
+		}
+		collection, err := corpus.Load(*root)
+		if err != nil {
+			return err
+		}
+		if _, err := corpus.Validate(collection); err != nil {
+			return err
+		}
+		arms, err := evaluation.FrozenMatrixArms(collection)
+		if err != nil {
+			return err
+		}
+		written, err := evaluation.RunMatrix(context.Background(), collection, arms, evaluation.MatrixOptions{
+			Runner: *runner, Model: *model, Kind: *kind, Case: *selectedCase, FixturesOnly: *fixturesOnly,
+			ExplicitSkill: *explicit, Repetition: *repetition, Limit: *limit, Seed: *seed, Timeout: *timeout,
+			OutputPath: filepath.Join(collection.RepoRoot, filepath.FromSlash(*outputPath)),
+		})
+		if err != nil {
+			return err
+		}
+		fmt.Fprintf(output, "wrote %d globally randomized isolated matrix cells\n", written)
 		return nil
 	case "score":
 		flags := flag.NewFlagSet("eval score", flag.ContinueOnError)
@@ -206,7 +248,9 @@ func runEval(arguments []string, output io.Writer) error {
 		flags := flag.NewFlagSet("eval report", flag.ContinueOnError)
 		flags.SetOutput(io.Discard)
 		input := flags.String("input", "", "scored JSONL artifact")
+		arm := flags.String("arm", "", "optional arm selected from a mixed matrix artifact")
 		against := flags.String("against", "", "optional scored JSONL competitor artifact for paired comparison")
+		againstArm := flags.String("against-arm", "", "optional competitor arm selected from -against, or from -input when -against is omitted")
 		outputPath := flags.String("output", "", "optional JSON report path; stdout when omitted")
 		if err := flags.Parse(arguments[1:]); err != nil {
 			return err
@@ -228,14 +272,18 @@ func runEval(arguments []string, output io.Writer) error {
 			defer outputFile.Close()
 			destination = outputFile
 		}
-		if *against != "" {
-			report, err := evaluation.CompareFiles(*input, *against)
+		competitorInput := *against
+		if competitorInput == "" && *againstArm != "" {
+			competitorInput = *input
+		}
+		if competitorInput != "" {
+			report, err := evaluation.CompareArms(*input, *arm, competitorInput, *againstArm)
 			if err != nil {
 				return err
 			}
 			return evaluation.WriteComparison(destination, report)
 		}
-		report, err := evaluation.ReportFile(*input)
+		report, err := evaluation.ReportFileForArm(*input, *arm)
 		if err != nil {
 			return err
 		}

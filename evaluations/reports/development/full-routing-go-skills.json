@@ -1,0 +1,68 @@
+{
+  "schema_version": 2,
+  "arm": "go-skills",
+  "cases": 40,
+  "passed": 24,
+  "pass_rate": 0.6,
+  "mean_score": 0.6,
+  "ci_lower_95": 0.44595893660346186,
+  "ci_upper_95": 0.7365167431570808,
+  "critical_failures": 7,
+  "collections": [
+    {
+      "collection": "distributed-systems-skills-for-go",
+      "cases": 12,
+      "passed": 10,
+      "pass_rate": 0.8333333333333334,
+      "mean_score": 0.8333333333333334
+    },
+    {
+      "collection": "engineering-skills-for-go",
+      "cases": 16,
+      "passed": 9,
+      "pass_rate": 0.5625,
+      "mean_score": 0.5625
+    },
+    {
+      "collection": "fintech-skills-for-go",
+      "cases": 12,
+      "passed": 5,
+      "pass_rate": 0.4166666666666667,
+      "mean_score": 0.4166666666666667
+    }
+  ],
+  "routing": {
+    "cases": 40,
+    "macro_f1": 0.19047619047619047,
+    "unrelated_cases": 0,
+    "false_activations": 0,
+    "false_activation_rate": 0
+  },
+  "tokens": {
+    "input_tokens": 627272,
+    "cached_input_tokens": 393216,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 391,
+    "reasoning_output_tokens": 119,
+    "score_per_k_input_tokens": 0.038260913925697304
+  },
+  "failure_cases": [
+    "go-clearing-settlement-reconciliation/avoid-initial-auth",
+    "go-financial-idempotency/avoid-broker-offset",
+    "go-fintech-security-compliance/avoid-generic-ssrf",
+    "go-money-and-ledgers/avoid-provider-state",
+    "go-payment-lifecycles/avoid-ledger-balance",
+    "go-performance-and-diagnostics/avoid-overload-policy",
+    "go-production-operations/avoid-domain-retry",
+    "go-production-operations/route-readiness-shutdown",
+    "go-security-hardening/avoid-pci-scope",
+    "go-service-boundaries/avoid-retry-storm",
+    "review-go-distributed-change/avoid-rounding",
+    "review-go-distributed-change/route-distributed-diff",
+    "review-go-engineering-change/avoid-ledger-diff",
+    "review-go-engineering-change/route-general-go-diff",
+    "review-go-fintech-change/avoid-generic-api",
+    "review-go-fintech-change/route-fintech-diff"
+  ],
+  "input": "evaluations/scores/2026-08-18-full-routing-matrix-native.jsonl"
+}
