@@ -1,6 +1,6 @@
 ---
 name: go-payment-lifecycles
-description: "Use for provider/rail payment authorization, capture, refund, webhook, and ambiguous states. Do not use for request replay identity."
+description: "Use only for payment/rail authorization, capture, refund, webhook, and ambiguity. Do not use for non-financial effects."
 license: Apache-2.0
 compatibility: "Go 1.24 or newer; provider, rail, and scheme state semantics are version- and region-specific."
 ---

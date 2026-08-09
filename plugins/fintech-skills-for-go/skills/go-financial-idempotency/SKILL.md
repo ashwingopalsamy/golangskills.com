@@ -1,6 +1,6 @@
 ---
 name: go-financial-idempotency
-description: "Use for financial request identity, fingerprints, replay, retention, and ambiguity. Do not use for broker dedupe."
+description: "Use only for financial request identity, replay, retention, and ambiguity. Do not use for non-financial effects."
 license: Apache-2.0
 compatibility: "Go 1.24 or newer; external idempotency guarantees must match the active provider contract."
 ---
