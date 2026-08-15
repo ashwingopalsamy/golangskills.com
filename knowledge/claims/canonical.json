@@ -41,14 +41,15 @@
       "statement": "At HTTP, gRPC, GraphQL, and OpenAPI boundaries, validate once, preserve protocol semantics, bound work, and keep domain behavior independent of transport encoding.",
       "status": "adopted",
       "scope": "Network service APIs and adapters",
-      "invariant": "Malformed, canceled, oversized, duplicated, or partially written requests cannot bypass domain invariants or leave uncontrolled work behind.",
-      "qualifications": ["Protocol-specific status and retry semantics must remain visible at the adapter.", "Streaming APIs require lifecycle handling beyond request-response handlers."],
-      "counterexamples": ["Converting every domain failure to HTTP 500 or gRPC Unknown destroys retry and client-correction semantics."],
+      "invariant": "Malformed, canceled, oversized, duplicated, partially written, or generation-crossing requests cannot bypass domain invariants or leave uncontrolled work or connection state behind.",
+      "qualifications": ["Protocol-specific status and retry semantics must remain visible at the adapter.", "Streaming APIs require lifecycle handling beyond request-response handlers.", "A versioned client cutover must preserve one captured policy and transport generation per admitted operation while retiring obsolete idle resources without interrupting in-flight work."],
+      "counterexamples": ["Converting every domain failure to HTTP 500 or gRPC Unknown destroys retry and client-correction semantics.", "Mutating an in-use transport or swapping policy separately from its client can make one operation observe two configuration generations."],
       "go_versions": ["1.24", "1.25", "1.26"],
       "owners": ["go-service-boundaries"],
       "risk_domains": ["correctness", "security", "availability", "compatibility"],
       "primary_evidence": [
-        {"title": "Package net/http", "url": "https://pkg.go.dev/net/http", "publisher": "The Go Authors", "kind": "primary", "verified_on": "2026-08-18"},
+        {"title": "Package net/http", "url": "https://pkg.go.dev/net/http", "publisher": "The Go Authors", "kind": "primary", "verified_on": "2026-08-24"},
+        {"title": "Package crypto/tls", "url": "https://pkg.go.dev/crypto/tls", "publisher": "The Go Authors", "kind": "primary", "verified_on": "2026-08-24"},
         {"title": "gRPC Guides", "url": "https://grpc.io/docs/guides/", "publisher": "Cloud Native Computing Foundation", "kind": "protocol", "verified_on": "2026-08-18"}
       ],
       "observed_in": ["cc-skills-golang", "gophers"]
@@ -109,15 +110,17 @@
       "statement": "A Go service owns startup validation, readiness, bounded shutdown, telemetry continuity, and dependency failure behavior as part of its public production contract.",
       "status": "adopted",
       "scope": "Configuration, logging, metrics, traces, health, shutdown, containers, Kubernetes, CI, and releases",
-      "invariant": "The process never advertises readiness before it can serve safely and does not abandon accepted work without an explicit shutdown policy.",
-      "qualifications": ["Readiness and liveness probe semantics depend on orchestration and failure-recovery strategy.", "Telemetry must remain bounded and avoid sensitive or high-cardinality dimensions."],
-      "counterexamples": ["A liveness probe that fails on every downstream outage can turn a dependency incident into a restart storm."],
+      "invariant": "The process never advertises readiness before it can serve safely, does not abandon accepted work without an explicit shutdown policy, and does not let telemetry failure create unbounded work or indefinite request and shutdown blocking.",
+      "qualifications": ["Readiness and liveness probe semantics depend on orchestration and failure-recovery strategy.", "Telemetry must remain bounded and avoid sensitive or high-cardinality dimensions.", "Dropping or sampling telemetry can be safer than blocking, but loss, saturation, and sampling must themselves be observable through an independent bounded path."],
+      "counterexamples": ["A liveness probe that fails on every downstream outage can turn a dependency incident into a restart storm.", "An unbounded exporter queue can turn collector failure into process memory exhaustion while an unlimited flush can defeat the shutdown budget."],
       "go_versions": ["1.24", "1.25", "1.26"],
       "owners": ["go-production-operations"],
       "risk_domains": ["availability", "observability", "deployment"],
       "primary_evidence": [
         {"title": "Kubernetes Pod Lifecycle", "url": "https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/", "publisher": "Cloud Native Computing Foundation", "kind": "operational", "verified_on": "2026-08-18"},
-        {"title": "OpenTelemetry Tracing API", "url": "https://opentelemetry.io/docs/specs/otel/trace/api/", "publisher": "OpenTelemetry", "kind": "protocol", "verified_on": "2026-08-18"}
+        {"title": "OpenTelemetry Tracing API", "url": "https://opentelemetry.io/docs/specs/otel/trace/api/", "publisher": "OpenTelemetry", "kind": "protocol", "verified_on": "2026-08-18"},
+        {"title": "OpenTelemetry Performance and Blocking", "url": "https://opentelemetry.io/docs/specs/otel/performance/", "publisher": "OpenTelemetry", "kind": "protocol", "verified_on": "2026-08-24"},
+        {"title": "Prometheus Metric and Label Naming", "url": "https://prometheus.io/docs/practices/naming/", "publisher": "Prometheus Authors", "kind": "primary", "verified_on": "2026-08-24"}
       ],
       "observed_in": ["cc-skills-golang", "gophers"]
     },
@@ -142,16 +145,18 @@
       "id": "dist-transaction-invariant",
       "statement": "Choose a transaction boundary and isolation behavior from the business invariant, and make the full read-check-write effect atomic at that boundary.",
       "status": "adopted",
-      "scope": "SQL transactions, isolation, locking, optimistic concurrency, and cache consistency",
-      "invariant": "Every committed outcome satisfies the domain invariant under permitted concurrent executions.",
-      "qualifications": ["Isolation names do not guarantee identical behavior across database engines.", "Serializable transactions may require safe retries and do not make external side effects transactional."],
-      "counterexamples": ["Read Committed can be sufficient for independent predetermined row updates but unsafe for cross-row invariants implemented as read-then-write."],
+      "scope": "SQL transactions, isolation, locking, optimistic concurrency, cache consistency, and online data changes",
+      "invariant": "Every committed outcome and mixed-version migration state satisfies the domain invariant under permitted concurrent executions.",
+      "qualifications": ["Isolation names do not guarantee identical behavior across database engines.", "Serializable transactions may require safe retries and do not make external side effects transactional.", "Online migrations are mixed-version protocols whose DDL locks, rewrites, validation, and failure artifacts must be verified for the deployed engine version."],
+      "counterexamples": ["Read Committed can be sufficient for independent predetermined row updates but unsafe for cross-row invariants implemented as read-then-write.", "An offset-paginated unconditional backfill can skip rows and overwrite newer writes while still reaching an apparent final page."],
       "go_versions": ["1.24", "1.25", "1.26"],
       "owners": ["go-data-consistency"],
       "risk_domains": ["consistency", "atomicity", "durability"],
       "primary_evidence": [
         {"title": "Executing transactions", "url": "https://go.dev/doc/database/execute-transactions", "publisher": "The Go Authors", "kind": "primary", "verified_on": "2026-08-18"},
-        {"title": "PostgreSQL Transaction Isolation", "url": "https://www.postgresql.org/docs/current/transaction-iso.html", "publisher": "PostgreSQL Global Development Group", "kind": "primary", "verified_on": "2026-08-18"}
+        {"title": "PostgreSQL Transaction Isolation", "url": "https://www.postgresql.org/docs/current/transaction-iso.html", "publisher": "PostgreSQL Global Development Group", "kind": "primary", "verified_on": "2026-08-18"},
+        {"title": "PostgreSQL ALTER TABLE", "url": "https://www.postgresql.org/docs/current/sql-altertable.html", "publisher": "PostgreSQL Global Development Group", "kind": "primary", "verified_on": "2026-08-24"},
+        {"title": "PostgreSQL CREATE INDEX", "url": "https://www.postgresql.org/docs/current/sql-createindex.html", "publisher": "PostgreSQL Global Development Group", "kind": "primary", "verified_on": "2026-08-24"}
       ],
       "observed_in": ["cc-skills-golang", "gophers"]
     },
@@ -211,9 +216,9 @@
       "statement": "Represent money with an explicit currency and exact integer minor units or an exact decimal whose scale and rounding policy are part of the operation contract.",
       "status": "adopted",
       "scope": "Monetary amounts, currency metadata, conversion, allocation, and rounding",
-      "invariant": "Stored and transferred amounts are exact under the selected currency exponent and every lossy conversion names its rounding rule.",
-      "qualifications": ["Not every currency uses two decimal minor units.", "Some products require sub-minor precision or non-currency units; preserve the original scale separately."],
-      "counterexamples": ["Binary floating point can be appropriate for analytics where exact settlement values are not produced, but not for ledger postings."],
+      "invariant": "Stored and transferred amounts are exact under the selected currency exponent, every lossy conversion names its rounding rule, and every booked FX result is reproducible from persisted rate and allocation evidence.",
+      "qualifications": ["Not every currency uses two decimal minor units.", "Some products require sub-minor precision or non-currency units; preserve the original scale separately.", "Currency metadata cannot select a commercial rate, spread, quote lifetime, accounting accounts, tax stage, or jurisdictional rounding policy."],
+      "counterexamples": ["Binary floating point can be appropriate for analytics where exact settlement values are not produced, but not for ledger postings.", "Summing signed numeric amounts across unlike currencies can appear to net to zero while proving no valid accounting balance."],
       "go_versions": ["1.24", "1.25", "1.26"],
       "owners": ["go-money-and-ledgers"],
       "risk_domains": ["financial-integrity", "rounding", "compatibility"],
@@ -313,14 +318,14 @@
       "statement": "Minimize payment-account and personal data at ingestion, isolate the cardholder-data environment, tokenize where possible, and make access and administrative changes tamper-evident.",
       "status": "adopted-with-qualifications",
       "scope": "Payment data, credentials, authentication, audit, retention, and compliance controls",
-      "invariant": "Sensitive authentication data and secrets never enter logs, generic events, idempotency keys, or lower-trust storage; access is attributable and least-privileged.",
-      "qualifications": ["PCI DSS scope and regulatory obligations require a qualified assessment of the actual system and contracts.", "This guidance is engineering support, not legal or compliance certification."],
-      "counterexamples": ["Encryption without key isolation and access control does not remove a system from the trust boundary."],
+      "invariant": "Sensitive authentication data and secrets never enter logs, generic events, idempotency keys, model or tool inputs, or lower-trust storage; reusable-token and detokenization access is attributable, purpose-bound, tenant-bound, and least-privileged.",
+      "qualifications": ["PCI DSS scope and regulatory obligations require a qualified assessment of the actual system and contracts.", "This guidance is engineering support, not legal or compliance certification.", "Tokenization narrows scope only according to the actual raw-data, token, key, routing, detokenization, support, backup, and administrative data flow."],
+      "counterexamples": ["Encryption without key isolation and access control does not remove a system from the trust boundary.", "A service that tokenizes PAN but copies the raw request into a retry queue, trace, or support prompt remains in the sensitive data path."],
       "go_versions": ["1.24", "1.25", "1.26"],
       "owners": ["go-fintech-security-compliance"],
       "risk_domains": ["security", "privacy", "compliance", "auditability"],
       "primary_evidence": [
-        {"title": "PCI Data Security Standard", "url": "https://www.pcisecuritystandards.org/standards/pci-dss/", "publisher": "PCI Security Standards Council", "kind": "regulatory", "verified_on": "2026-08-18"},
+        {"title": "PCI Data Security Standard v4.0.1", "url": "https://www.pcisecuritystandards.org/document_library/", "publisher": "PCI Security Standards Council", "kind": "regulatory", "verified_on": "2026-08-24"},
         {"title": "NIST SP 800-63B", "url": "https://pages.nist.gov/800-63-4/sp800-63b.html", "publisher": "NIST", "kind": "regulatory", "verified_on": "2026-08-18"}
       ],
       "observed_in": []

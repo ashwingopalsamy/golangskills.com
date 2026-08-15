@@ -345,10 +345,32 @@
             "isolation anomalies",
             "serializable behavior"
           ]
+        },
+        {
+          "title": "PostgreSQL ALTER TABLE",
+          "url": "https://www.postgresql.org/docs/current/sql-altertable.html",
+          "publisher": "PostgreSQL Global Development Group",
+          "kind": "primary",
+          "verified_on": "2026-08-24",
+          "supports": [
+            "constraint validation",
+            "DDL lock behavior"
+          ]
+        },
+        {
+          "title": "PostgreSQL CREATE INDEX",
+          "url": "https://www.postgresql.org/docs/current/sql-createindex.html",
+          "publisher": "PostgreSQL Global Development Group",
+          "kind": "primary",
+          "verified_on": "2026-08-24",
+          "supports": [
+            "concurrent index construction",
+            "invalid-index recovery"
+          ]
         }
       ],
-      "source_count": 2,
-      "evaluation_count": 5
+      "source_count": 4,
+      "evaluation_count": 6
     },
     {
       "name": "go-distributed-coordination",
@@ -612,12 +634,14 @@
       "sources": [
         {
           "title": "PCI Data Security Standard",
-          "url": "https://www.pcisecuritystandards.org/standards/pci-dss/",
+          "url": "https://www.pcisecuritystandards.org/document_library/",
           "publisher": "PCI Security Standards Council",
           "kind": "primary",
-          "verified_on": "2026-08-18",
+          "verified_on": "2026-08-24",
           "supports": [
+            "PCI DSS v4.0.1",
             "account data",
+            "sensitive authentication data",
             "security controls",
             "scope"
           ]
@@ -635,7 +659,7 @@
         }
       ],
       "source_count": 2,
-      "evaluation_count": 4
+      "evaluation_count": 5
     },
     {
       "name": "go-language-engineering",
@@ -934,7 +958,7 @@
         }
       ],
       "source_count": 3,
-      "evaluation_count": 4
+      "evaluation_count": 5
     },
     {
       "name": "go-payment-lifecycles",
@@ -1205,6 +1229,29 @@
           ]
         },
         {
+          "title": "OpenTelemetry Performance and Blocking",
+          "url": "https://opentelemetry.io/docs/specs/otel/performance/",
+          "publisher": "OpenTelemetry",
+          "kind": "normative",
+          "verified_on": "2026-08-24",
+          "supports": [
+            "bounded telemetry behavior",
+            "drop observability",
+            "shutdown flush timeout"
+          ]
+        },
+        {
+          "title": "Prometheus Metric and Label Naming",
+          "url": "https://prometheus.io/docs/practices/naming/",
+          "publisher": "Prometheus Authors",
+          "kind": "primary",
+          "verified_on": "2026-08-24",
+          "supports": [
+            "bounded label cardinality",
+            "metric dimensions"
+          ]
+        },
+        {
           "title": "Kubernetes Pod Lifecycle",
           "url": "https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/",
           "publisher": "Kubernetes",
@@ -1217,8 +1264,8 @@
           ]
         }
       ],
-      "source_count": 2,
-      "evaluation_count": 4
+      "source_count": 4,
+      "evaluation_count": 5
     },
     {
       "name": "go-project-and-api-design",
@@ -1490,7 +1537,20 @@
           "supports": [
             "server lifecycle",
             "client ownership",
-            "timeouts"
+            "timeouts",
+            "transport cloning",
+            "idle connection retirement"
+          ]
+        },
+        {
+          "title": "Package crypto/tls",
+          "url": "https://pkg.go.dev/crypto/tls",
+          "publisher": "The Go Authors",
+          "kind": "normative",
+          "verified_on": "2026-08-24",
+          "supports": [
+            "TLS configuration cloning",
+            "certificate and trust configuration"
           ]
         },
         {
@@ -1507,8 +1567,8 @@
           ]
         }
       ],
-      "source_count": 2,
-      "evaluation_count": 4
+      "source_count": 3,
+      "evaluation_count": 5
     },
     {
       "name": "go-service-resilience",
@@ -1606,7 +1666,7 @@
         }
       ],
       "source_count": 2,
-      "evaluation_count": 4
+      "evaluation_count": 5
     },
     {
       "name": "go-testing-and-verification",

@@ -15,6 +15,8 @@ Carry amount and currency together. Use integer minor units when the product con
 
 Rounding is a named business operation: specify mode, scale, stage, and residual allocation. ISO/CLDR metadata alone cannot choose half-even versus half-up, cash rounding, or the legally correct tax stage; obtain product, contract, and jurisdiction evidence. Do not round intermediate values merely for display. Allocate remainders with a stable tie-break independent of map iteration so parts sum exactly to the source amount. Persist the per-part allocation and policy version; refunds and reversals use the original allocation rather than recomputing it under a new order or policy.
 
+For FX, persist the booked quote identity, source and time, base/quote direction, exact rate and scale, rounding stage, resulting amounts, residual disposition, and policy version. Balance journals per currency; connect the two currency legs through explicit FX position or clearing accounts rather than netting unlike units. A reversal uses the original booking evidence unless the product contract creates a new conversion.
+
 ## Post a journal
 
 Persist immutable entries with journal ID, account, currency, signed side/amount, effective and recorded time, operation identity, and source evidence. Enforce per-journal, per-currency balance in the same transaction. Use reversal or adjustment journals rather than editing history.
@@ -27,7 +29,7 @@ Where overdraft, limits, reservations, or sequence matter, the decision read, au
 
 Use `go-data-consistency` for the database anomaly and `go-financial-idempotency` for operation identity and replay.
 
-Read [references/money-ledger-invariants.md](references/money-ledger-invariants.md) for arithmetic and schema checks.
+Read [references/money-ledger-invariants.md](references/money-ledger-invariants.md) for arithmetic and schema checks and [references/fx-booking.md](references/fx-booking.md) for conversion, allocation, and reversal evidence.
 
 ## Output contract
 

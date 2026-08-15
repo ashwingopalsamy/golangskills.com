@@ -31,7 +31,9 @@ State whether the cache is authoritative, derived, or optional. Define invalidat
 
 Use expand, mixed-version deployment, bounded restartable backfill, switchover, and delayed contract. Verify old writer/new reader, new writer/old reader, rollback, and partial progress.
 
-Read [references/isolation-and-ambiguity.md](references/isolation-and-ambiguity.md) for counterexamples.
+Treat backfill progress as resumability metadata, not completeness proof. Partition by a stable key, update conditionally so a stale batch cannot overwrite a newer write, validate the authoritative rows before cutover, and remove the old representation only after old binaries, queued work, consumers, and rollback paths can no longer use it. Verify engine-version lock, rewrite, and failed-DDL behavior before choosing an online mechanism.
+
+Read [references/isolation-and-ambiguity.md](references/isolation-and-ambiguity.md) for transaction counterexamples and [references/online-changes.md](references/online-changes.md) for expand/backfill/cutover failure schedules.
 
 ## Output contract
 

@@ -17,6 +17,8 @@ Record authentication and authorization ownership, request and response size lim
 
 Use explicit `http.Server`, client, and transport ownership. Bound headers and finite bodies. Reuse clients and close response bodies. Propagate `r.Context()`. Choose total, phase, or idle timeouts from endpoint semantics; a global write timeout can break streaming. Treat redirects and proxy headers as new trust decisions.
 
+Treat a transport configuration as immutable after concurrent use begins. When TLS identity, trust roots, proxy, dial policy, or another connection-affecting setting changes, construct a private replacement and publish it with every policy decision that must share its version. Each admitted operation captures one generation. Stop new admission to the old generation, let its in-flight operations keep their captured client, close its idle connections, and release it only when its owned streams and bodies are done. A pointer swap without old-generation retirement prevents mixed configuration but still leaks connection state.
+
 ## gRPC
 
 Preserve status codes, cancellation, metadata trust, message limits, and stream lifecycle. Reuse connections. Put authentication, tracing, and recovery in ordered interceptors, but keep domain decisions out of them. A retry policy must respect method idempotency and the caller's deadline.
@@ -29,7 +31,7 @@ Keep resolvers and generated handlers thin. Bound query complexity and paginatio
 
 Stop admission, drain accepted work within the platform budget, terminate application-owned streams, then close dependencies. A missing response after a request may mean an unknown remote outcome; do not convert transport uncertainty into a known business failure.
 
-Read [references/protocol-matrix.md](references/protocol-matrix.md) for protocol-specific failure and test cases.
+Read [references/protocol-matrix.md](references/protocol-matrix.md) for protocol-specific failure, versioned client cutover, and test cases.
 
 ## Output contract
 

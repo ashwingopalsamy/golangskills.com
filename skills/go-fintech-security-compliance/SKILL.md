@@ -15,6 +15,8 @@ Classify account data, sensitive authentication data, PII, secrets, reusable pay
 
 Do not retain applicable sensitive authentication data after authorization, even when encrypted. This includes card verification codes, PIN/PIN blocks, and full track data. Confirm the exact classification and disposition against the current PCI DSS and qualified assessor guidance for the deployed flow; code inspection cannot establish compliance.
 
+Tokenization narrows scope only when raw collection, detokenization authority, routing, failure queues, telemetry, support access, analytics, backups, and model/tool inputs remain separated in the real data flow. Classify reusable tokens and detokenization handles as authority-bearing values. Prove deletion and retention outcomes across derived stores rather than deleting only the primary row.
+
 ## Enforce authority
 
 Authenticate users and services at an assurance level matching risk. Authorize by subject, tenant, action, resource, amount, and workflow state. Separate maker/checker or privileged approval where required. Rotate and revoke credentials; isolate cryptographic keys and record key version without logging secret material.
@@ -27,7 +29,7 @@ Record actor, authority, operation, target, before/after state reference, reason
 
 Threat-model sensitive changes, review generated artifacts and dependencies, pin CI inputs, separate duties for releases, prove rollback/migration behavior, and keep retention/deletion schedules enforceable. A checklist does not certify PCI DSS or any regulation; involve qualified security, compliance, and legal owners.
 
-Read [references/control-boundaries.md](references/control-boundaries.md) for scope and audit failure cases.
+Read [references/control-boundaries.md](references/control-boundaries.md) for tokenization, scope, retention, and audit failure cases.
 
 ## Output contract
 
