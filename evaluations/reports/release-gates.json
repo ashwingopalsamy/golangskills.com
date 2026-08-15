@@ -36,7 +36,7 @@
     {
       "id": "critical-correctness",
       "status": "blocked",
-      "summary": "Zero critical failures is not established across the full quality and holdout matrix.",
+      "summary": "Zero critical failures is not established across the full quality and holdout matrix. Ours strictly passed zero repetitions in both settlement families despite leading their aggregate criteria.",
       "evidence": ["evaluations/reports/latest.json"]
     },
     {
@@ -48,26 +48,26 @@
     {
       "id": "paired-superiority",
       "status": "blocked",
-      "summary": "Public routing clears paired thresholds and ours leads every arm in three final batch-offset repetitions, but those are one public case with zero strict ours passes. On the independent lease/fencing transfer, ours exceeded every skill competitor in aggregate but tied baseline, passed zero repetitions, and did not clear paired thresholds. Aggregate behavioral superiority is not established.",
-      "evidence": ["evaluations/reports/development/full-routing-ours-vs-cxuu-golang-skills.json", "evaluations/reports/development/fintech-authorization-review-ours-vs-cxuu-golang-skills.json", "evaluations/reports/development/engineering-shutdown-review-ours.json", "evaluations/reports/development/distributed-dual-write-review-ours.json", "evaluations/reports/development/distributed-batch-offset-review-final-ours.json", "evaluations/reports/development/distributed-lease-fencing-review-ours.json", "evaluations/reports/latest.json"]
+      "summary": "Public routing clears paired thresholds. Ours leads the final batch-offset and both settlement families in aggregate, and quality-and-token dominates every skill competitor on the fresh manifest-close transfer. Those are repeated public cases with zero strict ours passes; lease/fencing still ties baseline. Aggregate behavioral superiority and confidence bounds remain unestablished.",
+      "evidence": ["evaluations/reports/development/full-routing-ours-vs-cxuu-golang-skills.json", "evaluations/reports/development/fintech-authorization-review-ours-vs-cxuu-golang-skills.json", "evaluations/reports/development/engineering-shutdown-review-ours.json", "evaluations/reports/development/distributed-dual-write-review-ours.json", "evaluations/reports/development/distributed-batch-offset-review-final-ours.json", "evaluations/reports/development/distributed-lease-fencing-review-ours.json", "evaluations/reports/development/fintech-settlement-correction-v3-ours.json", "evaluations/reports/development/fintech-settlement-manifest-close-v3-ours.json", "evaluations/reports/latest.json"]
     },
     {
       "id": "domain-non-inferiority",
       "status": "blocked",
-      "summary": "Collection-level non-inferiority is not established; ours leads all three final batch-offset repetitions but strictly passes none, ties baseline on the lease/fencing transfer with zero strict passes, and the fintech cell exposed a missing mismatch-rejection finding.",
+      "summary": "Collection-level non-inferiority is not established. Fintech now has a strong fresh transfer lead over every skill competitor, but ours strictly passes zero settlement repetitions; Distributed Systems still includes the lease/fencing baseline tie, and the original fintech authorization loss remains preserved.",
       "evidence": ["evaluations/reports/latest.json"]
     },
     {
       "id": "baseline-improvement",
       "status": "blocked",
-      "summary": "The Engineering review beat baseline on one public cell, but the first Distributed review and the three-repetition lease/fencing transfer tied baseline. No statistically positive paired behavioral improvement is established.",
-      "evidence": ["evaluations/reports/latest.json"]
+      "summary": "Ours beat baseline in all three manifest-close repetitions and narrowly led the settlement-correction aggregate, but the Engineering evidence is one public cell and Distributed Systems includes ties. No statistically positive cross-scenario paired behavioral improvement is established.",
+      "evidence": ["evaluations/reports/development/fintech-settlement-correction-v3-ours-vs-baseline.json", "evaluations/reports/development/fintech-settlement-manifest-close-v3-ours-vs-baseline.json", "evaluations/reports/latest.json"]
     },
     {
       "id": "token-efficiency",
       "status": "blocked",
-      "summary": "cxuu-golang-skills quality-and-token dominated the fintech review cell; ours used the most input tokens in the first Distributed tie; and baseline quality-and-token dominated ours on the frozen lease/fencing transfer. That transfer dominates four skill competitors and trades off against Gophers, but the behavioral frontier is not established.",
-      "evidence": ["evaluations/reports/development/full-routing-ours.json", "evaluations/reports/development/fintech-authorization-review-ours-vs-cxuu-golang-skills.json", "evaluations/reports/development/engineering-shutdown-review-ours.json", "evaluations/reports/development/distributed-dual-write-review-ours.json", "evaluations/reports/development/distributed-batch-offset-review-final-ours.json", "evaluations/reports/development/distributed-lease-fencing-review-ours.json", "evaluations/reports/latest.json"]
+      "summary": "Ours quality-and-token dominates every skill competitor on the fresh manifest-close transfer and four on settlement correction. However cxuu-golang-skills dominated the authorization cell, ours used the most tokens in the first Distributed tie, and baseline dominates the frozen lease/fencing transfer while remaining far cheaper on Fintech cases. The global behavioral frontier is not established.",
+      "evidence": ["evaluations/reports/development/full-routing-ours.json", "evaluations/reports/development/fintech-authorization-review-ours-vs-cxuu-golang-skills.json", "evaluations/reports/development/engineering-shutdown-review-ours.json", "evaluations/reports/development/distributed-dual-write-review-ours.json", "evaluations/reports/development/distributed-batch-offset-review-final-ours.json", "evaluations/reports/development/distributed-lease-fencing-review-ours.json", "evaluations/reports/development/fintech-settlement-correction-v3-ours.json", "evaluations/reports/development/fintech-settlement-manifest-close-v3-ours.json", "evaluations/reports/latest.json"]
     },
     {
       "id": "artifact-traceability",

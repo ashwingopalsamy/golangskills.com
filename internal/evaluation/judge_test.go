@@ -32,6 +32,11 @@ func TestSemanticJudgePromptBlindsArmAndSkillIdentity(t *testing.T) {
 	if !strings.Contains(prompt, "candidate-123") || !strings.Contains(prompt, "preserves the invariant") {
 		t.Errorf("semanticJudgePrompt() omitted blinded label or rubric: %s", prompt)
 	}
+	for _, required := range []string{"forbidden_endorsed", "quote, describe, identify, or condemn", "never the task's code"} {
+		if !strings.Contains(prompt, required) {
+			t.Errorf("semanticJudgePrompt() omitted forbidden-outcome polarity rule %q", required)
+		}
+	}
 }
 
 func TestDecodeRubricVerdictFailsClosed(t *testing.T) {
@@ -41,10 +46,10 @@ func TestDecodeRubricVerdictFailsClosed(t *testing.T) {
 		name    string
 		content string
 	}{
-		{name: "wrong invariant count", content: `{"invariants":[true],"forbidden_observed":[false],"evidence":["a","b"],"summary":"ok"}`},
-		{name: "unknown field", content: `{"invariants":[true,true],"forbidden_observed":[false],"evidence":["a","b","c"],"summary":"ok","score":1}`},
-		{name: "trailing value", content: `{"invariants":[true,true],"forbidden_observed":[false],"evidence":["a","b","c"],"summary":"ok"} {}`},
-		{name: "empty evidence", content: `{"invariants":[true,true],"forbidden_observed":[false],"evidence":["a","","c"],"summary":"ok"}`},
+		{name: "wrong invariant count", content: `{"invariants":[true],"forbidden_endorsed":[false],"evidence":["a","b"],"summary":"ok"}`},
+		{name: "unknown field", content: `{"invariants":[true,true],"forbidden_endorsed":[false],"evidence":["a","b","c"],"summary":"ok","score":1}`},
+		{name: "trailing value", content: `{"invariants":[true,true],"forbidden_endorsed":[false],"evidence":["a","b","c"],"summary":"ok"} {}`},
+		{name: "empty evidence", content: `{"invariants":[true,true],"forbidden_endorsed":[false],"evidence":["a","","c"],"summary":"ok"}`},
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
@@ -60,7 +65,7 @@ func TestDecodeRubricVerdictFailsClosed(t *testing.T) {
 func TestComputeRubricScoreUsesForbiddenOutcomesAsCritical(t *testing.T) {
 	t.Parallel()
 	score, passed, critical := computeRubricScore(RubricVerdict{
-		Invariants: []bool{true, false}, ForbiddenObserved: []bool{true},
+		Invariants: []bool{true, false}, ForbiddenEndorsed: []bool{true},
 	})
 	if score != 1.0/3.0 || passed || !critical {
 		t.Errorf("computeRubricScore() = (%v, %v, %v), want (%v, false, true)", score, passed, critical, 1.0/3.0)
@@ -75,7 +80,7 @@ func TestApplyJudgmentRejectsSourceDigestMismatch(t *testing.T) {
 		Invariants: []string{"one"}, Forbidden: []string{"bad"},
 		Graders: []corpus.Grader{{ID: "terms", Kind: "contains", Required: []string{"answer"}, Weight: 1}},
 	}
-	verdict := RubricVerdict{Invariants: []bool{true}, ForbiddenObserved: []bool{false}, Evidence: []string{"yes", "absent"}, Summary: "ok"}
+	verdict := RubricVerdict{Invariants: []bool{true}, ForbiddenEndorsed: []bool{false}, Evidence: []string{"yes", "absent"}, Summary: "ok"}
 	judgmentID := semanticJudgmentID(result, "codex", "judge-model")
 	judgment := Judgment{
 		SchemaVersion: judgmentSchemaVersion, JudgmentID: judgmentID, Arm: result.Arm, Skill: result.Skill,
@@ -97,7 +102,7 @@ func TestApplyJudgmentRejectsMissingEvaluatorCommit(t *testing.T) {
 		Prompt: "task", Response: "answer", Invariants: []string{"one"}, Forbidden: []string{"bad"},
 	}
 	verdict := RubricVerdict{
-		Invariants: []bool{true}, ForbiddenObserved: []bool{false},
+		Invariants: []bool{true}, ForbiddenEndorsed: []bool{false},
 		Evidence: []string{"present", "absent"}, Summary: "all criteria pass",
 	}
 	judgment := validJudgment(result, "codex", "judge-model", verdict)
@@ -160,7 +165,7 @@ func TestScoreFileWithJudgmentsMergesValidSemanticScore(t *testing.T) {
 	}
 	writeJSONLine(t, inputPath, result)
 	verdict := RubricVerdict{
-		Invariants: []bool{true}, ForbiddenObserved: []bool{false},
+		Invariants: []bool{true}, ForbiddenEndorsed: []bool{false},
 		Evidence: []string{"present", "absent"}, Summary: "all criteria pass",
 	}
 	judgment := validJudgment(result, "codex", "judge-model", verdict)
@@ -205,7 +210,7 @@ func TestJudgmentRetriesRemainResumableAndLatestSuccessWins(t *testing.T) {
 		Prompt: "task", Response: "answer", Invariants: []string{"one"}, Forbidden: []string{"bad"},
 	}
 	verdict := RubricVerdict{
-		Invariants: []bool{true}, ForbiddenObserved: []bool{false},
+		Invariants: []bool{true}, ForbiddenEndorsed: []bool{false},
 		Evidence: []string{"present", "absent"}, Summary: "all criteria pass",
 	}
 	success := validJudgment(result, "codex", "judge-model", verdict)

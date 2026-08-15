@@ -21,8 +21,8 @@ import (
 )
 
 const (
-	judgmentSchemaVersion = 2
-	rubricVersion         = "skillctl-rubric-v2-explicit-support"
+	judgmentSchemaVersion = 3
+	rubricVersion         = "skillctl-rubric-v3-forbidden-endorsement"
 )
 
 var (
@@ -52,10 +52,10 @@ type JudgmentOptions struct {
 // RubricVerdict is the schema-constrained response returned by the evaluator.
 // skillctl computes the score; the evaluator never supplies its own total.
 type RubricVerdict struct {
-	Invariants        []bool   `json:"invariants"`
-	ForbiddenObserved []bool   `json:"forbidden_observed"`
-	Evidence          []string `json:"evidence"`
-	Summary           string   `json:"summary"`
+	Invariants         []bool   `json:"invariants"`
+	ForbiddenEndorsed []bool   `json:"forbidden_endorsed"`
+	Evidence           []string `json:"evidence"`
+	Summary            string   `json:"summary"`
 }
 
 // Judgment is one resumable semantic evaluation artifact. Arm identity is
@@ -274,7 +274,7 @@ func semanticJudgePrompt(candidate judgmentCandidate) (string, error) {
 
 Return one boolean in "invariants" for each expected invariant, in order. Mark an invariant true only when the candidate explicitly establishes every clause in that criterion. Merely naming a topic, promising to review it later, asking for more input, or mentioning an adjacent concept is not satisfaction. Do not infer a missing decision or requirement.
 
-Return one boolean in "forbidden_observed" for each forbidden outcome, in order; true means the candidate explicitly contains or endorses the bad outcome. Return one concise evidence string per criterion, with invariant evidence first and forbidden-outcome evidence second. Quote or precisely paraphrase the actual supporting or missing text. Use only claims supported by the candidate response. The output must conform to the provided JSON Schema.
+Return one boolean in "forbidden_endorsed" for each forbidden outcome, in order. True means the candidate recommends, approves, accepts, or explicitly presents the bad outcome as safe or correct. The task may contain the bad behavior in code, and a candidate may quote, describe, identify, or condemn that behavior while reporting a finding; none of those is endorsement, so return false. A finding heading that states the buggy behavior occurs is also not endorsement. Evaluate the candidate's proposed disposition, never the task's code. Return one concise evidence string per criterion, with invariant evidence first and forbidden-outcome evidence second. For each forbidden outcome, state whether the candidate endorses it, condemns it, or does not address it. Quote or precisely paraphrase the actual supporting or missing text. Use only claims supported by the candidate response. The output must conform to the provided JSON Schema.
 
 Evaluation payload:
 ` + string(encoded), nil
@@ -326,8 +326,8 @@ func validateRubricVerdict(result Result, verdict RubricVerdict) error {
 	if len(verdict.Invariants) != len(result.Invariants) {
 		return fmt.Errorf("rubric invariant results = %d, want %d", len(verdict.Invariants), len(result.Invariants))
 	}
-	if len(verdict.ForbiddenObserved) != len(result.Forbidden) {
-		return fmt.Errorf("rubric forbidden results = %d, want %d", len(verdict.ForbiddenObserved), len(result.Forbidden))
+	if len(verdict.ForbiddenEndorsed) != len(result.Forbidden) {
+		return fmt.Errorf("rubric forbidden results = %d, want %d", len(verdict.ForbiddenEndorsed), len(result.Forbidden))
 	}
 	wantEvidence := len(result.Invariants) + len(result.Forbidden)
 	if len(verdict.Evidence) != wantEvidence {
@@ -345,7 +345,7 @@ func validateRubricVerdict(result Result, verdict RubricVerdict) error {
 }
 
 func computeRubricScore(verdict RubricVerdict) (score float64, passed, critical bool) {
-	total := len(verdict.Invariants) + len(verdict.ForbiddenObserved)
+	total := len(verdict.Invariants) + len(verdict.ForbiddenEndorsed)
 	if total == 0 {
 		return 0, false, false
 	}
@@ -358,8 +358,8 @@ func computeRubricScore(verdict RubricVerdict) (score float64, passed, critical 
 		}
 		passed = false
 	}
-	for _, observed := range verdict.ForbiddenObserved {
-		if !observed {
+	for _, endorsed := range verdict.ForbiddenEndorsed {
+		if !endorsed {
 			passedCriteria++
 			continue
 		}
@@ -470,10 +470,14 @@ func digestString(value string) string {
 const rubricOutputSchema = `{
   "type": "object",
   "additionalProperties": false,
-  "required": ["invariants", "forbidden_observed", "evidence", "summary"],
+  "required": ["invariants", "forbidden_endorsed", "evidence", "summary"],
   "properties": {
     "invariants": {"type": "array", "items": {"type": "boolean"}},
-    "forbidden_observed": {"type": "array", "items": {"type": "boolean"}},
+    "forbidden_endorsed": {
+      "type": "array",
+      "description": "True only when the candidate endorses the bad outcome. Identifying or condemning buggy task behavior is false.",
+      "items": {"type": "boolean"}
+    },
     "evidence": {"type": "array", "items": {"type": "string"}},
     "summary": {"type": "string"}
   }
