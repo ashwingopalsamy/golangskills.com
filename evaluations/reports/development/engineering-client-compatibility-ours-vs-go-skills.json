@@ -1,0 +1,32 @@
+{
+  "schema_version": 2,
+  "candidate": "ours",
+  "competitor": "go-skills",
+  "candidate_input": "evaluations/scores/2026-08-24-engineering-client-compatibility-native-v3.jsonl",
+  "competitor_input": "evaluations/scores/2026-08-24-engineering-client-compatibility-native-v3.jsonl",
+  "complete_pairs": true,
+  "paired_cases": 1,
+  "candidate_wins": 0,
+  "competitor_wins": 0,
+  "ties": 1,
+  "paired_win_rate": 0.5,
+  "paired_win_ci_lower_95": 0.5,
+  "paired_win_ci_upper_95": 0.5,
+  "mean_score_difference": 0,
+  "mean_difference_ci_lower_95": 0,
+  "mean_difference_ci_upper_95": 0,
+  "candidate_critical_failures": 0,
+  "competitor_critical_failures": 0,
+  "candidate_score_per_k_input_tokens": 0.01838302878782308,
+  "competitor_score_per_k_input_tokens": 0.025835787733167984,
+  "pareto_relation": "competitor-dominates",
+  "collections": [
+    {
+      "collection": "engineering-skills-for-go",
+      "cases": 1,
+      "candidate_mean": 1,
+      "competitor_mean": 1,
+      "difference": 0
+    }
+  ]
+}
