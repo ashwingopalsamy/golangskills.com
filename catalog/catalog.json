@@ -861,10 +861,22 @@
             "redelivery",
             "consumer state"
           ]
+        },
+        {
+          "title": "Apache Kafka 4.0 Protocol",
+          "url": "https://kafka.apache.org/40/design/protocol/",
+          "publisher": "Apache Software Foundation",
+          "kind": "primary",
+          "verified_on": "2026-08-24",
+          "supports": [
+            "consumer group generations",
+            "member epochs",
+            "offset commits"
+          ]
         }
       ],
-      "source_count": 2,
-      "evaluation_count": 4
+      "source_count": 3,
+      "evaluation_count": 5
     },
     {
       "name": "go-money-and-ledgers",
@@ -1074,10 +1086,34 @@
             "capture",
             "expiry"
           ]
+        },
+        {
+          "title": "Visa Acceptance partial authorization reversal",
+          "url": "https://developer.visaacceptance.com/docs/cybs/en-us/payments/developer/ctv/rest/payments/payments-processing-basic-intro/payments-processing-basic-inc-auth-reversal-intro.html",
+          "publisher": "Visa Acceptance Solutions",
+          "kind": "primary",
+          "verified_on": "2026-08-24",
+          "supports": [
+            "partial authorization reversal",
+            "unused hold release",
+            "follow-on identity"
+          ]
+        },
+        {
+          "title": "Visa Acceptance voids",
+          "url": "https://developer.visaacceptance.com/docs/vas/en-us/payments/developer/vital/rest/payments/payments-intro/payments-services-intro/payments-intro-processing-void.html",
+          "publisher": "Visa Acceptance Solutions",
+          "kind": "primary",
+          "verified_on": "2026-08-24",
+          "supports": [
+            "void eligibility",
+            "authorization hold distinction",
+            "follow-on linkage"
+          ]
         }
       ],
-      "source_count": 2,
-      "evaluation_count": 5
+      "source_count": 4,
+      "evaluation_count": 6
     },
     {
       "name": "go-performance-and-diagnostics",
@@ -1806,10 +1842,23 @@
             "race evidence",
             "coverage limits"
           ]
+        },
+        {
+          "title": "testing/synctest package (Go 1.26.5)",
+          "url": "https://pkg.go.dev/testing/synctest@go1.26.5",
+          "publisher": "The Go Authors",
+          "kind": "normative",
+          "verified_on": "2026-08-24",
+          "supports": [
+            "test bubbles",
+            "fake time",
+            "durable blocking",
+            "quiescence"
+          ]
         }
       ],
-      "source_count": 2,
-      "evaluation_count": 4
+      "source_count": 3,
+      "evaluation_count": 5
     },
     {
       "name": "review-go-distributed-change",

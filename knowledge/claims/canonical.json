@@ -60,14 +60,15 @@
       "status": "adopted",
       "scope": "Go testing and automated verification",
       "invariant": "Each material invariant has an executable oracle at the cheapest layer that can falsify it.",
-      "qualifications": ["Race detection observes executed paths and cannot prove the absence of all races.", "Fuzzing is most useful with fast deterministic targets and meaningful invariants."],
+      "qualifications": ["Race detection observes executed paths and cannot prove the absence of all races.", "Fuzzing is most useful with fast deterministic targets and meaningful invariants.", "testing/synctest virtualizes time and quiescence only for its owned bubble; external I/O and outside goroutines need separate fakes or integration evidence."],
       "counterexamples": ["A table-driven test is not inherently better than direct tests for a single behavior.", "Mock call-order assertions can freeze implementation detail without validating behavior."],
       "go_versions": ["1.24", "1.25", "1.26"],
       "owners": ["go-testing-and-verification"],
       "risk_domains": ["correctness", "security", "concurrency"],
       "primary_evidence": [
         {"title": "Go Fuzzing", "url": "https://go.dev/doc/security/fuzz/", "publisher": "The Go Authors", "kind": "primary", "verified_on": "2026-08-18"},
-        {"title": "Data Race Detector", "url": "https://go.dev/doc/articles/race_detector", "publisher": "The Go Authors", "kind": "primary", "verified_on": "2026-08-18"}
+        {"title": "Data Race Detector", "url": "https://go.dev/doc/articles/race_detector", "publisher": "The Go Authors", "kind": "primary", "verified_on": "2026-08-18"},
+        {"title": "testing/synctest package (Go 1.26.5)", "url": "https://pkg.go.dev/testing/synctest@go1.26.5", "publisher": "The Go Authors", "kind": "normative", "verified_on": "2026-08-24"}
       ],
       "observed_in": ["cc-skills-golang", "cxuu-golang-skills", "gophers"]
     },
@@ -168,14 +169,15 @@
       "status": "adopted",
       "scope": "Queues, logs, consumers, outbox/inbox, acknowledgements, ordering, and poison messages",
       "invariant": "Redelivery or crash at any acknowledgement boundary cannot violate the business invariant or silently lose required work.",
-      "qualifications": ["Exactly-once features are scoped to particular systems and transaction boundaries.", "Global ordering is expensive and usually unnecessary; identify the ordering key."],
+      "qualifications": ["Exactly-once features are scoped to particular systems and transaction boundaries.", "Global ordering is expensive and usually unnecessary; identify the ordering key.", "A consumer-group generation or member epoch may reject stale offset progress without fencing an external business effect already started by the revoked owner."],
       "counterexamples": ["A broker transaction cannot make an arbitrary third-party API side effect exactly once."],
       "go_versions": ["1.24", "1.25", "1.26"],
       "owners": ["go-message-processing"],
       "risk_domains": ["delivery", "ordering", "idempotency", "recovery"],
       "primary_evidence": [
         {"title": "Apache Kafka Design", "url": "https://kafka.apache.org/documentation/#design", "publisher": "Apache Software Foundation", "kind": "protocol", "verified_on": "2026-08-18"},
-        {"title": "NATS JetStream Consumers", "url": "https://docs.nats.io/nats-concepts/jetstream/consumers", "publisher": "Synadia", "kind": "protocol", "verified_on": "2026-08-18"}
+        {"title": "NATS JetStream Consumers", "url": "https://docs.nats.io/nats-concepts/jetstream/consumers", "publisher": "Synadia", "kind": "protocol", "verified_on": "2026-08-18"},
+        {"title": "Apache Kafka 4.0 Protocol", "url": "https://kafka.apache.org/40/design/protocol/", "publisher": "Apache Software Foundation", "kind": "protocol", "verified_on": "2026-08-24"}
       ],
       "observed_in": ["cc-skills-golang"]
     },
@@ -255,14 +257,16 @@
       "status": "adopted-with-qualifications",
       "scope": "Provider or rail payment lifecycles whose current state contract has been verified; conditional modeling otherwise",
       "invariant": "No transition invents a successful movement of funds, and late provider events remain safely applicable or explicitly quarantined.",
-      "qualifications": ["Provider state names and legal finality differ by rail and region.", "A locally terminal state can still receive chargebacks or settlement adjustments.", "Stripe evidence supports Stripe behavior only; it does not establish ACH or other rail idempotency, query, expiry, or finality semantics."],
+      "qualifications": ["Provider state names and legal finality differ by rail and region.", "A locally terminal state can still receive chargebacks or settlement adjustments.", "Stripe evidence supports Stripe behavior only; it does not establish ACH or other rail idempotency, query, expiry, or finality semantics.", "Partial capture, void, authorization reversal, and unused-hold release semantics must come from the verified provider and payment-method contract."],
       "counterexamples": ["Treating an HTTP timeout as a declined payment can trigger a second successful authorization."],
       "go_versions": ["1.24", "1.25", "1.26"],
       "owners": ["go-payment-lifecycles"],
       "risk_domains": ["financial-integrity", "state-machine", "ambiguous-outcome"],
       "primary_evidence": [
         {"title": "Stripe PaymentIntent lifecycle", "url": "https://docs.stripe.com/payments/paymentintents/lifecycle", "publisher": "Stripe", "kind": "protocol", "verified_on": "2026-08-18"},
-        {"title": "Stripe separate authorization and capture", "url": "https://docs.stripe.com/payments/place-a-hold-on-a-payment-method", "publisher": "Stripe", "kind": "protocol", "verified_on": "2026-08-18"}
+        {"title": "Stripe separate authorization and capture", "url": "https://docs.stripe.com/payments/place-a-hold-on-a-payment-method", "publisher": "Stripe", "kind": "protocol", "verified_on": "2026-08-18"},
+        {"title": "Visa Acceptance partial authorization reversal", "url": "https://developer.visaacceptance.com/docs/cybs/en-us/payments/developer/ctv/rest/payments/payments-processing-basic-intro/payments-processing-basic-inc-auth-reversal-intro.html", "publisher": "Visa Acceptance Solutions", "kind": "protocol", "verified_on": "2026-08-24"},
+        {"title": "Visa Acceptance voids", "url": "https://developer.visaacceptance.com/docs/vas/en-us/payments/developer/vital/rest/payments/payments-intro/payments-services-intro/payments-intro-processing-void.html", "publisher": "Visa Acceptance Solutions", "kind": "protocol", "verified_on": "2026-08-24"}
       ],
       "observed_in": []
     },

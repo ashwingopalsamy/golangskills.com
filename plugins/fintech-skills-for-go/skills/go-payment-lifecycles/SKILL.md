@@ -27,6 +27,8 @@ Enforce cumulative capture and refund limits with exact money. Partial capture/r
 
 Read [references/payment-machine.md](references/payment-machine.md) for transition and ambiguity rules.
 
+For partial authorization, incremental authorization, capture, void, or authorization-reversal changes, read [references/authorization-adjustments.md](references/authorization-adjustments.md). Preserve requested, approved, capturable, captured, and released amounts separately; provider-specific remainder-release behavior is not a portable payment rule.
+
 Use `go-financial-idempotency` for repeated-request identity, and `go-clearing-settlement-reconciliation` for post-capture external reports and settlement breaks.
 
 ## Output contract

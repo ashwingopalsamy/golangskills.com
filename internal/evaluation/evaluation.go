@@ -347,6 +347,9 @@ func runCase(parent context.Context, repoRoot string, options RunOptions, runID,
 	if runErr != nil {
 		result.Error = runErr.Error()
 		result.ExitCode = exitCode(runErr)
+		if errors.Is(caseContext.Err(), context.DeadlineExceeded) {
+			result.Metadata["timed_out"] = "true"
+		}
 	}
 	response, readErr := os.ReadFile(lastMessage)
 	if readErr == nil {

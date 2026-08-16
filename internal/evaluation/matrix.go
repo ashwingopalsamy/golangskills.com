@@ -27,6 +27,9 @@ type MatrixOptions struct {
 	Limit         int
 	Seed          int64
 	Timeout       time.Duration
+	MaxCells      int
+	MaxFailures   int
+	StopOnTimeout bool
 	OutputPath    string
 	FreezeID      string
 	FreezeDigest  string
@@ -100,6 +103,7 @@ func RunMatrix(ctx context.Context, collection corpus.Collection, arms []RunOpti
 	runID := fmt.Sprintf("%s-matrix-%d-r%d", time.Now().UTC().Format("20060102T150405Z"), options.Seed, options.Repetition)
 	clientVersion := commandOutput(ctx, "codex", "--version")
 	written := 0
+	failures := 0
 	for _, cell := range cells {
 		key := benchmarkKeyWithFreeze(cell.options.Arm, cell.item.skill.Name, cell.item.eval.ID, benchmarkMode(options.ExplicitSkill), options.Repetition, options.FreezeDigest)
 		if completed[key] {
@@ -113,6 +117,18 @@ func RunMatrix(ctx context.Context, collection corpus.Collection, arms []RunOpti
 			return written, err
 		}
 		written++
+		if result.Error != "" || result.ExitCode != 0 {
+			failures++
+			if options.StopOnTimeout && result.Metadata["timed_out"] == "true" {
+				return written, fmt.Errorf("matrix stopped after runner timeout at %s/%s", result.Arm, result.CaseID)
+			}
+			if options.MaxFailures > 0 && failures >= options.MaxFailures {
+				return written, fmt.Errorf("matrix stopped after %d runner failure(s)", failures)
+			}
+		}
+		if options.MaxCells > 0 && written >= options.MaxCells {
+			break
+		}
 	}
 	return written, nil
 }
