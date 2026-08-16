@@ -101,7 +101,9 @@
       "risk_domains": ["security", "privacy", "supply-chain"],
       "primary_evidence": [
         {"title": "Go Security Best Practices", "url": "https://go.dev/doc/security/best-practices", "publisher": "The Go Authors", "kind": "primary", "verified_on": "2026-08-18"},
-        {"title": "NIST Secure Software Development Framework", "url": "https://csrc.nist.gov/pubs/sp/800/218/final", "publisher": "NIST", "kind": "regulatory", "verified_on": "2026-08-18"}
+        {"title": "NIST Secure Software Development Framework", "url": "https://csrc.nist.gov/pubs/sp/800/218/final", "publisher": "NIST", "kind": "regulatory", "verified_on": "2026-08-18"},
+        {"title": "Go Modules Reference", "url": "https://go.dev/ref/mod", "publisher": "The Go Authors", "kind": "primary", "verified_on": "2026-08-24"},
+        {"title": "SLSA Build Track Basics", "url": "https://slsa.dev/spec/v1.2/build-track-basics", "publisher": "OpenSSF", "kind": "primary", "verified_on": "2026-08-24"}
       ],
       "observed_in": ["cc-skills-golang", "gophers"]
     },
@@ -207,7 +209,8 @@
       "risk_domains": ["coordination", "partition", "ordering", "recovery"],
       "primary_evidence": [
         {"title": "etcd concurrency API", "url": "https://pkg.go.dev/go.etcd.io/etcd/client/v3/concurrency", "publisher": "etcd Authors", "kind": "primary", "verified_on": "2026-08-18"},
-        {"title": "Kubernetes Leases", "url": "https://kubernetes.io/docs/concepts/architecture/leases/", "publisher": "Cloud Native Computing Foundation", "kind": "protocol", "verified_on": "2026-08-18"}
+        {"title": "Kubernetes Leases", "url": "https://kubernetes.io/docs/concepts/architecture/leases/", "publisher": "Cloud Native Computing Foundation", "kind": "protocol", "verified_on": "2026-08-18"},
+        {"title": "Go time package", "url": "https://pkg.go.dev/time", "publisher": "The Go Authors", "kind": "normative", "verified_on": "2026-08-24"}
       ],
       "observed_in": ["cc-skills-golang"]
     },
@@ -241,7 +244,8 @@
       "risk_domains": ["financial-integrity", "auditability", "durability"],
       "primary_evidence": [
         {"title": "Modern Treasury: How to Scale a Ledger", "url": "https://www.moderntreasury.com/journal/how-to-scale-a-ledger-part-i", "publisher": "Modern Treasury", "kind": "operational", "verified_on": "2026-08-18"},
-        {"title": "PostgreSQL Constraints", "url": "https://www.postgresql.org/docs/current/ddl-constraints.html", "publisher": "PostgreSQL Global Development Group", "kind": "primary", "verified_on": "2026-08-18"}
+        {"title": "PostgreSQL Constraints", "url": "https://www.postgresql.org/docs/current/ddl-constraints.html", "publisher": "PostgreSQL Global Development Group", "kind": "primary", "verified_on": "2026-08-18"},
+        {"title": "How to Handle Concurrent Transactions", "url": "https://www.moderntreasury.com/journal/how-to-handle-concurrent-transactions", "publisher": "Modern Treasury", "kind": "operational", "verified_on": "2026-08-24"}
       ],
       "observed_in": []
     },

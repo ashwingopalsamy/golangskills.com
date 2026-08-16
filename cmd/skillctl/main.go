@@ -10,6 +10,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"time"
 
@@ -130,7 +131,7 @@ func runPackage(arguments []string, output io.Writer) error {
 
 func runEval(arguments []string, output io.Writer) error {
 	if len(arguments) == 0 {
-		return errors.New("usage: skillctl eval <preflight|run|matrix|score|report> [options]")
+		return errors.New("usage: skillctl eval <preflight|freeze|verify-freeze|run|matrix|score|report> [options]")
 	}
 	switch arguments[0] {
 	case "preflight":
@@ -140,6 +141,111 @@ func runEval(arguments []string, output io.Writer) error {
 		encoder := json.NewEncoder(output)
 		encoder.SetIndent("", "  ")
 		return encoder.Encode(evaluation.SortedStatuses(evaluation.Preflight(context.Background())))
+	case "freeze":
+		flags := flag.NewFlagSet("eval freeze", flag.ContinueOnError)
+		flags.SetOutput(io.Discard)
+		root := flags.String("root", "", "repository root")
+		id := flags.String("id", "", "release-candidate freeze id")
+		model := flags.String("model", "", "treatment model")
+		judgeModel := flags.String("judge-model", "", "semantic evaluator model")
+		modes := flags.String("modes", "native,explicit", "comma-separated native and explicit modes")
+		repetitions := flags.Int("repetitions", 3, "number of precommitted repetitions")
+		seedBase := flags.Int64("seed-base", 2026082401, "first treatment seed")
+		judgeSeedBase := flags.Int64("judge-seed-base", 2026083401, "first semantic evaluator seed")
+		timeout := flags.Duration("timeout", 5*time.Minute, "per-treatment timeout")
+		judgeTimeout := flags.Duration("judge-timeout", 5*time.Minute, "per-judgment timeout")
+		privateHoldout := flags.String("private-holdout", "", "untracked private holdout JSON")
+		holdoutKey := flags.String("holdout-key", "", "owner-only hexadecimal HMAC key file")
+		createdOn := flags.String("created-on", time.Now().UTC().Format("2006-01-02"), "freeze date")
+		outputPath := flags.String("output", "", "public freeze lock path")
+		if err := flags.Parse(arguments[1:]); err != nil {
+			return err
+		}
+		if *id == "" || *model == "" || *judgeModel == "" || *repetitions <= 0 {
+			return errors.New("eval freeze requires -id, -model, -judge-model, and positive -repetitions")
+		}
+		collection, err := corpus.Load(*root)
+		if err != nil {
+			return err
+		}
+		if _, err := corpus.Validate(collection); err != nil {
+			return err
+		}
+		clientVersion, err := authenticatedCodexVersion()
+		if err != nil {
+			return err
+		}
+		treatmentSeeds := sequentialSeeds(*seedBase, *repetitions)
+		judgeSeeds := sequentialSeeds(*judgeSeedBase, *repetitions)
+		lock, err := evaluation.CreateBenchmarkFreeze(collection, evaluation.FreezeOptions{
+			ID: *id, CreatedOn: *createdOn, Runner: "codex", Model: *model,
+			ClientVersion: clientVersion, ToolchainVersion: runtime.Version(),
+			JudgeRunner: "codex", JudgeModel: *judgeModel, Modes: splitList(*modes),
+			TreatmentSeeds: treatmentSeeds, JudgeSeeds: judgeSeeds,
+			TreatmentTimeout: *timeout, JudgmentTimeout: *judgeTimeout,
+			PrivateHoldoutPath: repositoryPath(collection.RepoRoot, *privateHoldout),
+			HoldoutKeyPath:     repositoryPath(collection.RepoRoot, *holdoutKey),
+		})
+		if err != nil {
+			return err
+		}
+		destination := *outputPath
+		if destination == "" {
+			destination = filepath.Join("evaluations", "releases", *id+".lock.json")
+		}
+		destination = repositoryPath(collection.RepoRoot, destination)
+		if err := evaluation.WriteBenchmarkFreeze(destination, lock); err != nil {
+			return err
+		}
+		digest, err := evaluation.BenchmarkFreezeDigest(lock)
+		if err != nil {
+			return err
+		}
+		fmt.Fprintf(output, "froze %d public cases and %d arms as %s (%s)\n", len(lock.PublicCases), len(lock.Arms), lock.ID, digest)
+		if lock.PrivateHoldout != nil {
+			fmt.Fprintf(output, "committed %d private holdout cases without publishing prompts or key\n", lock.PrivateHoldout.CaseCount)
+		}
+		fmt.Fprintln(output, destination)
+		return nil
+	case "verify-freeze":
+		flags := flag.NewFlagSet("eval verify-freeze", flag.ContinueOnError)
+		flags.SetOutput(io.Discard)
+		root := flags.String("root", "", "repository root")
+		lockPath := flags.String("freeze", "", "public freeze lock path")
+		privateHoldout := flags.String("private-holdout", "", "private holdout JSON")
+		holdoutKey := flags.String("holdout-key", "", "holdout HMAC key file")
+		publicOnly := flags.Bool("public-only", false, "verify disclosed inputs without opening a committed private holdout")
+		checkEnvironment := flags.Bool("check-environment", false, "also require current Codex and Go versions")
+		if err := flags.Parse(arguments[1:]); err != nil {
+			return err
+		}
+		if *lockPath == "" {
+			return errors.New("eval verify-freeze requires -freeze")
+		}
+		collection, err := corpus.Load(*root)
+		if err != nil {
+			return err
+		}
+		if _, err := corpus.Validate(collection); err != nil {
+			return err
+		}
+		verify := evaluation.FreezeVerifyOptions{
+			PrivateHoldoutPath: repositoryPath(collection.RepoRoot, *privateHoldout),
+			HoldoutKeyPath:     repositoryPath(collection.RepoRoot, *holdoutKey), PublicOnly: *publicOnly,
+		}
+		if *checkEnvironment {
+			verify.ClientVersion, err = authenticatedCodexVersion()
+			if err != nil {
+				return err
+			}
+			verify.ToolchainVersion = runtime.Version()
+		}
+		lock, _, digest, err := evaluation.VerifyBenchmarkFreeze(collection, repositoryPath(collection.RepoRoot, *lockPath), verify)
+		if err != nil {
+			return err
+		}
+		fmt.Fprintf(output, "verified benchmark freeze %s (%s)\n", lock.ID, digest)
+		return nil
 	case "run":
 		flags := flag.NewFlagSet("eval run", flag.ContinueOnError)
 		flags.SetOutput(io.Discard)
@@ -151,6 +257,7 @@ func runEval(arguments []string, output io.Writer) error {
 		routingMapPath := flags.String("routing-map", "", "locked JSON map from canonical skill/case to accepted arm routes")
 		skillMapPath := flags.String("skill-map", "", "locked JSON map from canonical skill IDs to arm skill IDs")
 		kind := flags.String("kind", "all", "routing, quality, or all")
+		split := flags.String("split", "all", "development, holdout, or all")
 		selectedCase := flags.String("case", "", "one canonical skill/case key to execute")
 		fixturesOnly := flags.Bool("fixtures-only", false, "select only quality cases with executable fixtures")
 		explicit := flags.Bool("explicit", false, "install and invoke only the expected canonical skill")
@@ -159,6 +266,9 @@ func runEval(arguments []string, output io.Writer) error {
 		seed := flags.Int64("seed", 1, "randomization seed")
 		timeout := flags.Duration("timeout", 5*time.Minute, "per-case timeout")
 		outputPath := flags.String("output", "evaluations/runs/manual.jsonl", "resumable JSONL artifact")
+		freezePath := flags.String("freeze", "", "release-candidate freeze lock")
+		privateHoldout := flags.String("private-holdout", "", "private holdout JSON for a frozen holdout run")
+		holdoutKey := flags.String("holdout-key", "", "holdout HMAC key file")
 		if err := flags.Parse(arguments[1:]); err != nil {
 			return err
 		}
@@ -169,6 +279,24 @@ func runEval(arguments []string, output io.Writer) error {
 		if _, err := corpus.Validate(collection); err != nil {
 			return err
 		}
+		var lock evaluation.BenchmarkFreeze
+		var freezeDigest string
+		if *freezePath != "" {
+			clientVersion, versionErr := authenticatedCodexVersion()
+			if versionErr != nil {
+				return versionErr
+			}
+			lock, collection, freezeDigest, err = evaluation.VerifyBenchmarkFreeze(collection, repositoryPath(collection.RepoRoot, *freezePath), evaluation.FreezeVerifyOptions{
+				ClientVersion: clientVersion, ToolchainVersion: runtime.Version(),
+				PrivateHoldoutPath: repositoryPath(collection.RepoRoot, *privateHoldout), HoldoutKeyPath: repositoryPath(collection.RepoRoot, *holdoutKey),
+				PublicOnly: *split != "holdout",
+			})
+			if err != nil {
+				return err
+			}
+		} else if *privateHoldout != "" || *holdoutKey != "" {
+			return errors.New("private holdout execution requires -freeze")
+		}
 		routingMap, err := loadRoutingMap(*routingMapPath)
 		if err != nil {
 			return err
@@ -177,12 +305,36 @@ func runEval(arguments []string, output io.Writer) error {
 		if err != nil {
 			return err
 		}
-		written, err := evaluation.Run(context.Background(), collection, evaluation.RunOptions{
+		runOptions := evaluation.RunOptions{
 			Runner: *runner, Model: *model, Arm: *arm, SkillsRoot: *skillsRoot, Kind: *kind, Case: *selectedCase,
-			FixturesOnly: *fixturesOnly, ExplicitSkill: *explicit, Repetition: *repetition,
+			Split: *split, FixturesOnly: *fixturesOnly, ExplicitSkill: *explicit, Repetition: *repetition,
 			RoutingMap: routingMap, SkillMap: skillMap, Limit: *limit, Seed: *seed, Timeout: *timeout,
 			OutputPath: filepath.Join(collection.RepoRoot, filepath.FromSlash(*outputPath)),
-		})
+		}
+		if *freezePath != "" {
+			if *routingMapPath != "" || *skillMapPath != "" || *skillsRoot != "" {
+				return errors.New("frozen single-arm runs derive skills and maps from the arm lock; custom arm flags are not allowed")
+			}
+			frozenArms, armErr := evaluation.FrozenMatrixArms(collection)
+			if armErr != nil {
+				return armErr
+			}
+			found := false
+			for _, frozenArm := range frozenArms {
+				if frozenArm.Arm == *arm {
+					runOptions.SkillsRoot, runOptions.SkillMap = frozenArm.SkillsRoot, frozenArm.SkillMap
+					found = true
+					break
+				}
+			}
+			if !found {
+				return fmt.Errorf("arm %q is not frozen", *arm)
+			}
+			if err := evaluation.BindRunFreeze(lock, freezeDigest, &runOptions); err != nil {
+				return err
+			}
+		}
+		written, err := evaluation.Run(context.Background(), collection, runOptions)
 		if err != nil {
 			return err
 		}
@@ -195,6 +347,7 @@ func runEval(arguments []string, output io.Writer) error {
 		runner := flags.String("runner", "codex", "agent runner")
 		model := flags.String("model", "", "runner model")
 		kind := flags.String("kind", "all", "routing, quality, or all")
+		split := flags.String("split", "all", "development, holdout, or all")
 		selectedCase := flags.String("case", "", "one canonical skill/case key to execute")
 		fixturesOnly := flags.Bool("fixtures-only", false, "select only quality cases with executable fixtures")
 		explicit := flags.Bool("explicit", false, "install and invoke only the mapped skill")
@@ -203,6 +356,9 @@ func runEval(arguments []string, output io.Writer) error {
 		seed := flags.Int64("seed", 1, "case and global cell randomization seed")
 		timeout := flags.Duration("timeout", 5*time.Minute, "per-cell timeout")
 		outputPath := flags.String("output", "evaluations/runs/matrix.jsonl", "resumable mixed-arm JSONL artifact")
+		freezePath := flags.String("freeze", "", "release-candidate freeze lock")
+		privateHoldout := flags.String("private-holdout", "", "private holdout JSON for a frozen holdout run")
+		holdoutKey := flags.String("holdout-key", "", "holdout HMAC key file")
 		if err := flags.Parse(arguments[1:]); err != nil {
 			return err
 		}
@@ -213,15 +369,39 @@ func runEval(arguments []string, output io.Writer) error {
 		if _, err := corpus.Validate(collection); err != nil {
 			return err
 		}
+		var lock evaluation.BenchmarkFreeze
+		var freezeDigest string
+		if *freezePath != "" {
+			clientVersion, versionErr := authenticatedCodexVersion()
+			if versionErr != nil {
+				return versionErr
+			}
+			lock, collection, freezeDigest, err = evaluation.VerifyBenchmarkFreeze(collection, repositoryPath(collection.RepoRoot, *freezePath), evaluation.FreezeVerifyOptions{
+				ClientVersion: clientVersion, ToolchainVersion: runtime.Version(),
+				PrivateHoldoutPath: repositoryPath(collection.RepoRoot, *privateHoldout), HoldoutKeyPath: repositoryPath(collection.RepoRoot, *holdoutKey),
+				PublicOnly: *split != "holdout",
+			})
+			if err != nil {
+				return err
+			}
+		} else if *privateHoldout != "" || *holdoutKey != "" {
+			return errors.New("private holdout execution requires -freeze")
+		}
 		arms, err := evaluation.FrozenMatrixArms(collection)
 		if err != nil {
 			return err
 		}
-		written, err := evaluation.RunMatrix(context.Background(), collection, arms, evaluation.MatrixOptions{
-			Runner: *runner, Model: *model, Kind: *kind, Case: *selectedCase, FixturesOnly: *fixturesOnly,
+		matrixOptions := evaluation.MatrixOptions{
+			Runner: *runner, Model: *model, Kind: *kind, Split: *split, Case: *selectedCase, FixturesOnly: *fixturesOnly,
 			ExplicitSkill: *explicit, Repetition: *repetition, Limit: *limit, Seed: *seed, Timeout: *timeout,
 			OutputPath: filepath.Join(collection.RepoRoot, filepath.FromSlash(*outputPath)),
-		})
+		}
+		if *freezePath != "" {
+			if err := evaluation.BindMatrixFreeze(lock, freezeDigest, &matrixOptions); err != nil {
+				return err
+			}
+		}
+		written, err := evaluation.RunMatrix(context.Background(), collection, arms, matrixOptions)
 		if err != nil {
 			return err
 		}
@@ -237,11 +417,44 @@ func runEval(arguments []string, output io.Writer) error {
 		judgeModel := flags.String("judge-model", "", "semantic evaluator model; enables blinded judgment")
 		judgeSeed := flags.Int64("judge-seed", 1, "semantic candidate randomization seed")
 		judgeTimeout := flags.Duration("judge-timeout", 5*time.Minute, "per-candidate semantic evaluator timeout")
+		root := flags.String("root", "", "repository root for freeze verification")
+		freezePath := flags.String("freeze", "", "release-candidate freeze lock")
+		privateHoldout := flags.String("private-holdout", "", "private holdout JSON")
+		holdoutKey := flags.String("holdout-key", "", "holdout HMAC key file")
+		publicOnly := flags.Bool("public-only", false, "score only disclosed development cells without opening the holdout")
 		if err := flags.Parse(arguments[1:]); err != nil {
 			return err
 		}
 		if *input == "" || *outputPath == "" {
 			return errors.New("eval score requires -input and -output")
+		}
+		if *freezePath != "" {
+			collection, err := corpus.Load(*root)
+			if err != nil {
+				return err
+			}
+			clientVersion, err := authenticatedCodexVersion()
+			if err != nil {
+				return err
+			}
+			lock, _, digest, err := evaluation.VerifyBenchmarkFreeze(collection, repositoryPath(collection.RepoRoot, *freezePath), evaluation.FreezeVerifyOptions{
+				ClientVersion: clientVersion, ToolchainVersion: runtime.Version(),
+				PrivateHoldoutPath: repositoryPath(collection.RepoRoot, *privateHoldout), HoldoutKeyPath: repositoryPath(collection.RepoRoot, *holdoutKey),
+				PublicOnly: *publicOnly,
+			})
+			if err != nil {
+				return err
+			}
+			if err := evaluation.ValidateResultArtifactFreeze(*input, lock, digest); err != nil {
+				return err
+			}
+			if *judgeModel != "" {
+				if err := evaluation.ValidateJudgmentFreeze(lock, *judgeRunner, *judgeModel, *judgeSeed, *judgeTimeout); err != nil {
+					return err
+				}
+			}
+		} else if *privateHoldout != "" || *holdoutKey != "" {
+			return errors.New("private holdout scoring requires -freeze")
 		}
 		if *judgeModel != "" {
 			if *judgmentsPath == "" {
@@ -355,6 +568,44 @@ func loadRoutingMap(path string) (map[string][]string, error) {
 		}
 	}
 	return result, nil
+}
+
+func authenticatedCodexVersion() (string, error) {
+	for _, status := range evaluation.Preflight(context.Background()) {
+		if status.Client != "codex" {
+			continue
+		}
+		if !status.Available || !status.Authenticated || status.Version == "" {
+			return "", fmt.Errorf("Codex runner is not ready for a frozen benchmark: %s", status.Evidence)
+		}
+		return status.Version, nil
+	}
+	return "", errors.New("Codex runner status is unavailable")
+}
+
+func sequentialSeeds(first int64, count int) []int64 {
+	result := make([]int64, count)
+	for index := range result {
+		result[index] = first + int64(index)
+	}
+	return result
+}
+
+func splitList(value string) []string {
+	var result []string
+	for _, item := range strings.Split(value, ",") {
+		if trimmed := strings.TrimSpace(item); trimmed != "" {
+			result = append(result, trimmed)
+		}
+	}
+	return result
+}
+
+func repositoryPath(root, path string) string {
+	if path == "" || filepath.IsAbs(path) {
+		return path
+	}
+	return filepath.Join(root, filepath.FromSlash(path))
 }
 
 func runRelease(arguments []string, output io.Writer) error {

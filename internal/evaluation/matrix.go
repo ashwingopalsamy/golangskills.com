@@ -19,6 +19,7 @@ type MatrixOptions struct {
 	Runner        string
 	Model         string
 	Kind          string
+	Split         string
 	Case          string
 	FixturesOnly  bool
 	ExplicitSkill bool
@@ -27,6 +28,8 @@ type MatrixOptions struct {
 	Seed          int64
 	Timeout       time.Duration
 	OutputPath    string
+	FreezeID      string
+	FreezeDigest  string
 }
 
 type matrixCell struct {
@@ -98,7 +101,7 @@ func RunMatrix(ctx context.Context, collection corpus.Collection, arms []RunOpti
 	clientVersion := commandOutput(ctx, "codex", "--version")
 	written := 0
 	for _, cell := range cells {
-		key := benchmarkKey(cell.options.Arm, cell.item.skill.Name, cell.item.eval.ID, benchmarkMode(options.ExplicitSkill), options.Repetition)
+		key := benchmarkKeyWithFreeze(cell.options.Arm, cell.item.skill.Name, cell.item.eval.ID, benchmarkMode(options.ExplicitSkill), options.Repetition, options.FreezeDigest)
 		if completed[key] {
 			continue
 		}
@@ -118,7 +121,7 @@ func planMatrixCells(collection corpus.Collection, arms []RunOptions, options Ma
 	if len(arms) < 2 {
 		return nil, errors.New("matrix requires at least two arms")
 	}
-	cases := flattenCases(collection, options.Kind, options.Case, options.FixturesOnly)
+	cases := flattenCases(collection, options.Kind, options.Split, options.Case, options.FixturesOnly)
 	if len(cases) == 0 {
 		return nil, errors.New("no evaluation cases selected")
 	}
@@ -140,12 +143,15 @@ func planMatrixCells(collection corpus.Collection, arms []RunOptions, options Ma
 		arm.Runner = options.Runner
 		arm.Model = options.Model
 		arm.Kind = options.Kind
+		arm.Split = options.Split
 		arm.Case = options.Case
 		arm.FixturesOnly = options.FixturesOnly
 		arm.ExplicitSkill = options.ExplicitSkill
 		arm.Repetition = options.Repetition
 		arm.Seed = options.Seed
 		arm.Timeout = options.Timeout
+		arm.FreezeID = options.FreezeID
+		arm.FreezeDigest = options.FreezeDigest
 		if err := validateArmMaps(arm, cases); err != nil {
 			return nil, err
 		}

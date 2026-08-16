@@ -27,6 +27,8 @@ Identify principals, assets, entrypoints, authorization decisions, privileged op
 
 Minimize dependencies, verify modules and generated inputs, pin CI actions by immutable revisions, scan release archives, and prohibit unreviewed executable resources from published skills. A checksum proves identity, not trustworthiness.
 
+For dependency or release-pipeline changes, read [references/dependency-integrity.md](references/dependency-integrity.md). Distinguish module authentication, cache verification, vulnerability reachability, source trust, build-input completeness, and artifact provenance; none substitutes for the others.
+
 Read [references/threat-paths.md](references/threat-paths.md) for concrete review paths.
 
 ## Output contract

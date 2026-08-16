@@ -25,6 +25,8 @@ If the target cannot compare fencing tokens—such as some payment, email, or fi
 
 Bound acquisition and renewal; propagate cancellation; stop admission before expiry; treat renewal uncertainty as loss of authority; make release best-effort rather than the sole takeover mechanism. Observe lease age, renewal latency, token, owner, failed fences, and takeover count without high-cardinality leakage.
 
+When ownership depends on timestamps or survives serialization/restart, read [references/time-and-authority.md](references/time-and-authority.md). Go's monotonic reading protects elapsed comparisons only inside one process; it is not serialized and cannot establish cross-replica authority.
+
 ## Sagas and compensation
 
 Persist each workflow transition and command identity. Make steps and compensations idempotent. Compensation is a new business action, not rollback: it can fail, race with late success, or be legally impossible. Define forward recovery, manual exception handling, and terminal evidence.

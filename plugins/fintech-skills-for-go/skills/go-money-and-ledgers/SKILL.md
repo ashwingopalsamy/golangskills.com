@@ -27,6 +27,8 @@ Distinguish pending, posted, and available balances if the product needs them. D
 
 Where overdraft, limits, reservations, or sequence matter, the decision read, authoritative balance/reservation mutation, journal posting, and operation claim share one atomic boundary. Name the anomaly and use a locked authoritative row, conditional balance/version update, or serializable transaction with whole-transaction retry. Enforce logical posting identity with a database uniqueness constraint. A balanced journal can still be unauthorized or economically wrong; preserve the business command and approval evidence. Avoid sensitive payloads while keeping immutable actor, time, reason, and correlation.
 
+When the product exposes available balance, authorizations, or internal holds, read [references/reservations-and-balances.md](references/reservations-and-balances.md). Define which pending and posted entries affect availability, then make the decision and reservation one conditional durable transition.
+
 Use `go-data-consistency` for the database anomaly and `go-financial-idempotency` for operation identity and replay.
 
 Read [references/money-ledger-invariants.md](references/money-ledger-invariants.md) for arithmetic and schema checks and [references/fx-booking.md](references/fx-booking.md) for conversion, allocation, and reversal evidence.

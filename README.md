@@ -18,7 +18,7 @@ Install one, two, or all three. No skill appears in more than one collection.
 
 - 20 focused skills with progressive one-hop references, not a monolithic prompt.
 - 7,777 conservative discovery characters for all three collections, including a 160-character path allowance per skill; every collection is below 4,000.
-- 91 development scenarios covering routing, confusion negatives, and deterministic quality criteria, including 15 executable failure-mode fixtures.
+- 103 development scenarios covering routing, confusion negatives, and deterministic quality criteria, including 15 executable failure-mode fixtures.
 - 21 primary-evidence claims with scope, qualifications, counterexamples, Go versions, owners, and provenance.
 - All seven local Go reference snapshots locked by remote, commit, license, 759 file hashes, 103 canonical skill entrypoints, and 10,239 material-item dispositions.
 - One canonical corpus generates Codex, Claude Code, Cursor, OpenCode, catalog, search, site, and `llms.txt` artifacts.
@@ -48,6 +48,8 @@ go run ./cmd/skillctl check
 go run ./cmd/skillctl generate
 go run ./cmd/skillctl package
 go run ./cmd/skillctl eval preflight
+go run ./cmd/skillctl eval freeze -id rc1 -model gpt-5.6-sol -judge-model gpt-5.6-sol -private-holdout .private/evaluations/rc1/holdout.json -holdout-key .private/evaluations/rc1/holdout.key
+go run ./cmd/skillctl eval verify-freeze -freeze evaluations/releases/rc1.lock.json -public-only
 go run ./cmd/skillctl eval run -runner codex -arm ours -kind routing -output evaluations/runs/ours-routing.jsonl
 go run ./cmd/skillctl eval matrix -runner codex -model gpt-5.6-sol -fixtures-only -output evaluations/runs/fixture-matrix.jsonl
 go run ./cmd/skillctl eval score -input evaluations/runs/ours-routing.jsonl -output evaluations/scores/ours-routing.jsonl
@@ -60,6 +62,8 @@ go run ./cmd/skillctl release check
 `check` validates schema v2, claim ownership and exposed evidence, complete reference disposition coverage, source freshness, discovery budgets, activation overlap, fixture/oracle paths, links, relations, licenses, and generated freshness. The eval harness creates a new isolated directory and ephemeral session per cell, globally randomizes mixed-arm matrices, uses distinct opaque arm labels, resumes by mode and repetition, scores deterministic graders first, and reports Wilson confidence intervals, routing macro-F1, unrelated-prompt false activation, collection scores, token efficiency, paired bootstrap intervals, and Pareto relations. Fixture cells hide the decisive test until the agent exits, then preserve edited Go sources, the injected oracle, and allowlisted offline `go test` output. Non-executable quality cases can use schema-constrained, identity-redacted, resumable semantic judgments; Codex-on-Codex results are labeled same-platform rather than independent. Competitor routing requires a committed `-routing-map`; explicit competitor runs require a committed `-skill-map`.
 
 Frozen local competitor mappings live under `evaluations/arms/`. A per-case routing map can override the canonical-to-arm skill map; otherwise the harness derives accepted arm-local IDs and accepts their isolated plugin namespace prefix.
+
+Release-candidate treatment and scoring must use a committed benchmark lock. The lock binds exact public cases, skill and fixture bytes, hidden oracles, arm commits and content, scorer code, client/toolchain versions, models, modes, timeouts, repetitions, and randomization seeds. Private holdouts are committed with HMAC-SHA-256 while their prompts and key remain outside Git until scoring. See [docs/release-candidate-freeze.md](docs/release-candidate-freeze.md).
 
 ## Evidence boundary
 

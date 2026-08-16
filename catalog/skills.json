@@ -397,10 +397,22 @@
           "lease ownership",
           "leader election"
         ]
+      },
+      {
+        "title": "Go time package",
+        "url": "https://pkg.go.dev/time",
+        "publisher": "The Go Authors",
+        "kind": "normative",
+        "verified_on": "2026-08-24",
+        "supports": [
+          "monotonic readings",
+          "serialization",
+          "time comparison"
+        ]
       }
     ],
-    "source_count": 2,
-    "evaluation_count": 4
+    "source_count": 3,
+    "evaluation_count": 5
   },
   {
     "name": "go-financial-idempotency",
@@ -889,10 +901,22 @@
           "journal immutability",
           "ledger invariants"
         ]
+      },
+      {
+        "title": "How to Handle Concurrent Transactions",
+        "url": "https://www.moderntreasury.com/journal/how-to-handle-concurrent-transactions",
+        "publisher": "Modern Treasury",
+        "kind": "operational",
+        "verified_on": "2026-08-24",
+        "supports": [
+          "conditional balance writes",
+          "concurrent spend",
+          "balance versions"
+        ]
       }
     ],
-    "source_count": 3,
-    "evaluation_count": 5
+    "source_count": 4,
+    "evaluation_count": 6
   },
   {
     "name": "go-payment-lifecycles",
@@ -1387,10 +1411,34 @@
           "secure development",
           "supply chain"
         ]
+      },
+      {
+        "title": "Go Modules Reference",
+        "url": "https://go.dev/ref/mod",
+        "publisher": "The Go Authors",
+        "kind": "primary",
+        "verified_on": "2026-08-24",
+        "supports": [
+          "module authentication",
+          "checksum database",
+          "private module boundaries"
+        ]
+      },
+      {
+        "title": "SLSA Build Track Basics",
+        "url": "https://slsa.dev/spec/v1.2/build-track-basics",
+        "publisher": "OpenSSF",
+        "kind": "primary",
+        "verified_on": "2026-08-24",
+        "supports": [
+          "build provenance",
+          "resolved inputs",
+          "builder trust"
+        ]
       }
     ],
-    "source_count": 2,
-    "evaluation_count": 4
+    "source_count": 4,
+    "evaluation_count": 5
   },
   {
     "name": "go-service-boundaries",

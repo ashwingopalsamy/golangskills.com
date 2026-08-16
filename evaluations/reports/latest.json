@@ -3,6 +3,40 @@
   "generated_on": "2026-08-24",
   "leadership_claim_eligible": false,
   "status": "development-screen-only",
+  "current_corpus": {
+    "source_commit": "b5e49f3fe7a53f3baca6c30ad91e587e290ccd41",
+    "skills": 20,
+    "development_cases": 103,
+    "executable_fixtures": 15,
+    "sources": 53,
+    "claims": 21,
+    "discovery_characters": 7777,
+    "maximum_description_overlap": 0.267,
+    "fresh_unrun_cases": [
+      "go-service-boundaries/quality-mtls-generation-cutover",
+      "go-data-consistency/quality-online-schema-cutover",
+      "go-money-and-ledgers/quality-fx-booking-review",
+      "go-production-operations/quality-telemetry-failure-boundary",
+      "go-service-resilience/quality-recovery-herd",
+      "go-fintech-security-compliance/quality-tokenization-scope-review",
+      "go-security-hardening/quality-dependency-integrity-review",
+      "go-distributed-coordination/quality-serialized-lease-clock-review",
+      "go-money-and-ledgers/quality-reservation-race-review"
+    ],
+    "qualification": "The nine fresh cases are frozen public development inputs with no treatment results. They support no comparative claim until the release-candidate batch."
+  },
+  "current_packages": {
+    "version": "0.2.0",
+    "source_commit": "b5e49f3fe7a53f3baca6c30ad91e587e290ccd41",
+    "package_commit": "ccc493cf02c5c4c9f6e702668fe13f3a54f3c2b2",
+    "reproduced_twice_byte_identically": true,
+    "checksums": {
+      "engineering-skills-for-go": "da456e19f74103301a5b9f289a91fbd0c3b0b5119e2e5a0b60888346a0ecdf93",
+      "distributed-systems-skills-for-go": "6bf9c09e8a4a71eda90116caaef36e5482712b60af678b0dccdb1c25a2dd055d",
+      "fintech-skills-for-go": "e77762256700b2ebbce3ebb76d4cec459df00a96de0ff0f070dc1ff55841f94c"
+    },
+    "qualification": "Reproducible development packages; no release tag or new clean-clone behavioral result."
+  },
   "codex_screen": {
     "model": "gpt-5.6-sol",
     "client_version": "codex-cli 0.148.0-alpha.9",
@@ -629,6 +663,39 @@
     "ours_report": "evaluations/reports/development/fintech-settlement-manifest-close-v3-ours.json",
     "qualification": "Ours led every skill competitor in aggregate quality while using fewer input tokens, and beat baseline in every repetition. Baseline remains a quality/token trade-off, ours strictly passed zero repetitions, and this one public family cannot establish paired statistical or category-level superiority."
   },
+  "engineering_runtime_reload_interrupted_screen": {
+    "case": "review-go-engineering-change/quality-runtime-reload-cutover-diff",
+    "original_fixture_commit": "5f84f0d",
+    "corrected_fixture_commit": "e354426",
+    "rubric_version": "skillctl-rubric-v3-forbidden-endorsement",
+    "model": "gpt-5.6-sol",
+    "client_version": "codex-cli 0.149.0-alpha.4.1",
+    "arms": 7,
+    "completed_scored_repetitions": 1,
+    "completed_unscored_treatment_repetitions": 1,
+    "unstarted_repetitions": 1,
+    "repetition_0_criteria": {
+      "ours": 12,
+      "baseline": 12,
+      "cc-skills-golang": 12,
+      "cxuu-golang-skills": 12,
+      "go-skills": 12,
+      "golang-ddd-skills": 13,
+      "gophers": 11,
+      "possible_per_arm": 13
+    },
+    "ours_input_tokens_repetition_0": 36787,
+    "retained_judgment_timeouts": 3,
+    "successful_unique_judgments": 7,
+    "resumed_judgments_on_final_rerun": 0,
+    "raw_artifacts": [
+      "evaluations/runs/2026-08-24-engineering-runtime-reload-cutover-corrected-native.jsonl",
+      "evaluations/runs/2026-08-24-engineering-runtime-reload-cutover-corrected-native-r1.jsonl"
+    ],
+    "judgment_artifact": "evaluations/judgments/2026-08-24-engineering-runtime-reload-cutover-corrected-native-codex-v3.jsonl",
+    "score_artifact": "evaluations/scores/2026-08-24-engineering-runtime-reload-cutover-corrected-native-v3.jsonl",
+    "qualification": "Incomplete by user direction and excluded from aggregate claims. Ours missed explicit obsolete-idle-connection retirement; the general invariant was added separately, and repeated comparison is deferred to the release-candidate batch."
+  },
   "targeted_rerun": {
     "case": "go-clearing-settlement-reconciliation/avoid-initial-auth",
     "passed": true,
@@ -657,7 +724,8 @@
   "blocking_gates": [
     "private release holdout not yet frozen and scored",
     "full baseline and multi-competitor behavioral quality matrix not yet completed",
-    "the quality half of the 92-scenario full-arm matrix and hard-case repetitions are not yet completed",
+    "nine newly frozen cross-domain development cases have no treatment results and are reserved for the release-candidate batch",
+    "the quality half of the 103-scenario full-arm matrix and release-candidate hard-case repetitions are not yet completed",
     "public routing macro-F1 clears its threshold, but private unrelated-prompt false activation is not established",
     "six post-edit hidden-oracle cases, including three behavior-rich multi-file additions, tied every arm; a less solution-revealing benchmark design is required",
     "the semantic judge is operational across eight public case families under a versioned protocol; the fresh settlement manifest family gives ours a quality-and-token lead over every skill competitor, but ours strictly passes zero repetitions and the lease/fencing transfer still ties baseline",
