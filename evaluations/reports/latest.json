@@ -46,6 +46,19 @@
     ],
     "qualification": "These reports expose routing and token metrics, but zero unrelated-prompt cases and ten pairs make every release threshold ineligible."
   },
+  "mixed_matrix_smoke": {
+    "fixture_commit": "5f5bbb0001e6adeab7622553db75eb367e7056aa",
+    "cells": 7,
+    "canonical_cases": 1,
+    "arms": 7,
+    "globally_randomized": true,
+    "distinct_opaque_arm_labels": true,
+    "raw_artifact": "evaluations/runs/2026-08-18-mixed-matrix-smoke.jsonl",
+    "score_artifact": "evaluations/scores/2026-08-18-mixed-matrix-smoke.jsonl",
+    "arm_report": "evaluations/reports/development/matrix-smoke-ours.json",
+    "paired_report": "evaluations/reports/development/matrix-smoke-ours-vs-gophers.json",
+    "qualification": "Harness integration evidence only; one canonical case has no comparative inferential value."
+  },
   "targeted_rerun": {
     "case": "go-clearing-settlement-reconciliation/avoid-initial-auth",
     "passed": true,
