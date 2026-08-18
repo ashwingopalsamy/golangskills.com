@@ -1,5 +1,7 @@
 # Go Engineering Skills by Ashwin Gopalsamy
 
+Current implementation status and benchmark evidence are tracked in the public catalog and evaluation reports.
+
 Evidence-backed Agent Skills for production Go, distributed systems, and fintech—authored by [Ashwin Gopalsamy](https://ashwingopalsamy.in).
 
 The ecosystem ships three non-overlapping installable collections:
