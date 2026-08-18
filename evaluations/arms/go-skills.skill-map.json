@@ -1,0 +1,22 @@
+{
+  "go-language-engineering": "go",
+  "go-project-and-api-design": "go",
+  "go-service-boundaries": "go",
+  "go-testing-and-verification": "go",
+  "go-performance-and-diagnostics": "go",
+  "go-security-hardening": "go",
+  "go-production-operations": "go-release",
+  "review-go-engineering-change": "go-spec-reviewer",
+  "go-concurrency-lifecycle": "go",
+  "go-data-consistency": "go",
+  "go-message-processing": "go",
+  "go-service-resilience": "go",
+  "go-distributed-coordination": "go",
+  "review-go-distributed-change": "go-spec-reviewer",
+  "go-money-and-ledgers": "go",
+  "go-payment-lifecycles": "go",
+  "go-financial-idempotency": "go",
+  "go-clearing-settlement-reconciliation": "go",
+  "go-fintech-security-compliance": "go",
+  "review-go-fintech-change": "go-spec-reviewer"
+}

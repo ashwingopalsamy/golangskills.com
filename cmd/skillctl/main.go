@@ -64,6 +64,9 @@ func run(arguments []string, output io.Writer) error {
 
 	switch command {
 	case "check":
+		if err := evaluation.ValidateArmFiles(collection); err != nil {
+			return err
+		}
 		outputs, err := corpus.Render(collection)
 		if err != nil {
 			return err

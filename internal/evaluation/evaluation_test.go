@@ -51,6 +51,16 @@ func TestValidateArmMapsRequiresEverySelectedCompetitorCase(t *testing.T) {
 	}
 }
 
+func TestExpectedRoutesMapsCanonicalSkillForCompetitor(t *testing.T) {
+	t.Parallel()
+	activate := true
+	item := caseItem{skill: corpus.Skill{Name: "go-data-consistency"}, eval: corpus.EvalCase{ID: "route-commit", ShouldActivate: &activate}}
+	routes := expectedRoutes(RunOptions{Arm: "competitor", SkillMap: map[string]string{"go-data-consistency": "golang-database"}}, item)
+	if len(routes) != 1 || routes[0] != "golang-database" {
+		t.Fatalf("expectedRoutes() = %v", routes)
+	}
+}
+
 func TestExpectedRoutesUsesDeclaredConfusionTarget(t *testing.T) {
 	t.Parallel()
 	activate := false

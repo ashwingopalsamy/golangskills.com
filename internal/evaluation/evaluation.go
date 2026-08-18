@@ -206,7 +206,11 @@ func validateArmMaps(options RunOptions, cases []caseItem) error {
 	}
 	for _, item := range cases {
 		if item.eval.Kind == "routing" && len(options.RoutingMap[item.skill.Name+"/"+item.eval.ID]) == 0 {
-			return fmt.Errorf("competitor routing arm %q is missing -routing-map entry %s/%s", options.Arm, item.skill.Name, item.eval.ID)
+			for _, canonical := range canonicalExpectedRoutes(item) {
+				if canonical != "NONE" && options.SkillMap[canonical] == "" {
+					return fmt.Errorf("competitor routing arm %q is missing a case override or -skill-map entry %s", options.Arm, canonical)
+				}
+			}
 		}
 		if options.ExplicitSkill && options.SkillMap[item.skill.Name] == "" {
 			return fmt.Errorf("competitor explicit-skill arm %q is missing -skill-map entry %s", options.Arm, item.skill.Name)
@@ -262,7 +266,7 @@ func runCase(parent context.Context, repoRoot string, options RunOptions, runID,
 	if mapped := options.SkillMap[item.skill.Name]; mapped != "" {
 		selectedSkill = mapped
 	}
-	if options.Arm != "baseline" {
+	if options.Arm != "baseline" && selectedSkill != "NONE" {
 		source := options.SkillsRoot
 		if source == "" {
 			source = filepath.Join(repoRoot, "skills")
@@ -278,10 +282,10 @@ func runCase(parent context.Context, repoRoot string, options RunOptions, runID,
 		prompt = "Choose whether one installed skill should handle the following request. Reply with exactly its skill ID, or NONE if no installed skill should activate. Do not solve the request.\n\n" + prompt
 	} else if item.eval.Fixture != "" {
 		prompt = "Modify the fixture in the current directory to solve the task. Keep the change scoped and leave the repository ready for its deterministic grader.\n\n" + prompt
-		if options.ExplicitSkill {
+		if options.ExplicitSkill && selectedSkill != "NONE" {
 			prompt = "Use $" + selectedSkill + ".\n\n" + prompt
 		}
-	} else if options.ExplicitSkill {
+	} else if options.ExplicitSkill && selectedSkill != "NONE" {
 		prompt = "Use $" + selectedSkill + " for this task.\n\n" + prompt
 	}
 	caseContext, cancel := context.WithTimeout(parent, options.Timeout)
@@ -325,6 +329,23 @@ func expectedRoutes(options RunOptions, item caseItem) []string {
 	if routes := options.RoutingMap[item.skill.Name+"/"+item.eval.ID]; len(routes) > 0 {
 		return append([]string(nil), routes...)
 	}
+	canonical := canonicalExpectedRoutes(item)
+	if options.Arm == "ours" {
+		return canonical
+	}
+	mapped := make([]string, 0, len(canonical))
+	for _, route := range canonical {
+		if armRoute := options.SkillMap[route]; armRoute != "" {
+			mapped = append(mapped, armRoute)
+		}
+	}
+	if len(mapped) == 0 {
+		return []string{"NONE"}
+	}
+	return mapped
+}
+
+func canonicalExpectedRoutes(item caseItem) []string {
 	if item.eval.ShouldActivate != nil && *item.eval.ShouldActivate {
 		return []string{item.skill.Name}
 	}
