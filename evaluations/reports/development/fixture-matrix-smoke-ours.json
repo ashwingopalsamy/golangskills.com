@@ -1,0 +1,36 @@
+{
+  "schema_version": 2,
+  "arm": "ours",
+  "cases": 1,
+  "passed": 1,
+  "pass_rate": 1,
+  "mean_score": 1,
+  "ci_lower_95": 0.20654931437723745,
+  "ci_upper_95": 1,
+  "critical_failures": 0,
+  "collections": [
+    {
+      "collection": "engineering-skills-for-go",
+      "cases": 1,
+      "passed": 1,
+      "pass_rate": 1,
+      "mean_score": 1
+    }
+  ],
+  "routing": {
+    "cases": 0,
+    "macro_f1": 0,
+    "unrelated_cases": 0,
+    "false_activations": 0,
+    "false_activation_rate": 0
+  },
+  "tokens": {
+    "input_tokens": 110138,
+    "cached_input_tokens": 93696,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 1968,
+    "reasoning_output_tokens": 643,
+    "score_per_k_input_tokens": 0.00907951842234288
+  },
+  "input": "evaluations/scores/2026-08-18-fixture-matrix-smoke.jsonl"
+}

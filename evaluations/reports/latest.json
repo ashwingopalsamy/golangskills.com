@@ -108,6 +108,20 @@
     ],
     "qualification": "Complete public native-discovery routing evidence. It has no unrelated holdout prompts and is not behavioral quality or no-skill improvement evidence; leadership remains ineligible."
   },
+  "fixture_matrix_smoke": {
+    "fixture_commit": "065007ea2a8fb5bb2db0879ee63a895e551ece1c",
+    "case": "go-service-boundaries/quality-http-body",
+    "arms": 7,
+    "cells": 7,
+    "runner_errors": 0,
+    "passed_arms": 7,
+    "resumed_cells_on_identical_rerun": 0,
+    "raw_artifact": "evaluations/runs/2026-08-18-fixture-matrix-smoke.jsonl",
+    "score_artifact": "evaluations/scores/2026-08-18-fixture-matrix-smoke.jsonl",
+    "arm_report": "evaluations/reports/development/fixture-matrix-smoke-ours.json",
+    "paired_report": "evaluations/reports/development/fixture-matrix-smoke-ours-vs-baseline.json",
+    "qualification": "Executable isolation and grading evidence only; one fixture passed by every arm and has no comparative inferential value."
+  },
   "targeted_rerun": {
     "case": "go-clearing-settlement-reconciliation/avoid-initial-auth",
     "passed": true,
