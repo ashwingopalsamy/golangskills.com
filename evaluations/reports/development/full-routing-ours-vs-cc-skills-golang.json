@@ -1,0 +1,46 @@
+{
+  "schema_version": 2,
+  "candidate": "ours",
+  "competitor": "cc-skills-golang",
+  "candidate_input": "evaluations/scores/2026-08-18-full-routing-matrix-native.jsonl",
+  "competitor_input": "evaluations/scores/2026-08-18-full-routing-matrix-native.jsonl",
+  "complete_pairs": true,
+  "paired_cases": 40,
+  "candidate_wins": 21,
+  "competitor_wins": 0,
+  "ties": 19,
+  "paired_win_rate": 0.7625,
+  "paired_win_ci_lower_95": 0.6875,
+  "paired_win_ci_upper_95": 0.8375,
+  "mean_score_difference": 0.525,
+  "mean_difference_ci_lower_95": 0.375,
+  "mean_difference_ci_upper_95": 0.675,
+  "candidate_critical_failures": 0,
+  "competitor_critical_failures": 3,
+  "candidate_score_per_k_input_tokens": 0.05776691354421297,
+  "competitor_score_per_k_input_tokens": 0.02412072850275544,
+  "pareto_relation": "candidate-dominates",
+  "collections": [
+    {
+      "collection": "distributed-systems-skills-for-go",
+      "cases": 12,
+      "candidate_mean": 0.9166666666666666,
+      "competitor_mean": 0.4166666666666667,
+      "difference": 0.49999999999999994
+    },
+    {
+      "collection": "engineering-skills-for-go",
+      "cases": 16,
+      "candidate_mean": 0.9375,
+      "competitor_mean": 0.1875,
+      "difference": 0.75
+    },
+    {
+      "collection": "fintech-skills-for-go",
+      "cases": 12,
+      "candidate_mean": 1,
+      "competitor_mean": 0.75,
+      "difference": 0.25
+    }
+  ]
+}

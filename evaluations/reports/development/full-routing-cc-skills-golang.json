@@ -1,0 +1,75 @@
+{
+  "schema_version": 2,
+  "arm": "cc-skills-golang",
+  "cases": 40,
+  "passed": 17,
+  "pass_rate": 0.425,
+  "mean_score": 0.425,
+  "ci_lower_95": 0.28509392559950375,
+  "ci_upper_95": 0.5780493145800892,
+  "critical_failures": 3,
+  "collections": [
+    {
+      "collection": "distributed-systems-skills-for-go",
+      "cases": 12,
+      "passed": 5,
+      "pass_rate": 0.4166666666666667,
+      "mean_score": 0.4166666666666667
+    },
+    {
+      "collection": "engineering-skills-for-go",
+      "cases": 16,
+      "passed": 3,
+      "pass_rate": 0.1875,
+      "mean_score": 0.1875
+    },
+    {
+      "collection": "fintech-skills-for-go",
+      "cases": 12,
+      "passed": 9,
+      "pass_rate": 0.75,
+      "mean_score": 0.75
+    }
+  ],
+  "routing": {
+    "cases": 40,
+    "macro_f1": 0.21481481481481482,
+    "unrelated_cases": 13,
+    "false_activations": 1,
+    "false_activation_rate": 0.07692307692307693
+  },
+  "tokens": {
+    "input_tokens": 704788,
+    "cached_input_tokens": 413696,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 535,
+    "reasoning_output_tokens": 252,
+    "score_per_k_input_tokens": 0.02412072850275544
+  },
+  "failure_cases": [
+    "go-data-consistency/avoid-saga",
+    "go-distributed-coordination/avoid-local-mutex",
+    "go-fintech-security-compliance/avoid-generic-ssrf",
+    "go-language-engineering/avoid-http-shutdown",
+    "go-language-engineering/route-aliasing-errors",
+    "go-message-processing/avoid-channel-pipeline",
+    "go-performance-and-diagnostics/avoid-overload-policy",
+    "go-performance-and-diagnostics/route-tail-latency",
+    "go-production-operations/route-readiness-shutdown",
+    "go-project-and-api-design/avoid-local-error",
+    "go-project-and-api-design/route-package-api",
+    "go-security-hardening/avoid-pci-scope",
+    "go-service-boundaries/avoid-retry-storm",
+    "go-service-boundaries/route-stream-timeout",
+    "go-service-resilience/avoid-http-body",
+    "go-service-resilience/route-amplification",
+    "go-testing-and-verification/avoid-profile-cpu",
+    "review-go-distributed-change/avoid-rounding",
+    "review-go-distributed-change/route-distributed-diff",
+    "review-go-engineering-change/avoid-ledger-diff",
+    "review-go-engineering-change/route-general-go-diff",
+    "review-go-fintech-change/avoid-generic-api",
+    "review-go-fintech-change/route-fintech-diff"
+  ],
+  "input": "evaluations/scores/2026-08-18-full-routing-matrix-native.jsonl"
+}

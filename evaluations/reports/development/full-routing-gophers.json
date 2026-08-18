@@ -1,0 +1,68 @@
+{
+  "schema_version": 2,
+  "arm": "gophers",
+  "cases": 40,
+  "passed": 24,
+  "pass_rate": 0.6,
+  "mean_score": 0.6,
+  "ci_lower_95": 0.44595893660346186,
+  "ci_upper_95": 0.7365167431570808,
+  "critical_failures": 2,
+  "collections": [
+    {
+      "collection": "distributed-systems-skills-for-go",
+      "cases": 12,
+      "passed": 7,
+      "pass_rate": 0.5833333333333334,
+      "mean_score": 0.5833333333333334
+    },
+    {
+      "collection": "engineering-skills-for-go",
+      "cases": 16,
+      "passed": 7,
+      "pass_rate": 0.4375,
+      "mean_score": 0.4375
+    },
+    {
+      "collection": "fintech-skills-for-go",
+      "cases": 12,
+      "passed": 10,
+      "pass_rate": 0.8333333333333334,
+      "mean_score": 0.8333333333333334
+    }
+  ],
+  "routing": {
+    "cases": 40,
+    "macro_f1": 0.4522408963585435,
+    "unrelated_cases": 13,
+    "false_activations": 0,
+    "false_activation_rate": 0
+  },
+  "tokens": {
+    "input_tokens": 691444,
+    "cached_input_tokens": 440320,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 449,
+    "reasoning_output_tokens": 203,
+    "score_per_k_input_tokens": 0.03470996928167719
+  },
+  "failure_cases": [
+    "go-distributed-coordination/avoid-local-mutex",
+    "go-fintech-security-compliance/avoid-generic-ssrf",
+    "go-fintech-security-compliance/route-card-data",
+    "go-language-engineering/avoid-http-shutdown",
+    "go-language-engineering/route-aliasing-errors",
+    "go-message-processing/avoid-channel-pipeline",
+    "go-performance-and-diagnostics/avoid-overload-policy",
+    "go-project-and-api-design/avoid-local-error",
+    "go-project-and-api-design/route-package-api",
+    "go-security-hardening/avoid-pci-scope",
+    "go-security-hardening/route-ssrf-command",
+    "go-service-boundaries/avoid-retry-storm",
+    "go-service-resilience/avoid-http-body",
+    "go-service-resilience/route-amplification",
+    "review-go-distributed-change/avoid-rounding",
+    "review-go-engineering-change/avoid-ledger-diff"
+  ],
+  "input": "evaluations/scores/2026-08-18-full-routing-matrix-native.jsonl"
+}

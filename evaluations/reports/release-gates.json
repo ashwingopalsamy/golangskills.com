@@ -48,8 +48,8 @@
     {
       "id": "paired-superiority",
       "status": "blocked",
-      "summary": "The current ten-pair development screens have overlapping intervals and do not clear release thresholds.",
-      "evidence": ["evaluations/reports/development/ours-vs-cxuu-golang-skills-routing.json", "evaluations/reports/latest.json"]
+      "summary": "Public routing clears paired thresholds against skill competitors, but aggregate behavioral quality superiority is not established.",
+      "evidence": ["evaluations/reports/development/full-routing-ours-vs-cxuu-golang-skills.json", "evaluations/reports/latest.json"]
     },
     {
       "id": "domain-non-inferiority",
@@ -66,8 +66,8 @@
     {
       "id": "token-efficiency",
       "status": "blocked",
-      "summary": "Routing screens expose token rates, but the full quality frontier is not established.",
-      "evidence": ["evaluations/reports/development/ours-routing.json", "evaluations/reports/latest.json"]
+      "summary": "The complete routing matrix exposes token rates, but the behavioral quality frontier is not established.",
+      "evidence": ["evaluations/reports/development/full-routing-ours.json", "evaluations/reports/latest.json"]
     },
     {
       "id": "artifact-traceability",
