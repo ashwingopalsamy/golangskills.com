@@ -56803,6 +56803,793 @@
       "canonical_skill_count": 6
     },
     {
+      "name": "golang-ddd-skills",
+      "path": "/reference-checkouts/golang-ddd-skills",
+      "remote": "https://github.com/joeyave/golang-ddd-skills.git",
+      "commit": "0cf1ee4d7facd50d1f25cce956dcc2fe252bf29d",
+      "commit_date": "2026-04-11T23:18:39+03:00",
+      "snapshot_sha256": "163006887a2050809323a06718326742c0b8ef5a7754dd45ca01afc57ecdd916",
+      "license": {
+        "spdx": "MIT",
+        "status": "local-license-file-verified",
+        "files": [
+          "LICENSE"
+        ]
+      },
+      "reuse_policy": "independent-rewrite-with-attribution",
+      "benchmark_eligible": true,
+      "files": [
+        {
+          "path": ".claude-plugin/plugin.json",
+          "size": 507,
+          "sha256": "abe217310fd0af2a504e94de39b96fbb3999f85701a403e8e7aac877c3b95879"
+        },
+        {
+          "path": ".cursor-plugin/plugin.json",
+          "size": 551,
+          "sha256": "af92f0b2f670c0b50e702b8a25ba3c6b3e32145f00327a1cae4ea375d32aa7c2"
+        },
+        {
+          "path": ".github/workflows/validate.yml",
+          "size": 254,
+          "sha256": "d0921f915cfe693eabef206b4322a39361368ab9ca775f75c583db7d03b6c895"
+        },
+        {
+          "path": ".gitignore",
+          "size": 26,
+          "sha256": "e9ded537ce2dcc1669b5155b173216296cda59391089e85bf6daae111f18c85d"
+        },
+        {
+          "path": "CHANGELOG.md",
+          "size": 864,
+          "sha256": "c163271ad2fc2ff011bab66229fd6e4379c6eeecb794519d17ef1f5d2b6b2695"
+        },
+        {
+          "path": "LICENSE",
+          "size": 1064,
+          "sha256": "6caa7d5d13decf53a477297ee4d706e1a16119bb689f38c9223fdfeb0c8ecce3"
+        },
+        {
+          "path": "MAINTAINING.md",
+          "size": 741,
+          "sha256": "8d6de54cb7461c52a75710600df04fc741e51624534c83043c13c037e00fb3f2"
+        },
+        {
+          "path": "README.md",
+          "size": 5664,
+          "sha256": "d578fbaf11180699a47569b0569e914620fc01df99429ba78d6dffd5873a80ae"
+        },
+        {
+          "path": "VERSION",
+          "size": 6,
+          "sha256": "d915cc95d6ca8f47ae297713ed46d4e5c5d99ddd29fc3c61e263bdf305f2b5b0"
+        },
+        {
+          "path": "gemini-extension.json",
+          "size": 170,
+          "sha256": "7b890031d58f5ddd5847941c55316ac65b6d1f8ec753a30887f4a8edd437b055"
+        },
+        {
+          "path": "scripts/sync-version.sh",
+          "size": 639,
+          "sha256": "e23a46abb235b7c765b67138f43d082431f36ea74a68964db02a6aad98252cbf"
+        },
+        {
+          "path": "scripts/validate-pack.sh",
+          "size": 2222,
+          "sha256": "51d75369fb540dfc22e27bc86801980a735b023d1d032a0688c2605369199a30"
+        },
+        {
+          "path": "skills/golang-ddd-architecture/SKILL.md",
+          "size": 3476,
+          "sha256": "4bf36d7c7a9a49da9c424e4691ece777f121d1f9e353f190d531697342856e67"
+        },
+        {
+          "path": "skills/golang-ddd-architecture/agents/openai.yaml",
+          "size": 270,
+          "sha256": "90dcacbc0c9a43cedbc5fe4d12fbc4af3ef9bccc0ae9e255473c43d2e6ea128f"
+        },
+        {
+          "path": "skills/golang-ddd-architecture/references/architecture-rules.md",
+          "size": 2623,
+          "sha256": "74068c46ca8b7eaee83d667282ea8a8f0f17b7589af5102551b81b28b3aeb5ac"
+        },
+        {
+          "path": "skills/golang-ddd-architecture/references/naming-and-models.md",
+          "size": 1857,
+          "sha256": "954c1a7cb18bc9407debb0986f65c92819edc8706e273e284e4633f71238c720"
+        },
+        {
+          "path": "skills/golang-ddd-cqrs/SKILL.md",
+          "size": 3248,
+          "sha256": "52c12878ab32af808ee0266b7122087866b7ac8731e802c93f4453b8b63f8c07"
+        },
+        {
+          "path": "skills/golang-ddd-cqrs/agents/openai.yaml",
+          "size": 271,
+          "sha256": "1ba33c4082d2c99ffa67f3fa98373e92cf3dc51442f56b6e2b83638821a5ee35"
+        },
+        {
+          "path": "skills/golang-ddd-cqrs/references/application-tests-and-errors.md",
+          "size": 1182,
+          "sha256": "9098c9331c6d0f72914449180972d2a5ff6b7710222025987b53078f04a65fa3"
+        },
+        {
+          "path": "skills/golang-ddd-cqrs/references/cqrs-guidelines.md",
+          "size": 1696,
+          "sha256": "485686ab21c0bcaacc55ebad4739af73f1718aa31fec7c56ee5cb57bd1dd16e7"
+        },
+        {
+          "path": "skills/golang-ddd-infrastructure/SKILL.md",
+          "size": 3158,
+          "sha256": "90760b25a33a03557bd9c66899a8c668045763dcb1fb0e15518df06f361ae50f"
+        },
+        {
+          "path": "skills/golang-ddd-infrastructure/agents/openai.yaml",
+          "size": 269,
+          "sha256": "be535a8c5fee520efd6b06529f77a5e8c2748d85d69996533a0eda09fe72ea06"
+        },
+        {
+          "path": "skills/golang-ddd-infrastructure/references/infra-and-delivery.md",
+          "size": 1326,
+          "sha256": "b1ec7eb85ba7bc79c93f4ef3f33d96a8db0d9581286689d029aa78b84c83b1d2"
+        },
+        {
+          "path": "skills/golang-ddd-infrastructure/references/testing-and-security.md",
+          "size": 1389,
+          "sha256": "b8ea7a1c9dc30ce3be8825cd408190784a5ddeb2af8c13952a1f525893ca7d80"
+        },
+        {
+          "path": "skills/golang-ddd-refactor/SKILL.md",
+          "size": 3294,
+          "sha256": "24d985a520d8eb5029983ed918bdf3681440a699c1b84496ddff727281c19f0a"
+        },
+        {
+          "path": "skills/golang-ddd-refactor/agents/openai.yaml",
+          "size": 274,
+          "sha256": "984d00a3ef3ebc22e55a1560f53d32bd36c6f1efbccf965e674b6c6f7a7ff7c3"
+        },
+        {
+          "path": "skills/golang-ddd-refactor/references/domain-rules.md",
+          "size": 1449,
+          "sha256": "661c4e6095e22f67ad399e463b31c47247163779c301cf0a69671284165bbde2"
+        },
+        {
+          "path": "skills/golang-ddd-refactor/references/refactor-playbook.md",
+          "size": 1929,
+          "sha256": "b7be90eee7b650f92c169fcc1c4e2d2873833d4437d6c3a8b6296cc7ece0466c"
+        },
+        {
+          "path": "skills/golang-ddd/SKILL.md",
+          "size": 2918,
+          "sha256": "cb962a53c0cfa1316621e9682a7583b589bafb5543d198e8aeae5685694cc3e3"
+        },
+        {
+          "path": "skills/golang-ddd/agents/openai.yaml",
+          "size": 223,
+          "sha256": "c5aeffd7e982548704e2678780a20200ea353dff735183195b3742c04fdbdf60"
+        }
+      ],
+      "skills": [
+        {
+          "name": "golang-ddd-architecture",
+          "path": "skills/golang-ddd-architecture/SKILL.md"
+        },
+        {
+          "name": "golang-ddd-cqrs",
+          "path": "skills/golang-ddd-cqrs/SKILL.md"
+        },
+        {
+          "name": "golang-ddd-infrastructure",
+          "path": "skills/golang-ddd-infrastructure/SKILL.md"
+        },
+        {
+          "name": "golang-ddd-refactor",
+          "path": "skills/golang-ddd-refactor/SKILL.md"
+        },
+        {
+          "name": "golang-ddd",
+          "path": "skills/golang-ddd/SKILL.md"
+        }
+      ],
+      "material_items": [
+        {
+          "id": "mi-49a9b40a032c2972",
+          "path": "MAINTAINING.md",
+          "start_line": 19,
+          "end_line": 19,
+          "kind": "normative-recommendation",
+          "sha256": "7dc14042e04d2c1babef72eb7dc2db12689079700b7eb195dfdeb693f1ea6747"
+        },
+        {
+          "id": "mi-04768c6107c38227",
+          "path": "MAINTAINING.md",
+          "start_line": 20,
+          "end_line": 20,
+          "kind": "normative-recommendation",
+          "sha256": "3914a9b9de77c7d37720f2a79cc16d64a074d867db92a81caa795be5dd625e19"
+        },
+        {
+          "id": "mi-63f1a70fed1e5f29",
+          "path": "README.md",
+          "start_line": 40,
+          "end_line": 55,
+          "kind": "taught-code-pattern",
+          "sha256": "6efc15e0ddf11a7805bb4deeded81798f91a0dea5987ca2b0b64e1c0797c06de"
+        },
+        {
+          "id": "mi-6499b851e63d342a",
+          "path": "README.md",
+          "start_line": 76,
+          "end_line": 78,
+          "kind": "taught-code-pattern",
+          "sha256": "a43622ef87f292e5febe149b874a924627ddb41613eea164f176ee00c6e2533e"
+        },
+        {
+          "id": "mi-7fe8e257f812fc44",
+          "path": "README.md",
+          "start_line": 82,
+          "end_line": 84,
+          "kind": "taught-code-pattern",
+          "sha256": "e04d3cf88c0392b301c80b5cae8451205041159b311fe74144d015fc81364ab9"
+        },
+        {
+          "id": "mi-fb1b0ec88097352b",
+          "path": "README.md",
+          "start_line": 90,
+          "end_line": 92,
+          "kind": "taught-code-pattern",
+          "sha256": "2f84839817d2405601fa8436888f13d3069d3613bd4886683c2e155237f1d23a"
+        },
+        {
+          "id": "mi-cced037a9ab40913",
+          "path": "README.md",
+          "start_line": 100,
+          "end_line": 102,
+          "kind": "taught-code-pattern",
+          "sha256": "2f84839817d2405601fa8436888f13d3069d3613bd4886683c2e155237f1d23a"
+        },
+        {
+          "id": "mi-e7051fcf28876bc4",
+          "path": "README.md",
+          "start_line": 108,
+          "end_line": 110,
+          "kind": "taught-code-pattern",
+          "sha256": "58dc5dfd274cc609b1884cba433a5dedae2e9c1228808c2af2401c420ce0bc1e"
+        },
+        {
+          "id": "mi-ed5a5dd748ee4ced",
+          "path": "README.md",
+          "start_line": 116,
+          "end_line": 118,
+          "kind": "taught-code-pattern",
+          "sha256": "ea1d713e0ab45050d4f4e6ca90d8d4ba346cb8be8cf4fedf65e8a35ef2b4d771"
+        },
+        {
+          "id": "mi-17affb9bcdab6c62",
+          "path": "README.md",
+          "start_line": 142,
+          "end_line": 142,
+          "kind": "normative-recommendation",
+          "sha256": "eab5170e61619070dc91692828c65840cf5ade99262c6a9804fbfde3bdeab2a2"
+        },
+        {
+          "id": "mi-6ad32bcf1da72bd8",
+          "path": "scripts/validate-pack.sh",
+          "start_line": 25,
+          "end_line": 25,
+          "kind": "normative-recommendation",
+          "sha256": "c46f98da952efaafd03cc25fcad7ec4d24e304e62ef3b2713c742969a3dbc846"
+        },
+        {
+          "id": "mi-82968855f1eea21a",
+          "path": "skills/golang-ddd-architecture/SKILL.md",
+          "start_line": 46,
+          "end_line": 46,
+          "kind": "normative-recommendation",
+          "sha256": "17e70d3d4162f411dc5f661ec9870ae479ff17e87f44674271cc8e62e99430a8"
+        },
+        {
+          "id": "mi-d072d413cf555011",
+          "path": "skills/golang-ddd-architecture/SKILL.md",
+          "start_line": 52,
+          "end_line": 52,
+          "kind": "normative-recommendation",
+          "sha256": "ed02f55f707679527aaab2ca94964792ea44eb9093b5baad4b5ed34269ad11f4"
+        },
+        {
+          "id": "mi-c72f583833f41998",
+          "path": "skills/golang-ddd-architecture/SKILL.md",
+          "start_line": 55,
+          "end_line": 55,
+          "kind": "normative-recommendation",
+          "sha256": "dbf2a254027eddcfb12c777d9c7ee32d6738660121e730cc383cda36305b99cc"
+        },
+        {
+          "id": "mi-8d7fa2c830aab29b",
+          "path": "skills/golang-ddd-architecture/SKILL.md",
+          "start_line": 56,
+          "end_line": 56,
+          "kind": "normative-recommendation",
+          "sha256": "9b93775c3e594308a030ac81d394f88af1984632ce87c3b06dc076c473c00956"
+        },
+        {
+          "id": "mi-3952ba264b758fea",
+          "path": "skills/golang-ddd-architecture/SKILL.md",
+          "start_line": 57,
+          "end_line": 57,
+          "kind": "normative-recommendation",
+          "sha256": "3da799256a8471800736a7f1d8e72b42243c0f9fd6b64359e150440d3365a528"
+        },
+        {
+          "id": "mi-ef5ac05a15c86900",
+          "path": "skills/golang-ddd-architecture/references/architecture-rules.md",
+          "start_line": 5,
+          "end_line": 5,
+          "kind": "normative-recommendation",
+          "sha256": "5b35522b97db91b91dba7ebeb6cd003b5fca31f82561c1c3a9fd71b0eca59abb"
+        },
+        {
+          "id": "mi-8b78b1c0c230408a",
+          "path": "skills/golang-ddd-architecture/references/architecture-rules.md",
+          "start_line": 24,
+          "end_line": 24,
+          "kind": "normative-recommendation",
+          "sha256": "3993ed195e1cddacbd8c9b9058b12270c8f0989cf4997f1656c768150f2d7e44"
+        },
+        {
+          "id": "mi-987cd65dc0d761b1",
+          "path": "skills/golang-ddd-architecture/references/architecture-rules.md",
+          "start_line": 30,
+          "end_line": 36,
+          "kind": "taught-code-pattern",
+          "sha256": "74f7fbd02b9d86aff496b5b3f1d7775dac1b75e28562eeb220234985dc8587e7"
+        },
+        {
+          "id": "mi-39ecbed5a6aa9817",
+          "path": "skills/golang-ddd-architecture/references/architecture-rules.md",
+          "start_line": 40,
+          "end_line": 48,
+          "kind": "taught-code-pattern",
+          "sha256": "8d3a0d08a6a9e0174cdfe77a6e942d01c3fac6b935da02d2eca91b0810ee20a2"
+        },
+        {
+          "id": "mi-4deec5c4bdabe3ef",
+          "path": "skills/golang-ddd-architecture/references/architecture-rules.md",
+          "start_line": 56,
+          "end_line": 56,
+          "kind": "normative-recommendation",
+          "sha256": "1788e4f4cc54b8240a0c32216a411f9a6002c803b2affff47b1e19ecbee9d1f4"
+        },
+        {
+          "id": "mi-ae3ca1a45c8bdfcb",
+          "path": "skills/golang-ddd-architecture/references/naming-and-models.md",
+          "start_line": 5,
+          "end_line": 5,
+          "kind": "normative-recommendation",
+          "sha256": "969ce356275fe7a561236b3bae4463c3f40c35b2df45aeddc5a9d6a581fe48e3"
+        },
+        {
+          "id": "mi-c81c7f7b65480de6",
+          "path": "skills/golang-ddd-architecture/references/naming-and-models.md",
+          "start_line": 6,
+          "end_line": 6,
+          "kind": "normative-recommendation",
+          "sha256": "afb8e770aaa50aaeb698b3f4231ca7dbea0cb14dabf6b7fd7de22984d3fe3d09"
+        },
+        {
+          "id": "mi-8f6c3ea005b72f00",
+          "path": "skills/golang-ddd-architecture/references/naming-and-models.md",
+          "start_line": 12,
+          "end_line": 12,
+          "kind": "normative-recommendation",
+          "sha256": "12936e222e925728cbd8e569340e136b7952e673ebdb1082d60b39d5ae1160eb"
+        },
+        {
+          "id": "mi-bc489b128db243f2",
+          "path": "skills/golang-ddd-architecture/references/naming-and-models.md",
+          "start_line": 15,
+          "end_line": 15,
+          "kind": "normative-recommendation",
+          "sha256": "dcec4fe8599acab2949d3b76e83f731b9ca0fab8c7fa61f4603aaeed6ebb4cc0"
+        },
+        {
+          "id": "mi-1c78d87d1aabaa97",
+          "path": "skills/golang-ddd-architecture/references/naming-and-models.md",
+          "start_line": 29,
+          "end_line": 29,
+          "kind": "normative-recommendation",
+          "sha256": "fede6c21807d8ea5cda51fb6e3ee5206f0c8e566445bf58acdb67ade1812a9b4"
+        },
+        {
+          "id": "mi-b1a48eadf34aa59e",
+          "path": "skills/golang-ddd-cqrs/SKILL.md",
+          "start_line": 25,
+          "end_line": 25,
+          "kind": "normative-recommendation",
+          "sha256": "45d247ea4c3f3078e111cee26db41c4b1f61dfb06b69e1491fb703d19d9078a7"
+        },
+        {
+          "id": "mi-c27939b47341d124",
+          "path": "skills/golang-ddd-cqrs/SKILL.md",
+          "start_line": 28,
+          "end_line": 28,
+          "kind": "normative-recommendation",
+          "sha256": "58ad96da422e7dc432220cbb1e7fd75af6eb792d67459d5bdf7f4b2060b0959d"
+        },
+        {
+          "id": "mi-faa9c959c6258ee3",
+          "path": "skills/golang-ddd-cqrs/SKILL.md",
+          "start_line": 29,
+          "end_line": 29,
+          "kind": "normative-recommendation",
+          "sha256": "2a95585bf74380f4c79b0156b74e86c381b16a95f1ba2816f196a380f25cf6bd"
+        },
+        {
+          "id": "mi-f356190981a500b3",
+          "path": "skills/golang-ddd-cqrs/SKILL.md",
+          "start_line": 43,
+          "end_line": 43,
+          "kind": "normative-recommendation",
+          "sha256": "5b1d5317e6e89a333d3d504f67c0b302b649d0d5fdf0bf8d251562eecc99722d"
+        },
+        {
+          "id": "mi-707d4d582d0f49d6",
+          "path": "skills/golang-ddd-cqrs/SKILL.md",
+          "start_line": 52,
+          "end_line": 52,
+          "kind": "normative-recommendation",
+          "sha256": "14a74fc33d8bd9ef0c25d23c3642bbf158f129da187933ca2067fe9c771ef2be"
+        },
+        {
+          "id": "mi-f3315824911eb50d",
+          "path": "skills/golang-ddd-cqrs/SKILL.md",
+          "start_line": 53,
+          "end_line": 53,
+          "kind": "normative-recommendation",
+          "sha256": "757a4c8975f3d9f70468733872cfc09bbaaf5829c1a87145d8ef43e77e71fd69"
+        },
+        {
+          "id": "mi-f89b08cd7c172d3b",
+          "path": "skills/golang-ddd-cqrs/SKILL.md",
+          "start_line": 54,
+          "end_line": 54,
+          "kind": "normative-recommendation",
+          "sha256": "89dc7a459240878ddc7909bc9e6440f4ee201608308286146e68970eac12dbee"
+        },
+        {
+          "id": "mi-d5256e653ddde1c6",
+          "path": "skills/golang-ddd-cqrs/SKILL.md",
+          "start_line": 55,
+          "end_line": 55,
+          "kind": "normative-recommendation",
+          "sha256": "97563fdb255260aeb71811368ee693da32ae2baaf7d1df7a44b253a6732a7e4f"
+        },
+        {
+          "id": "mi-5ea5fb7879e6d808",
+          "path": "skills/golang-ddd-cqrs/references/application-tests-and-errors.md",
+          "start_line": 18,
+          "end_line": 18,
+          "kind": "normative-recommendation",
+          "sha256": "0fd68f0a2376412d0a9c89e510d6f59bdf9f9b041c6025adcf648e31b291f28c"
+        },
+        {
+          "id": "mi-20242d7f1be86aef",
+          "path": "skills/golang-ddd-cqrs/references/application-tests-and-errors.md",
+          "start_line": 32,
+          "end_line": 32,
+          "kind": "normative-recommendation",
+          "sha256": "38ae1b65f370978a3c94b246d5e71746916741951ab8bd79ed0a112735bf78b7"
+        },
+        {
+          "id": "mi-d7a399bd22b50e1d",
+          "path": "skills/golang-ddd-cqrs/references/cqrs-guidelines.md",
+          "start_line": 6,
+          "end_line": 6,
+          "kind": "normative-recommendation",
+          "sha256": "a67326d99cae234ee99c58348a30e01f99381563f1b86939b40bf8652db38d04"
+        },
+        {
+          "id": "mi-7e5e947c78e560ea",
+          "path": "skills/golang-ddd-cqrs/references/cqrs-guidelines.md",
+          "start_line": 13,
+          "end_line": 13,
+          "kind": "normative-recommendation",
+          "sha256": "783d6d81c7f149dc14fe92870b23f772113e93d86d589309ba774c5d04368596"
+        },
+        {
+          "id": "mi-563f82d04140f741",
+          "path": "skills/golang-ddd-cqrs/references/cqrs-guidelines.md",
+          "start_line": 14,
+          "end_line": 14,
+          "kind": "normative-recommendation",
+          "sha256": "8e896e15a6c27c8bcf8fa3c3df59cc183e00bf553a650bc0df5aa1c41307ec98"
+        },
+        {
+          "id": "mi-866ffe8b66b7cc8b",
+          "path": "skills/golang-ddd-cqrs/references/cqrs-guidelines.md",
+          "start_line": 15,
+          "end_line": 15,
+          "kind": "normative-recommendation",
+          "sha256": "11c8d9e3f36badd462ddaef0a751ac26002aaa183b92fc64a951b9207648ca26"
+        },
+        {
+          "id": "mi-e460ee24575bef71",
+          "path": "skills/golang-ddd-cqrs/references/cqrs-guidelines.md",
+          "start_line": 21,
+          "end_line": 25,
+          "kind": "taught-code-pattern",
+          "sha256": "044b13066554f63c1fdaf3b90d4dba61fea9ad39b566dcec5175c2cd4e3073fa"
+        },
+        {
+          "id": "mi-2b6f2ab42ea5f079",
+          "path": "skills/golang-ddd-infrastructure/SKILL.md",
+          "start_line": 14,
+          "end_line": 14,
+          "kind": "normative-recommendation",
+          "sha256": "41a511f90c59dd9265fc8a23c915e04afea3a0683e1dcb52e08bc553fc9a8ffd"
+        },
+        {
+          "id": "mi-640e605e5828f1a0",
+          "path": "skills/golang-ddd-infrastructure/SKILL.md",
+          "start_line": 24,
+          "end_line": 24,
+          "kind": "normative-recommendation",
+          "sha256": "0ee7bfedd1011d318adb9e9f58a06eb32a990e124e07c87b509e173995ca7ac2"
+        },
+        {
+          "id": "mi-090ec578a4e3938b",
+          "path": "skills/golang-ddd-infrastructure/SKILL.md",
+          "start_line": 29,
+          "end_line": 29,
+          "kind": "normative-recommendation",
+          "sha256": "0f85eccac8c11f430470c72f27a8132d5bb0b86b2351f4ac993414c86148ca42"
+        },
+        {
+          "id": "mi-f3ff31ce3619ffec",
+          "path": "skills/golang-ddd-infrastructure/SKILL.md",
+          "start_line": 35,
+          "end_line": 35,
+          "kind": "normative-recommendation",
+          "sha256": "07d007940bf97429f9f6cf3a2b6978ae37cd27b1533c951dee5d942f48649992"
+        },
+        {
+          "id": "mi-8a8f91e4762c3f61",
+          "path": "skills/golang-ddd-infrastructure/SKILL.md",
+          "start_line": 40,
+          "end_line": 40,
+          "kind": "normative-recommendation",
+          "sha256": "c8fcea298f41b9f395a8e4e1213b97dd6032a4c6237671b0f3767f8d86f00723"
+        },
+        {
+          "id": "mi-213ba376126dbb92",
+          "path": "skills/golang-ddd-infrastructure/SKILL.md",
+          "start_line": 43,
+          "end_line": 43,
+          "kind": "normative-recommendation",
+          "sha256": "2c0740e90cb3479e1ece01469f0697781cd58a5f2ca59e5978434cf5d7e4173a"
+        },
+        {
+          "id": "mi-e29723a3aed85ff5",
+          "path": "skills/golang-ddd-infrastructure/SKILL.md",
+          "start_line": 44,
+          "end_line": 44,
+          "kind": "normative-recommendation",
+          "sha256": "6fd3a483b990a80709e98003b1813a56e010df39fcff04fcb7345b897306dcb3"
+        },
+        {
+          "id": "mi-2675000576e3f5b5",
+          "path": "skills/golang-ddd-infrastructure/SKILL.md",
+          "start_line": 48,
+          "end_line": 48,
+          "kind": "normative-recommendation",
+          "sha256": "e34f1df20f24439d4022019b10f1ab89e2f6bd5f474bfb6fd85656ace2b49a02"
+        },
+        {
+          "id": "mi-58c9e0143c9f46f0",
+          "path": "skills/golang-ddd-infrastructure/references/infra-and-delivery.md",
+          "start_line": 7,
+          "end_line": 7,
+          "kind": "normative-recommendation",
+          "sha256": "13fa582235d679f0bcf7c1665bfdced2a7dfb177e30cb0bf4818f8ce22b9d436"
+        },
+        {
+          "id": "mi-67359eb56de6c88d",
+          "path": "skills/golang-ddd-infrastructure/references/infra-and-delivery.md",
+          "start_line": 25,
+          "end_line": 25,
+          "kind": "normative-recommendation",
+          "sha256": "7bd5cf22f7f26f7ae2beb2ec56623ac3956b83794c6e63566e1d3725a98fe44c"
+        },
+        {
+          "id": "mi-b83eb46c6b569494",
+          "path": "skills/golang-ddd-infrastructure/references/infra-and-delivery.md",
+          "start_line": 33,
+          "end_line": 33,
+          "kind": "normative-recommendation",
+          "sha256": "9a0e633a29fe8b98f31bf73fe55905d40f7f9f93d595f9a81faa051503386f82"
+        },
+        {
+          "id": "mi-0d1fdabbf815c4f8",
+          "path": "skills/golang-ddd-infrastructure/references/testing-and-security.md",
+          "start_line": 14,
+          "end_line": 14,
+          "kind": "normative-recommendation",
+          "sha256": "3372d82723696fb01f3e6e2b0fb882c156ead5203c1916fd510b7c7735fca2ab"
+        },
+        {
+          "id": "mi-c3e2ca11090b7c24",
+          "path": "skills/golang-ddd-infrastructure/references/testing-and-security.md",
+          "start_line": 16,
+          "end_line": 16,
+          "kind": "normative-recommendation",
+          "sha256": "8a41ec9ccd5b05fd7080422b0b8bf1f5f9fbaf11a53a8dfd6ca448a5a6a3a9b2"
+        },
+        {
+          "id": "mi-b7cf7eb831195723",
+          "path": "skills/golang-ddd-infrastructure/references/testing-and-security.md",
+          "start_line": 20,
+          "end_line": 20,
+          "kind": "normative-recommendation",
+          "sha256": "a718da8934d4ae3b1a8098e07875e574b06dfd43121b7e4c764cc0811c001f59"
+        },
+        {
+          "id": "mi-f19f73eb01707091",
+          "path": "skills/golang-ddd-infrastructure/references/testing-and-security.md",
+          "start_line": 21,
+          "end_line": 21,
+          "kind": "normative-recommendation",
+          "sha256": "417a02e1930ac24011771db7b46a1e9511dc963385a93169f324c84207808a94"
+        },
+        {
+          "id": "mi-01a2bafffed5b93b",
+          "path": "skills/golang-ddd-infrastructure/references/testing-and-security.md",
+          "start_line": 22,
+          "end_line": 22,
+          "kind": "normative-recommendation",
+          "sha256": "c5d0ec280512ec9e636597f13c36d289be32145437570727440d5fcb88faceb9"
+        },
+        {
+          "id": "mi-5fb881fa9922143e",
+          "path": "skills/golang-ddd-refactor/SKILL.md",
+          "start_line": 27,
+          "end_line": 27,
+          "kind": "normative-recommendation",
+          "sha256": "b9150998d18e4bf1bfe6e52542e683f23801275ea05f1d7a06d58f9545f28e98"
+        },
+        {
+          "id": "mi-97418e14c9a7b6a8",
+          "path": "skills/golang-ddd-refactor/SKILL.md",
+          "start_line": 28,
+          "end_line": 28,
+          "kind": "normative-recommendation",
+          "sha256": "81fef3ec9b1240e1274d5461e3105bb1c625f325af6905b045c9a32d9e4e5176"
+        },
+        {
+          "id": "mi-063cb1281bb47272",
+          "path": "skills/golang-ddd-refactor/SKILL.md",
+          "start_line": 37,
+          "end_line": 37,
+          "kind": "normative-recommendation",
+          "sha256": "576ca63b59f259467a8ac09b286b1453b0ead69ce150b62549f4015a0ae417da"
+        },
+        {
+          "id": "mi-c6d36b2f3551f27e",
+          "path": "skills/golang-ddd-refactor/SKILL.md",
+          "start_line": 38,
+          "end_line": 38,
+          "kind": "normative-recommendation",
+          "sha256": "bed69e865ce55422fa41a84d8c644abc88b6702d19f0b06d3d2156f54731d6c4"
+        },
+        {
+          "id": "mi-b40d8d6e1e8ee71c",
+          "path": "skills/golang-ddd-refactor/SKILL.md",
+          "start_line": 51,
+          "end_line": 51,
+          "kind": "normative-recommendation",
+          "sha256": "315896feda92e0c8af295a275786031352552e80d0f91c9d91e384720bc07933"
+        },
+        {
+          "id": "mi-3605b81b4be91e32",
+          "path": "skills/golang-ddd-refactor/SKILL.md",
+          "start_line": 52,
+          "end_line": 52,
+          "kind": "normative-recommendation",
+          "sha256": "d0833ef18e32603be728ab5ba07b4137665f50a649f78b599f8067d1a0a3f53f"
+        },
+        {
+          "id": "mi-faf37909e5567b45",
+          "path": "skills/golang-ddd-refactor/SKILL.md",
+          "start_line": 53,
+          "end_line": 53,
+          "kind": "normative-recommendation",
+          "sha256": "d99d8d7581cf1fe2020c0ccfbd73b5041cedc0e008930bdfb3c75b8a690cdbb7"
+        },
+        {
+          "id": "mi-144394b4bc913432",
+          "path": "skills/golang-ddd-refactor/SKILL.md",
+          "start_line": 54,
+          "end_line": 54,
+          "kind": "normative-recommendation",
+          "sha256": "ed6468974de79ab6cf62561727366d21d7776a51dd857c9aa3df48c28346a112"
+        },
+        {
+          "id": "mi-d2e3f564a689d2de",
+          "path": "skills/golang-ddd-refactor/references/domain-rules.md",
+          "start_line": 6,
+          "end_line": 6,
+          "kind": "normative-recommendation",
+          "sha256": "9cc1b6342f58474943ce2d2a62219ab1b6926d2efcc6871d5898c732c890f3bc"
+        },
+        {
+          "id": "mi-94b692d6dc6c9343",
+          "path": "skills/golang-ddd-refactor/references/domain-rules.md",
+          "start_line": 18,
+          "end_line": 18,
+          "kind": "normative-recommendation",
+          "sha256": "bc1af5906975d5bd155315c3aab24c4a999ef8c4ee3e76cd3d0530ae8aa2c9da"
+        },
+        {
+          "id": "mi-6248313943003d2a",
+          "path": "skills/golang-ddd-refactor/references/refactor-playbook.md",
+          "start_line": 6,
+          "end_line": 6,
+          "kind": "normative-recommendation",
+          "sha256": "657ddf981ea62442e33156bba497e406c072ba43ccf42e4213d52a1ebe2c3085"
+        },
+        {
+          "id": "mi-f0c3d7a2cc999837",
+          "path": "skills/golang-ddd-refactor/references/refactor-playbook.md",
+          "start_line": 25,
+          "end_line": 25,
+          "kind": "normative-recommendation",
+          "sha256": "3478ac039c8038a493d2b54ec90d65210f97dba50c4fed0dca5c5e86b09db667"
+        },
+        {
+          "id": "mi-baaa4ae4e774f544",
+          "path": "skills/golang-ddd-refactor/references/refactor-playbook.md",
+          "start_line": 26,
+          "end_line": 26,
+          "kind": "normative-recommendation",
+          "sha256": "c2334a5b3315bbc03f99398c274678bf8151a7d059d37ff9c502cda2c6ec9587"
+        },
+        {
+          "id": "mi-0cbc844a4cec6ecd",
+          "path": "skills/golang-ddd/SKILL.md",
+          "start_line": 3,
+          "end_line": 3,
+          "kind": "normative-recommendation",
+          "sha256": "c145fe2ef997816628c220a1be1cc926a769e800996b0009a2bfd2ee435f0ba4"
+        },
+        {
+          "id": "mi-4efa71da507ee9d3",
+          "path": "skills/golang-ddd/SKILL.md",
+          "start_line": 37,
+          "end_line": 37,
+          "kind": "normative-recommendation",
+          "sha256": "8b6b9c50f2721434a24c48e3dec130672305e50c6d6dfdbfe3c7436463c5a506"
+        },
+        {
+          "id": "mi-2a3400012e4506b8",
+          "path": "skills/golang-ddd/SKILL.md",
+          "start_line": 38,
+          "end_line": 38,
+          "kind": "normative-recommendation",
+          "sha256": "7135263ccbfe634cd5637f790f0b30591df99a946e17830d27a4328aa32c2bf5"
+        },
+        {
+          "id": "mi-87c4406ab0afdbc3",
+          "path": "skills/golang-ddd/SKILL.md",
+          "start_line": 39,
+          "end_line": 39,
+          "kind": "normative-recommendation",
+          "sha256": "d6cfed117e10bdfa5e48e7f82416e6b0c6db0ca885c5fbeac1a1faecd4a71b34"
+        }
+      ],
+      "material_item_count": 74,
+      "canonical_skill_count": 5
+    },
+    {
       "name": "google-go-style-guide",
       "path": "/reference-checkouts/google-go-style-guide",
       "snapshot_sha256": "43938d97db6c732a3fb77c2436594187fb8d97437d5938d5ab44a45d1cfb32d2",

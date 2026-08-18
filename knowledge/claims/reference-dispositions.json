@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "corpus_verified_on": "2026-08-18",
-  "corpus_sha256": "e77949ac12019751c165e2b9d47f60ac5a232c233fa3759c510bebc01b6c86ff",
-  "material_items": 10165,
+  "corpus_sha256": "b13a0a77f75e8fdd9d4fc3fcb32dd7c6885be92c027765220459313f444584af",
+  "material_items": 10239,
   "dispositions": [
     {
       "repository": "cc-skills-golang",
@@ -47390,6 +47390,524 @@
     {
       "repository": "go-skills",
       "item_id": "mi-a027caa91a8b7acf",
+      "status": "adopted-with-qualifications",
+      "claim_id": "eng-language-clarity",
+      "rationale": "General Go guidance is retained for claim-level review and is subordinate to primary Go sources."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-49a9b40a032c2972",
+      "status": "outside-project-scope",
+      "claim_id": "repository-mechanics",
+      "rationale": "Repository-specific prose or tooling does not define canonical Go, distributed-systems, or fintech guidance."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-04768c6107c38227",
+      "status": "outside-project-scope",
+      "claim_id": "repository-mechanics",
+      "rationale": "Repository-specific prose or tooling does not define canonical Go, distributed-systems, or fintech guidance."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-63f1a70fed1e5f29",
+      "status": "outside-project-scope",
+      "claim_id": "repository-mechanics",
+      "rationale": "Repository-specific prose or tooling does not define canonical Go, distributed-systems, or fintech guidance."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-6499b851e63d342a",
+      "status": "outside-project-scope",
+      "claim_id": "repository-mechanics",
+      "rationale": "Repository-specific prose or tooling does not define canonical Go, distributed-systems, or fintech guidance."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-7fe8e257f812fc44",
+      "status": "outside-project-scope",
+      "claim_id": "repository-mechanics",
+      "rationale": "Repository-specific prose or tooling does not define canonical Go, distributed-systems, or fintech guidance."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-fb1b0ec88097352b",
+      "status": "outside-project-scope",
+      "claim_id": "repository-mechanics",
+      "rationale": "Repository-specific prose or tooling does not define canonical Go, distributed-systems, or fintech guidance."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-cced037a9ab40913",
+      "status": "outside-project-scope",
+      "claim_id": "repository-mechanics",
+      "rationale": "Repository-specific prose or tooling does not define canonical Go, distributed-systems, or fintech guidance."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-e7051fcf28876bc4",
+      "status": "outside-project-scope",
+      "claim_id": "repository-mechanics",
+      "rationale": "Repository-specific prose or tooling does not define canonical Go, distributed-systems, or fintech guidance."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-ed5a5dd748ee4ced",
+      "status": "outside-project-scope",
+      "claim_id": "repository-mechanics",
+      "rationale": "Repository-specific prose or tooling does not define canonical Go, distributed-systems, or fintech guidance."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-17affb9bcdab6c62",
+      "status": "outside-project-scope",
+      "claim_id": "repository-mechanics",
+      "rationale": "Repository-specific prose or tooling does not define canonical Go, distributed-systems, or fintech guidance."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-6ad32bcf1da72bd8",
+      "status": "outside-project-scope",
+      "claim_id": "repository-mechanics",
+      "rationale": "Repository-specific prose or tooling does not define canonical Go, distributed-systems, or fintech guidance."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-82968855f1eea21a",
+      "status": "adopted-with-qualifications",
+      "claim_id": "eng-dependency-direction",
+      "rationale": "Mapped to a conditional canonical claim; primary evidence and counterexamples control, not source wording."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-d072d413cf555011",
+      "status": "adopted-with-qualifications",
+      "claim_id": "eng-dependency-direction",
+      "rationale": "Mapped to a conditional canonical claim; primary evidence and counterexamples control, not source wording."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-c72f583833f41998",
+      "status": "adopted-with-qualifications",
+      "claim_id": "eng-dependency-direction",
+      "rationale": "Mapped to a conditional canonical claim; primary evidence and counterexamples control, not source wording."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-8d7fa2c830aab29b",
+      "status": "adopted-with-qualifications",
+      "claim_id": "eng-dependency-direction",
+      "rationale": "Mapped to a conditional canonical claim; primary evidence and counterexamples control, not source wording."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-3952ba264b758fea",
+      "status": "adopted-with-qualifications",
+      "claim_id": "eng-dependency-direction",
+      "rationale": "Mapped to a conditional canonical claim; primary evidence and counterexamples control, not source wording."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-ef5ac05a15c86900",
+      "status": "adopted-with-qualifications",
+      "claim_id": "eng-dependency-direction",
+      "rationale": "Mapped to a conditional canonical claim; primary evidence and counterexamples control, not source wording."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-8b78b1c0c230408a",
+      "status": "adopted-with-qualifications",
+      "claim_id": "eng-dependency-direction",
+      "rationale": "Mapped to a conditional canonical claim; primary evidence and counterexamples control, not source wording."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-987cd65dc0d761b1",
+      "status": "adopted-with-qualifications",
+      "claim_id": "eng-dependency-direction",
+      "rationale": "Mapped to a conditional canonical claim; primary evidence and counterexamples control, not source wording."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-39ecbed5a6aa9817",
+      "status": "adopted-with-qualifications",
+      "claim_id": "eng-dependency-direction",
+      "rationale": "Mapped to a conditional canonical claim; primary evidence and counterexamples control, not source wording."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-4deec5c4bdabe3ef",
+      "status": "adopted-with-qualifications",
+      "claim_id": "eng-dependency-direction",
+      "rationale": "Mapped to a conditional canonical claim; primary evidence and counterexamples control, not source wording."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-ae3ca1a45c8bdfcb",
+      "status": "adopted-with-qualifications",
+      "claim_id": "eng-dependency-direction",
+      "rationale": "Mapped to a conditional canonical claim; primary evidence and counterexamples control, not source wording."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-c81c7f7b65480de6",
+      "status": "adopted-with-qualifications",
+      "claim_id": "eng-dependency-direction",
+      "rationale": "Mapped to a conditional canonical claim; primary evidence and counterexamples control, not source wording."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-8f6c3ea005b72f00",
+      "status": "adopted-with-qualifications",
+      "claim_id": "eng-dependency-direction",
+      "rationale": "Mapped to a conditional canonical claim; primary evidence and counterexamples control, not source wording."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-bc489b128db243f2",
+      "status": "adopted-with-qualifications",
+      "claim_id": "eng-dependency-direction",
+      "rationale": "Mapped to a conditional canonical claim; primary evidence and counterexamples control, not source wording."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-1c78d87d1aabaa97",
+      "status": "adopted-with-qualifications",
+      "claim_id": "eng-dependency-direction",
+      "rationale": "Mapped to a conditional canonical claim; primary evidence and counterexamples control, not source wording."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-b1a48eadf34aa59e",
+      "status": "adopted-with-qualifications",
+      "claim_id": "eng-language-clarity",
+      "rationale": "General Go guidance is retained for claim-level review and is subordinate to primary Go sources."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-c27939b47341d124",
+      "status": "adopted-with-qualifications",
+      "claim_id": "eng-language-clarity",
+      "rationale": "General Go guidance is retained for claim-level review and is subordinate to primary Go sources."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-faa9c959c6258ee3",
+      "status": "adopted-with-qualifications",
+      "claim_id": "eng-language-clarity",
+      "rationale": "General Go guidance is retained for claim-level review and is subordinate to primary Go sources."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-f356190981a500b3",
+      "status": "adopted-with-qualifications",
+      "claim_id": "eng-language-clarity",
+      "rationale": "General Go guidance is retained for claim-level review and is subordinate to primary Go sources."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-707d4d582d0f49d6",
+      "status": "adopted-with-qualifications",
+      "claim_id": "eng-language-clarity",
+      "rationale": "General Go guidance is retained for claim-level review and is subordinate to primary Go sources."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-f3315824911eb50d",
+      "status": "adopted-with-qualifications",
+      "claim_id": "eng-language-clarity",
+      "rationale": "General Go guidance is retained for claim-level review and is subordinate to primary Go sources."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-f89b08cd7c172d3b",
+      "status": "adopted-with-qualifications",
+      "claim_id": "eng-language-clarity",
+      "rationale": "General Go guidance is retained for claim-level review and is subordinate to primary Go sources."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-d5256e653ddde1c6",
+      "status": "adopted-with-qualifications",
+      "claim_id": "eng-language-clarity",
+      "rationale": "General Go guidance is retained for claim-level review and is subordinate to primary Go sources."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-5ea5fb7879e6d808",
+      "status": "adopted-with-qualifications",
+      "claim_id": "eng-verification-by-risk",
+      "rationale": "Mapped to a conditional canonical claim; primary evidence and counterexamples control, not source wording."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-20242d7f1be86aef",
+      "status": "adopted-with-qualifications",
+      "claim_id": "eng-verification-by-risk",
+      "rationale": "Mapped to a conditional canonical claim; primary evidence and counterexamples control, not source wording."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-d7a399bd22b50e1d",
+      "status": "adopted-with-qualifications",
+      "claim_id": "eng-language-clarity",
+      "rationale": "General Go guidance is retained for claim-level review and is subordinate to primary Go sources."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-7e5e947c78e560ea",
+      "status": "adopted-with-qualifications",
+      "claim_id": "eng-language-clarity",
+      "rationale": "General Go guidance is retained for claim-level review and is subordinate to primary Go sources."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-563f82d04140f741",
+      "status": "adopted-with-qualifications",
+      "claim_id": "eng-language-clarity",
+      "rationale": "General Go guidance is retained for claim-level review and is subordinate to primary Go sources."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-866ffe8b66b7cc8b",
+      "status": "adopted-with-qualifications",
+      "claim_id": "eng-language-clarity",
+      "rationale": "General Go guidance is retained for claim-level review and is subordinate to primary Go sources."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-e460ee24575bef71",
+      "status": "adopted-with-qualifications",
+      "claim_id": "eng-language-clarity",
+      "rationale": "General Go guidance is retained for claim-level review and is subordinate to primary Go sources."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-2b6f2ab42ea5f079",
+      "status": "adopted-with-qualifications",
+      "claim_id": "eng-language-clarity",
+      "rationale": "General Go guidance is retained for claim-level review and is subordinate to primary Go sources."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-640e605e5828f1a0",
+      "status": "adopted-with-qualifications",
+      "claim_id": "eng-language-clarity",
+      "rationale": "General Go guidance is retained for claim-level review and is subordinate to primary Go sources."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-090ec578a4e3938b",
+      "status": "adopted-with-qualifications",
+      "claim_id": "eng-language-clarity",
+      "rationale": "General Go guidance is retained for claim-level review and is subordinate to primary Go sources."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-f3ff31ce3619ffec",
+      "status": "adopted-with-qualifications",
+      "claim_id": "eng-language-clarity",
+      "rationale": "General Go guidance is retained for claim-level review and is subordinate to primary Go sources."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-8a8f91e4762c3f61",
+      "status": "adopted-with-qualifications",
+      "claim_id": "eng-language-clarity",
+      "rationale": "General Go guidance is retained for claim-level review and is subordinate to primary Go sources."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-213ba376126dbb92",
+      "status": "adopted-with-qualifications",
+      "claim_id": "eng-language-clarity",
+      "rationale": "General Go guidance is retained for claim-level review and is subordinate to primary Go sources."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-e29723a3aed85ff5",
+      "status": "adopted-with-qualifications",
+      "claim_id": "eng-language-clarity",
+      "rationale": "General Go guidance is retained for claim-level review and is subordinate to primary Go sources."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-2675000576e3f5b5",
+      "status": "adopted-with-qualifications",
+      "claim_id": "eng-language-clarity",
+      "rationale": "General Go guidance is retained for claim-level review and is subordinate to primary Go sources."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-58c9e0143c9f46f0",
+      "status": "adopted-with-qualifications",
+      "claim_id": "eng-language-clarity",
+      "rationale": "General Go guidance is retained for claim-level review and is subordinate to primary Go sources."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-67359eb56de6c88d",
+      "status": "adopted-with-qualifications",
+      "claim_id": "eng-language-clarity",
+      "rationale": "General Go guidance is retained for claim-level review and is subordinate to primary Go sources."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-b83eb46c6b569494",
+      "status": "adopted-with-qualifications",
+      "claim_id": "eng-language-clarity",
+      "rationale": "General Go guidance is retained for claim-level review and is subordinate to primary Go sources."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-0d1fdabbf815c4f8",
+      "status": "adopted-with-qualifications",
+      "claim_id": "eng-security-boundary",
+      "rationale": "Mapped to a conditional canonical claim; primary evidence and counterexamples control, not source wording."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-c3e2ca11090b7c24",
+      "status": "adopted-with-qualifications",
+      "claim_id": "eng-security-boundary",
+      "rationale": "Mapped to a conditional canonical claim; primary evidence and counterexamples control, not source wording."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-b7cf7eb831195723",
+      "status": "adopted-with-qualifications",
+      "claim_id": "eng-security-boundary",
+      "rationale": "Mapped to a conditional canonical claim; primary evidence and counterexamples control, not source wording."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-f19f73eb01707091",
+      "status": "adopted-with-qualifications",
+      "claim_id": "eng-security-boundary",
+      "rationale": "Mapped to a conditional canonical claim; primary evidence and counterexamples control, not source wording."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-01a2bafffed5b93b",
+      "status": "adopted-with-qualifications",
+      "claim_id": "eng-security-boundary",
+      "rationale": "Mapped to a conditional canonical claim; primary evidence and counterexamples control, not source wording."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-5fb881fa9922143e",
+      "status": "adopted-with-qualifications",
+      "claim_id": "eng-language-clarity",
+      "rationale": "General Go guidance is retained for claim-level review and is subordinate to primary Go sources."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-97418e14c9a7b6a8",
+      "status": "adopted-with-qualifications",
+      "claim_id": "eng-language-clarity",
+      "rationale": "General Go guidance is retained for claim-level review and is subordinate to primary Go sources."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-063cb1281bb47272",
+      "status": "adopted-with-qualifications",
+      "claim_id": "eng-language-clarity",
+      "rationale": "General Go guidance is retained for claim-level review and is subordinate to primary Go sources."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-c6d36b2f3551f27e",
+      "status": "adopted-with-qualifications",
+      "claim_id": "eng-language-clarity",
+      "rationale": "General Go guidance is retained for claim-level review and is subordinate to primary Go sources."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-b40d8d6e1e8ee71c",
+      "status": "adopted-with-qualifications",
+      "claim_id": "eng-language-clarity",
+      "rationale": "General Go guidance is retained for claim-level review and is subordinate to primary Go sources."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-3605b81b4be91e32",
+      "status": "adopted-with-qualifications",
+      "claim_id": "eng-language-clarity",
+      "rationale": "General Go guidance is retained for claim-level review and is subordinate to primary Go sources."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-faf37909e5567b45",
+      "status": "adopted-with-qualifications",
+      "claim_id": "eng-language-clarity",
+      "rationale": "General Go guidance is retained for claim-level review and is subordinate to primary Go sources."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-144394b4bc913432",
+      "status": "adopted-with-qualifications",
+      "claim_id": "eng-language-clarity",
+      "rationale": "General Go guidance is retained for claim-level review and is subordinate to primary Go sources."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-d2e3f564a689d2de",
+      "status": "adopted-with-qualifications",
+      "claim_id": "eng-language-clarity",
+      "rationale": "General Go guidance is retained for claim-level review and is subordinate to primary Go sources."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-94b692d6dc6c9343",
+      "status": "adopted-with-qualifications",
+      "claim_id": "eng-language-clarity",
+      "rationale": "General Go guidance is retained for claim-level review and is subordinate to primary Go sources."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-6248313943003d2a",
+      "status": "adopted-with-qualifications",
+      "claim_id": "eng-language-clarity",
+      "rationale": "General Go guidance is retained for claim-level review and is subordinate to primary Go sources."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-f0c3d7a2cc999837",
+      "status": "adopted-with-qualifications",
+      "claim_id": "eng-language-clarity",
+      "rationale": "General Go guidance is retained for claim-level review and is subordinate to primary Go sources."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-baaa4ae4e774f544",
+      "status": "adopted-with-qualifications",
+      "claim_id": "eng-language-clarity",
+      "rationale": "General Go guidance is retained for claim-level review and is subordinate to primary Go sources."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-0cbc844a4cec6ecd",
+      "status": "adopted-with-qualifications",
+      "claim_id": "eng-language-clarity",
+      "rationale": "General Go guidance is retained for claim-level review and is subordinate to primary Go sources."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-4efa71da507ee9d3",
+      "status": "adopted-with-qualifications",
+      "claim_id": "eng-language-clarity",
+      "rationale": "General Go guidance is retained for claim-level review and is subordinate to primary Go sources."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-2a3400012e4506b8",
+      "status": "adopted-with-qualifications",
+      "claim_id": "eng-language-clarity",
+      "rationale": "General Go guidance is retained for claim-level review and is subordinate to primary Go sources."
+    },
+    {
+      "repository": "golang-ddd-skills",
+      "item_id": "mi-87c4406ab0afdbc3",
       "status": "adopted-with-qualifications",
       "claim_id": "eng-language-clarity",
       "rationale": "General Go guidance is retained for claim-level review and is subordinate to primary Go sources."

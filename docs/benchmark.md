@@ -2,7 +2,7 @@
 
 ## Locked comparison set
 
-The local freeze includes `cc-skills-golang`, `cxuu-golang-skills`, `spf13/go-skills`, `gophers`, the Google style snapshot, and the Uber style guide. Installable benchmark arms also include no-skill baseline and the strongest additional public collection frozen before a release run. Style-only repositories contribute claims but are not installable benchmark arms.
+The local freeze includes `cc-skills-golang`, `cxuu-golang-skills`, `spf13/go-skills`, `gophers`, the specialist `golang-ddd-skills` collection, the Google style snapshot, and the Uber style guide. Installable benchmark arms also include the no-skill baseline and this project. Style-only repositories contribute claims but are not installable benchmark arms. The additional-arm selection rationale is recorded in `research/competitor-selection.md`.
 
 ## Protocol
 

@@ -25,6 +25,12 @@
       "repository_commit": "d4bc22a03ccb4550fcd148b7ad56250624799c72",
       "skills_root": "/reference-checkouts/gophers/skills",
       "skill_map": "evaluations/arms/gophers.skill-map.json"
+    },
+    {
+      "name": "golang-ddd-skills",
+      "repository_commit": "0cf1ee4d7facd50d1f25cce956dcc2fe252bf29d",
+      "skills_root": "/reference-checkouts/golang-ddd-skills/skills",
+      "skill_map": "evaluations/arms/golang-ddd-skills.skill-map.json"
     }
   ]
 }

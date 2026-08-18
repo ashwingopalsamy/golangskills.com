@@ -89,8 +89,8 @@ func ValidateArmFiles(collection corpus.Collection) error {
 			}
 		}
 	}
-	if len(manifest.Arms) != 4 {
-		issues = append(issues, fmt.Sprintf("evaluation arm manifest has %d competitors; want 4", len(manifest.Arms)))
+	if len(manifest.Arms) < 5 {
+		issues = append(issues, fmt.Sprintf("evaluation arm manifest has %d competitors; want at least 5", len(manifest.Arms)))
 	}
 	if len(issues) > 0 {
 		sort.Strings(issues)
