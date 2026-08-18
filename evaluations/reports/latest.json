@@ -29,6 +29,17 @@
     "raw_artifact": "evaluations/runs/2026-08-18-ours-reconciliation-fixture.jsonl",
     "score_artifact": "evaluations/scores/2026-08-18-ours-reconciliation-fixture.jsonl"
   },
+  "clean_clone_compatibility": {
+    "commit": "bb68087",
+    "archive_checksums_reproduced": true,
+    "codex_plugins_installed": [
+      "engineering-skills-for-go",
+      "distributed-systems-skills-for-go",
+      "fintech-skills-for-go"
+    ],
+    "representative_route": "fintech-skills-for-go:go-payment-lifecycles",
+    "temporary_installation_removed": true
+  },
   "blocking_gates": [
     "private release holdout not yet frozen and scored",
     "full baseline and multi-competitor treatment matrix not yet completed",
