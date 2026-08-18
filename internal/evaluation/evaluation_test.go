@@ -154,6 +154,25 @@ func TestCompareFilesUsesCompletePairsAndHalfCreditTies(t *testing.T) {
 	}
 }
 
+func TestReportsSelectAndCompareArmsFromMixedArtifact(t *testing.T) {
+	t.Parallel()
+	path := writeScoreFile(t, []Score{
+		{Result: Result{Arm: "ours", Skill: "go-language-engineering", CaseID: "one", Usage: Usage{InputTokens: 100}}, Passed: true, Score: 1},
+		{Result: Result{Arm: "competitor", Skill: "go-language-engineering", CaseID: "one", Usage: Usage{InputTokens: 100}}, Score: 0},
+	})
+	if _, err := ReportFile(path); err == nil {
+		t.Fatal("ReportFile() accepted a mixed artifact without an arm selector")
+	}
+	report, err := ReportFileForArm(path, "ours")
+	if err != nil || report.Cases != 1 || report.Passed != 1 {
+		t.Fatalf("ReportFileForArm() report = %#v, err = %v", report, err)
+	}
+	comparison, err := CompareArms(path, "ours", path, "competitor")
+	if err != nil || !comparison.CompletePairs || comparison.CandidateWins != 1 {
+		t.Fatalf("CompareArms() report = %#v, err = %v", comparison, err)
+	}
+}
+
 func writeScoreFile(t *testing.T, scores []Score) string {
 	t.Helper()
 	path := filepath.Join(t.TempDir(), "scores.jsonl")
