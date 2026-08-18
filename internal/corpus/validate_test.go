@@ -2,6 +2,7 @@ package corpus
 
 import (
 	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 	"time"
@@ -63,6 +64,46 @@ func TestValidateRepositoryLinksRejectsMissingTarget(t *testing.T) {
 	if len(issues) != 1 || !strings.Contains(issues[0], "missing link target") {
 		t.Fatalf("validateRepositoryLinks() issues = %v, want one missing-target issue", issues)
 	}
+}
+
+func TestValidateEvaluationsRejectsFixtureTestsVisibleToAgent(t *testing.T) {
+	t.Parallel()
+
+	root := t.TempDir()
+	fixture := filepath.Join(root, "evaluations", "fixtures", "example")
+	oracle := filepath.Join(root, "evaluations", "oracles", "example")
+	if err := os.MkdirAll(fixture, 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.MkdirAll(oracle, 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(fixture, "visible_test.go"), []byte("package example\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(oracle, "hidden_test.go"), []byte("package example\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+
+	skill := validTestCollection().Skills[0]
+	skill.Evaluations.Cases[2] = EvalCase{
+		ID: "quality-one", Kind: "quality", Split: "development", Prompt: "Repair the example.",
+		Fixture: "evaluations/fixtures/example", ExpectedInvariants: []string{"Find cause.", "Preserve invariant."},
+		ForbiddenOutcomes: []string{"Guess."}, Graders: []Grader{{ID: "oracle", Kind: "go-test", Target: "./...", Weight: 1}},
+	}
+	issues := validateEvaluations("example: ", skill, root, map[string]struct{}{skill.Name: {}})
+	if !containsIssue(issues, "fixture exposes a test before the agent exits") {
+		t.Fatalf("validateEvaluations() issues = %v", issues)
+	}
+}
+
+func containsIssue(issues []string, fragment string) bool {
+	for _, issue := range issues {
+		if strings.Contains(issue, fragment) {
+			return true
+		}
+	}
+	return false
 }
 
 func validTestCollection() Collection {

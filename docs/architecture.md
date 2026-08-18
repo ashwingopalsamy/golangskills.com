@@ -6,6 +6,8 @@
 
 `skill.json` owns collection, maturity, risk domains, Go support, claim IDs, relations, compatibility evidence, primary sources, and source provenance. `evals.json` separates routing decisions from quality cases with expected invariants, forbidden outcomes, deterministic graders, optional fixtures, and semantic rubrics.
 
+Executable fixtures under `evaluations/fixtures/` contain only the broken module visible to treatment arms. After the agent exits, the harness injects the corresponding repository-locked test from `evaluations/oracles/` as a read-only file and runs an allowlisted offline target. Keeping oracles in a nested Go module prevents the repository's ordinary package test traversal from compiling them against absent fixture sources.
+
 The knowledge plane is independent:
 
 - `research/corpus-lock.json`: repository identity, licenses, every file hash, canonical skill inventory, and hashed material markers;

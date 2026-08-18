@@ -13,6 +13,7 @@
       "minItems": 4,
       "items": {
         "type": "object",
+        "additionalProperties": false,
         "required": ["id", "kind", "split", "prompt"],
         "properties": {
           "id": { "type": "string" },
@@ -25,7 +26,24 @@
           "fixture": { "type": "string" },
           "expected_invariants": { "type": "array", "items": { "type": "string" } },
           "forbidden_outcomes": { "type": "array", "items": { "type": "string" } },
-          "graders": { "type": "array" },
+          "graders": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["id", "kind", "weight"],
+              "properties": {
+                "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+                "kind": { "enum": ["contains", "not-contains", "go-test", "json"] },
+                "target": { "enum": ["./...", "-race ./..."] },
+                "oracle": { "type": "string", "pattern": "^evaluations/oracles/.+_test\\.go$" },
+                "required": { "type": "array", "items": { "type": "string" } },
+                "forbidden": { "type": "array", "items": { "type": "string" } },
+                "weight": { "type": "number", "exclusiveMinimum": 0 }
+              }
+            }
+          },
           "semantic_rubric": { "type": "array", "items": { "type": "string" } }
         }
       }

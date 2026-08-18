@@ -99,6 +99,7 @@ type Grader struct {
 	ID        string   `json:"id"`
 	Kind      string   `json:"kind"`
 	Target    string   `json:"target,omitempty"`
+	Oracle    string   `json:"oracle,omitempty"`
 	Required  []string `json:"required,omitempty"`
 	Forbidden []string `json:"forbidden,omitempty"`
 	Weight    float64  `json:"weight"`

@@ -248,12 +248,13 @@ func flattenCases(collection corpus.Collection, kind, selectedCase string, fixtu
 
 func runCase(parent context.Context, repoRoot string, options RunOptions, runID, opaqueArm, clientVersion string, item caseItem) Result {
 	started := time.Now()
+	graders := normalizedGraders(item.eval)
 	result := Result{
 		SchemaVersion: 1, RunID: runID, OpaqueArm: opaqueArm, Arm: options.Arm,
 		Runner: options.Runner, Model: options.Model, ClientVersion: clientVersion,
 		Skill: item.skill.Name, Collection: item.skill.Metadata.Collection, RiskDomains: append([]string(nil), item.skill.Metadata.RiskDomains...),
 		CaseID: item.eval.ID, Mode: benchmarkMode(options.ExplicitSkill), Repetition: options.Repetition, Kind: item.eval.Kind, Prompt: item.eval.Prompt,
-		Graders: item.eval.Graders, Invariants: item.eval.ExpectedInvariants, Forbidden: item.eval.ForbiddenOutcomes,
+		Graders: graders, Invariants: item.eval.ExpectedInvariants, Forbidden: item.eval.ForbiddenOutcomes,
 		Metadata: map[string]string{"fixture_commit": gitHead(repoRoot), "grader_version": "skillctl-eval-v1"},
 	}
 	if item.eval.Kind == "routing" {
@@ -326,11 +327,24 @@ func runCase(parent context.Context, repoRoot string, options RunOptions, runID,
 		result.Error = readErr.Error()
 	}
 	if item.eval.Fixture != "" {
-		result.GraderRuns = runFixtureGraders(parent, worktree, item.eval.Graders)
+		result.GraderRuns = runFixtureGraders(parent, repoRoot, worktree, graders)
 		result.FixtureFiles = snapshotFixture(worktree)
 	}
 	result.DurationMS = time.Since(started).Milliseconds()
 	return result
+}
+
+func normalizedGraders(eval corpus.EvalCase) []corpus.Grader {
+	graders := append([]corpus.Grader(nil), eval.Graders...)
+	if eval.Fixture == "" {
+		return graders
+	}
+	for index := range graders {
+		if graders[index].Kind == "go-test" && graders[index].Oracle == "" {
+			graders[index].Oracle = filepath.ToSlash(filepath.Join("evaluations", "oracles", filepath.Base(eval.Fixture), "hidden_test.go"))
+		}
+	}
+	return graders
 }
 
 func expectedRoutes(options RunOptions, item caseItem) []string {
@@ -507,10 +521,14 @@ func copySkills(source, destination string, explicit bool, skillName string) err
 	return nil
 }
 
-func runFixtureGraders(parent context.Context, worktree string, graders []corpus.Grader) map[string]GraderRun {
+func runFixtureGraders(parent context.Context, repoRoot, worktree string, graders []corpus.Grader) map[string]GraderRun {
 	runs := make(map[string]GraderRun)
 	for _, grader := range graders {
 		if grader.Kind != "go-test" {
+			continue
+		}
+		if err := installOracle(repoRoot, worktree, grader.Oracle); err != nil {
+			runs[grader.ID] = GraderRun{Passed: false, ExitCode: -1, Output: "install post-edit oracle: " + err.Error()}
 			continue
 		}
 		args := []string{"test", "-mod=readonly", "./..."}
@@ -530,6 +548,32 @@ func runFixtureGraders(parent context.Context, worktree string, graders []corpus
 		runs[grader.ID] = run
 	}
 	return runs
+}
+
+func installOracle(repoRoot, worktree, relative string) error {
+	clean := filepath.ToSlash(filepath.Clean(filepath.FromSlash(relative)))
+	if clean != relative || !strings.HasPrefix(clean, "evaluations/oracles/") || !strings.HasSuffix(clean, "_test.go") {
+		return fmt.Errorf("unsafe oracle path %q", relative)
+	}
+	source := filepath.Join(repoRoot, filepath.FromSlash(clean))
+	info, err := os.Lstat(source)
+	if err != nil {
+		return err
+	}
+	if !info.Mode().IsRegular() {
+		return fmt.Errorf("oracle %s is not a regular file", relative)
+	}
+	content, err := os.ReadFile(source)
+	if err != nil {
+		return err
+	}
+	destination := filepath.Join(worktree, filepath.Base(source))
+	if _, err := os.Lstat(destination); err == nil {
+		return fmt.Errorf("oracle destination %s already exists", filepath.Base(destination))
+	} else if !errors.Is(err, os.ErrNotExist) {
+		return err
+	}
+	return os.WriteFile(destination, content, 0o444)
 }
 
 func snapshotFixture(root string) map[string]string {

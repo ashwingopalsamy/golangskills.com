@@ -594,6 +594,25 @@ func validateEvaluations(prefix string, skill Skill, repoRoot string, names map[
 					if grader.Target != "" && grader.Target != "./..." && grader.Target != "-race ./..." {
 						issues = append(issues, graderPrefix+"go-test target must be empty, ./..., or -race ./...")
 					}
+					oracle := grader.Oracle
+					if oracle == "" && eval.Fixture != "" {
+						oracle = path.Join("evaluations/oracles", path.Base(eval.Fixture), "hidden_test.go")
+					}
+					if oracle == "" {
+						issues = append(issues, graderPrefix+"go-test requires a post-edit oracle")
+					} else {
+						clean := path.Clean(oracle)
+						if !strings.HasPrefix(clean, "evaluations/oracles/") || clean != oracle || !strings.HasSuffix(clean, "_test.go") {
+							issues = append(issues, graderPrefix+"oracle must be a clean _test.go path under evaluations/oracles")
+						} else if repoRoot != "" {
+							info, err := os.Stat(filepath.Join(repoRoot, filepath.FromSlash(clean)))
+							if err != nil || !info.Mode().IsRegular() {
+								issues = append(issues, graderPrefix+"oracle file does not exist")
+							}
+						}
+					}
+				} else if grader.Oracle != "" {
+					issues = append(issues, graderPrefix+"only go-test graders may define an oracle")
 				}
 				if grader.Weight <= 0 {
 					issues = append(issues, graderPrefix+"weight must be positive")
@@ -604,9 +623,17 @@ func validateEvaluations(prefix string, skill Skill, repoRoot string, names map[
 				if !strings.HasPrefix(clean, "evaluations/fixtures/") || clean != eval.Fixture {
 					issues = append(issues, evalPrefix+"fixture must be a clean path under evaluations/fixtures")
 				} else if repoRoot != "" {
-					info, err := os.Stat(filepath.Join(repoRoot, filepath.FromSlash(clean)))
+					fixtureRoot := filepath.Join(repoRoot, filepath.FromSlash(clean))
+					info, err := os.Stat(fixtureRoot)
 					if err != nil || !info.IsDir() {
 						issues = append(issues, evalPrefix+"fixture directory does not exist")
+					} else {
+						_ = filepath.WalkDir(fixtureRoot, func(path string, entry os.DirEntry, walkErr error) error {
+							if walkErr == nil && !entry.IsDir() && strings.HasSuffix(entry.Name(), "_test.go") {
+								issues = append(issues, evalPrefix+"fixture exposes a test before the agent exits; move it to the post-edit oracle")
+							}
+							return nil
+						})
 					}
 				}
 				if !hasGoTest {
