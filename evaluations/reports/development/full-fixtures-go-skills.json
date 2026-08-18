@@ -1,0 +1,50 @@
+{
+  "schema_version": 2,
+  "arm": "go-skills",
+  "cases": 12,
+  "passed": 12,
+  "pass_rate": 1,
+  "mean_score": 1,
+  "ci_lower_95": 0.7575059933447592,
+  "ci_upper_95": 1,
+  "critical_failures": 0,
+  "collections": [
+    {
+      "collection": "distributed-systems-skills-for-go",
+      "cases": 5,
+      "passed": 5,
+      "pass_rate": 1,
+      "mean_score": 1
+    },
+    {
+      "collection": "engineering-skills-for-go",
+      "cases": 3,
+      "passed": 3,
+      "pass_rate": 1,
+      "mean_score": 1
+    },
+    {
+      "collection": "fintech-skills-for-go",
+      "cases": 4,
+      "passed": 4,
+      "pass_rate": 1,
+      "mean_score": 1
+    }
+  ],
+  "routing": {
+    "cases": 0,
+    "macro_f1": 0,
+    "unrelated_cases": 0,
+    "false_activations": 0,
+    "false_activation_rate": 0
+  },
+  "tokens": {
+    "input_tokens": 1314792,
+    "cached_input_tokens": 1097216,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 13594,
+    "reasoning_output_tokens": 3251,
+    "score_per_k_input_tokens": 0.009126918934706022
+  },
+  "input": "evaluations/scores/2026-08-18-full-fixture-matrix-native.jsonl"
+}

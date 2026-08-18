@@ -42,7 +42,7 @@
     {
       "id": "fixture-superiority",
       "status": "blocked",
-      "summary": "All 12 deterministic fixtures have not been scored across baseline and every competitor arm.",
+      "summary": "Every arm passed all visible-test fixtures; a post-edit hidden-oracle rerun is required for discriminatory evidence.",
       "evidence": ["docs/evaluations.md", "evaluations/reports/latest.json"]
     },
     {

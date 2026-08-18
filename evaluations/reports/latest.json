@@ -122,6 +122,38 @@
     "paired_report": "evaluations/reports/development/fixture-matrix-smoke-ours-vs-baseline.json",
     "qualification": "Executable isolation and grading evidence only; one fixture passed by every arm and has no comparative inferential value."
   },
+  "full_visible_fixture_matrix": {
+    "fixture_commit": "d5c6da70a3cdb963e4cf4c5d7a55793c6e936161",
+    "model": "gpt-5.6-sol",
+    "client_version": "codex-cli 0.148.0-alpha.9",
+    "scorer_version": "skillctl-eval-v2",
+    "fixture_cases": 12,
+    "arms": 7,
+    "cells": 84,
+    "runner_errors": 0,
+    "resumed_cells_on_identical_rerun": 0,
+    "pass_rates": {
+      "baseline": 1.0,
+      "ours": 1.0,
+      "cc-skills-golang": 1.0,
+      "cxuu-golang-skills": 1.0,
+      "go-skills": 1.0,
+      "gophers": 1.0,
+      "golang-ddd-skills": 1.0
+    },
+    "raw_artifact": "evaluations/runs/2026-08-18-full-fixture-matrix-native.jsonl",
+    "score_artifact": "evaluations/scores/2026-08-18-full-fixture-matrix-native.jsonl",
+    "arm_report": "evaluations/reports/development/full-fixtures-ours.json",
+    "paired_reports": [
+      "evaluations/reports/development/full-fixtures-ours-vs-baseline.json",
+      "evaluations/reports/development/full-fixtures-ours-vs-cc-skills-golang.json",
+      "evaluations/reports/development/full-fixtures-ours-vs-cxuu-golang-skills.json",
+      "evaluations/reports/development/full-fixtures-ours-vs-go-skills.json",
+      "evaluations/reports/development/full-fixtures-ours-vs-gophers.json",
+      "evaluations/reports/development/full-fixtures-ours-vs-golang-ddd-skills.json"
+    ],
+    "qualification": "Every arm passed every visible-test fixture. This is valid harness evidence but a failed benchmark design with zero discriminatory value; post-edit hidden oracles are required before rerunning."
+  },
   "targeted_rerun": {
     "case": "go-clearing-settlement-reconciliation/avoid-initial-auth",
     "passed": true,
@@ -152,7 +184,7 @@
     "full baseline and multi-competitor behavioral quality matrix not yet completed",
     "the quality half of the 80-scenario full-arm matrix and hard-case repetitions are not yet completed",
     "public routing macro-F1 clears its threshold, but private unrelated-prompt false activation is not established",
-    "deterministic fixture superiority and domain non-inferiority not yet established",
+    "visible-test fixtures tied every arm; the post-edit hidden-oracle fixture matrix is not yet scored",
     "paired win-rate confidence intervals and token-efficiency frontier not yet established"
   ]
 }
