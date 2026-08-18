@@ -1,0 +1,20 @@
+{
+  "interface": {
+    "displayName": "golangskills.com"
+  },
+  "name": "golangskills",
+  "plugins": [
+    {
+      "category": "Developer Tools",
+      "name": "engineering-skills-for-go",
+      "policy": {
+        "authentication": "ON_INSTALL",
+        "installation": "AVAILABLE"
+      },
+      "source": {
+        "path": "./plugins/engineering-skills-for-go",
+        "source": "local"
+      }
+    }
+  ]
+}

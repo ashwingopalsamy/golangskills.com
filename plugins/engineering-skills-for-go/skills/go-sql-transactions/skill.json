@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "display_name": "Go SQL Transactions",
+  "short_description": "Preserve durable SQL invariants in Go",
+  "default_prompt": "Use $go-sql-transactions to review this Go database path for atomicity, isolation, retries, pool behavior, and ambiguous outcomes.",
+  "version": "0.1.0",
+  "status": "beta",
+  "category": "state",
+  "tags": ["sql", "transactions", "isolation", "idempotency", "database-sql", "migrations"],
+  "go_versions": {
+    "minimum": "1.24",
+    "guidance": ["1.25", "1.26"]
+  },
+  "relations": {
+    "complements": ["go-message-processing", "go-service-resilience", "review-go-production-change"],
+    "overlaps": []
+  },
+  "sources": [
+    {
+      "title": "Package database/sql",
+      "url": "https://pkg.go.dev/database/sql",
+      "publisher": "The Go Project",
+      "kind": "normative",
+      "verified_on": "2026-08-18",
+      "supports": ["pool handle", "transaction and rows contracts", "context APIs"]
+    },
+    {
+      "title": "Executing transactions",
+      "url": "https://go.dev/doc/database/execute-transactions",
+      "publisher": "The Go Project",
+      "kind": "primary",
+      "verified_on": "2026-08-18",
+      "supports": ["transaction workflow", "commit and rollback semantics"]
+    },
+    {
+      "title": "Managing connections",
+      "url": "https://go.dev/doc/database/manage-connections",
+      "publisher": "The Go Project",
+      "kind": "primary",
+      "verified_on": "2026-08-18",
+      "supports": ["pool limits", "pool wait and deadlock risk", "dedicated connections"]
+    },
+    {
+      "title": "PostgreSQL transaction isolation",
+      "url": "https://www.postgresql.org/docs/current/transaction-iso.html",
+      "publisher": "PostgreSQL Global Development Group",
+      "kind": "primary",
+      "verified_on": "2026-08-18",
+      "supports": ["database-specific isolation anomalies", "serialization failures"]
+    },
+    {
+      "title": "Stripe idempotent requests",
+      "url": "https://docs.stripe.com/api/idempotent_requests",
+      "publisher": "Stripe",
+      "kind": "operational",
+      "verified_on": "2026-08-18",
+      "supports": ["request fingerprinting", "stable replay outcomes", "idempotency key lifetime"]
+    }
+  ]
+}

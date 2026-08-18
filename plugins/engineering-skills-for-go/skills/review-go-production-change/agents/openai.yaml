@@ -1,0 +1,6 @@
+interface:
+  display_name: "Review Go Production Change"
+  short_description: "Find causal production risks in Go diffs"
+  default_prompt: "Use $review-go-production-change to review this Go diff for concrete production correctness and safety findings."
+policy:
+  allow_implicit_invocation: true

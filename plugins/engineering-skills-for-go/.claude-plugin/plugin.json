@@ -1,0 +1,19 @@
+{
+  "author": {
+    "name": "Ashwin Gopalsamy",
+    "url": "https://github.com/ashwingopalsamy"
+  },
+  "description": "Focused production engineering skills for Go systems.",
+  "homepage": "https://golangskills.com",
+  "keywords": [
+    "go",
+    "golang",
+    "distributed-systems",
+    "reliability",
+    "agent-skills"
+  ],
+  "license": "Apache-2.0",
+  "name": "engineering-skills-for-go",
+  "repository": "https://github.com/ashwingopalsamy/golangskills.com",
+  "version": "0.1.0"
+}

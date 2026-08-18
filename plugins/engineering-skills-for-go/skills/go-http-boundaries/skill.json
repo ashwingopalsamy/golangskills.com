@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "display_name": "Go HTTP Boundaries",
+  "short_description": "Bound Go HTTP resources and shutdown",
+  "default_prompt": "Use $go-http-boundaries to review this Go HTTP client or server path for timeouts, ownership, overload, and shutdown.",
+  "version": "0.1.0",
+  "status": "beta",
+  "category": "execution",
+  "tags": ["http", "net-http", "timeouts", "shutdown", "middleware", "overload"],
+  "go_versions": {
+    "minimum": "1.24",
+    "guidance": ["1.25", "1.26"]
+  },
+  "relations": {
+    "complements": ["go-service-resilience", "review-go-production-change"],
+    "overlaps": []
+  },
+  "sources": [
+    {
+      "title": "Package net/http",
+      "url": "https://pkg.go.dev/net/http",
+      "publisher": "The Go Project",
+      "kind": "normative",
+      "verified_on": "2026-08-18",
+      "supports": ["server shutdown", "client and transport reuse", "response body ownership", "timeout fields"]
+    },
+    {
+      "title": "Package context",
+      "url": "https://pkg.go.dev/context",
+      "publisher": "The Go Project",
+      "kind": "normative",
+      "verified_on": "2026-08-18",
+      "supports": ["request cancellation", "deadline propagation"]
+    },
+    {
+      "title": "Addressing Cascading Failures",
+      "url": "https://sre.google/sre-book/addressing-cascading-failures/",
+      "publisher": "Google SRE",
+      "kind": "operational",
+      "verified_on": "2026-08-18",
+      "supports": ["overload rejection", "queue bounds", "retry amplification", "load testing"]
+    }
+  ]
+}

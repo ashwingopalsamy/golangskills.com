@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "skill": "go-service-resilience",
+  "cases": [
+    {
+      "id": "route-retry-storm",
+      "kind": "routing",
+      "prompt": "A Go service retries three times at four RPC layers and melts the leaf dependency during a 2% error spike.",
+      "should_activate": true,
+      "reason": "The task is retry amplification and overload control."
+    },
+    {
+      "id": "route-deadline-budget",
+      "kind": "routing",
+      "prompt": "Allocate a 700 ms request budget across queueing and two possible outbound Go HTTP attempts.",
+      "should_activate": true,
+      "reason": "The task requires end-to-end deadline and attempt budgeting."
+    },
+    {
+      "id": "avoid-local-loop",
+      "kind": "routing",
+      "prompt": "Retry parsing a local configuration file after a syntax error.",
+      "should_activate": false,
+      "reason": "This is a permanent local input failure, not a remote partial-failure path."
+    },
+    {
+      "id": "avoid-broker-redelivery",
+      "kind": "routing",
+      "prompt": "Choose when to ack a queue message so a crash cannot lose the database update.",
+      "should_activate": false,
+      "reason": "Broker delivery semantics belong to go-message-processing."
+    },
+    {
+      "id": "quality-multiplicative-retries",
+      "kind": "quality",
+      "prompt": "Every service in a five-hop Go call chain retries three times. Improve resilience without removing all retries.",
+      "criteria": [
+        "Quantifies multiplicative leaf attempts.",
+        "Assigns one retry owner with bounded attempt and elapsed budgets.",
+        "Combines retry policy with dependency capacity and admission control."
+      ],
+      "anti_criteria": [
+        "Only adds exponential backoff at every layer.",
+        "Retries permanent or ambiguous non-idempotent failures."
+      ]
+    },
+    {
+      "id": "quality-circuit-counterexample",
+      "kind": "quality",
+      "prompt": "A dependency has no timeouts and callers queue without limit. Should we add a circuit breaker first?",
+      "criteria": [
+        "Prioritizes deadline, admission, and bounded retry fundamentals.",
+        "Explains the additional state and recovery risks of a circuit breaker.",
+        "Keeps a breaker conditional on evidence that simpler controls are insufficient."
+      ],
+      "anti_criteria": [
+        "Adds a circuit breaker as a universal first step.",
+        "Leaves the unbounded queue in place."
+      ]
+    }
+  ]
+}

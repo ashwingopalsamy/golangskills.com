@@ -1,0 +1,6 @@
+interface:
+  display_name: "Go SQL Transactions"
+  short_description: "Preserve durable SQL invariants in Go"
+  default_prompt: "Use $go-sql-transactions to review this Go database path for atomicity, isolation, retries, pool behavior, and ambiguous outcomes."
+policy:
+  allow_implicit_invocation: true

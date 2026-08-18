@@ -1,0 +1,530 @@
+{
+  "schema_version": 1,
+  "collection_version": "0.1.0",
+  "generated_from": "skills/*/{SKILL.md,skill.json,evals.json,references/**}",
+  "skills": [
+    {
+      "name": "go-concurrency-lifecycle",
+      "path": "skills/go-concurrency-lifecycle",
+      "description": "Design, implement, or review concurrent Go code by making goroutine ownership, termination, synchronization, capacity, and cancellation explicit. Use for worker pools, pipelines, shared mutable state, races, deadlocks, or leaks. Do not use for async message-delivery semantics or ordinary sequential code.",
+      "compatibility": "Go 1.24 or newer. Guidance targets the stable Go 1.25 and 1.26 families and degrades to older repository versions when required.",
+      "display_name": "Go Concurrency Lifecycle",
+      "short_description": "Own goroutines, capacity, and shutdown",
+      "version": "0.1.0",
+      "status": "beta",
+      "category": "execution",
+      "tags": [
+        "concurrency",
+        "goroutines",
+        "channels",
+        "mutexes",
+        "cancellation",
+        "backpressure"
+      ],
+      "go_versions": {
+        "minimum": "1.24",
+        "guidance": [
+          "1.25",
+          "1.26"
+        ]
+      },
+      "relations": {
+        "complements": [
+          "go-service-resilience",
+          "review-go-production-change"
+        ],
+        "overlaps": []
+      },
+      "sources": [
+        {
+          "title": "The Go Memory Model",
+          "url": "https://go.dev/ref/mem",
+          "publisher": "The Go Project",
+          "kind": "normative",
+          "verified_on": "2026-08-18",
+          "supports": [
+            "happens-before",
+            "synchronization",
+            "race definition"
+          ]
+        },
+        {
+          "title": "Package context",
+          "url": "https://pkg.go.dev/context",
+          "publisher": "The Go Project",
+          "kind": "normative",
+          "verified_on": "2026-08-18",
+          "supports": [
+            "cancellation propagation",
+            "context ownership"
+          ]
+        },
+        {
+          "title": "Data Race Detector",
+          "url": "https://go.dev/doc/articles/race_detector",
+          "publisher": "The Go Project",
+          "kind": "primary",
+          "verified_on": "2026-08-18",
+          "supports": [
+            "race detector scope",
+            "runtime coverage limitation"
+          ]
+        },
+        {
+          "title": "Testing Time and Other Asynchronicities",
+          "url": "https://go.dev/blog/testing-time",
+          "publisher": "The Go Project",
+          "kind": "primary",
+          "verified_on": "2026-08-18",
+          "supports": [
+            "testing/synctest",
+            "deterministic concurrent tests"
+          ]
+        }
+      ],
+      "source_count": 4,
+      "evaluation_count": 6
+    },
+    {
+      "name": "go-http-boundaries",
+      "path": "skills/go-http-boundaries",
+      "description": "Design, implement, or review Go HTTP client and server boundaries: timeouts, body ownership, cancellation, middleware, graceful shutdown, streaming, and overload behavior. Use for net/http services and outbound calls. Do not use for domain logic, generic API schema design, or non-HTTP transports.",
+      "compatibility": "Go 1.24 or newer. Guidance targets the stable Go 1.25 and 1.26 families and standard net/http behavior.",
+      "display_name": "Go HTTP Boundaries",
+      "short_description": "Bound Go HTTP resources and shutdown",
+      "version": "0.1.0",
+      "status": "beta",
+      "category": "execution",
+      "tags": [
+        "http",
+        "net-http",
+        "timeouts",
+        "shutdown",
+        "middleware",
+        "overload"
+      ],
+      "go_versions": {
+        "minimum": "1.24",
+        "guidance": [
+          "1.25",
+          "1.26"
+        ]
+      },
+      "relations": {
+        "complements": [
+          "go-service-resilience",
+          "review-go-production-change"
+        ],
+        "overlaps": []
+      },
+      "sources": [
+        {
+          "title": "Package net/http",
+          "url": "https://pkg.go.dev/net/http",
+          "publisher": "The Go Project",
+          "kind": "normative",
+          "verified_on": "2026-08-18",
+          "supports": [
+            "server shutdown",
+            "client and transport reuse",
+            "response body ownership",
+            "timeout fields"
+          ]
+        },
+        {
+          "title": "Package context",
+          "url": "https://pkg.go.dev/context",
+          "publisher": "The Go Project",
+          "kind": "normative",
+          "verified_on": "2026-08-18",
+          "supports": [
+            "request cancellation",
+            "deadline propagation"
+          ]
+        },
+        {
+          "title": "Addressing Cascading Failures",
+          "url": "https://sre.google/sre-book/addressing-cascading-failures/",
+          "publisher": "Google SRE",
+          "kind": "operational",
+          "verified_on": "2026-08-18",
+          "supports": [
+            "overload rejection",
+            "queue bounds",
+            "retry amplification",
+            "load testing"
+          ]
+        }
+      ],
+      "source_count": 3,
+      "evaluation_count": 6
+    },
+    {
+      "name": "go-message-processing",
+      "path": "skills/go-message-processing",
+      "description": "Design, implement, or review Go message producers and consumers for delivery semantics, idempotency, deduplication, ordering, acknowledgments, poison messages, backpressure, and outbox/inbox consistency. Use for brokers, queues, event handlers, or async payments. Do not use for in-process channels or transport setup alone.",
+      "compatibility": "Go 1.24 or newer. Broker guarantees and client APIs are version-specific and must be verified against the deployed system.",
+      "display_name": "Go Message Processing",
+      "short_description": "Make async Go effects replay-safe",
+      "version": "0.1.0",
+      "status": "beta",
+      "category": "state",
+      "tags": [
+        "messaging",
+        "consumers",
+        "idempotency",
+        "outbox",
+        "ordering",
+        "backpressure"
+      ],
+      "go_versions": {
+        "minimum": "1.24",
+        "guidance": [
+          "1.25",
+          "1.26"
+        ]
+      },
+      "relations": {
+        "complements": [
+          "go-concurrency-lifecycle",
+          "go-sql-transactions",
+          "go-service-resilience",
+          "review-go-production-change"
+        ],
+        "overlaps": []
+      },
+      "sources": [
+        {
+          "title": "Apache Kafka design: message delivery semantics",
+          "url": "https://kafka.apache.org/documentation/#semantics",
+          "publisher": "Apache Kafka",
+          "kind": "primary",
+          "verified_on": "2026-08-18",
+          "supports": [
+            "at-most-once",
+            "at-least-once",
+            "Kafka exactly-once scope"
+          ]
+        },
+        {
+          "title": "Pub/Sub exactly-once delivery",
+          "url": "https://cloud.google.com/pubsub/docs/exactly-once-delivery",
+          "publisher": "Google Cloud",
+          "kind": "primary",
+          "verified_on": "2026-08-18",
+          "supports": [
+            "acknowledgment result",
+            "redelivery handling",
+            "regional guarantee scope"
+          ]
+        },
+        {
+          "title": "Debezium outbox event router",
+          "url": "https://debezium.io/documentation/reference/stable/transformations/outbox-event-router.html",
+          "publisher": "Debezium",
+          "kind": "primary",
+          "verified_on": "2026-08-18",
+          "supports": [
+            "outbox structure",
+            "change-data-capture relay"
+          ]
+        },
+        {
+          "title": "Stripe idempotent requests",
+          "url": "https://docs.stripe.com/api/idempotent_requests",
+          "publisher": "Stripe",
+          "kind": "operational",
+          "verified_on": "2026-08-18",
+          "supports": [
+            "stable operation identity",
+            "payload comparison",
+            "replay outcome"
+          ]
+        },
+        {
+          "title": "Addressing Cascading Failures",
+          "url": "https://sre.google/sre-book/addressing-cascading-failures/",
+          "publisher": "Google SRE",
+          "kind": "operational",
+          "verified_on": "2026-08-18",
+          "supports": [
+            "retry amplification",
+            "backpressure",
+            "overload failure"
+          ]
+        }
+      ],
+      "source_count": 5,
+      "evaluation_count": 6
+    },
+    {
+      "name": "go-service-resilience",
+      "path": "skills/go-service-resilience",
+      "description": "Design, implement, or review resilient remote-call paths in Go using deadline budgets, retry ownership, replay safety, backoff, jitter, admission control, load shedding, and failure isolation. Use for HTTP, RPC, or dependency partial failures. Do not use for local loops, broker redelivery, or generic observability.",
+      "compatibility": "Go 1.24 or newer. Policies are transport-neutral; verify client and dependency behavior against repository versions.",
+      "display_name": "Go Service Resilience",
+      "short_description": "Bound remote failure and retry load",
+      "version": "0.1.0",
+      "status": "beta",
+      "category": "reliability",
+      "tags": [
+        "resilience",
+        "retries",
+        "timeouts",
+        "backoff",
+        "load-shedding",
+        "circuit-breakers"
+      ],
+      "go_versions": {
+        "minimum": "1.24",
+        "guidance": [
+          "1.25",
+          "1.26"
+        ]
+      },
+      "relations": {
+        "complements": [
+          "go-concurrency-lifecycle",
+          "go-http-boundaries",
+          "go-message-processing",
+          "go-sql-transactions",
+          "review-go-production-change"
+        ],
+        "overlaps": []
+      },
+      "sources": [
+        {
+          "title": "Package context",
+          "url": "https://pkg.go.dev/context",
+          "publisher": "The Go Project",
+          "kind": "normative",
+          "verified_on": "2026-08-18",
+          "supports": [
+            "deadline propagation",
+            "cancellation ownership"
+          ]
+        },
+        {
+          "title": "Timeouts, retries and backoff with jitter",
+          "url": "https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/",
+          "publisher": "Amazon Web Services",
+          "kind": "operational",
+          "verified_on": "2026-08-18",
+          "supports": [
+            "timeout selection",
+            "retry ownership",
+            "backoff",
+            "jitter",
+            "retry budgets"
+          ]
+        },
+        {
+          "title": "Addressing Cascading Failures",
+          "url": "https://sre.google/sre-book/addressing-cascading-failures/",
+          "publisher": "Google SRE",
+          "kind": "operational",
+          "verified_on": "2026-08-18",
+          "supports": [
+            "overload",
+            "retry amplification",
+            "load shedding",
+            "recovery testing"
+          ]
+        },
+        {
+          "title": "Production Services Best Practices",
+          "url": "https://sre.google/sre-book/service-best-practices/",
+          "publisher": "Google SRE",
+          "kind": "operational",
+          "verified_on": "2026-08-18",
+          "supports": [
+            "graceful degradation",
+            "capacity and load testing"
+          ]
+        }
+      ],
+      "source_count": 4,
+      "evaluation_count": 6
+    },
+    {
+      "name": "go-sql-transactions",
+      "path": "skills/go-sql-transactions",
+      "description": "Design, implement, or review Go SQL transaction boundaries, isolation, retries, connection pools, query cancellation, and ambiguous commits. Use for database/sql, pgx, repositories, migrations, or persisted idempotency. Do not use for query tuning alone, non-SQL stores, or broker acknowledgment semantics.",
+      "compatibility": "Go 1.24 or newer. Standard-library contracts are primary; driver and database behavior must be verified against repository versions.",
+      "display_name": "Go SQL Transactions",
+      "short_description": "Preserve durable SQL invariants in Go",
+      "version": "0.1.0",
+      "status": "beta",
+      "category": "state",
+      "tags": [
+        "sql",
+        "transactions",
+        "isolation",
+        "idempotency",
+        "database-sql",
+        "migrations"
+      ],
+      "go_versions": {
+        "minimum": "1.24",
+        "guidance": [
+          "1.25",
+          "1.26"
+        ]
+      },
+      "relations": {
+        "complements": [
+          "go-message-processing",
+          "go-service-resilience",
+          "review-go-production-change"
+        ],
+        "overlaps": []
+      },
+      "sources": [
+        {
+          "title": "Package database/sql",
+          "url": "https://pkg.go.dev/database/sql",
+          "publisher": "The Go Project",
+          "kind": "normative",
+          "verified_on": "2026-08-18",
+          "supports": [
+            "pool handle",
+            "transaction and rows contracts",
+            "context APIs"
+          ]
+        },
+        {
+          "title": "Executing transactions",
+          "url": "https://go.dev/doc/database/execute-transactions",
+          "publisher": "The Go Project",
+          "kind": "primary",
+          "verified_on": "2026-08-18",
+          "supports": [
+            "transaction workflow",
+            "commit and rollback semantics"
+          ]
+        },
+        {
+          "title": "Managing connections",
+          "url": "https://go.dev/doc/database/manage-connections",
+          "publisher": "The Go Project",
+          "kind": "primary",
+          "verified_on": "2026-08-18",
+          "supports": [
+            "pool limits",
+            "pool wait and deadlock risk",
+            "dedicated connections"
+          ]
+        },
+        {
+          "title": "PostgreSQL transaction isolation",
+          "url": "https://www.postgresql.org/docs/current/transaction-iso.html",
+          "publisher": "PostgreSQL Global Development Group",
+          "kind": "primary",
+          "verified_on": "2026-08-18",
+          "supports": [
+            "database-specific isolation anomalies",
+            "serialization failures"
+          ]
+        },
+        {
+          "title": "Stripe idempotent requests",
+          "url": "https://docs.stripe.com/api/idempotent_requests",
+          "publisher": "Stripe",
+          "kind": "operational",
+          "verified_on": "2026-08-18",
+          "supports": [
+            "request fingerprinting",
+            "stable replay outcomes",
+            "idempotency key lifetime"
+          ]
+        }
+      ],
+      "source_count": 5,
+      "evaluation_count": 6
+    },
+    {
+      "name": "review-go-production-change",
+      "path": "skills/review-go-production-change",
+      "description": "Review a Go diff or change plan for production correctness using risk-driven causal analysis across concurrency, persistence, remote calls, compatibility, security, and operability. Use for PRs that change stateful or distributed behavior. Do not use for formatting-only review, greenfield implementation, or exhaustive whole-repo audits.",
+      "compatibility": "Go 1.24 or newer. Repository contracts and changed behavior outrank generic conventions.",
+      "display_name": "Review Go Production Change",
+      "short_description": "Find causal production risks in Go diffs",
+      "version": "0.1.0",
+      "status": "beta",
+      "category": "workflow",
+      "tags": [
+        "review",
+        "production",
+        "distributed-systems",
+        "correctness",
+        "security",
+        "compatibility"
+      ],
+      "go_versions": {
+        "minimum": "1.24",
+        "guidance": [
+          "1.25",
+          "1.26"
+        ]
+      },
+      "relations": {
+        "complements": [
+          "go-concurrency-lifecycle",
+          "go-http-boundaries",
+          "go-message-processing",
+          "go-service-resilience",
+          "go-sql-transactions"
+        ],
+        "overlaps": []
+      },
+      "sources": [
+        {
+          "title": "Go Code Review Comments",
+          "url": "https://go.dev/wiki/CodeReviewComments",
+          "publisher": "The Go Project Wiki",
+          "kind": "organization-specific",
+          "verified_on": "2026-08-18",
+          "supports": [
+            "common Go review conventions, scoped as conventions rather than language rules"
+          ]
+        },
+        {
+          "title": "Security Best Practices for Go Developers",
+          "url": "https://go.dev/doc/security/best-practices",
+          "publisher": "The Go Project",
+          "kind": "primary",
+          "verified_on": "2026-08-18",
+          "supports": [
+            "race testing",
+            "fuzzing",
+            "vulnerability scanning"
+          ]
+        },
+        {
+          "title": "Effective Troubleshooting",
+          "url": "https://sre.google/sre-book/effective-troubleshooting/",
+          "publisher": "Google SRE",
+          "kind": "operational",
+          "verified_on": "2026-08-18",
+          "supports": [
+            "causal analysis",
+            "evidence-driven diagnosis"
+          ]
+        },
+        {
+          "title": "SWE-Skills-Bench",
+          "url": "https://arxiv.org/abs/2603.15401",
+          "publisher": "Han et al.",
+          "kind": "primary",
+          "verified_on": "2026-08-18",
+          "supports": [
+            "marginal skill evaluation",
+            "risk from context-conflicting guidance"
+          ]
+        }
+      ],
+      "source_count": 4,
+      "evaluation_count": 6
+    }
+  ]
+}

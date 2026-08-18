@@ -1,0 +1,6 @@
+interface:
+  display_name: "Go HTTP Boundaries"
+  short_description: "Bound Go HTTP resources and shutdown"
+  default_prompt: "Use $go-http-boundaries to review this Go HTTP client or server path for timeouts, ownership, overload, and shutdown."
+policy:
+  allow_implicit_invocation: true

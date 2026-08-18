@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "skill": "review-go-production-change",
+  "cases": [
+    {
+      "id": "route-stateful-pr",
+      "kind": "routing",
+      "prompt": "Review this Go PR that adds a transaction, emits an event, and retries the downstream request.",
+      "should_activate": true,
+      "reason": "The diff crosses persistence, messaging, and remote-failure boundaries."
+    },
+    {
+      "id": "route-concurrent-shutdown-pr",
+      "kind": "routing",
+      "prompt": "Review a Go change that adds background workers and a new shutdown path. Report only actionable findings.",
+      "should_activate": true,
+      "reason": "The task requests risk-driven review of production concurrency behavior."
+    },
+    {
+      "id": "avoid-formatting",
+      "kind": "routing",
+      "prompt": "Check whether this Go file follows our import grouping and identifier naming style.",
+      "should_activate": false,
+      "reason": "The request is explicitly formatting/style-only."
+    },
+    {
+      "id": "avoid-implementation",
+      "kind": "routing",
+      "prompt": "Implement a new Go HTTP endpoint from this specification.",
+      "should_activate": false,
+      "reason": "The task is greenfield implementation, not review."
+    },
+    {
+      "id": "quality-concrete-schedule",
+      "kind": "quality",
+      "prompt": "Review a diff where Stop closes a jobs channel after unlocking, while Submit checks stopped under the lock and sends after unlocking.",
+      "criteria": [
+        "Reports the check-close-send interleaving that causes send-on-closed panic.",
+        "Locates the finding at the changed ownership/synchronization line.",
+        "Recommends one-owner close/admission serialization without unrelated refactoring."
+      ],
+      "anti_criteria": [
+        "Only says channels should be closed by senders.",
+        "Produces a broad checklist with no concrete schedule."
+      ]
+    },
+    {
+      "id": "quality-no-invented-finding",
+      "kind": "quality",
+      "prompt": "Review a diff that only changes an unexported local variable from n to count and gofmt output. There are no behavioral changes.",
+      "criteria": [
+        "Reports no actionable production findings.",
+        "Does not elevate a naming preference into a defect."
+      ],
+      "anti_criteria": [
+        "Invents concurrency, security, or compatibility concerns unrelated to the diff.",
+        "Demands new tests for a behavior-preserving rename."
+      ]
+    }
+  ]
+}

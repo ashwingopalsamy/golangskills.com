@@ -1,0 +1,29 @@
+{
+  "$schema": "https://raw.githubusercontent.com/anthropics/claude-code/main/schemas/marketplace.schema.json",
+  "metadata": {
+    "description": "Production engineering skills for Go systems."
+  },
+  "name": "engineering-skills-for-go",
+  "owner": {
+    "name": "Ashwin Gopalsamy",
+    "url": "https://github.com/ashwingopalsamy"
+  },
+  "plugins": [
+    {
+      "category": "language-skills",
+      "description": "Focused production engineering skills for Go systems.",
+      "homepage": "https://golangskills.com",
+      "license": "Apache-2.0",
+      "name": "engineering-skills-for-go",
+      "source": "./plugins/engineering-skills-for-go",
+      "tags": [
+        "go",
+        "golang",
+        "distributed-systems",
+        "reliability",
+        "agent-skills"
+      ],
+      "version": "0.1.0"
+    }
+  ]
+}

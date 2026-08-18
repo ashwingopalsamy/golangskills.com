@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "skill": "go-sql-transactions",
+  "cases": [
+    {
+      "id": "route-payment-commit",
+      "kind": "routing",
+      "prompt": "A Go payment command times out during Tx.Commit and the caller retries. Prevent duplicate ledger entries.",
+      "should_activate": true,
+      "reason": "The core issue is durable idempotency and ambiguous commit outcome."
+    },
+    {
+      "id": "route-pool-starvation",
+      "kind": "routing",
+      "prompt": "database/sql WaitDuration spikes and requests time out while a transaction calls db.Query on the parent handle.",
+      "should_activate": true,
+      "reason": "The task crosses transaction-handle correctness and pool capacity."
+    },
+    {
+      "id": "avoid-nosql-consistency",
+      "kind": "routing",
+      "prompt": "Choose a consistency level for conditional writes in DynamoDB.",
+      "should_activate": false,
+      "reason": "The store is not SQL and has different contracts."
+    },
+    {
+      "id": "avoid-query-index",
+      "kind": "routing",
+      "prompt": "Use EXPLAIN ANALYZE to choose an index for this slow SELECT.",
+      "should_activate": false,
+      "reason": "Query tuning alone is outside transaction-boundary scope."
+    },
+    {
+      "id": "quality-whole-transaction-retry",
+      "kind": "quality",
+      "prompt": "Our PostgreSQL transaction gets SQLSTATE 40001 after reading inventory and updating an order. Add retries around the failing UPDATE.",
+      "criteria": [
+        "Retries the whole transaction from fresh reads rather than one statement.",
+        "Uses stable database error classification and a bounded budget.",
+        "Keeps non-transactional side effects outside or makes them idempotent."
+      ],
+      "anti_criteria": [
+        "String-matches the error text.",
+        "Retries only the UPDATE using values read by the aborted transaction."
+      ]
+    },
+    {
+      "id": "quality-commit-unknown",
+      "kind": "quality",
+      "prompt": "The network dropped while committing a charge. We received an error, so can we safely create a new charge ID and try again?",
+      "criteria": [
+        "Identifies that commit outcome may be unknown.",
+        "Requires reconciliation or replay with the same durable operation identity.",
+        "Rejects a conflicting payload for a reused idempotency identity."
+      ],
+      "anti_criteria": [
+        "Assumes any Commit error proves rollback.",
+        "Retries with a new operation identity."
+      ]
+    }
+  ]
+}
