@@ -86,10 +86,11 @@ type GraderRun struct {
 // Score is a deterministic score for one result.
 type Score struct {
 	Result
-	Passed      bool            `json:"passed"`
-	Score       float64         `json:"score"`
-	GraderScore map[string]bool `json:"grader_score"`
-	Failures    []string        `json:"failures,omitempty"`
+	ScorerVersion string          `json:"scorer_version"`
+	Passed        bool            `json:"passed"`
+	Score         float64         `json:"score"`
+	GraderScore   map[string]bool `json:"grader_score"`
+	Failures      []string        `json:"failures,omitempty"`
 }
 
 // Report summarizes deterministic pass rates and a Wilson confidence interval.
@@ -389,7 +390,7 @@ func ScoreFile(inputPath, outputPath string) (int, error) {
 }
 
 func scoreResult(result Result) Score {
-	score := Score{Result: result, GraderScore: make(map[string]bool)}
+	score := Score{Result: result, ScorerVersion: "skillctl-eval-v2", GraderScore: make(map[string]bool)}
 	if result.Error != "" || result.ExitCode != 0 {
 		score.Failures = append(score.Failures, "runner failed")
 		return score
@@ -401,7 +402,7 @@ func scoreResult(result Result) Score {
 		}
 		response := strings.TrimSpace(result.Response)
 		for _, route := range expected {
-			if strings.EqualFold(response, route) {
+			if routeMatches(response, route) {
 				score.Passed = true
 				break
 			}
@@ -446,6 +447,11 @@ func scoreResult(result Result) Score {
 	}
 	score.Passed = score.Score == 1
 	return score
+}
+
+func routeMatches(response, expected string) bool {
+	response = strings.TrimSpace(response)
+	return strings.EqualFold(response, expected) || strings.HasSuffix(strings.ToLower(response), ":"+strings.ToLower(expected))
 }
 
 // ReportFile summarizes a scored JSONL artifact.

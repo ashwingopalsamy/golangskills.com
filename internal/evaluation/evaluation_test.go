@@ -17,6 +17,14 @@ func TestScoreRouting(t *testing.T) {
 	}
 }
 
+func TestScoreRoutingAcceptsIsolatedPluginNamespace(t *testing.T) {
+	t.Parallel()
+	score := scoreResult(Result{Kind: "routing", ExpectedRoutes: []string{"go"}, Response: "go:go"})
+	if !score.Passed {
+		t.Fatalf("score = %#v", score)
+	}
+}
+
 func TestRunFixtureGradersExecutesGoTest(t *testing.T) {
 	t.Parallel()
 	root := t.TempDir()

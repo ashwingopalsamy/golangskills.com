@@ -10,7 +10,7 @@ Run both native full-collection discovery and explicitly matched skills. Use at 
 
 Score executable behavior first. The committed suite includes 12 initially failing Go modules; treatment arms edit an isolated copy, run allowlisted Go-test graders, and retain the resulting source and output. Use blinded semantic evaluation only when a deterministic oracle cannot decide, and label same-platform judgment. Repeat hard or uncertain cells three to five times. Persist raw JSONL checkpoints.
 
-Freeze routing and skill maps before treatment runs. Canonical positive cases map to the arm's matching skill; confusion-negative cases map to the declared adjacent skill rather than `NONE`. Competitor routing arms must supply a map from canonical case keys to their own skill IDs; explicit arms map canonical skills to competitor skill IDs. Missing maps fail closed.
+Freeze routing and skill maps before treatment runs. Canonical positive cases map to the arm's matching skill; confusion-negative cases map to the declared adjacent skill rather than `NONE`. Committed canonical-to-arm skill maps drive both routing and explicit cells, with per-case routing overrides where needed. Missing mappings fail closed, and arm manifests must match the audited competitor commits and real skill directories.
 
 ## Category-leadership gates
 

@@ -7,13 +7,26 @@
     "model": "gpt-5.6-sol",
     "client_version": "codex-cli 0.148.0-alpha.9",
     "cases": 10,
-    "passed": 9,
-    "pass_rate": 0.9,
-    "ci_lower_95": 0.5958499732047615,
-    "ci_upper_95": 0.9821237869049271,
+    "fixture_commit": "3365b989b4e39c4e2bc0a2a97689ba4aaaf06ced",
+    "scorer_version": "skillctl-eval-v2",
+    "passed": 10,
+    "pass_rate": 1.0,
+    "ci_lower_95": 0.7224672001371107,
+    "ci_upper_95": 0.9999999999999999,
     "critical_failures": 0,
-    "raw_artifact": "evaluations/runs/2026-08-18-ours-routing-screen-v2.jsonl",
-    "score_artifact": "evaluations/scores/2026-08-18-ours-routing-screen-v2.jsonl"
+    "raw_artifact": "evaluations/runs/2026-08-18-ours-routing-screen-v4.jsonl",
+    "score_artifact": "evaluations/scores/2026-08-18-ours-routing-screen-v4.jsonl"
+  },
+  "competitor_routing_screen": {
+    "fixture_commit": "3365b989b4e39c4e2bc0a2a97689ba4aaaf06ced",
+    "cases_per_arm": 10,
+    "results": [
+      {"arm": "cxuu-golang-skills", "passed": 7, "critical_failures": 1, "raw_artifact": "evaluations/runs/2026-08-18-cxuu-golang-skills-routing-screen.jsonl", "score_artifact": "evaluations/scores/2026-08-18-cxuu-golang-skills-routing-screen.jsonl"},
+      {"arm": "gophers", "passed": 6, "critical_failures": 1, "raw_artifact": "evaluations/runs/2026-08-18-gophers-routing-screen-v2.jsonl", "score_artifact": "evaluations/scores/2026-08-18-gophers-routing-screen-v2.jsonl"},
+      {"arm": "go-skills", "passed": 6, "critical_failures": 2, "raw_artifact": "evaluations/runs/2026-08-18-go-skills-routing-screen.jsonl", "score_artifact": "evaluations/scores/2026-08-18-go-skills-routing-screen.jsonl"},
+      {"arm": "cc-skills-golang", "passed": 5, "critical_failures": 1, "raw_artifact": "evaluations/runs/2026-08-18-cc-skills-golang-routing-screen-v2.jsonl", "score_artifact": "evaluations/scores/2026-08-18-cc-skills-golang-routing-screen-v2.jsonl"}
+    ],
+    "qualification": "Development screen only; confidence intervals overlap and no superiority claim is permitted."
   },
   "targeted_rerun": {
     "case": "go-clearing-settlement-reconciliation/avoid-initial-auth",
