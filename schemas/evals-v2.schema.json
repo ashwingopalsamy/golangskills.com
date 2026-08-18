@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://golangskills.com/schemas/evals-v2.schema.json",
+  "title": "golangskills.com skill evaluations v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "skill", "cases"],
+  "properties": {
+    "schema_version": { "const": 2 },
+    "skill": { "type": "string" },
+    "cases": {
+      "type": "array",
+      "minItems": 4,
+      "items": {
+        "type": "object",
+        "required": ["id", "kind", "split", "prompt"],
+        "properties": {
+          "id": { "type": "string" },
+          "kind": { "enum": ["routing", "quality"] },
+          "split": { "enum": ["development", "holdout"] },
+          "prompt": { "type": "string", "minLength": 1 },
+          "should_activate": { "type": "boolean" },
+          "reason": { "type": "string" },
+          "confuses_with": { "type": "array", "items": { "type": "string" } },
+          "fixture": { "type": "string" },
+          "expected_invariants": { "type": "array", "items": { "type": "string" } },
+          "forbidden_outcomes": { "type": "array", "items": { "type": "string" } },
+          "graders": { "type": "array" },
+          "semantic_rubric": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    }
+  }
+}

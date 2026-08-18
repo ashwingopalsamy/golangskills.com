@@ -458,6 +458,11 @@ func corpusLockHash(lock CorpusLock) string {
 	return hash(content)
 }
 
+// LockSHA256 returns the canonical JSON identity used by disposition indexes.
+func LockSHA256(lock CorpusLock) string {
+	return corpusLockHash(lock)
+}
+
 func writeJSONAtomic(path string, value any, pattern string) error {
 	content, err := json.MarshalIndent(value, "", "  ")
 	if err != nil {

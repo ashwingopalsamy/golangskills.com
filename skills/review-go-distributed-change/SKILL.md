@@ -1,0 +1,38 @@
+---
+name: review-go-distributed-change
+description: "Use for Go diff review across stores, brokers, retries, leases, ordering, and recovery. Do not use for general or fintech work."
+license: Apache-2.0
+compatibility: "Go 1.24 or newer; repository and deployed-system guarantees control the review."
+---
+
+# Review a Go distributed change
+
+Find the failure schedule that violates a system invariant.
+
+## Build the state/effect graph
+
+Trace admission, local reads, decisions, durable writes, remote calls, publication, acknowledgement, response, and recovery. Mark transaction boundaries, goroutine owners, retry owners, ordering keys, leases, queues, and version transitions.
+
+## Test causal schedules
+
+- concurrent same/conflicting identities;
+- cancellation before admission, during work, and after a durable effect;
+- crash immediately before and after commit, publish, and acknowledgement;
+- timeout with unknown remote result;
+- redelivery, duplication, delay, and reordering;
+- retry at several layers under dependency overload;
+- lease expiry while an owner is paused;
+- mixed versions during deploy and rollback;
+- recovery with cold caches, reconnects, and queued retries.
+
+Use only schedules reachable in the changed path. Quantify maximum goroutines, queue entries, attempts, held connections, and duplicate effects where possible.
+
+## Findings
+
+Tie each finding to a changed line and include invariant, trigger schedule, state consequence, and smallest correction. Do not recommend retries without replay safety, locks without an authoritative boundary, or “exactly once” without naming its scope.
+
+Read [references/schedule-catalog.md](references/schedule-catalog.md) before finalizing.
+
+## Output contract
+
+Lead with correctness and availability findings. Route monetary, ledger, settlement, or compliance consequences to `review-go-fintech-change` for domain adjudication.

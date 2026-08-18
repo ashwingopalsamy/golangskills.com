@@ -1,6 +1,0 @@
-interface:
-  display_name: "Go Service Resilience"
-  short_description: "Bound remote failure and retry load"
-  default_prompt: "Use $go-service-resilience to review this Go remote-call path for deadline budgets, replay safety, retry amplification, and overload."
-policy:
-  allow_implicit_invocation: true

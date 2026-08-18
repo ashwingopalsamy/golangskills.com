@@ -15,8 +15,8 @@ func TestValidateAtAcceptsCompleteSkill(t *testing.T) {
 	if err != nil {
 		t.Fatalf("validateAt() error = %v", err)
 	}
-	if metrics.SkillCount != 1 || metrics.EvaluationCount != 6 || metrics.SourceCount != 2 {
-		t.Fatalf("metrics = %+v, want one skill, six evals, and two sources", metrics)
+	if metrics.SkillCount != 1 || metrics.EvaluationCount != 4 || metrics.SourceCount != 2 {
+		t.Fatalf("metrics = %+v, want one skill, four evals, and two sources", metrics)
 	}
 }
 
@@ -24,9 +24,9 @@ func TestValidateAtRequiresNegativeRoutingCases(t *testing.T) {
 	t.Parallel()
 
 	collection := validTestCollection()
-	collection.Skills[0].Evaluations.Cases = collection.Skills[0].Evaluations.Cases[:4]
+	collection.Skills[0].Evaluations.Cases = collection.Skills[0].Evaluations.Cases[:3]
 	_, err := validateAt(collection, mustDate(t, "2026-08-18"))
-	if err == nil || !strings.Contains(err.Error(), "two positive routes, two negative routes, and two quality cases") {
+	if err == nil || !strings.Contains(err.Error(), "one positive route, one negative route, and two quality cases") {
 		t.Fatalf("validateAt() error = %v, want balanced-eval error", err)
 	}
 }
@@ -89,15 +89,17 @@ func validTestCollection() Collection {
 		},
 	}
 	evals := []EvalCase{
-		{ID: "route-one", Kind: "routing", Prompt: "Example failure one", ShouldActivate: &activate, Reason: "In scope."},
-		{ID: "route-two", Kind: "routing", Prompt: "Example failure two", ShouldActivate: &activate, Reason: "In scope."},
-		{ID: "avoid-one", Kind: "routing", Prompt: "Unrelated work one", ShouldActivate: &doNotActivate, Reason: "Out of scope."},
-		{ID: "avoid-two", Kind: "routing", Prompt: "Unrelated work two", ShouldActivate: &doNotActivate, Reason: "Out of scope."},
-		{ID: "quality-one", Kind: "quality", Prompt: "Solve example one", Criteria: []string{"Find cause.", "Preserve invariant."}, AntiCriteria: []string{"Guess."}},
-		{ID: "quality-two", Kind: "quality", Prompt: "Solve example two", Criteria: []string{"Bound work.", "Handle failure."}, AntiCriteria: []string{"Ignore failure."}},
+		{ID: "route-one", Kind: "routing", Split: "development", Prompt: "Example failure one", ShouldActivate: &activate, Reason: "In scope."},
+		{ID: "avoid-one", Kind: "routing", Split: "development", Prompt: "Unrelated work one", ShouldActivate: &doNotActivate, Reason: "Out of scope."},
+		{ID: "quality-one", Kind: "quality", Split: "development", Prompt: "Solve example one", ExpectedInvariants: []string{"Find cause.", "Preserve invariant."}, ForbiddenOutcomes: []string{"Guess."}, Graders: []Grader{{ID: "cause", Kind: "contains", Required: []string{"cause"}, Weight: 1}}},
+		{ID: "quality-two", Kind: "quality", Split: "development", Prompt: "Solve example two", ExpectedInvariants: []string{"Bound work.", "Handle failure."}, ForbiddenOutcomes: []string{"Ignore failure."}, Graders: []Grader{{ID: "bound", Kind: "contains", Required: []string{"bound"}, Weight: 1}}},
 	}
 	return Collection{
 		RepoRoot: "",
+		Claims: ClaimLedger{SchemaVersion: 2, VerifiedOn: "2026-08-18", Claims: []Claim{{
+			ID: "example-invariant", Statement: "Preserve example behavior.", Status: "adopted-with-qualifications",
+			Scope: "Example", Invariant: "Example remains bounded.", Owners: []string{"example-skill"}, RiskDomains: []string{"correctness"},
+		}}},
 		Skills: []Skill{
 			{
 				Name: "example-skill",
@@ -108,21 +110,31 @@ func validTestCollection() Collection {
 					Compatibility: "Go 1.24 or newer.",
 				},
 				Metadata: Metadata{
-					SchemaVersion:    1,
+					SchemaVersion:    2,
+					Collection:       "engineering-skills-for-go",
 					DisplayName:      "Example Skill",
 					ShortDescription: "Bound example production failures",
 					DefaultPrompt:    "Use $example-skill to review this path.",
 					Version:          "0.1.0",
-					Status:           "beta",
-					Category:         "execution",
+					Maturity:         "beta",
+					Category:         "language",
+					RiskDomains:      []string{"correctness"},
 					Tags:             []string{"example", "failure", "bounded"},
 					GoVersions: GoVersions{
 						Minimum:  "1.24",
 						Guidance: []string{"1.25", "1.26"},
 					},
-					Sources: sources,
+					ClaimIDs: []string{"example-invariant"},
+					CompatibilityEvidence: []CompatibilityEvidence{
+						{Client: "codex", Level: "behaviorally-benchmarked", Contract: "test", VerifiedOn: "2026-08-18"},
+						{Client: "claude-code", Level: "structurally-compatible", Contract: "test", VerifiedOn: "2026-08-18"},
+						{Client: "cursor", Level: "structurally-compatible", Contract: "test", VerifiedOn: "2026-08-18"},
+						{Client: "opencode", Level: "structurally-compatible", Contract: "test", VerifiedOn: "2026-08-18"},
+					},
+					SourceProvenance: SourceProvenance{Method: "independent-rewrite-from-primary-evidence", CorpusLock: "research/corpus-lock.json"},
+					Sources:          sources,
 				},
-				Evaluations: Evaluations{SchemaVersion: 1, Skill: "example-skill", Cases: evals},
+				Evaluations: Evaluations{SchemaVersion: 2, Skill: "example-skill", Cases: evals},
 				Files: map[string][]byte{
 					"SKILL.md":   markdown,
 					"skill.json": []byte("{}"),

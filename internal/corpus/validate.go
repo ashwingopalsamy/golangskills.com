@@ -14,17 +14,26 @@ import (
 	"strings"
 	"time"
 	"unicode"
+
+	"github.com/ashwingopalsamy/golangskills.com/internal/research"
 )
 
 const (
 	maxDescriptionCharacters = 500
-	maxDiscoveryCharacters   = 6000
+	maxDiscoveryCharacters   = 7800
+	maxCollectionDiscovery   = 4000
 	minLocationCharacters    = 160
-	maxSkillLines            = 300
-	maxSkillWords            = 3000
+	maxSkillLines            = 250
+	maxSkillWords            = 1800
 	maxSourceAge             = 400 * 24 * time.Hour
 	maxDescriptionOverlap    = 0.68
 )
+
+var collectionNames = []string{
+	"distributed-systems-skills-for-go",
+	"engineering-skills-for-go",
+	"fintech-skills-for-go",
+}
 
 var (
 	skillNamePattern = regexp.MustCompile(`^[a-z0-9]+(?:-[a-z0-9]+)*$`)
@@ -53,9 +62,13 @@ func validateAt(collection Collection, now time.Time) (Metrics, error) {
 	metrics := Metrics{
 		SkillCount:          len(collection.Skills),
 		DiscoveryCharacters: len("<available_skills>\n</available_skills>\n"),
+		ClaimCount:          len(collection.Claims.Claims),
 	}
 	names := make(map[string]struct{}, len(collection.Skills))
 	displayNames := make(map[string]string, len(collection.Skills))
+	claimIDs := make(map[string]struct{}, len(collection.Claims.Claims))
+	collectionDiscovery := make(map[string]int, len(collectionNames))
+	collectionSkillCount := make(map[string]int, len(collectionNames))
 
 	for _, skill := range collection.Skills {
 		names[skill.Name] = struct{}{}
@@ -64,20 +77,34 @@ func validateAt(collection Collection, now time.Time) (Metrics, error) {
 		}
 		displayNames[skill.Metadata.DisplayName] = skill.Name
 	}
+	issues = append(issues, validateClaims(collection.Claims, names, claimIDs, now)...)
+	issues = append(issues, validateReferenceCoverage(collection.RepoRoot, claimIDs, now)...)
 
 	for _, skill := range collection.Skills {
 		prefix := skill.Name + ": "
 		issues = append(issues, validateFrontmatter(prefix, skill)...)
-		issues = append(issues, validateMetadata(prefix, skill, names, now)...)
+		issues = append(issues, validateMetadata(prefix, skill, names, claimIDs, now)...)
 		issues = append(issues, validateEvaluations(prefix, skill)...)
 		issues = append(issues, validateFiles(prefix, skill)...)
 
 		skillMarkdown := skill.Files["SKILL.md"]
-		metrics.DiscoveryCharacters += discoveryCharacters(skill)
+		discovery := discoveryCharacters(skill)
+		metrics.DiscoveryCharacters += discovery
+		collectionDiscovery[skill.Metadata.Collection] += discovery
+		collectionSkillCount[skill.Metadata.Collection]++
 		metrics.SkillLines += lineCount(skillMarkdown)
 		metrics.SkillWords += len(strings.Fields(string(skillMarkdown)))
 		metrics.SourceCount += len(skill.Metadata.Sources)
 		metrics.EvaluationCount += len(skill.Evaluations.Cases)
+	}
+	for _, name := range collectionNames {
+		characters := collectionDiscovery[name] + len("<available_skills>\n</available_skills>\n")
+		metrics.Collections = append(metrics.Collections, CollectionMetrics{
+			Name: name, SkillCount: collectionSkillCount[name], DiscoveryCharacters: characters,
+		})
+		if characters > maxCollectionDiscovery {
+			issues = append(issues, fmt.Sprintf("collection %s: discovery metadata has %d characters; limit is %d", name, characters, maxCollectionDiscovery))
+		}
 	}
 
 	if metrics.DiscoveryCharacters > maxDiscoveryCharacters {
@@ -95,6 +122,64 @@ func validateAt(collection Collection, now time.Time) (Metrics, error) {
 		return metrics, &ValidationError{Issues: issues}
 	}
 	return metrics, nil
+}
+
+func validateReferenceCoverage(repoRoot string, claimIDs map[string]struct{}, now time.Time) []string {
+	if repoRoot == "" {
+		return nil
+	}
+	var issues []string
+	lockContent, err := os.ReadFile(filepath.Join(repoRoot, "research", "corpus-lock.json"))
+	if err != nil {
+		return []string{"research: corpus lock: " + err.Error()}
+	}
+	var lock research.CorpusLock
+	if err := decodeStrict(lockContent, &lock); err != nil {
+		return []string{"research: decode corpus lock: " + err.Error()}
+	}
+	dispositionContent, err := os.ReadFile(filepath.Join(repoRoot, "knowledge", "claims", "reference-dispositions.json"))
+	if err != nil {
+		return []string{"research: disposition index: " + err.Error()}
+	}
+	var index research.DispositionIndex
+	if err := decodeStrict(dispositionContent, &index); err != nil {
+		return []string{"research: decode disposition index: " + err.Error()}
+	}
+	if lock.SchemaVersion != 1 || index.SchemaVersion != 1 {
+		issues = append(issues, "research: corpus lock and disposition schemas must be version 1")
+	}
+	issues = append(issues, validateDate("research corpus: ", lock.VerifiedOn, now)...)
+	if index.CorpusSHA256 != research.LockSHA256(lock) {
+		issues = append(issues, "research: disposition index does not match corpus lock")
+	}
+	want := make(map[string]struct{})
+	for _, repository := range lock.Repositories {
+		for _, item := range repository.MaterialItems {
+			key := repository.Name + "/" + item.ID
+			if _, duplicate := want[key]; duplicate {
+				issues = append(issues, "research: duplicate material item "+key)
+			}
+			want[key] = struct{}{}
+		}
+	}
+	seen := make(map[string]struct{})
+	for _, disposition := range index.DispositionRows {
+		key := disposition.Repository + "/" + disposition.ItemID
+		if _, exists := want[key]; !exists {
+			issues = append(issues, "research: disposition has no material item "+key)
+		}
+		if _, duplicate := seen[key]; duplicate {
+			issues = append(issues, "research: duplicate disposition "+key)
+		}
+		seen[key] = struct{}{}
+		if _, exists := claimIDs[disposition.ClaimID]; !exists {
+			issues = append(issues, fmt.Sprintf("research: disposition %s references missing claim %q", key, disposition.ClaimID))
+		}
+	}
+	if len(want) != len(seen) || index.MaterialItems != len(seen) {
+		issues = append(issues, fmt.Sprintf("research: material coverage mismatch: %d items, %d dispositions", len(want), len(seen)))
+	}
+	return issues
 }
 
 func validateFrontmatter(prefix string, skill Skill) []string {
@@ -132,11 +217,14 @@ func validateFrontmatter(prefix string, skill Skill) []string {
 	return issues
 }
 
-func validateMetadata(prefix string, skill Skill, names map[string]struct{}, now time.Time) []string {
+func validateMetadata(prefix string, skill Skill, names, claimIDs map[string]struct{}, now time.Time) []string {
 	metadata := skill.Metadata
 	var issues []string
-	if metadata.SchemaVersion != 1 {
-		issues = append(issues, prefix+"skill.json schema_version must be 1")
+	if metadata.SchemaVersion != 2 {
+		issues = append(issues, prefix+"skill.json schema_version must be 2")
+	}
+	if !oneOf(metadata.Collection, collectionNames...) {
+		issues = append(issues, prefix+"collection is not an installable collection")
 	}
 	if len(metadata.DisplayName) < 3 || len(metadata.DisplayName) > 64 {
 		issues = append(issues, prefix+"display_name must contain 3-64 characters")
@@ -153,12 +241,13 @@ func validateMetadata(prefix string, skill Skill, names map[string]struct{}, now
 	if !semverPattern.MatchString(metadata.Version) {
 		issues = append(issues, prefix+"version must be semantic versioning")
 	}
-	if !oneOf(metadata.Status, "experimental", "beta", "stable") {
-		issues = append(issues, prefix+"status must be experimental, beta, or stable")
+	if !oneOf(metadata.Maturity, "experimental", "beta", "stable") {
+		issues = append(issues, prefix+"maturity must be experimental, beta, or stable")
 	}
-	if !oneOf(metadata.Category, "execution", "state", "reliability", "workflow") {
+	if !oneOf(metadata.Category, "language", "design", "boundary", "verification", "performance", "security", "operations", "review", "concurrency", "consistency", "messaging", "resilience", "coordination", "money", "payments", "idempotency", "settlement", "compliance") {
 		issues = append(issues, prefix+"category is not part of the repository taxonomy")
 	}
+	issues = append(issues, validateStringSet(prefix+"risk_domains", metadata.RiskDomains, 1, 8)...)
 	issues = append(issues, validateTags(prefix, metadata.Tags)...)
 
 	minimumMinor, minimumValid := parseGoMinor(metadata.GoVersions.Minimum)
@@ -178,8 +267,37 @@ func validateMetadata(prefix string, skill Skill, names map[string]struct{}, now
 		}
 		seenVersions[version] = struct{}{}
 	}
+	for _, required := range []string{"1.25", "1.26"} {
+		if _, exists := seenVersions[required]; !exists {
+			issues = append(issues, fmt.Sprintf("%sguidance must include current target %s", prefix, required))
+		}
+	}
+	if metadata.GoVersions.Minimum != "1.24" {
+		issues = append(issues, prefix+"go_versions.minimum must remain 1.24 for repository tooling compatibility")
+	}
+	for _, legacy := range metadata.GoVersions.Legacy {
+		minor, valid := parseGoMinor(legacy)
+		if !valid || minor >= 25 {
+			issues = append(issues, fmt.Sprintf("%slegacy version %q must be valid and older than 1.25", prefix, legacy))
+		}
+	}
 
 	issues = append(issues, validateRelations(prefix, skill.Name, metadata.Relations, names)...)
+	if len(metadata.ClaimIDs) == 0 {
+		issues = append(issues, prefix+"claim_ids must identify at least one canonical claim")
+	}
+	for _, claimID := range metadata.ClaimIDs {
+		if _, exists := claimIDs[claimID]; !exists {
+			issues = append(issues, fmt.Sprintf("%sclaim_id %q does not exist", prefix, claimID))
+		}
+	}
+	issues = append(issues, validateCompatibility(prefix, metadata.CompatibilityEvidence, now)...)
+	if metadata.SourceProvenance.Method != "independent-rewrite-from-primary-evidence" {
+		issues = append(issues, prefix+"source_provenance.method must require an independent primary-evidence rewrite")
+	}
+	if metadata.SourceProvenance.CorpusLock != "research/corpus-lock.json" {
+		issues = append(issues, prefix+"source_provenance.corpus_lock must name research/corpus-lock.json")
+	}
 	if len(metadata.Sources) < 2 {
 		issues = append(issues, prefix+"at least two evidence sources are required")
 	}
@@ -209,6 +327,52 @@ func validateTags(prefix string, tags []string) []string {
 			issues = append(issues, fmt.Sprintf("%sduplicate tag %q", prefix, tag))
 		}
 		seen[tag] = struct{}{}
+	}
+	return issues
+}
+
+func validateStringSet(label string, values []string, minimum, maximum int) []string {
+	var issues []string
+	if len(values) < minimum || len(values) > maximum {
+		issues = append(issues, fmt.Sprintf("%s must contain %d-%d entries", label, minimum, maximum))
+	}
+	seen := make(map[string]struct{}, len(values))
+	for _, value := range values {
+		if !skillNamePattern.MatchString(value) {
+			issues = append(issues, fmt.Sprintf("%s contains invalid value %q", label, value))
+		}
+		if _, duplicate := seen[value]; duplicate {
+			issues = append(issues, fmt.Sprintf("%s contains duplicate value %q", label, value))
+		}
+		seen[value] = struct{}{}
+	}
+	return issues
+}
+
+func validateCompatibility(prefix string, evidence []CompatibilityEvidence, now time.Time) []string {
+	var issues []string
+	clients := make(map[string]struct{}, len(evidence))
+	for index, item := range evidence {
+		itemPrefix := fmt.Sprintf("%scompatibility evidence %d: ", prefix, index+1)
+		if !oneOf(item.Client, "codex", "claude-code", "cursor", "opencode") {
+			issues = append(issues, itemPrefix+"client is not supported")
+		}
+		if !oneOf(item.Level, "behaviorally-benchmarked", "structurally-compatible") {
+			issues = append(issues, itemPrefix+"level is not recognized")
+		}
+		if item.Contract == "" {
+			issues = append(issues, itemPrefix+"contract is required")
+		}
+		if _, duplicate := clients[item.Client]; duplicate {
+			issues = append(issues, itemPrefix+"client is duplicated")
+		}
+		clients[item.Client] = struct{}{}
+		issues = append(issues, validateDate(itemPrefix, item.VerifiedOn, now)...)
+	}
+	for _, client := range []string{"codex", "claude-code", "cursor", "opencode"} {
+		if _, exists := clients[client]; !exists {
+			issues = append(issues, prefix+"compatibility_evidence must cover "+client)
+		}
 	}
 	return issues
 }
@@ -246,14 +410,18 @@ func validateSource(prefix string, source Source, now time.Time) []string {
 	if len(source.Supports) == 0 {
 		issues = append(issues, prefix+"supports must identify at least one claim")
 	}
-	if !datePattern.MatchString(source.VerifiedOn) {
-		issues = append(issues, prefix+"verified_on must use YYYY-MM-DD")
-		return issues
+	issues = append(issues, validateDate(prefix, source.VerifiedOn, now)...)
+	return issues
+}
+
+func validateDate(prefix, value string, now time.Time) []string {
+	var issues []string
+	if !datePattern.MatchString(value) {
+		return append(issues, prefix+"verified_on must use YYYY-MM-DD")
 	}
-	verified, err := time.Parse("2006-01-02", source.VerifiedOn)
+	verified, err := time.Parse("2006-01-02", value)
 	if err != nil {
-		issues = append(issues, prefix+"verified_on is not a calendar date")
-		return issues
+		return append(issues, prefix+"verified_on is not a calendar date")
 	}
 	now = now.Truncate(24 * time.Hour)
 	if verified.After(now) {
@@ -264,11 +432,59 @@ func validateSource(prefix string, source Source, now time.Time) []string {
 	return issues
 }
 
+func validateClaims(ledger ClaimLedger, skillNames, claimIDs map[string]struct{}, now time.Time) []string {
+	var issues []string
+	if ledger.SchemaVersion != 2 {
+		issues = append(issues, "claims: schema_version must be 2")
+	}
+	issues = append(issues, validateDate("claims: ", ledger.VerifiedOn, now)...)
+	for index, claim := range ledger.Claims {
+		prefix := fmt.Sprintf("claim %d (%s): ", index+1, claim.ID)
+		if !skillNamePattern.MatchString(claim.ID) {
+			issues = append(issues, prefix+"id must be lowercase kebab-case")
+		}
+		if _, duplicate := claimIDs[claim.ID]; duplicate {
+			issues = append(issues, prefix+"id is duplicated")
+		}
+		claimIDs[claim.ID] = struct{}{}
+		if !oneOf(claim.Status, "adopted", "adopted-with-qualifications", "organizational-preference", "version-specific", "rejected", "outside-project-scope") {
+			issues = append(issues, prefix+"status is not recognized")
+		}
+		if claim.Statement == "" || claim.Scope == "" || claim.Invariant == "" {
+			issues = append(issues, prefix+"statement, scope, and invariant are required")
+		}
+		if len(claim.Owners) == 0 {
+			issues = append(issues, prefix+"at least one owner is required")
+		}
+		for _, owner := range claim.Owners {
+			if _, exists := skillNames[owner]; !exists {
+				issues = append(issues, fmt.Sprintf("%sowner %q does not exist", prefix, owner))
+			}
+		}
+		sensitive := strings.HasPrefix(claim.ID, "fin-") || strings.Contains(claim.ID, "security") || claim.Status == "adopted" || claim.Status == "version-specific"
+		if sensitive && len(claim.PrimaryEvidence) == 0 {
+			issues = append(issues, prefix+"normative, security, and financial claims require primary evidence")
+		}
+		for evidenceIndex, evidence := range claim.PrimaryEvidence {
+			evidencePrefix := fmt.Sprintf("%sevidence %d: ", prefix, evidenceIndex+1)
+			parsedURL, err := url.Parse(evidence.URL)
+			if err != nil || parsedURL.Scheme != "https" || parsedURL.Host == "" {
+				issues = append(issues, evidencePrefix+"URL must be absolute HTTPS")
+			}
+			if evidence.Title == "" || evidence.Publisher == "" || !oneOf(evidence.Kind, "normative", "primary", "protocol", "operational", "regulatory") {
+				issues = append(issues, evidencePrefix+"title, publisher, and recognized kind are required")
+			}
+			issues = append(issues, validateDate(evidencePrefix, evidence.VerifiedOn, now)...)
+		}
+	}
+	return issues
+}
+
 func validateEvaluations(prefix string, skill Skill) []string {
 	evaluations := skill.Evaluations
 	var issues []string
-	if evaluations.SchemaVersion != 1 {
-		issues = append(issues, prefix+"evals.json schema_version must be 1")
+	if evaluations.SchemaVersion != 2 {
+		issues = append(issues, prefix+"evals.json schema_version must be 2")
 	}
 	if evaluations.Skill != skill.Name {
 		issues = append(issues, prefix+"evals.json skill must match its directory")
@@ -288,6 +504,9 @@ func validateEvaluations(prefix string, skill Skill) []string {
 		if strings.TrimSpace(eval.Prompt) == "" {
 			issues = append(issues, evalPrefix+"prompt is required")
 		}
+		if !oneOf(eval.Split, "development", "holdout") {
+			issues = append(issues, evalPrefix+"split must be development or holdout")
+		}
 		switch eval.Kind {
 		case "routing":
 			if eval.ShouldActivate == nil {
@@ -300,7 +519,7 @@ func validateEvaluations(prefix string, skill Skill) []string {
 			if eval.Reason == "" {
 				issues = append(issues, evalPrefix+"routing cases require a reason")
 			}
-			if len(eval.Criteria) != 0 || len(eval.AntiCriteria) != 0 {
+			if eval.Fixture != "" || len(eval.ExpectedInvariants) != 0 || len(eval.ForbiddenOutcomes) != 0 || len(eval.Graders) != 0 || len(eval.SemanticRubric) != 0 {
 				issues = append(issues, evalPrefix+"routing cases cannot contain quality criteria")
 			}
 		case "quality":
@@ -308,15 +527,27 @@ func validateEvaluations(prefix string, skill Skill) []string {
 			if eval.ShouldActivate != nil || eval.Reason != "" {
 				issues = append(issues, evalPrefix+"quality cases cannot contain routing fields")
 			}
-			if len(eval.Criteria) < 2 || len(eval.AntiCriteria) < 1 {
-				issues = append(issues, evalPrefix+"quality cases require at least two criteria and one anti-criterion")
+			if len(eval.ExpectedInvariants) < 2 || len(eval.ForbiddenOutcomes) < 1 {
+				issues = append(issues, evalPrefix+"quality cases require at least two expected invariants and one forbidden outcome")
+			}
+			if len(eval.Graders) == 0 {
+				issues = append(issues, evalPrefix+"quality cases require at least one deterministic grader")
+			}
+			for graderIndex, grader := range eval.Graders {
+				graderPrefix := fmt.Sprintf("%sgrader %d: ", evalPrefix, graderIndex+1)
+				if !skillNamePattern.MatchString(grader.ID) || !oneOf(grader.Kind, "contains", "not-contains", "go-test", "command", "json") {
+					issues = append(issues, graderPrefix+"id or kind is invalid")
+				}
+				if grader.Weight <= 0 {
+					issues = append(issues, graderPrefix+"weight must be positive")
+				}
 			}
 		default:
 			issues = append(issues, evalPrefix+"kind must be routing or quality")
 		}
 	}
-	if positiveRoutes < 2 || negativeRoutes < 2 || qualityCases < 2 {
-		issues = append(issues, prefix+"evals require at least two positive routes, two negative routes, and two quality cases")
+	if positiveRoutes < 1 || negativeRoutes < 1 || qualityCases < 2 {
+		issues = append(issues, prefix+"evals require at least one positive route, one negative route, and two quality cases")
 	}
 	return issues
 }

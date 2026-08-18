@@ -1,6 +1,6 @@
 {
   "interface": {
-    "displayName": "golangskills.com"
+    "displayName": "Go Engineering Skills by Ashwin Gopalsamy"
   },
   "name": "golangskills",
   "plugins": [
@@ -13,6 +13,30 @@
       },
       "source": {
         "path": "./plugins/engineering-skills-for-go",
+        "source": "local"
+      }
+    },
+    {
+      "category": "Developer Tools",
+      "name": "distributed-systems-skills-for-go",
+      "policy": {
+        "authentication": "ON_INSTALL",
+        "installation": "AVAILABLE"
+      },
+      "source": {
+        "path": "./plugins/distributed-systems-skills-for-go",
+        "source": "local"
+      }
+    },
+    {
+      "category": "Developer Tools",
+      "name": "fintech-skills-for-go",
+      "policy": {
+        "authentication": "ON_INSTALL",
+        "installation": "AVAILABLE"
+      },
+      "source": {
+        "path": "./plugins/fintech-skills-for-go",
         "source": "local"
       }
     }

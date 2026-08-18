@@ -32,7 +32,7 @@ func TestWriteGeneratedRemovesStalePluginSkillFiles(t *testing.T) {
 	root := t.TempDir()
 	collection := validTestCollection()
 	collection.RepoRoot = root
-	stale := filepath.Join(root, filepath.FromSlash(pluginRoot), "skills", "removed-skill", "SKILL.md")
+	stale := filepath.Join(root, "plugins", "engineering-skills-for-go", "skills", "removed-skill", "SKILL.md")
 	if err := os.MkdirAll(filepath.Dir(stale), 0o755); err != nil {
 		t.Fatalf("MkdirAll() error = %v", err)
 	}

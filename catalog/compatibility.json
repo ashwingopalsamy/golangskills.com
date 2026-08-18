@@ -1,0 +1,22 @@
+[
+  {
+    "client": "codex",
+    "status": "behaviorally-benchmarked",
+    "evidence": "evaluations/runs/"
+  },
+  {
+    "client": "claude-code",
+    "status": "structurally-compatible",
+    "evidence": "catalog/compatibility.json"
+  },
+  {
+    "client": "cursor",
+    "status": "structurally-compatible",
+    "evidence": "catalog/compatibility.json"
+  },
+  {
+    "client": "opencode",
+    "status": "structurally-compatible",
+    "evidence": "catalog/compatibility.json"
+  }
+]

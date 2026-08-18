@@ -56,6 +56,13 @@ func Load(repoRoot string) (Collection, error) {
 	}
 
 	collection := Collection{RepoRoot: root}
+	claimContent, err := os.ReadFile(filepath.Join(root, "knowledge", "claims", "canonical.json"))
+	if err != nil {
+		return Collection{}, fmt.Errorf("read claim ledger: %w", err)
+	}
+	if err := decodeStrict(claimContent, &collection.Claims); err != nil {
+		return Collection{}, fmt.Errorf("knowledge/claims/canonical.json: %w", err)
+	}
 	for _, entry := range entries {
 		if !entry.IsDir() || strings.HasPrefix(entry.Name(), ".") {
 			continue
