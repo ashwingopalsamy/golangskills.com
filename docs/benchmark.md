@@ -10,6 +10,8 @@ Run both native full-collection discovery and explicitly matched skills. Use at 
 
 Score executable behavior first. The committed suite includes 12 initially failing Go modules; treatment arms edit an isolated copy, run allowlisted Go-test graders, and retain the resulting source and output. Use blinded semantic evaluation only when a deterministic oracle cannot decide, and label same-platform judgment. Repeat hard or uncertain cells three to five times. Persist raw JSONL checkpoints.
 
+For paired reports, match arms by canonical skill and case ID. A strict win receives 1, a tie 0.5, and a loss 0; resample complete pairs for confidence intervals. Report collection-level score deltas and total client-reported input tokens alongside score per thousand input tokens. If either arm lacks a case or token accounting, the corresponding completeness or Pareto result remains ineligible rather than being silently imputed.
+
 Freeze routing and skill maps before treatment runs. Canonical positive cases map to the arm's matching skill; confusion-negative cases map to the declared adjacent skill rather than `NONE`. Committed canonical-to-arm skill maps drive both routing and explicit cells, with per-case routing overrides where needed. Missing mappings fail closed, and arm manifests must match the audited competitor commits and real skill directories.
 
 ## Category-leadership gates
@@ -30,3 +32,5 @@ A release may claim leadership only when all gates pass:
 - every number links to raw artifacts, fixture commit, client/model, grader version, and scoring code.
 
 Until then, publish evidence without “number one” claims. The generated benchmark status intentionally remains ineligible.
+
+`skillctl release check` validates `evaluations/reports/release-gates.json` against the complete required gate inventory, rejects unknown or missing gates, verifies every repository-local evidence path, and checks that `leadership_claim_eligible` is exactly equivalent to every gate passing. A hand-edited boolean cannot bypass the release contract.

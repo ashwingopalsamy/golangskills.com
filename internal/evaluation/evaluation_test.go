@@ -2,6 +2,7 @@ package evaluation
 
 import (
 	"context"
+	"encoding/json"
 	"os"
 	"path/filepath"
 	"testing"
@@ -98,4 +99,77 @@ func TestWilsonIntervalContainsObservedRate(t *testing.T) {
 	if lower >= 0.6 || upper <= 0.6 {
 		t.Fatalf("interval = [%f, %f], want it to contain 0.6", lower, upper)
 	}
+}
+
+func TestParseUsage(t *testing.T) {
+	t.Parallel()
+	events := "warning\n{\"type\":\"turn.completed\",\"usage\":{\"input_tokens\":120,\"cached_input_tokens\":80,\"output_tokens\":7,\"reasoning_output_tokens\":3}}\n"
+	usage := parseUsage(events)
+	if usage.InputTokens != 120 || usage.CachedInputTokens != 80 || usage.OutputTokens != 7 || usage.ReasoningOutputTokens != 3 {
+		t.Fatalf("usage = %#v", usage)
+	}
+}
+
+func TestReportIncludesRoutingCollectionsAndTokens(t *testing.T) {
+	t.Parallel()
+	path := writeScoreFile(t, []Score{
+		{Result: Result{Arm: "ours", Skill: "go-language-engineering", Collection: "engineering-skills-for-go", Kind: "routing", ExpectedRoutes: []string{"go-language-engineering"}, Response: "go-language-engineering", Usage: Usage{InputTokens: 100}}, Passed: true, Score: 1},
+		{Result: Result{Arm: "ours", Skill: "go-language-engineering", Collection: "engineering-skills-for-go", Kind: "routing", ExpectedRoutes: []string{"NONE"}, Response: "go-language-engineering", Usage: Usage{InputTokens: 100}}, Score: 0},
+		{Result: Result{Arm: "ours", Skill: "go-money-and-ledgers", Collection: "fintech-skills-for-go", Kind: "quality", Usage: Usage{InputTokens: 100}}, Score: 0},
+	})
+	report, err := ReportFile(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if report.SchemaVersion != 2 || report.Cases != 3 || report.Passed != 1 || report.CriticalFails != 1 {
+		t.Fatalf("report = %#v", report)
+	}
+	if report.Routing.UnrelatedCases != 1 || report.Routing.FalseActivations != 1 || report.Routing.FalseActivationRate != 1 {
+		t.Fatalf("routing = %#v", report.Routing)
+	}
+	if report.Tokens.InputTokens != 300 || report.Tokens.ScorePerKInputTokens == 0 {
+		t.Fatalf("tokens = %#v", report.Tokens)
+	}
+}
+
+func TestCompareFilesUsesCompletePairsAndHalfCreditTies(t *testing.T) {
+	t.Parallel()
+	candidate := writeScoreFile(t, []Score{
+		{Result: Result{Arm: "ours", Skill: "go-language-engineering", CaseID: "one", Usage: Usage{InputTokens: 100}}, Passed: true, Score: 1},
+		{Result: Result{Arm: "ours", Skill: "go-language-engineering", CaseID: "two", Usage: Usage{InputTokens: 100}}, Passed: true, Score: 1},
+	})
+	competitor := writeScoreFile(t, []Score{
+		{Result: Result{Arm: "competitor", Skill: "go-language-engineering", CaseID: "one", Usage: Usage{InputTokens: 200}}, Score: 0},
+		{Result: Result{Arm: "competitor", Skill: "go-language-engineering", CaseID: "two", Usage: Usage{InputTokens: 200}}, Passed: true, Score: 1},
+	})
+	report, err := CompareFiles(candidate, competitor)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !report.CompletePairs || report.PairedCases != 2 || report.CandidateWins != 1 || report.Ties != 1 || report.PairedWinRate != 0.75 {
+		t.Fatalf("comparison = %#v", report)
+	}
+	if report.ParetoRelation != "candidate-dominates" {
+		t.Fatalf("pareto relation = %q", report.ParetoRelation)
+	}
+}
+
+func writeScoreFile(t *testing.T, scores []Score) string {
+	t.Helper()
+	path := filepath.Join(t.TempDir(), "scores.jsonl")
+	file, err := os.Create(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	encoder := json.NewEncoder(file)
+	for _, score := range scores {
+		if err := encoder.Encode(score); err != nil {
+			file.Close()
+			t.Fatal(err)
+		}
+	}
+	if err := file.Close(); err != nil {
+		t.Fatal(err)
+	}
+	return path
 }

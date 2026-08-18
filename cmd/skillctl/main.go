@@ -206,17 +206,40 @@ func runEval(arguments []string, output io.Writer) error {
 		flags := flag.NewFlagSet("eval report", flag.ContinueOnError)
 		flags.SetOutput(io.Discard)
 		input := flags.String("input", "", "scored JSONL artifact")
+		against := flags.String("against", "", "optional scored JSONL competitor artifact for paired comparison")
+		outputPath := flags.String("output", "", "optional JSON report path; stdout when omitted")
 		if err := flags.Parse(arguments[1:]); err != nil {
 			return err
 		}
 		if *input == "" {
 			return errors.New("eval report requires -input")
 		}
+		destination := output
+		var outputFile *os.File
+		if *outputPath != "" {
+			if err := os.MkdirAll(filepath.Dir(*outputPath), 0o755); err != nil {
+				return err
+			}
+			created, err := os.Create(*outputPath)
+			if err != nil {
+				return err
+			}
+			outputFile = created
+			defer outputFile.Close()
+			destination = outputFile
+		}
+		if *against != "" {
+			report, err := evaluation.CompareFiles(*input, *against)
+			if err != nil {
+				return err
+			}
+			return evaluation.WriteComparison(destination, report)
+		}
 		report, err := evaluation.ReportFile(*input)
 		if err != nil {
 			return err
 		}
-		return evaluation.WriteReport(output, report)
+		return evaluation.WriteReport(destination, report)
 	default:
 		return fmt.Errorf("unknown eval command %q", arguments[0])
 	}
@@ -269,7 +292,7 @@ func runRelease(arguments []string, output io.Writer) error {
 	flags := flag.NewFlagSet("release check", flag.ContinueOnError)
 	flags.SetOutput(io.Discard)
 	root := flags.String("root", "", "repository root")
-	reportPath := flags.String("report", "evaluations/reports/latest.json", "leadership benchmark report")
+	reportPath := flags.String("report", "evaluations/reports/release-gates.json", "machine-evaluable leadership gate report")
 	if err := flags.Parse(arguments[1:]); err != nil {
 		return err
 	}
@@ -289,19 +312,12 @@ func runRelease(arguments []string, output io.Writer) error {
 		return err
 	}
 	absoluteReport := filepath.Join(collection.RepoRoot, filepath.FromSlash(*reportPath))
-	content, err := os.ReadFile(absoluteReport)
+	_, blockers, err := evaluation.CheckReleaseEvidence(collection.RepoRoot, absoluteReport)
 	if err != nil {
 		return fmt.Errorf("leadership evidence gate failed: %w", err)
 	}
-	var gate struct {
-		LeadershipClaimEligible bool     `json:"leadership_claim_eligible"`
-		BlockingGates           []string `json:"blocking_gates"`
-	}
-	if err := json.Unmarshal(content, &gate); err != nil {
-		return fmt.Errorf("decode leadership report: %w", err)
-	}
-	if !gate.LeadershipClaimEligible {
-		return fmt.Errorf("leadership evidence gate failed: %s", strings.Join(gate.BlockingGates, "; "))
+	if len(blockers) > 0 {
+		return fmt.Errorf("leadership evidence gate failed: %s", strings.Join(blockers, "; "))
 	}
 	fmt.Fprintln(output, "all structural and leadership evidence gates pass")
 	writeMetrics(output, metrics)

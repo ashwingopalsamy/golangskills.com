@@ -1,0 +1,56 @@
+{
+  "schema_version": 2,
+  "arm": "gophers",
+  "cases": 10,
+  "passed": 6,
+  "pass_rate": 0.6,
+  "mean_score": 0.6,
+  "ci_lower_95": 0.31267376973365824,
+  "ci_upper_95": 0.8318196702937638,
+  "critical_failures": 1,
+  "collections": [
+    {
+      "collection": "distributed-systems-skills-for-go",
+      "cases": 2,
+      "passed": 0,
+      "pass_rate": 0,
+      "mean_score": 0
+    },
+    {
+      "collection": "engineering-skills-for-go",
+      "cases": 2,
+      "passed": 1,
+      "pass_rate": 0.5,
+      "mean_score": 0.5
+    },
+    {
+      "collection": "fintech-skills-for-go",
+      "cases": 6,
+      "passed": 5,
+      "pass_rate": 0.8333333333333334,
+      "mean_score": 0.8333333333333334
+    }
+  ],
+  "routing": {
+    "cases": 10,
+    "macro_f1": 0.35,
+    "unrelated_cases": 4,
+    "false_activations": 0,
+    "false_activation_rate": 0
+  },
+  "tokens": {
+    "input_tokens": 165174,
+    "cached_input_tokens": 97792,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 59,
+    "reasoning_output_tokens": 0,
+    "score_per_k_input_tokens": 0.036325329652366595
+  },
+  "failure_cases": [
+    "go-fintech-security-compliance/avoid-generic-ssrf",
+    "go-message-processing/avoid-channel-pipeline",
+    "go-service-boundaries/avoid-retry-storm",
+    "go-service-resilience/route-amplification"
+  ],
+  "input": "evaluations/scores/2026-08-18-gophers-routing-screen-v2.jsonl"
+}

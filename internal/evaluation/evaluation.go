@@ -9,7 +9,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"math"
 	"math/rand"
 	"os"
 	"os/exec"
@@ -58,6 +57,8 @@ type Result struct {
 	Model          string               `json:"model"`
 	ClientVersion  string               `json:"client_version"`
 	Skill          string               `json:"skill"`
+	Collection     string               `json:"collection,omitempty"`
+	RiskDomains    []string             `json:"risk_domains,omitempty"`
 	CaseID         string               `json:"case_id"`
 	Kind           string               `json:"kind"`
 	Prompt         string               `json:"prompt"`
@@ -66,6 +67,7 @@ type Result struct {
 	Response       string               `json:"response"`
 	ExitCode       int                  `json:"exit_code"`
 	DurationMS     int64                `json:"duration_ms"`
+	Usage          Usage                `json:"usage,omitempty"`
 	RunnerEvents   string               `json:"runner_events"`
 	Error          string               `json:"error,omitempty"`
 	Graders        []corpus.Grader      `json:"graders,omitempty"`
@@ -74,6 +76,17 @@ type Result struct {
 	GraderRuns     map[string]GraderRun `json:"grader_runs,omitempty"`
 	FixtureFiles   map[string]string    `json:"fixture_files,omitempty"`
 	Metadata       map[string]string    `json:"metadata"`
+}
+
+// Usage records the client-reported token accounting for a benchmark cell.
+// Cached input remains separate so reports can show both billed/context input
+// and cache behavior without silently choosing one accounting convention.
+type Usage struct {
+	InputTokens           int64 `json:"input_tokens,omitempty"`
+	CachedInputTokens     int64 `json:"cached_input_tokens,omitempty"`
+	CacheWriteInputTokens int64 `json:"cache_write_input_tokens,omitempty"`
+	OutputTokens          int64 `json:"output_tokens,omitempty"`
+	ReasoningOutputTokens int64 `json:"reasoning_output_tokens,omitempty"`
 }
 
 // GraderRun preserves deterministic fixture evidence from the isolated cell.
@@ -91,19 +104,6 @@ type Score struct {
 	Score         float64         `json:"score"`
 	GraderScore   map[string]bool `json:"grader_score"`
 	Failures      []string        `json:"failures,omitempty"`
-}
-
-// Report summarizes deterministic pass rates and a Wilson confidence interval.
-type Report struct {
-	SchemaVersion int     `json:"schema_version"`
-	Arm           string  `json:"arm"`
-	Cases         int     `json:"cases"`
-	Passed        int     `json:"passed"`
-	PassRate      float64 `json:"pass_rate"`
-	CILower95     float64 `json:"ci_lower_95"`
-	CIUpper95     float64 `json:"ci_upper_95"`
-	CriticalFails int     `json:"critical_failures"`
-	Input         string  `json:"input"`
 }
 
 // Preflight inspects supported local runners without changing authentication.
@@ -243,7 +243,8 @@ func runCase(parent context.Context, repoRoot string, options RunOptions, runID,
 	result := Result{
 		SchemaVersion: 1, RunID: runID, OpaqueArm: opaqueArm, Arm: options.Arm,
 		Runner: options.Runner, Model: options.Model, ClientVersion: clientVersion,
-		Skill: item.skill.Name, CaseID: item.eval.ID, Kind: item.eval.Kind, Prompt: item.eval.Prompt,
+		Skill: item.skill.Name, Collection: item.skill.Metadata.Collection, RiskDomains: append([]string(nil), item.skill.Metadata.RiskDomains...),
+		CaseID: item.eval.ID, Kind: item.eval.Kind, Prompt: item.eval.Prompt,
 		Graders: item.eval.Graders, Invariants: item.eval.ExpectedInvariants, Forbidden: item.eval.ForbiddenOutcomes,
 		Metadata: map[string]string{"fixture_commit": gitHead(repoRoot), "grader_version": "skillctl-eval-v1"},
 	}
@@ -304,6 +305,7 @@ func runCase(parent context.Context, repoRoot string, options RunOptions, runID,
 	command := exec.CommandContext(caseContext, "codex", arguments...)
 	events, runErr := command.CombinedOutput()
 	result.RunnerEvents = string(events)
+	result.Usage = parseUsage(result.RunnerEvents)
 	result.ExitCode = 0
 	if runErr != nil {
 		result.Error = runErr.Error()
@@ -454,57 +456,6 @@ func routeMatches(response, expected string) bool {
 	return strings.EqualFold(response, expected) || strings.HasSuffix(strings.ToLower(response), ":"+strings.ToLower(expected))
 }
 
-// ReportFile summarizes a scored JSONL artifact.
-func ReportFile(inputPath string) (Report, error) {
-	file, err := os.Open(inputPath)
-	if err != nil {
-		return Report{}, err
-	}
-	defer file.Close()
-	report := Report{SchemaVersion: 1, Input: inputPath}
-	scanner := bufio.NewScanner(file)
-	scanner.Buffer(make([]byte, 64*1024), 16*1024*1024)
-	for scanner.Scan() {
-		var score Score
-		if err := json.Unmarshal(scanner.Bytes(), &score); err != nil {
-			return Report{}, err
-		}
-		if report.Arm == "" {
-			report.Arm = score.Arm
-		}
-		report.Cases++
-		if score.Passed {
-			report.Passed++
-		}
-		if strings.HasPrefix(score.Skill, "go-fin") || strings.Contains(score.Skill, "money") || strings.Contains(score.Skill, "payment") || strings.Contains(score.Skill, "ledger") {
-			if !score.Passed {
-				report.CriticalFails++
-			}
-		}
-	}
-	if err := scanner.Err(); err != nil {
-		return Report{}, err
-	}
-	if report.Cases > 0 {
-		report.PassRate = float64(report.Passed) / float64(report.Cases)
-		report.CILower95, report.CIUpper95 = wilson(report.Passed, report.Cases)
-	}
-	return report, nil
-}
-
-func wilson(successes, trials int) (float64, float64) {
-	if trials == 0 {
-		return 0, 0
-	}
-	z := 1.959963984540054
-	n := float64(trials)
-	p := float64(successes) / n
-	denominator := 1 + z*z/n
-	center := (p + z*z/(2*n)) / denominator
-	margin := z * math.Sqrt((p*(1-p)+z*z/(4*n))/n) / denominator
-	return math.Max(0, center-margin), math.Min(1, center+margin)
-}
-
 func completedCases(path string) (map[string]bool, error) {
 	completed := make(map[string]bool)
 	file, err := os.Open(path)
@@ -647,8 +598,29 @@ func exitCode(err error) int {
 	return -1
 }
 
+func parseUsage(events string) Usage {
+	var result Usage
+	for _, line := range strings.Split(events, "\n") {
+		var event struct {
+			Type  string `json:"type"`
+			Usage Usage  `json:"usage"`
+		}
+		if json.Unmarshal([]byte(line), &event) == nil && event.Type == "turn.completed" {
+			result = event.Usage
+		}
+	}
+	return result
+}
+
 // WriteReport writes an indented report.
 func WriteReport(output io.Writer, report Report) error {
+	encoder := json.NewEncoder(output)
+	encoder.SetIndent("", "  ")
+	return encoder.Encode(report)
+}
+
+// WriteComparison writes an indented paired comparison report.
+func WriteComparison(output io.Writer, report ComparisonReport) error {
 	encoder := json.NewEncoder(output)
 	encoder.SetIndent("", "  ")
 	return encoder.Encode(report)

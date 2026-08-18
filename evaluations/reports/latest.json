@@ -28,6 +28,24 @@
     ],
     "qualification": "Development screen only; confidence intervals overlap and no superiority claim is permitted."
   },
+  "computed_routing_reports": {
+    "arm_reports": [
+      "evaluations/reports/development/ours-routing.json",
+      "evaluations/reports/development/cxuu-golang-skills-routing.json",
+      "evaluations/reports/development/gophers-routing.json",
+      "evaluations/reports/development/go-skills-routing.json",
+      "evaluations/reports/development/cc-skills-golang-routing.json",
+      "evaluations/reports/development/golang-ddd-skills-routing.json"
+    ],
+    "paired_reports": [
+      "evaluations/reports/development/ours-vs-cxuu-golang-skills-routing.json",
+      "evaluations/reports/development/ours-vs-gophers-routing.json",
+      "evaluations/reports/development/ours-vs-go-skills-routing.json",
+      "evaluations/reports/development/ours-vs-cc-skills-golang-routing.json",
+      "evaluations/reports/development/ours-vs-golang-ddd-skills-routing.json"
+    ],
+    "qualification": "These reports expose routing and token metrics, but zero unrelated-prompt cases and ten pairs make every release threshold ineligible."
+  },
   "targeted_rerun": {
     "case": "go-clearing-settlement-reconciliation/avoid-initial-auth",
     "passed": true,
