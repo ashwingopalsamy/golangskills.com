@@ -1,31 +1,13 @@
-# Agent evaluation
+# Evaluation harness
 
-The repository distinguishes structural eval coverage from observed agent improvement. `evals.json` defines checked fixtures for every skill; paired model runs determine whether those fixtures produce marginal value.
+Every skill ships public development cases. The current corpus contains 80: one positive route, one confusion negative, and two quality scenarios per skill. Quality cases name expected invariants, forbidden outcomes, deterministic graders, and optional semantic rubrics. Twelve cases use executable fixtures for races, lifecycle completion, HTTP bodies, ambiguous commits, redelivery, retry amplification, API compatibility, fuzz regressions, rounding, ledger balance, payment ordering, and settlement netting.
 
-## Protocol
+`skillctl eval run` creates one temporary project and ephemeral session per case. It installs no skills for baseline, the selected arm for treatment, randomizes order from a recorded seed, assigns an opaque arm label, records client/model/commit/grader metadata, captures raw runner JSONL, and resumes already completed cells. `-case skill-id/case-id` reruns an affected cell without restarting the matrix.
 
-1. Hold the agent, model, scenario, and scoring rubric constant.
-2. Run a baseline arm instructed not to read repository skills.
-3. Run a treatment arm instructed to read only the selected skill and relevant references.
-4. Score externally observable engineering decisions as binary criteria. Do not score tone or wording.
-5. Test discovery separately using only the available-skill names and descriptions.
-6. Preserve conditions, prompts, raw outputs, scores, and limitations.
+For this collection, a positive routing case expects its owning skill and a confusion-negative case accepts only its declared neighboring skill IDs. A competitor routing arm must provide a locked JSON `-routing-map` from each canonical `skill-id/case-id` to the competitor's accepted route IDs; otherwise execution is refused. Baseline expects `NONE`. This separates arm-specific naming from prompt difficulty and prevents correct neighboring routes from being scored as false failures.
 
-This is not a statistically useful benchmark until scenarios have repeated trials across at least two current agent/model combinations. A same-model judge is a consistency check, not an independent oracle.
+Fixture cells copy a locked failing Go module into the isolated workspace, enable workspace edits, run only allowlisted `go test` targets, and store the resulting Go sources plus grader output in raw JSONL. All 12 committed baselines fail their intended grader. Explicit competitor cells require a frozen canonical-to-arm `-skill-map`; missing mappings fail closed.
 
-## Initial exploratory forward test
+`eval score` applies accepted-route equality and deterministic response/fixture graders. `eval report` reports pass rate and a 95% Wilson interval. The harness does not turn keyword grading into a broad quality claim; executable fixtures and blinded rubrics are required for release evidence.
 
-Run: [2026-08-18 Codex GPT-5.6 Sol](../evaluations/runs/2026-08-18-codex-gpt-5.6-sol.md)
-
-| Scenario | Baseline | With skill | Delta | Observation |
-| --- | ---: | ---: | ---: | --- |
-| Payment consumer with Kafka, PostgreSQL, and remote rewards | 9/10 | 10/10 | +1 | Skill arm enumerated every crash boundary; both arms found the outbox/idempotency design. |
-| Bounded image workers with cancellation | 10/10 | 10/10 | 0 | Both arms replaced spawn-then-semaphore with a fixed, owned worker lifecycle. |
-| Three-hop retry amplification and overload | 10/10 | 10/10 | 0 | Both arms correctly bounded deadlines, retries, replay, capacity, and recovery. |
-| Ten discovery-only routing prompts | n/a | 10/10 | n/a | All prompts selected the intended skill or `NONE`, including adjacent HTTP/resilience and SQL/message boundaries. |
-
-The observed quality delta is 1/30 criteria over one trial. The run file preserves normalized output rather than byte-exact harness artifacts, so it is not eligible as a published benchmark under the policy below. It is directionally useful but too small and under-sampled to establish broad superiority over the base agent. All v1 skills therefore remain `beta`.
-
-## Running future evaluations
-
-Select quality and routing cases from each `skills/<name>/evals.json`. For code-producing tasks, use a pinned repository fixture and an executable verifier in addition to semantic scoring. Record model and agent versions, repository commit, trial count, token use when available, failures, and full outputs. Reject changes that improve the preferred wording without changing engineering behavior.
+The current schema-v2 Codex screen scored 9/10 routes with no critical failure; its sole miss passed an isolated rerun after the activation-description correction. One reconciliation fixture also passed end to end, including the stored edited source and `go test` output. The [raw screen](../evaluations/runs/2026-08-18-ours-routing-screen-v2.jsonl), [screen scores](../evaluations/scores/2026-08-18-ours-routing-screen-v2.jsonl), [raw targeted rerun](../evaluations/runs/2026-08-18-ours-routing-targeted-v3.jsonl), [rerun score](../evaluations/scores/2026-08-18-ours-routing-targeted-v3.jsonl), [raw fixture cell](../evaluations/runs/2026-08-18-ours-reconciliation-fixture.jsonl), and [fixture score](../evaluations/scores/2026-08-18-ours-reconciliation-fixture.jsonl) are development evidence only. The small sample, post-screen repair, absent holdout, and absent competitor arms make it ineligible for a leadership claim. The earlier [exploratory Codex run](../evaluations/runs/2026-08-18-codex-gpt-5.6-sol.md) predates schema v2 and is also ineligible.

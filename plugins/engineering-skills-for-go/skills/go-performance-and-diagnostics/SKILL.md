@@ -11,7 +11,7 @@ Optimize a measured constraint, not a code pattern.
 
 ## Establish the workload
 
-Record input distribution, concurrency, duration, warmup, dependencies, hardware, Go version, `GOMAXPROCS`, latency percentiles, throughput, allocations, and error rate. Reproduce the symptom before changing code.
+Record input distribution, offered arrival rate, open- versus closed-loop generation, concurrency, duration, warmup, dependencies, hardware, Go version, `GOMAXPROCS`, achieved throughput, dropped/deadline-expired work, allocations, and error rate. Measure latency from intended arrival when production queueing matters; closed-loop generators can hide stalls through coordinated omission. Reproduce the symptom before changing code.
 
 ## Follow the dominant resource
 

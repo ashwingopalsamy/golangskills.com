@@ -1,6 +1,6 @@
 ---
 name: go-fintech-security-compliance
-description: "Use for Go payment-data scope, tokenization, authorization, audit, retention, and PCI controls. Do not use as certification."
+description: "Use for Go payment-data governance, tokenization, audit, retention, and PCI. Do not use for generic exploits or certification."
 license: Apache-2.0
 compatibility: "Go 1.24 or newer; standards and regulatory obligations require current qualified interpretation for the actual system."
 ---
@@ -11,7 +11,9 @@ Minimize the systems and people that can store, process, transmit, or affect sen
 
 ## Scope the data
 
-Classify account data, sensitive authentication data, PII, secrets, tokens, derived identifiers, and audit records. Prefer hosted collection or tokenization that prevents raw data from entering the service. Map every store, log, queue, trace, backup, analytics stream, and support tool the data can reach.
+Classify account data, sensitive authentication data, PII, secrets, reusable payment/network tokens, detokenization handles, low-value opaque correlation IDs, derived identifiers, and audit records. Prefer hosted collection or tokenization that prevents raw data from entering the service. Map every store, log, queue, trace, backup, analytics stream, and support tool the data can reach.
+
+Do not retain applicable sensitive authentication data after authorization, even when encrypted. This includes card verification codes, PIN/PIN blocks, and full track data. Confirm the exact classification and disposition against the current PCI DSS and qualified assessor guidance for the deployed flow; code inspection cannot establish compliance.
 
 ## Enforce authority
 
@@ -19,7 +21,7 @@ Authenticate users and services at an assurance level matching risk. Authorize b
 
 ## Preserve auditability
 
-Record actor, authority, operation, target, before/after state reference, reason, time, correlation, and approval in tamper-evident durable storage. Keep logs and traces free of PAN, authentication data, tokens, secrets, and unnecessary PII. Restrict access and test evidence retrieval.
+Record actor, authority, operation, target, before/after state reference, reason, time, correlation, and approval in tamper-evident durable storage. Keep logs and traces free of PAN, authentication data, reusable credentials or payment tokens, detokenization handles, secrets, and unnecessary PII. Classify token-like values before logging; an approved low-value correlation ID is not interchangeable with a reusable credential. Restrict access and test evidence retrieval.
 
 ## Engineer change controls
 

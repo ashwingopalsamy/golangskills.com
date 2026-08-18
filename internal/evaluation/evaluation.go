@@ -38,7 +38,10 @@ type RunOptions struct {
 	Arm           string
 	SkillsRoot    string
 	Kind          string
+	Case          string
 	ExplicitSkill bool
+	RoutingMap    map[string][]string
+	SkillMap      map[string]string
 	Limit         int
 	Seed          int64
 	Timeout       time.Duration
@@ -47,27 +50,37 @@ type RunOptions struct {
 
 // Result is one resumable JSONL benchmark cell.
 type Result struct {
-	SchemaVersion int               `json:"schema_version"`
-	RunID         string            `json:"run_id"`
-	OpaqueArm     string            `json:"opaque_arm"`
-	Arm           string            `json:"arm"`
-	Runner        string            `json:"runner"`
-	Model         string            `json:"model"`
-	ClientVersion string            `json:"client_version"`
-	Skill         string            `json:"skill"`
-	CaseID        string            `json:"case_id"`
-	Kind          string            `json:"kind"`
-	Prompt        string            `json:"prompt"`
-	ExpectedRoute string            `json:"expected_route,omitempty"`
-	Response      string            `json:"response"`
-	ExitCode      int               `json:"exit_code"`
-	DurationMS    int64             `json:"duration_ms"`
-	RunnerEvents  string            `json:"runner_events"`
-	Error         string            `json:"error,omitempty"`
-	Graders       []corpus.Grader   `json:"graders,omitempty"`
-	Invariants    []string          `json:"expected_invariants,omitempty"`
-	Forbidden     []string          `json:"forbidden_outcomes,omitempty"`
-	Metadata      map[string]string `json:"metadata"`
+	SchemaVersion  int                  `json:"schema_version"`
+	RunID          string               `json:"run_id"`
+	OpaqueArm      string               `json:"opaque_arm"`
+	Arm            string               `json:"arm"`
+	Runner         string               `json:"runner"`
+	Model          string               `json:"model"`
+	ClientVersion  string               `json:"client_version"`
+	Skill          string               `json:"skill"`
+	CaseID         string               `json:"case_id"`
+	Kind           string               `json:"kind"`
+	Prompt         string               `json:"prompt"`
+	ExpectedRoute  string               `json:"expected_route,omitempty"`
+	ExpectedRoutes []string             `json:"expected_routes,omitempty"`
+	Response       string               `json:"response"`
+	ExitCode       int                  `json:"exit_code"`
+	DurationMS     int64                `json:"duration_ms"`
+	RunnerEvents   string               `json:"runner_events"`
+	Error          string               `json:"error,omitempty"`
+	Graders        []corpus.Grader      `json:"graders,omitempty"`
+	Invariants     []string             `json:"expected_invariants,omitempty"`
+	Forbidden      []string             `json:"forbidden_outcomes,omitempty"`
+	GraderRuns     map[string]GraderRun `json:"grader_runs,omitempty"`
+	FixtureFiles   map[string]string    `json:"fixture_files,omitempty"`
+	Metadata       map[string]string    `json:"metadata"`
+}
+
+// GraderRun preserves deterministic fixture evidence from the isolated cell.
+type GraderRun struct {
+	Passed   bool   `json:"passed"`
+	ExitCode int    `json:"exit_code"`
+	Output   string `json:"output"`
 }
 
 // Score is a deterministic score for one result.
@@ -142,7 +155,10 @@ func Run(ctx context.Context, collection corpus.Collection, options RunOptions) 
 	if options.Seed == 0 {
 		options.Seed = 1
 	}
-	cases := flattenCases(collection, options.Kind)
+	cases := flattenCases(collection, options.Kind, options.Case)
+	if err := validateArmMaps(options, cases); err != nil {
+		return 0, err
+	}
 	rand.New(rand.NewSource(options.Seed)).Shuffle(len(cases), func(i, j int) { cases[i], cases[j] = cases[j], cases[i] })
 	if options.Limit > 0 && options.Limit < len(cases) {
 		cases = cases[:options.Limit]
@@ -184,16 +200,32 @@ func Run(ctx context.Context, collection corpus.Collection, options RunOptions) 
 	return written, nil
 }
 
+func validateArmMaps(options RunOptions, cases []caseItem) error {
+	if options.Arm == "ours" || options.Arm == "baseline" {
+		return nil
+	}
+	for _, item := range cases {
+		if item.eval.Kind == "routing" && len(options.RoutingMap[item.skill.Name+"/"+item.eval.ID]) == 0 {
+			return fmt.Errorf("competitor routing arm %q is missing -routing-map entry %s/%s", options.Arm, item.skill.Name, item.eval.ID)
+		}
+		if options.ExplicitSkill && options.SkillMap[item.skill.Name] == "" {
+			return fmt.Errorf("competitor explicit-skill arm %q is missing -skill-map entry %s", options.Arm, item.skill.Name)
+		}
+	}
+	return nil
+}
+
 type caseItem struct {
 	skill corpus.Skill
 	eval  corpus.EvalCase
 }
 
-func flattenCases(collection corpus.Collection, kind string) []caseItem {
+func flattenCases(collection corpus.Collection, kind, selectedCase string) []caseItem {
 	var result []caseItem
 	for _, skill := range collection.Skills {
 		for _, eval := range skill.Evaluations.Cases {
-			if kind == "" || kind == "all" || eval.Kind == kind {
+			caseKey := skill.Name + "/" + eval.ID
+			if (selectedCase == "" || selectedCase == caseKey) && (kind == "" || kind == "all" || eval.Kind == kind) {
 				result = append(result, caseItem{skill: skill, eval: eval})
 			}
 		}
@@ -211,11 +243,7 @@ func runCase(parent context.Context, repoRoot string, options RunOptions, runID,
 		Metadata: map[string]string{"fixture_commit": gitHead(repoRoot), "grader_version": "skillctl-eval-v1"},
 	}
 	if item.eval.Kind == "routing" {
-		if item.eval.ShouldActivate != nil && *item.eval.ShouldActivate {
-			result.ExpectedRoute = item.skill.Name
-		} else {
-			result.ExpectedRoute = "NONE"
-		}
+		result.ExpectedRoutes = expectedRoutes(options, item)
 	}
 	worktree, err := os.MkdirTemp("", "golangskills-eval-*")
 	if err != nil {
@@ -223,13 +251,24 @@ func runCase(parent context.Context, repoRoot string, options RunOptions, runID,
 		return result
 	}
 	defer os.RemoveAll(worktree)
+	if item.eval.Fixture != "" {
+		fixtureRoot := filepath.Join(repoRoot, filepath.FromSlash(item.eval.Fixture))
+		if err := copyTree(fixtureRoot, worktree); err != nil {
+			result.Error = "copy fixture: " + err.Error()
+			return result
+		}
+	}
+	selectedSkill := item.skill.Name
+	if mapped := options.SkillMap[item.skill.Name]; mapped != "" {
+		selectedSkill = mapped
+	}
 	if options.Arm != "baseline" {
 		source := options.SkillsRoot
 		if source == "" {
 			source = filepath.Join(repoRoot, "skills")
 		}
 		destination := filepath.Join(worktree, ".agents", "skills")
-		if err := copySkills(source, destination, options.ExplicitSkill, item.skill.Name); err != nil {
+		if err := copySkills(source, destination, options.ExplicitSkill, selectedSkill); err != nil {
 			result.Error = err.Error()
 			return result
 		}
@@ -237,13 +276,22 @@ func runCase(parent context.Context, repoRoot string, options RunOptions, runID,
 	prompt := item.eval.Prompt
 	if item.eval.Kind == "routing" {
 		prompt = "Choose whether one installed skill should handle the following request. Reply with exactly its skill ID, or NONE if no installed skill should activate. Do not solve the request.\n\n" + prompt
+	} else if item.eval.Fixture != "" {
+		prompt = "Modify the fixture in the current directory to solve the task. Keep the change scoped and leave the repository ready for its deterministic grader.\n\n" + prompt
+		if options.ExplicitSkill {
+			prompt = "Use $" + selectedSkill + ".\n\n" + prompt
+		}
 	} else if options.ExplicitSkill {
-		prompt = "Use $" + item.skill.Name + " for this task.\n\n" + prompt
+		prompt = "Use $" + selectedSkill + " for this task.\n\n" + prompt
 	}
 	caseContext, cancel := context.WithTimeout(parent, options.Timeout)
 	defer cancel()
 	lastMessage := filepath.Join(worktree, "last-message.txt")
-	arguments := []string{"exec", "--json", "--ephemeral", "--ignore-user-config", "--ignore-rules", "--skip-git-repo-check", "--sandbox", "read-only", "--cd", worktree, "--output-last-message", lastMessage}
+	sandbox := "read-only"
+	if item.eval.Fixture != "" {
+		sandbox = "workspace-write"
+	}
+	arguments := []string{"exec", "--json", "--ephemeral", "--ignore-user-config", "--ignore-rules", "--skip-git-repo-check", "--sandbox", sandbox, "--cd", worktree, "--output-last-message", lastMessage}
 	if options.Model != "" {
 		arguments = append(arguments, "--model", options.Model)
 	}
@@ -262,8 +310,28 @@ func runCase(parent context.Context, repoRoot string, options RunOptions, runID,
 	} else if runErr == nil {
 		result.Error = readErr.Error()
 	}
+	if item.eval.Fixture != "" {
+		result.GraderRuns = runFixtureGraders(parent, worktree, item.eval.Graders)
+		result.FixtureFiles = snapshotFixture(worktree)
+	}
 	result.DurationMS = time.Since(started).Milliseconds()
 	return result
+}
+
+func expectedRoutes(options RunOptions, item caseItem) []string {
+	if options.Arm == "baseline" {
+		return []string{"NONE"}
+	}
+	if routes := options.RoutingMap[item.skill.Name+"/"+item.eval.ID]; len(routes) > 0 {
+		return append([]string(nil), routes...)
+	}
+	if item.eval.ShouldActivate != nil && *item.eval.ShouldActivate {
+		return []string{item.skill.Name}
+	}
+	if len(item.eval.ConfusesWith) > 0 {
+		return append([]string(nil), item.eval.ConfusesWith...)
+	}
+	return []string{"NONE"}
 }
 
 // ScoreFile applies only deterministic graders and writes JSONL scores.
@@ -306,7 +374,17 @@ func scoreResult(result Result) Score {
 		return score
 	}
 	if result.Kind == "routing" {
-		score.Passed = strings.EqualFold(strings.TrimSpace(result.Response), result.ExpectedRoute)
+		expected := result.ExpectedRoutes
+		if len(expected) == 0 && result.ExpectedRoute != "" {
+			expected = []string{result.ExpectedRoute}
+		}
+		response := strings.TrimSpace(result.Response)
+		for _, route := range expected {
+			if strings.EqualFold(response, route) {
+				score.Passed = true
+				break
+			}
+		}
 		if score.Passed {
 			score.Score = 1
 		} else {
@@ -317,15 +395,21 @@ func scoreResult(result Result) Score {
 	totalWeight, passedWeight := 0.0, 0.0
 	lower := strings.ToLower(result.Response)
 	for _, grader := range result.Graders {
-		passed := true
-		for _, required := range grader.Required {
-			if !strings.Contains(lower, strings.ToLower(required)) {
-				passed = false
+		passed := false
+		switch grader.Kind {
+		case "go-test":
+			passed = result.GraderRuns[grader.ID].Passed
+		default:
+			passed = true
+			for _, required := range grader.Required {
+				if !strings.Contains(lower, strings.ToLower(required)) {
+					passed = false
+				}
 			}
-		}
-		for _, forbidden := range grader.Forbidden {
-			if strings.Contains(lower, strings.ToLower(forbidden)) {
-				passed = false
+			for _, forbidden := range grader.Forbidden {
+				if strings.Contains(lower, strings.ToLower(forbidden)) {
+					passed = false
+				}
 			}
 		}
 		score.GraderScore[grader.ID] = passed
@@ -421,6 +505,7 @@ func copySkills(source, destination string, explicit bool, skillName string) err
 	if err != nil {
 		return err
 	}
+	copied := false
 	for _, entry := range entries {
 		if !entry.IsDir() || explicit && entry.Name() != skillName {
 			continue
@@ -428,8 +513,65 @@ func copySkills(source, destination string, explicit bool, skillName string) err
 		if err := copyTree(filepath.Join(source, entry.Name()), filepath.Join(destination, entry.Name())); err != nil {
 			return err
 		}
+		copied = true
+	}
+	if explicit && !copied {
+		return fmt.Errorf("mapped skill %q not found under %s", skillName, source)
 	}
 	return nil
+}
+
+func runFixtureGraders(parent context.Context, worktree string, graders []corpus.Grader) map[string]GraderRun {
+	runs := make(map[string]GraderRun)
+	for _, grader := range graders {
+		if grader.Kind != "go-test" {
+			continue
+		}
+		args := []string{"test", "-mod=readonly", "./..."}
+		if grader.Target != "" {
+			args = append([]string{"test", "-mod=readonly"}, strings.Fields(grader.Target)...)
+		}
+		ctx, cancel := context.WithTimeout(parent, 2*time.Minute)
+		command := exec.CommandContext(ctx, "go", args...)
+		command.Dir = worktree
+		command.Env = append(os.Environ(), "GOPROXY=off", "GOSUMDB=off", "GOTOOLCHAIN=local")
+		output, err := command.CombinedOutput()
+		cancel()
+		run := GraderRun{Passed: err == nil, ExitCode: exitCode(err), Output: string(output)}
+		if err == nil {
+			run.ExitCode = 0
+		}
+		runs[grader.ID] = run
+	}
+	return runs
+}
+
+func snapshotFixture(root string) map[string]string {
+	files := make(map[string]string)
+	_ = filepath.WalkDir(root, func(path string, entry os.DirEntry, walkErr error) error {
+		if walkErr != nil {
+			return nil
+		}
+		relative, err := filepath.Rel(root, path)
+		if err != nil {
+			return nil
+		}
+		if entry.IsDir() && (relative == ".agents" || relative == ".git") {
+			return filepath.SkipDir
+		}
+		if entry.IsDir() || relative == "last-message.txt" {
+			return nil
+		}
+		if filepath.Ext(relative) != ".go" && relative != "go.mod" && relative != "go.sum" {
+			return nil
+		}
+		content, err := os.ReadFile(path)
+		if err == nil && len(content) <= 256*1024 {
+			files[filepath.ToSlash(relative)] = string(content)
+		}
+		return nil
+	})
+	return files
 }
 
 func copyTree(source, destination string) error {

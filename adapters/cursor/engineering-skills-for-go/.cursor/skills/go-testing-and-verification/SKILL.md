@@ -1,6 +1,6 @@
 ---
 name: go-testing-and-verification
-description: "Use for Go integration, fuzz, race, leak, property, or deterministic tests. Do not use for profiling."
+description: "Use when asked to design or debug Go tests, fuzzing, race/leak checks, or deterministic verification. Do not use for profiling."
 license: Apache-2.0
 compatibility: "Go 1.24 or newer; testing/synctest guidance targets Go 1.25 and 1.26."
 ---

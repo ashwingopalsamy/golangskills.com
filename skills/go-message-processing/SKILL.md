@@ -1,6 +1,6 @@
 ---
 name: go-message-processing
-description: "Use for Go broker delivery, deduplication, ordering, acknowledgements, outbox, and inbox. Do not use for channels."
+description: "Use for Go broker delivery, ACK, replay, ordering, poison recovery, outbox, or inbox. Do not use for in-process channels."
 license: Apache-2.0
 compatibility: "Go 1.24 or newer. Broker guarantees and client APIs are version-specific and must be verified against the deployed system."
 ---
@@ -11,7 +11,7 @@ Assume delivery can be duplicated, delayed, reordered, and interrupted at every 
 
 ## Model the state machine
 
-Inspect the broker, client version, producer settings, consumer-group model, schema, database transaction path, and retry/dead-letter policy. Write a state machine for one logical message:
+Choose the relevant path before loading details: producer contract, consumer effect, or outbox relay. Inspect consumer groups, retry/dead-letter policy, claiming, and acknowledgment only for consuming paths; inspect publication state and relay ownership for a producer/outbox path. In either case inspect the broker and client version, schema, database transaction path, and stable identity. A consuming path uses a state machine such as:
 
 ```text
 received -> admitted -> claimed/deduplicated -> effect committed -> acknowledged
@@ -93,6 +93,8 @@ Verify client-library concurrency rules:
 - whether one failed item can block a batch acknowledgment.
 
 If acknowledgment result itself can fail, retain enough durable processing state to handle redelivery.
+
+For cumulative offsets, track completion per partition and commit only through the highest contiguous completed offset; later completion must never skip unfinished lower offsets. On rebalance, stop admission and either drain within the revocation budget or fence unfinished ownership before committing progress.
 
 ## Preserve ordering only where needed
 

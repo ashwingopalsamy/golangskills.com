@@ -1,6 +1,6 @@
 ---
 name: go-production-operations
-description: "Use for Go startup, telemetry, health, shutdown, containers, Kubernetes, and releases. Do not use for domain logic."
+description: "Use for Go process/deployment lifecycle, health, telemetry, drain, Kubernetes, and releases. Do not use for domain logic."
 license: Apache-2.0
 compatibility: "Go 1.24 or newer; deployment-platform behavior must be verified against the active environment."
 ---
@@ -11,7 +11,7 @@ Startup, readiness, telemetry, overload signals, and shutdown are externally obs
 
 ## Startup
 
-Parse and validate configuration before serving. Distinguish required secrets, immutable startup settings, and safely reloadable values. Initialize dependencies in ownership order and return startup errors from a testable `run` path rather than hiding work in `init`.
+Parse and validate configuration before serving. Distinguish required secrets, immutable startup settings, and safely reloadable values. Every reload validates a complete candidate snapshot before atomic publication and retains the last known-good state on failure. Initialize dependencies in ownership order and return startup errors from a testable `run` path rather than hiding work in `init`.
 
 ## Telemetry
 
@@ -24,6 +24,8 @@ Readiness means the instance can safely accept its intended traffic. Liveness me
 ## Shutdown
 
 On termination: stop or mark admission, drain accepted work, stop background producers, wait within the platform budget, flush bounded telemetry, and close dependencies after their users. Surface forced termination and abandoned work.
+
+Use `go-service-boundaries` as well when shutdown correctness depends on HTTP bodies, streams, protocol draining, or client/server resource ownership.
 
 ## Delivery
 

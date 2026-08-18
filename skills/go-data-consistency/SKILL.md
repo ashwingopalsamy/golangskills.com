@@ -1,6 +1,6 @@
 ---
 name: go-data-consistency
-description: "Use for Go transactions, isolation, constraints, ambiguous commits, caches, and migrations. Do not use for brokers."
+description: "Use for Go transaction, cache, migration, and DB/broker consistency. Do not use for broker ACK or replay."
 license: Apache-2.0
 compatibility: "Go 1.24 or newer; database, driver, and cache semantics must be verified against deployed versions."
 ---
@@ -25,7 +25,7 @@ Replay the whole transaction from fresh reads only for stable retryable error cl
 
 ## Cache consistency
 
-State whether the cache is authoritative, derived, or optional. Define invalidation/order behavior, stale-read tolerance, stampede control, and recovery after cache loss. Do not create a correctness dependency on best-effort invalidation without version or write-through semantics.
+State whether the cache is authoritative, derived, or optional. Define invalidation/order behavior, stale-read tolerance, stampede control, and recovery after cache loss. A version embedded only in the cached value cannot reveal that the authoritative version advanced. Write-through is safe only if it participates in the authoritative commit. For correctness-dependent reads, use authoritative reads, a reader-visible generation check, or durable ordered propagation such as transactional outbox/CDC; do not rely on best-effort invalidation.
 
 ## Migrations
 

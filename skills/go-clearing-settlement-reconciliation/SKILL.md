@@ -1,6 +1,6 @@
 ---
 name: go-clearing-settlement-reconciliation
-description: "Use for Go clearing, settlement, payouts, statements, and item reconciliation. Do not use for payment authorization."
+description: "Use after capture for Go settlement, reconciliation, exceptions, and repair. Do not use for initial authorization."
 license: Apache-2.0
 compatibility: "Go 1.24 or newer; rail cutoffs, calendars, reports, and finality come from current provider and scheme contracts."
 ---
@@ -11,11 +11,13 @@ Do not collapse payment acceptance, clearing, settlement, payout, and bank movem
 
 ## Preserve evidence
 
-Ingest external reports and statements immutably with source identity, version, checksum, retrieval time, business date, and parser version. Make re-ingestion idempotent. Preserve raw evidence under access and retention policy; derive normalized items separately.
+Ingest external reports and statements immutably with artifact identity, source version, checksum, retrieval time, business date, completeness/sequence evidence, and parser version. A corrected artifact does not overwrite its predecessor: record `supersedes` lineage and create explicit rematching or reversal work. Make re-ingestion idempotent. Preserve raw evidence under access and retention policy; derive versioned normalized items separately.
 
 ## Match at item level
 
-Match stable external/internal identity first, then amount, currency, lifecycle, account, and time window. Each item must match exactly once or remain in an explicit exception state: missing internal, missing external, duplicate, amount/currency mismatch, status mismatch, or timing break.
+Match stable external/internal identity first, then amount, currency, lifecycle, account, and time window. Support 1:1, 1:N, and N:1 match groups when the source economics require them. Every normalized economic component belongs to exactly one explained match group or one explicit exception; never reuse an item across groups. Each group must satisfy a currency-preserving equation over captures, refunds, fees, reserves, adjustments, and bank movement.
+
+Exceptions include missing internal, missing external, duplicate, amount/currency mismatch, status mismatch, timing break, and incomplete or superseded evidence. Persist the rule and source versions behind every match decision.
 
 Aggregate totals are controls, not sufficient reconciliation. Equal and opposite item errors can net to zero.
 

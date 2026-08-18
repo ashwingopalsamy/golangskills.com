@@ -1,6 +1,6 @@
 ---
 name: go-project-and-api-design
-description: "Use for Go packages, modules, APIs, dependencies, and evolution. Do not use for local code or protocols."
+description: "Use for exported Go APIs, packages, modules, versioning, and compatibility. Do not use for local semantics or wire protocols."
 license: Apache-2.0
 compatibility: "Go 1.24 or newer; module and toolchain behavior must match the repository's declared versions."
 ---
@@ -25,7 +25,7 @@ Identify the domain decision, its inputs and effects, the outer mechanisms that 
 
 - Make zero values useful when that is cheap and unambiguous; otherwise require construction.
 - Use functional options for a growing set of independent optional settings, not required arguments or every constructor.
-- Validate configuration once at startup and distinguish secret values from ordinary settings.
+- Validate immutable configuration at startup and distinguish secret values from ordinary settings. For reloadable configuration, parse and validate a complete candidate snapshot before atomic publication; retain the last known-good snapshot on failure.
 - Return concrete types unless callers need substitution at that boundary.
 - Preserve error, cancellation, and ownership contracts in names and documentation.
 

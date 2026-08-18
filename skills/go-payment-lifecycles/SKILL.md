@@ -1,6 +1,6 @@
 ---
 name: go-payment-lifecycles
-description: "Use for Go payment authorization, capture, refund, disputes, webhooks, and ambiguity. Do not use for ledger arithmetic."
+description: "Use for provider/rail payment authorization, capture, refund, webhook, and ambiguous states. Do not use for request replay identity."
 license: Apache-2.0
 compatibility: "Go 1.24 or newer; provider, rail, and scheme state semantics are version- and region-specific."
 ---
@@ -15,17 +15,19 @@ List states, legal commands, provider requests, provider evidence, terminality, 
 
 ## Handle ambiguous outcomes
 
-A timeout or lost response after request transmission can mean success, failure, or still processing. Persist the attempt and stable provider identity, replay only under the provider's idempotency contract, query authoritative state, and reconcile asynchronous evidence. Never create a new payment identity merely because the response was missing.
+A timeout or lost response after request transmission can mean success, failure, or still processing. Persist the attempt and stable provider identity, replay only under the provider's idempotency contract, identify what evidence is authoritative for this provider or rail and whether its query can lag, and reconcile asynchronous evidence. Never create a new payment identity merely because the response was missing. If the deployed provider or rail contract is unavailable, stop at a conditional state machine; do not transfer Stripe-specific idempotency, expiry, or finality semantics to ACH or another rail.
 
 ## Apply events safely
 
-Verify authenticity before parsing into trusted events. Deduplicate by provider event or operation identity, but make handlers tolerant of out-of-order evidence. Apply transitions conditionally against current version/state. Quarantine impossible transitions with full non-sensitive evidence rather than silently dropping them.
+Verify authenticity before parsing into trusted events. Deduplicate by provider event or operation identity, but make handlers tolerant of out-of-order evidence. Distinguish duplicate, stale, future/missing-predecessor, conflicting, and contract-invalid evidence. Persist future evidence such as refund success arriving before capture success and reevaluate it when prerequisites arrive; quarantine only contract-invalid or irreconcilably conflicting evidence. Apply transitions conditionally against current version/state.
 
 ## Amount and terminality
 
 Enforce cumulative capture and refund limits with exact money. Partial capture/refund and multiple disputes can coexist. “Succeeded” may be locally terminal for fulfillment while chargebacks and settlement adjustments remain possible.
 
 Read [references/payment-machine.md](references/payment-machine.md) for transition and ambiguity rules.
+
+Use `go-financial-idempotency` for repeated-request identity, and `go-clearing-settlement-reconciliation` for post-capture external reports and settlement breaks.
 
 ## Output contract
 

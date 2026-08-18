@@ -1,72 +1,30 @@
 # Architecture
 
-## Design objective
-
-The project optimizes a constrained objective rather than skill count:
-
-```text
-net value = task-quality delta
-          - discovery cost
-          - activation mistakes
-          - instruction conflicts
-          - maintenance drift
-          - supply-chain risk
-```
-
-A skill is successful only if it improves a consequential task relative to the same agent without the skill. Structural validity is necessary but not sufficient.
-
 ## Canonical model
 
-`skills/` is the only authored skill corpus. Open Agent Skills Markdown is already the portable intermediate representation; inventing another content DSL would create a lowest-common-denominator abstraction and a second source of truth.
+`skills/` is the authored corpus. Each skill contains portable `SKILL.md`, schema-v2 `skill.json`, schema-v2 `evals.json`, optional one-hop Markdown references, and generated `agents/openai.yaml`.
 
-Each skill separates four concerns:
+`skill.json` owns collection, maturity, risk domains, Go support, claim IDs, relations, compatibility evidence, primary sources, and source provenance. `evals.json` separates routing decisions from quality cases with expected invariants, forbidden outcomes, deterministic graders, optional fixtures, and semantic rubrics.
 
-| Artifact | Authority |
-| --- | --- |
-| `SKILL.md` | Activation description and procedural instructions |
-| `skill.json` | Catalog identity, version, status, compatibility, relations, and provenance |
-| `evals.json` | Routing and output behavior to measure |
-| `references/` | Conditional depth for a specific decision branch |
+The knowledge plane is independent:
 
-The Go tool reads those inputs and generates:
+- `research/corpus-lock.json`: repository identity, licenses, every file hash, canonical skill inventory, and hashed material markers;
+- `knowledge/claims/canonical.json`: adjudicated technical claims and primary evidence;
+- `knowledge/claims/reference-dispositions.json`: one disposition for every material marker;
+- `THIRD_PARTY_NOTICES.md`: reuse policy and attribution.
 
-- `agents/openai.yaml` inside each canonical skill;
-- `catalog/catalog.json` for the future website and external tooling;
-- a Codex plugin package under `plugins/engineering-skills-for-go/`;
-- a Claude plugin manifest in that package, reusing the same skill tree.
+## Generation
 
-Generated artifacts are checked for freshness. No client adapter is allowed to edit the skill body.
+`skillctl generate` produces three Codex/Claude/Agent Plugin packages, Cursor `.cursor/skills` adapters, OpenCode `.agents/skills` adapters, catalogs, search data, site data, and `llms.txt`. Generated content never forks canonical knowledge.
 
-## Taxonomy
+## Context contract
 
-The v1 taxonomy follows failure boundaries rather than language syntax:
+Every `SKILL.md` is below 250 lines and 1,800 words. Conditional depth is one reference hop. Conservative discovery accounting assumes a 160-character installation path, limits each collection to 4,000 characters, and all collections together to 7,800.
 
-- **execution:** concurrency lifecycle and HTTP transport boundaries;
-- **state:** SQL transaction boundaries and message-processing semantics;
-- **reliability:** remote-call resilience;
-- **workflow:** risk-driven production change review.
+## Authority
 
-These skills compose only when the change crosses boundaries. They do not require an orchestrator and do not instruct an agent to load the whole collection.
+Claims distinguish adopted, qualified, organizational, version-specific, rejected, and outside-scope guidance. The Go specification and official implemented contracts outrank community convention. Security, financial, normative, and version-sensitive claims require primary evidence and explicit counterexamples.
 
-Generic formatting, naming, declarations, and basic error wrapping are deliberately absent from v1. Current base models and repository-local instructions usually cover them, while conflicting generic guidance can reduce task performance.
+## Security
 
-## Authority model
-
-Every source has one of four kinds:
-
-- `normative`: a language specification, standard-library contract, or open skill specification;
-- `primary`: official project documentation describing implemented behavior;
-- `operational`: first-party production guidance whose causal model generalizes but is not a Go rule;
-- `organization-specific`: a convention valid for its publisher unless repository evidence adopts it.
-
-The validator rejects missing verification dates and unknown kinds. Skill prose must not elevate a lower-authority source into a universal requirement.
-
-## Versioning
-
-Skills use independent semantic versions because a routing-description change can affect one skill without changing the others. The collection and plugin use their own semantic version. `status` is one of `experimental`, `beta`, or `stable`; v1 skills begin at `beta` until paired evaluations have been repeated across at least two current agent/model combinations.
-
-Go guidance targets the two stable Go release families recorded in each `skill.json`. A skill must isolate version-sensitive advice and retain a compatible path when the repository’s declared Go version is older.
-
-## Security boundary
-
-Instruction-only skills are the default. Scripts require a separate threat model because empirical ecosystem research finds executable skills carry materially higher vulnerability rates. Client-specific tool grants are not placed in portable frontmatter; the user’s agent and repository policy remain authoritative.
+Published skills are instruction-only. The validator rejects executable skill resources, symlinks, unexpected files, escaping references, stale evidence, and generated drift. Packaging uses deterministic archives, checksums, and provenance.

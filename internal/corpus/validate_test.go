@@ -99,6 +99,7 @@ func validTestCollection() Collection {
 		Claims: ClaimLedger{SchemaVersion: 2, VerifiedOn: "2026-08-18", Claims: []Claim{{
 			ID: "example-invariant", Statement: "Preserve example behavior.", Status: "adopted-with-qualifications",
 			Scope: "Example", Invariant: "Example remains bounded.", Owners: []string{"example-skill"}, RiskDomains: []string{"correctness"},
+			PrimaryEvidence: []ClaimEvidence{{Title: "Normative source", URL: "https://example.com/normative", Publisher: "Example", Kind: "normative", VerifiedOn: "2026-08-18"}},
 		}}},
 		Skills: []Skill{
 			{
@@ -142,6 +143,17 @@ func validTestCollection() Collection {
 				},
 			},
 		},
+	}
+}
+
+func TestValidateAtRequiresOwnedClaimEvidence(t *testing.T) {
+	t.Parallel()
+
+	collection := validTestCollection()
+	collection.Skills[0].Metadata.Sources[0].URL = "https://example.com/unrelated"
+	_, err := validateAt(collection, mustDate(t, "2026-08-18"))
+	if err == nil || !strings.Contains(err.Error(), "has no matching primary evidence") {
+		t.Fatalf("validateAt() error = %v, want claim-evidence error", err)
 	}
 }
 

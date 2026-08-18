@@ -1,6 +1,6 @@
 ---
 name: go-distributed-coordination
-description: "Use for Go leases, fencing, distributed locks, sagas, and multi-service recovery. Do not use for local mutexes."
+description: "Use for Go cross-process ownership, leases, fencing, locks, sagas, and recovery. Do not use for local mutexes."
 license: Apache-2.0
 compatibility: "Go 1.24 or newer; coordination guarantees are specific to the deployed service and client version."
 ---
@@ -18,6 +18,8 @@ Identify the resource, operations requiring exclusion or order, authoritative st
 For irreversible writes, obtain a monotonically increasing fencing token and make the authoritative store reject effects from older tokens. A lease check performed before the write is insufficient when the holder can pause between check and effect.
 
 Use storage-level compare-and-swap, version predicates, or transaction constraints where possible. Process-local mutexes and leader flags cannot coordinate replicas.
+
+If the target cannot compare fencing tokens—such as some payment, email, or filesystem effects—a lease alone cannot guarantee exclusion. Use target-enforced stable idempotency, route the effect through a fenceable authoritative outbox, or state the weaker guarantee and duplicate-recovery requirement explicitly.
 
 ## Design lease lifecycle
 

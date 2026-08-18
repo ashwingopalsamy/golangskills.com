@@ -1,6 +1,6 @@
 ---
 name: go-service-resilience
-description: "Use for Go deadlines, retries, admission, load shedding, fallbacks, and recovery. Do not use for local speed or brokers."
+description: "Use for cross-service Go deadlines, retries, admission, shedding, and recovery. Do not use for commits, brokers, or local speed."
 license: Apache-2.0
 compatibility: "Go 1.24 or newer. Policies are transport-neutral; verify client and dependency behavior against repository versions."
 ---
@@ -56,7 +56,7 @@ Read [references/retries.md](references/retries.md) for classification, backoff,
 
 ## Control amplification
 
-If a five-deep call chain retries three times at every layer, one user request can create up to 243 leaf attempts. Prefer one retry owner near the layer that understands replay semantics and user budget.
+If a five-deep call chain makes three total attempts at every layer, one user request can create up to 243 leaf attempts. If “retry three times” means three retries after the first attempt, the bound is 4^5 = 1,024. Prefer one retry owner near the layer that understands replay semantics and user budget.
 
 Use exponential backoff with jitter to desynchronize callers, but remember:
 
@@ -77,6 +77,8 @@ Admission control should happen before allocating expensive state or spawning wo
 - queue only within an explicit memory and latency limit.
 
 Separate concurrency pools only when isolation matches real failure domains. Per-dependency bulkheads can stop one slow dependency from consuming every worker, but too many pools strand capacity and complicate fairness.
+
+Bound both logical operations and active dependency attempts. An operation-lifecycle permit bounds callers sleeping in backoff; an attempt permit bounds active dependency load and is released before backoff, then reacquired cancellation-aware. Holding scarce dependency capacity during sleep starves fresh work and recovery probes; releasing it without an operation bound creates unbounded sleepers.
 
 Read [references/overload.md](references/overload.md) for load shedding, circuit behavior, and recovery.
 

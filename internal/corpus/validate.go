@@ -84,7 +84,7 @@ func validateAt(collection Collection, now time.Time) (Metrics, error) {
 		prefix := skill.Name + ": "
 		issues = append(issues, validateFrontmatter(prefix, skill)...)
 		issues = append(issues, validateMetadata(prefix, skill, names, claimIDs, now)...)
-		issues = append(issues, validateEvaluations(prefix, skill)...)
+		issues = append(issues, validateEvaluations(prefix, skill, collection.RepoRoot, names)...)
 		issues = append(issues, validateFiles(prefix, skill)...)
 
 		skillMarkdown := skill.Files["SKILL.md"]
@@ -97,6 +97,7 @@ func validateAt(collection Collection, now time.Time) (Metrics, error) {
 		metrics.SourceCount += len(skill.Metadata.Sources)
 		metrics.EvaluationCount += len(skill.Evaluations.Cases)
 	}
+	issues = append(issues, validateSkillClaimEvidence(collection.Skills, collection.Claims.Claims)...)
 	for _, name := range collectionNames {
 		characters := collectionDiscovery[name] + len("<available_skills>\n</available_skills>\n")
 		metrics.Collections = append(metrics.Collections, CollectionMetrics{
@@ -122,6 +123,47 @@ func validateAt(collection Collection, now time.Time) (Metrics, error) {
 		return metrics, &ValidationError{Issues: issues}
 	}
 	return metrics, nil
+}
+
+func validateSkillClaimEvidence(skills []Skill, claims []Claim) []string {
+	claimByID := make(map[string]Claim, len(claims))
+	for _, claim := range claims {
+		claimByID[claim.ID] = claim
+	}
+
+	var issues []string
+	for _, skill := range skills {
+		sourceURLs := make(map[string]struct{}, len(skill.Metadata.Sources))
+		for _, source := range skill.Metadata.Sources {
+			sourceURLs[source.URL] = struct{}{}
+		}
+		for _, claimID := range skill.Metadata.ClaimIDs {
+			claim, exists := claimByID[claimID]
+			if !exists || !containsString(claim.Owners, skill.Name) || len(claim.PrimaryEvidence) == 0 {
+				continue
+			}
+			covered := false
+			for _, evidence := range claim.PrimaryEvidence {
+				if _, exists := sourceURLs[evidence.URL]; exists {
+					covered = true
+					break
+				}
+			}
+			if !covered {
+				issues = append(issues, fmt.Sprintf("%s: owned claim %q has no matching primary evidence in skill.json sources", skill.Name, claimID))
+			}
+		}
+	}
+	return issues
+}
+
+func containsString(values []string, target string) bool {
+	for _, value := range values {
+		if value == target {
+			return true
+		}
+	}
+	return false
 }
 
 func validateReferenceCoverage(repoRoot string, claimIDs map[string]struct{}, now time.Time) []string {
@@ -480,7 +522,7 @@ func validateClaims(ledger ClaimLedger, skillNames, claimIDs map[string]struct{}
 	return issues
 }
 
-func validateEvaluations(prefix string, skill Skill) []string {
+func validateEvaluations(prefix string, skill Skill, repoRoot string, names map[string]struct{}) []string {
 	evaluations := skill.Evaluations
 	var issues []string
 	if evaluations.SchemaVersion != 2 {
@@ -519,6 +561,11 @@ func validateEvaluations(prefix string, skill Skill) []string {
 			if eval.Reason == "" {
 				issues = append(issues, evalPrefix+"routing cases require a reason")
 			}
+			for _, alternative := range eval.ConfusesWith {
+				if _, exists := names[alternative]; !exists || alternative == skill.Name {
+					issues = append(issues, fmt.Sprintf("%sconfusion route %q must name another canonical skill", evalPrefix, alternative))
+				}
+			}
 			if eval.Fixture != "" || len(eval.ExpectedInvariants) != 0 || len(eval.ForbiddenOutcomes) != 0 || len(eval.Graders) != 0 || len(eval.SemanticRubric) != 0 {
 				issues = append(issues, evalPrefix+"routing cases cannot contain quality criteria")
 			}
@@ -533,13 +580,37 @@ func validateEvaluations(prefix string, skill Skill) []string {
 			if len(eval.Graders) == 0 {
 				issues = append(issues, evalPrefix+"quality cases require at least one deterministic grader")
 			}
+			hasGoTest := false
 			for graderIndex, grader := range eval.Graders {
 				graderPrefix := fmt.Sprintf("%sgrader %d: ", evalPrefix, graderIndex+1)
-				if !skillNamePattern.MatchString(grader.ID) || !oneOf(grader.Kind, "contains", "not-contains", "go-test", "command", "json") {
+				if !skillNamePattern.MatchString(grader.ID) || !oneOf(grader.Kind, "contains", "not-contains", "go-test", "json") {
 					issues = append(issues, graderPrefix+"id or kind is invalid")
+				}
+				if grader.Kind == "go-test" {
+					hasGoTest = true
+					if eval.Fixture == "" {
+						issues = append(issues, graderPrefix+"go-test requires a fixture")
+					}
+					if grader.Target != "" && grader.Target != "./..." && grader.Target != "-race ./..." {
+						issues = append(issues, graderPrefix+"go-test target must be empty, ./..., or -race ./...")
+					}
 				}
 				if grader.Weight <= 0 {
 					issues = append(issues, graderPrefix+"weight must be positive")
+				}
+			}
+			if eval.Fixture != "" {
+				clean := path.Clean(eval.Fixture)
+				if !strings.HasPrefix(clean, "evaluations/fixtures/") || clean != eval.Fixture {
+					issues = append(issues, evalPrefix+"fixture must be a clean path under evaluations/fixtures")
+				} else if repoRoot != "" {
+					info, err := os.Stat(filepath.Join(repoRoot, filepath.FromSlash(clean)))
+					if err != nil || !info.IsDir() {
+						issues = append(issues, evalPrefix+"fixture directory does not exist")
+					}
+				}
+				if !hasGoTest {
+					issues = append(issues, evalPrefix+"fixture requires at least one go-test grader")
 				}
 			}
 		default:

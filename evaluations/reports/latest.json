@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "generated_on": "2026-08-18",
+  "leadership_claim_eligible": false,
+  "status": "development-screen-only",
+  "codex_screen": {
+    "model": "gpt-5.6-sol",
+    "client_version": "codex-cli 0.148.0-alpha.9",
+    "cases": 10,
+    "passed": 9,
+    "pass_rate": 0.9,
+    "ci_lower_95": 0.5958499732047615,
+    "ci_upper_95": 0.9821237869049271,
+    "critical_failures": 0,
+    "raw_artifact": "evaluations/runs/2026-08-18-ours-routing-screen-v2.jsonl",
+    "score_artifact": "evaluations/scores/2026-08-18-ours-routing-screen-v2.jsonl"
+  },
+  "targeted_rerun": {
+    "case": "go-clearing-settlement-reconciliation/avoid-initial-auth",
+    "passed": true,
+    "reason": "The activation description was corrected after the screen; this rerun is not substituted into the original sample.",
+    "raw_artifact": "evaluations/runs/2026-08-18-ours-routing-targeted-v3.jsonl",
+    "score_artifact": "evaluations/scores/2026-08-18-ours-routing-targeted-v3.jsonl"
+  },
+  "fixture_screen": {
+    "case": "go-clearing-settlement-reconciliation/quality-item-match",
+    "passed": true,
+    "grader": "go test ./...",
+    "raw_artifact": "evaluations/runs/2026-08-18-ours-reconciliation-fixture.jsonl",
+    "score_artifact": "evaluations/scores/2026-08-18-ours-reconciliation-fixture.jsonl"
+  },
+  "blocking_gates": [
+    "private release holdout not yet frozen and scored",
+    "full baseline and multi-competitor treatment matrix not yet completed",
+    "the 80-scenario full-arm matrix and hard-case repetitions are not yet completed",
+    "routing macro-F1 and false-activation gates not yet established",
+    "deterministic fixture superiority and domain non-inferiority not yet established",
+    "paired win-rate confidence intervals and token-efficiency frontier not yet established"
+  ]
+}
