@@ -7,8 +7,11 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"path/filepath"
+	"time"
 
 	"github.com/ashwingopalsamy/golangskills.com/internal/corpus"
+	"github.com/ashwingopalsamy/golangskills.com/internal/research"
 )
 
 func main() {
@@ -20,7 +23,10 @@ func main() {
 
 func run(arguments []string, output io.Writer) error {
 	if len(arguments) == 0 {
-		return errors.New("usage: skillctl <check|generate|stats> [-root path]")
+		return errors.New("usage: skillctl <audit refs|check|generate|stats> [options]")
+	}
+	if arguments[0] == "audit" {
+		return runAudit(arguments[1:], output)
 	}
 	command := arguments[0]
 	flags := flag.NewFlagSet(command, flag.ContinueOnError)
@@ -81,6 +87,48 @@ func run(arguments []string, output io.Writer) error {
 	default:
 		return fmt.Errorf("unknown command %q; expected check, generate, or stats", command)
 	}
+}
+
+func runAudit(arguments []string, output io.Writer) error {
+	if len(arguments) == 0 || arguments[0] != "refs" {
+		return errors.New("usage: skillctl audit refs -refs path [-root path] [-verified-on YYYY-MM-DD]")
+	}
+	flags := flag.NewFlagSet("audit refs", flag.ContinueOnError)
+	flags.SetOutput(io.Discard)
+	referenceRoot := flags.String("refs", "", "directory containing reference repositories")
+	repositoryRoot := flags.String("root", "", "golangskills.com repository root")
+	verifiedOn := flags.String("verified-on", time.Now().UTC().Format("2006-01-02"), "verification date")
+	if err := flags.Parse(arguments[1:]); err != nil {
+		return err
+	}
+	if flags.NArg() != 0 {
+		return fmt.Errorf("unexpected arguments: %v", flags.Args())
+	}
+	root, err := corpus.FindRepoRoot(*repositoryRoot)
+	if err != nil {
+		return err
+	}
+	lock, err := research.Audit(*referenceRoot, *verifiedOn)
+	if err != nil {
+		return err
+	}
+	outputPath := filepath.Join(root, "research", "corpus-lock.json")
+	if err := research.WriteLock(outputPath, lock); err != nil {
+		return err
+	}
+	dispositionPath := filepath.Join(root, "knowledge", "claims", "reference-dispositions.json")
+	index := research.BuildDispositionIndex(lock)
+	if err := research.WriteDispositionIndex(dispositionPath, index); err != nil {
+		return err
+	}
+	files, skills, items := 0, 0, 0
+	for _, repository := range lock.Repositories {
+		files += len(repository.Files)
+		skills += len(repository.Skills)
+		items += len(repository.MaterialItems)
+	}
+	fmt.Fprintf(output, "locked %d repositories, %d files, %d skills, and %d material items in %s; mapped every item in %s\n", len(lock.Repositories), files, skills, items, outputPath, dispositionPath)
+	return nil
 }
 
 func writeMetrics(output io.Writer, metrics corpus.Metrics) {

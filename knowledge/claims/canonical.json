@@ -1,0 +1,359 @@
+{
+  "schema_version": 2,
+  "verified_on": "2026-08-18",
+  "claims": [
+    {
+      "id": "eng-language-clarity",
+      "statement": "Choose Go constructs by semantic clarity and ownership, then simplify control flow; formatting and naming conventions serve that goal rather than acting as correctness laws.",
+      "status": "adopted-with-qualifications",
+      "scope": "Go language, declarations, data structures, errors, interfaces, generics, and naming",
+      "invariant": "A maintainer can determine value ownership, mutation, failure, and control flow from the local API and implementation.",
+      "qualifications": ["The Go specification defines validity, not house style.", "Existing public APIs and repository conventions can outweigh a local preference."],
+      "counterexamples": ["Changing an established exported name solely to satisfy a style preference can be a compatibility regression.", "A pointer is not automatically preferable for a large value when identity and mutation are not part of the contract."],
+      "go_versions": ["1.24", "1.25", "1.26"],
+      "owners": ["go-language-engineering"],
+      "risk_domains": ["correctness", "compatibility", "maintainability"],
+      "primary_evidence": [
+        {"title": "The Go Programming Language Specification", "url": "https://go.dev/ref/spec", "publisher": "The Go Authors", "kind": "normative", "verified_on": "2026-08-18"},
+        {"title": "Go Code Review Comments", "url": "https://go.dev/wiki/CodeReviewComments", "publisher": "The Go Authors", "kind": "primary", "verified_on": "2026-08-18"}
+      ],
+      "observed_in": ["cc-skills-golang", "cxuu-golang-skills", "go-skills", "google-go-style-guide", "gophers", "uber-go-style-guide"]
+    },
+    {
+      "id": "eng-dependency-direction",
+      "statement": "Put dependency seams at behavior boundaries owned by the consumer, and introduce abstraction only when it isolates a real variation or failure boundary.",
+      "status": "adopted-with-qualifications",
+      "scope": "Packages, modules, interfaces, dependency injection, constructors, and project layout",
+      "invariant": "Core behavior can be exercised without importing transport, storage, or process bootstrap details.",
+      "qualifications": ["Small concrete dependencies are often clearer than interfaces.", "A repository layout is not an architecture by itself."],
+      "counterexamples": ["A one-implementation interface created beside its implementation can add indirection without isolation.", "Framework-specific applications may reasonably follow framework layout at the outer boundary."],
+      "go_versions": ["1.24", "1.25", "1.26"],
+      "owners": ["go-project-and-api-design"],
+      "risk_domains": ["maintainability", "testability", "compatibility"],
+      "primary_evidence": [
+        {"title": "Organizing a Go module", "url": "https://go.dev/doc/modules/layout", "publisher": "The Go Authors", "kind": "primary", "verified_on": "2026-08-18"},
+        {"title": "Go Wiki: Code Review Comments - Interfaces", "url": "https://go.dev/wiki/CodeReviewComments#interfaces", "publisher": "The Go Authors", "kind": "primary", "verified_on": "2026-08-18"}
+      ],
+      "observed_in": ["cc-skills-golang", "cxuu-golang-skills", "go-skills", "gophers"]
+    },
+    {
+      "id": "eng-protocol-boundary",
+      "statement": "At HTTP, gRPC, GraphQL, and OpenAPI boundaries, validate once, preserve protocol semantics, bound work, and keep domain behavior independent of transport encoding.",
+      "status": "adopted",
+      "scope": "Network service APIs and adapters",
+      "invariant": "Malformed, canceled, oversized, duplicated, or partially written requests cannot bypass domain invariants or leave uncontrolled work behind.",
+      "qualifications": ["Protocol-specific status and retry semantics must remain visible at the adapter.", "Streaming APIs require lifecycle handling beyond request-response handlers."],
+      "counterexamples": ["Converting every domain failure to HTTP 500 or gRPC Unknown destroys retry and client-correction semantics."],
+      "go_versions": ["1.24", "1.25", "1.26"],
+      "owners": ["go-service-boundaries"],
+      "risk_domains": ["correctness", "security", "availability", "compatibility"],
+      "primary_evidence": [
+        {"title": "Package net/http", "url": "https://pkg.go.dev/net/http", "publisher": "The Go Authors", "kind": "primary", "verified_on": "2026-08-18"},
+        {"title": "gRPC Guides", "url": "https://grpc.io/docs/guides/", "publisher": "Cloud Native Computing Foundation", "kind": "protocol", "verified_on": "2026-08-18"}
+      ],
+      "observed_in": ["cc-skills-golang", "gophers"]
+    },
+    {
+      "id": "eng-verification-by-risk",
+      "statement": "Select deterministic tests, fuzzing, race detection, static analysis, and integration checks from the failure modes a change can introduce, not from a fixed test template.",
+      "status": "adopted",
+      "scope": "Go testing and automated verification",
+      "invariant": "Each material invariant has an executable oracle at the cheapest layer that can falsify it.",
+      "qualifications": ["Race detection observes executed paths and cannot prove the absence of all races.", "Fuzzing is most useful with fast deterministic targets and meaningful invariants."],
+      "counterexamples": ["A table-driven test is not inherently better than direct tests for a single behavior.", "Mock call-order assertions can freeze implementation detail without validating behavior."],
+      "go_versions": ["1.24", "1.25", "1.26"],
+      "owners": ["go-testing-and-verification"],
+      "risk_domains": ["correctness", "security", "concurrency"],
+      "primary_evidence": [
+        {"title": "Go Fuzzing", "url": "https://go.dev/doc/security/fuzz/", "publisher": "The Go Authors", "kind": "primary", "verified_on": "2026-08-18"},
+        {"title": "Data Race Detector", "url": "https://go.dev/doc/articles/race_detector", "publisher": "The Go Authors", "kind": "primary", "verified_on": "2026-08-18"}
+      ],
+      "observed_in": ["cc-skills-golang", "cxuu-golang-skills", "gophers"]
+    },
+    {
+      "id": "eng-measure-before-optimize",
+      "statement": "Establish a reproducible workload and profile the dominant resource before optimizing Go code; report both effect size and cost transfer.",
+      "status": "adopted",
+      "scope": "CPU, allocation, memory, contention, scheduling, I/O, and latency diagnostics",
+      "invariant": "An optimization improves the target production constraint without violating correctness or moving an unacceptable cost elsewhere.",
+      "qualifications": ["Microbenchmarks require stable setup and statistical comparison.", "Profile-guided optimization does not replace end-to-end latency and capacity evidence."],
+      "counterexamples": ["Replacing readable code with allocation tricks before identifying allocation pressure can reduce maintainability with no material gain."],
+      "go_versions": ["1.24", "1.25", "1.26"],
+      "owners": ["go-performance-and-diagnostics"],
+      "risk_domains": ["performance", "reliability", "maintainability"],
+      "primary_evidence": [
+        {"title": "Profiling Go Programs", "url": "https://go.dev/blog/pprof", "publisher": "The Go Authors", "kind": "primary", "verified_on": "2026-08-18"},
+        {"title": "Package testing", "url": "https://pkg.go.dev/testing", "publisher": "The Go Authors", "kind": "primary", "verified_on": "2026-08-18"}
+      ],
+      "observed_in": ["cc-skills-golang", "cxuu-golang-skills", "gophers", "uber-go-style-guide"]
+    },
+    {
+      "id": "eng-security-boundary",
+      "statement": "Treat every external input, credential, dependency, generated artifact, and privileged operation as a trust boundary with explicit validation, least privilege, and failure containment.",
+      "status": "adopted",
+      "scope": "Application, supply-chain, authentication, authorization, cryptography, and secret handling",
+      "invariant": "Untrusted data cannot acquire authority merely by reaching an internal type or generated path.",
+      "qualifications": ["Security controls must follow a threat model and deployment context.", "Use maintained cryptographic protocols and libraries rather than custom primitives."],
+      "counterexamples": ["Input validation alone cannot repair an authorization decision made at the wrong resource boundary."],
+      "go_versions": ["1.24", "1.25", "1.26"],
+      "owners": ["go-security-hardening"],
+      "risk_domains": ["security", "privacy", "supply-chain"],
+      "primary_evidence": [
+        {"title": "Go Security Best Practices", "url": "https://go.dev/doc/security/best-practices", "publisher": "The Go Authors", "kind": "primary", "verified_on": "2026-08-18"},
+        {"title": "NIST Secure Software Development Framework", "url": "https://csrc.nist.gov/pubs/sp/800/218/final", "publisher": "NIST", "kind": "regulatory", "verified_on": "2026-08-18"}
+      ],
+      "observed_in": ["cc-skills-golang", "gophers"]
+    },
+    {
+      "id": "eng-operational-lifecycle",
+      "statement": "A Go service owns startup validation, readiness, bounded shutdown, telemetry continuity, and dependency failure behavior as part of its public production contract.",
+      "status": "adopted",
+      "scope": "Configuration, logging, metrics, traces, health, shutdown, containers, Kubernetes, CI, and releases",
+      "invariant": "The process never advertises readiness before it can serve safely and does not abandon accepted work without an explicit shutdown policy.",
+      "qualifications": ["Readiness and liveness probe semantics depend on orchestration and failure-recovery strategy.", "Telemetry must remain bounded and avoid sensitive or high-cardinality dimensions."],
+      "counterexamples": ["A liveness probe that fails on every downstream outage can turn a dependency incident into a restart storm."],
+      "go_versions": ["1.24", "1.25", "1.26"],
+      "owners": ["go-production-operations"],
+      "risk_domains": ["availability", "observability", "deployment"],
+      "primary_evidence": [
+        {"title": "Kubernetes Pod Lifecycle", "url": "https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/", "publisher": "Cloud Native Computing Foundation", "kind": "operational", "verified_on": "2026-08-18"},
+        {"title": "OpenTelemetry Tracing API", "url": "https://opentelemetry.io/docs/specs/otel/trace/api/", "publisher": "OpenTelemetry", "kind": "protocol", "verified_on": "2026-08-18"}
+      ],
+      "observed_in": ["cc-skills-golang", "gophers"]
+    },
+    {
+      "id": "dist-bounded-concurrency",
+      "statement": "Every goroutine needs a bounded creation rate, an owner, a completion condition, and cancellation or shutdown semantics; shared memory requires a documented synchronization relation.",
+      "status": "adopted",
+      "scope": "Goroutines, channels, mutexes, atomics, worker pools, and context propagation",
+      "invariant": "Load, cancellation, or partial failure cannot create an unbounded number of live goroutines or unsynchronized conflicting memory access.",
+      "qualifications": ["Not every goroutine needs its own context when ownership provides a stronger completion mechanism.", "Channels and mutexes solve different ownership problems; neither is categorically superior."],
+      "counterexamples": ["A process-lifetime telemetry goroutine can be owned by process shutdown rather than a request context."],
+      "go_versions": ["1.24", "1.25", "1.26"],
+      "owners": ["go-concurrency-lifecycle"],
+      "risk_domains": ["concurrency", "availability", "resource-exhaustion"],
+      "primary_evidence": [
+        {"title": "The Go Memory Model", "url": "https://go.dev/ref/mem", "publisher": "The Go Authors", "kind": "normative", "verified_on": "2026-08-18"},
+        {"title": "Package context", "url": "https://pkg.go.dev/context", "publisher": "The Go Authors", "kind": "primary", "verified_on": "2026-08-18"}
+      ],
+      "observed_in": ["cc-skills-golang", "cxuu-golang-skills", "gophers", "uber-go-style-guide"]
+    },
+    {
+      "id": "dist-transaction-invariant",
+      "statement": "Choose a transaction boundary and isolation behavior from the business invariant, and make the full read-check-write effect atomic at that boundary.",
+      "status": "adopted",
+      "scope": "SQL transactions, isolation, locking, optimistic concurrency, and cache consistency",
+      "invariant": "Every committed outcome satisfies the domain invariant under permitted concurrent executions.",
+      "qualifications": ["Isolation names do not guarantee identical behavior across database engines.", "Serializable transactions may require safe retries and do not make external side effects transactional."],
+      "counterexamples": ["Read Committed can be sufficient for independent predetermined row updates but unsafe for cross-row invariants implemented as read-then-write."],
+      "go_versions": ["1.24", "1.25", "1.26"],
+      "owners": ["go-data-consistency"],
+      "risk_domains": ["consistency", "atomicity", "durability"],
+      "primary_evidence": [
+        {"title": "Executing transactions", "url": "https://go.dev/doc/database/execute-transactions", "publisher": "The Go Authors", "kind": "primary", "verified_on": "2026-08-18"},
+        {"title": "PostgreSQL Transaction Isolation", "url": "https://www.postgresql.org/docs/current/transaction-iso.html", "publisher": "PostgreSQL Global Development Group", "kind": "primary", "verified_on": "2026-08-18"}
+      ],
+      "observed_in": ["cc-skills-golang", "gophers"]
+    },
+    {
+      "id": "dist-delivery-semantics",
+      "statement": "Assume messages can be duplicated, delayed, reordered, or redelivered unless the complete broker-consumer-state boundary proves stronger semantics.",
+      "status": "adopted",
+      "scope": "Queues, logs, consumers, outbox/inbox, acknowledgements, ordering, and poison messages",
+      "invariant": "Redelivery or crash at any acknowledgement boundary cannot violate the business invariant or silently lose required work.",
+      "qualifications": ["Exactly-once features are scoped to particular systems and transaction boundaries.", "Global ordering is expensive and usually unnecessary; identify the ordering key."],
+      "counterexamples": ["A broker transaction cannot make an arbitrary third-party API side effect exactly once."],
+      "go_versions": ["1.24", "1.25", "1.26"],
+      "owners": ["go-message-processing"],
+      "risk_domains": ["delivery", "ordering", "idempotency", "recovery"],
+      "primary_evidence": [
+        {"title": "Apache Kafka Design", "url": "https://kafka.apache.org/documentation/#design", "publisher": "Apache Software Foundation", "kind": "protocol", "verified_on": "2026-08-18"},
+        {"title": "NATS JetStream Consumers", "url": "https://docs.nats.io/nats-concepts/jetstream/consumers", "publisher": "Synadia", "kind": "protocol", "verified_on": "2026-08-18"}
+      ],
+      "observed_in": ["cc-skills-golang"]
+    },
+    {
+      "id": "dist-retry-budget",
+      "statement": "Retry only operations whose duplicate effects are safe, within one end-to-end deadline and retry budget that accounts for amplification across layers.",
+      "status": "adopted",
+      "scope": "Timeouts, cancellation, retries, circuit breaking, load shedding, and backpressure",
+      "invariant": "Recovery traffic cannot exceed the capacity reserved to recover, and a caller never interprets an ambiguous side effect as a known failure.",
+      "qualifications": ["Backoff with jitter reduces synchronization but does not create capacity.", "A circuit breaker is useful only when its state and fallback semantics match the dependency failure mode."],
+      "counterexamples": ["Retrying at client, proxy, and service layers can multiply attempts even when each layer uses a small retry count."],
+      "go_versions": ["1.24", "1.25", "1.26"],
+      "owners": ["go-service-resilience"],
+      "risk_domains": ["availability", "overload", "latency", "partial-failure"],
+      "primary_evidence": [
+        {"title": "gRPC Retry Guide", "url": "https://grpc.io/docs/guides/retry/", "publisher": "Cloud Native Computing Foundation", "kind": "protocol", "verified_on": "2026-08-18"},
+        {"title": "AWS Builders Library: Timeouts, retries, and backoff with jitter", "url": "https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/", "publisher": "Amazon Web Services", "kind": "operational", "verified_on": "2026-08-18"}
+      ],
+      "observed_in": ["cc-skills-golang"]
+    },
+    {
+      "id": "dist-coordination-safety",
+      "statement": "Treat leases and distributed locks as time-bounded evidence, not permanent ownership; protect irreversible effects with fencing or storage-level conditional writes.",
+      "status": "adopted-with-qualifications",
+      "scope": "Leases, leader election, distributed locks, sagas, and multi-service recovery",
+      "invariant": "A delayed or partitioned former owner cannot commit an effect after a newer owner has taken over.",
+      "qualifications": ["Consensus-backed services reduce but do not remove client pause and stale-owner hazards.", "Sagas provide compensating workflow, not ACID rollback across services."],
+      "counterexamples": ["Mutual exclusion inside one Go process can use a mutex and does not require fencing tokens."],
+      "go_versions": ["1.24", "1.25", "1.26"],
+      "owners": ["go-distributed-coordination"],
+      "risk_domains": ["coordination", "partition", "ordering", "recovery"],
+      "primary_evidence": [
+        {"title": "etcd concurrency API", "url": "https://pkg.go.dev/go.etcd.io/etcd/client/v3/concurrency", "publisher": "etcd Authors", "kind": "primary", "verified_on": "2026-08-18"},
+        {"title": "Kubernetes Leases", "url": "https://kubernetes.io/docs/concepts/architecture/leases/", "publisher": "Cloud Native Computing Foundation", "kind": "protocol", "verified_on": "2026-08-18"}
+      ],
+      "observed_in": ["cc-skills-golang"]
+    },
+    {
+      "id": "fin-money-representation",
+      "statement": "Represent money with an explicit currency and exact integer minor units or an exact decimal whose scale and rounding policy are part of the operation contract.",
+      "status": "adopted",
+      "scope": "Monetary amounts, currency metadata, conversion, allocation, and rounding",
+      "invariant": "Stored and transferred amounts are exact under the selected currency exponent and every lossy conversion names its rounding rule.",
+      "qualifications": ["Not every currency uses two decimal minor units.", "Some products require sub-minor precision or non-currency units; preserve the original scale separately."],
+      "counterexamples": ["Binary floating point can be appropriate for analytics where exact settlement values are not produced, but not for ledger postings."],
+      "go_versions": ["1.24", "1.25", "1.26"],
+      "owners": ["go-money-and-ledgers"],
+      "risk_domains": ["financial-integrity", "rounding", "compatibility"],
+      "primary_evidence": [
+        {"title": "ISO 4217 Currency Codes", "url": "https://www.iso.org/iso-4217-currency-codes.html", "publisher": "ISO", "kind": "normative", "verified_on": "2026-08-18"},
+        {"title": "Unicode CLDR Supplemental Currency Data", "url": "https://www.unicode.org/cldr/charts/47/supplemental/index.html", "publisher": "Unicode Consortium", "kind": "primary", "verified_on": "2026-08-18"}
+      ],
+      "observed_in": []
+    },
+    {
+      "id": "fin-ledger-invariants",
+      "statement": "Record immutable balanced journal entries with explicit accounts, currency, effective time, and external correlation; derive balances from postings or a transactionally consistent projection.",
+      "status": "adopted-with-qualifications",
+      "scope": "Double-entry ledgers, journals, balances, reversals, and audit history",
+      "invariant": "For each journal and currency, signed debits and credits net to zero and committed history is changed only by compensating entries.",
+      "qualifications": ["Account normal-balance conventions must be defined by the ledger model.", "A high-throughput projection may be authoritative only if its rebuild and reconciliation semantics are explicit."],
+      "counterexamples": ["A simple single-party stored-value counter may not need a general ledger, but then it cannot claim double-entry controls."],
+      "go_versions": ["1.24", "1.25", "1.26"],
+      "owners": ["go-money-and-ledgers"],
+      "risk_domains": ["financial-integrity", "auditability", "durability"],
+      "primary_evidence": [
+        {"title": "Modern Treasury: How to Scale a Ledger", "url": "https://www.moderntreasury.com/journal/how-to-scale-a-ledger-part-i", "publisher": "Modern Treasury", "kind": "operational", "verified_on": "2026-08-18"},
+        {"title": "PostgreSQL Constraints", "url": "https://www.postgresql.org/docs/current/ddl-constraints.html", "publisher": "PostgreSQL Global Development Group", "kind": "primary", "verified_on": "2026-08-18"}
+      ],
+      "observed_in": []
+    },
+    {
+      "id": "fin-payment-state-machine",
+      "statement": "Model authorization, capture, refund, reversal, dispute, and asynchronous processing as explicit monotonic transitions driven by persisted provider evidence.",
+      "status": "adopted-with-qualifications",
+      "scope": "Card and account-to-account payment lifecycles",
+      "invariant": "No transition invents a successful movement of funds, and late provider events remain safely applicable or explicitly quarantined.",
+      "qualifications": ["Provider state names and legal finality differ by rail and region.", "A locally terminal state can still receive chargebacks or settlement adjustments."],
+      "counterexamples": ["Treating an HTTP timeout as a declined payment can trigger a second successful authorization."],
+      "go_versions": ["1.24", "1.25", "1.26"],
+      "owners": ["go-payment-lifecycles"],
+      "risk_domains": ["financial-integrity", "state-machine", "ambiguous-outcome"],
+      "primary_evidence": [
+        {"title": "Stripe PaymentIntent lifecycle", "url": "https://docs.stripe.com/payments/paymentintents/lifecycle", "publisher": "Stripe", "kind": "protocol", "verified_on": "2026-08-18"},
+        {"title": "Stripe separate authorization and capture", "url": "https://docs.stripe.com/payments/place-a-hold-on-a-payment-method", "publisher": "Stripe", "kind": "protocol", "verified_on": "2026-08-18"}
+      ],
+      "observed_in": []
+    },
+    {
+      "id": "fin-idempotency-record",
+      "statement": "Bind an idempotency key to the authenticated operation identity and canonical request, serialize concurrent first use, persist the business outcome atomically, and reject mismatched reuse.",
+      "status": "adopted",
+      "scope": "Money-moving commands, API retries, provider calls, webhooks, and replay",
+      "invariant": "Any number of equivalent retries produces at most one committed financial effect and returns an outcome consistent with that effect.",
+      "qualifications": ["Retention must cover the maximum credible retry and replay window.", "Provider idempotency does not replace local idempotency around local state changes."],
+      "counterexamples": ["A check-then-insert implementation without a uniqueness constraint races under concurrent requests."],
+      "go_versions": ["1.24", "1.25", "1.26"],
+      "owners": ["go-financial-idempotency"],
+      "risk_domains": ["financial-integrity", "idempotency", "concurrency"],
+      "primary_evidence": [
+        {"title": "Stripe idempotent requests", "url": "https://docs.stripe.com/api/idempotent_requests", "publisher": "Stripe", "kind": "protocol", "verified_on": "2026-08-18"},
+        {"title": "PostgreSQL INSERT ON CONFLICT", "url": "https://www.postgresql.org/docs/current/sql-insert.html", "publisher": "PostgreSQL Global Development Group", "kind": "primary", "verified_on": "2026-08-18"}
+      ],
+      "observed_in": []
+    },
+    {
+      "id": "fin-settlement-evidence",
+      "statement": "Keep authorization, clearing, settlement, fees, reserves, and bank movement as separate evidence-bearing events rather than collapsing them into one paid flag.",
+      "status": "adopted-with-qualifications",
+      "scope": "Clearing, settlement, payout, reserves, and external account movement",
+      "invariant": "Every external movement and fee can be traced to immutable source evidence and its corresponding ledger postings.",
+      "qualifications": ["Rail-specific cutoffs, calendars, netting, and finality must come from the applicable scheme and processor contract."],
+      "counterexamples": ["A synchronous internal transfer within one ledger may settle atomically and need no external clearing state."],
+      "go_versions": ["1.24", "1.25", "1.26"],
+      "owners": ["go-clearing-settlement-reconciliation"],
+      "risk_domains": ["settlement", "financial-integrity", "auditability"],
+      "primary_evidence": [
+        {"title": "Stripe Balance Transactions", "url": "https://docs.stripe.com/reports/balance-transaction-types", "publisher": "Stripe", "kind": "protocol", "verified_on": "2026-08-18"},
+        {"title": "Federal Reserve Funds Transfer Through Fedwire", "url": "https://www.federalreserve.gov/paymentsystems/fedfunds_about.htm", "publisher": "Federal Reserve Board", "kind": "regulatory", "verified_on": "2026-08-18"}
+      ],
+      "observed_in": []
+    },
+    {
+      "id": "fin-reconciliation-control",
+      "statement": "Reconcile internal expectations to independently obtained external evidence by stable identity, amount, currency, and lifecycle, with explicit missing, duplicate, mismatched, and timing-break states.",
+      "status": "adopted",
+      "scope": "Processor reports, bank statements, ledger projections, and operational exception queues",
+      "invariant": "Every item is matched exactly once or remains a visible, owned exception; reruns do not erase prior evidence or duplicate adjustments.",
+      "qualifications": ["Timing differences need aging policy and cutoff calendars rather than immediate adjustment.", "Automated repair requires a stronger authorization boundary than automated detection."],
+      "counterexamples": ["Comparing only aggregate totals can conceal equal and opposite item-level errors."],
+      "go_versions": ["1.24", "1.25", "1.26"],
+      "owners": ["go-clearing-settlement-reconciliation"],
+      "risk_domains": ["reconciliation", "financial-integrity", "operations"],
+      "primary_evidence": [
+        {"title": "Stripe reconciliation reports", "url": "https://docs.stripe.com/reports/reconciliation", "publisher": "Stripe", "kind": "operational", "verified_on": "2026-08-18"},
+        {"title": "Stripe payouts and reconciliation", "url": "https://docs.stripe.com/payouts/reconciliation", "publisher": "Stripe", "kind": "operational", "verified_on": "2026-08-18"}
+      ],
+      "observed_in": []
+    },
+    {
+      "id": "fin-data-boundaries",
+      "statement": "Minimize payment-account and personal data at ingestion, isolate the cardholder-data environment, tokenize where possible, and make access and administrative changes tamper-evident.",
+      "status": "adopted-with-qualifications",
+      "scope": "Payment data, credentials, authentication, audit, retention, and compliance controls",
+      "invariant": "Sensitive authentication data and secrets never enter logs, generic events, idempotency keys, or lower-trust storage; access is attributable and least-privileged.",
+      "qualifications": ["PCI DSS scope and regulatory obligations require a qualified assessment of the actual system and contracts.", "This guidance is engineering support, not legal or compliance certification."],
+      "counterexamples": ["Encryption without key isolation and access control does not remove a system from the trust boundary."],
+      "go_versions": ["1.24", "1.25", "1.26"],
+      "owners": ["go-fintech-security-compliance"],
+      "risk_domains": ["security", "privacy", "compliance", "auditability"],
+      "primary_evidence": [
+        {"title": "PCI Data Security Standard", "url": "https://www.pcisecuritystandards.org/standards/pci-dss/", "publisher": "PCI Security Standards Council", "kind": "regulatory", "verified_on": "2026-08-18"},
+        {"title": "NIST SP 800-63B", "url": "https://pages.nist.gov/800-63-4/sp800-63b.html", "publisher": "NIST", "kind": "regulatory", "verified_on": "2026-08-18"}
+      ],
+      "observed_in": []
+    },
+    {
+      "id": "benchmark-methodology",
+      "statement": "Agent-skill performance claims require locked prompts and fixtures, isolated randomized arms, deterministic scoring before blinded semantic scoring, repeated uncertain cases, and raw artifact publication.",
+      "status": "organizational-preference",
+      "scope": "golangskills.com evaluation and release evidence",
+      "invariant": "A reported comparison can be reproduced from a named fixture, model/client configuration, grader version, and raw run artifact without treatment contamination.",
+      "qualifications": ["Same-platform model grading is labeled as such and is not independent human evaluation.", "A failed leadership gate permits evidence publication but forbids a category-leadership claim."],
+      "counterexamples": ["One manually selected prompt and one run cannot establish general superiority."],
+      "go_versions": [],
+      "owners": ["review-go-engineering-change", "review-go-distributed-change", "review-go-fintech-change"],
+      "risk_domains": ["evaluation-integrity", "reproducibility"],
+      "primary_evidence": [
+        {"title": "OpenAI Evals design guide", "url": "https://platform.openai.com/docs/guides/evals", "publisher": "OpenAI", "kind": "primary", "verified_on": "2026-08-18"}
+      ],
+      "observed_in": ["cc-skills-golang", "cxuu-golang-skills", "gophers"]
+    },
+    {
+      "id": "repository-mechanics",
+      "statement": "Reference-repository branding, contributor workflow, generated files, and tool-specific process claims do not become canonical Go guidance merely because they occur beside a skill.",
+      "status": "outside-project-scope",
+      "scope": "Competitor-specific repository mechanics",
+      "invariant": "Only material technical guidance and benchmark assertions enter domain adjudication.",
+      "qualifications": ["Packaging mechanics are compared separately when they affect discoverability or compatibility."],
+      "counterexamples": [],
+      "go_versions": [],
+      "owners": ["review-go-engineering-change"],
+      "risk_domains": ["provenance"],
+      "primary_evidence": [],
+      "observed_in": ["cc-skills-golang", "cxuu-golang-skills", "go-skills", "google-go-style-guide", "gophers", "uber-go-style-guide"]
+    }
+  ]
+}
