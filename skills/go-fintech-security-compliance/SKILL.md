@@ -1,6 +1,6 @@
 ---
 name: go-fintech-security-compliance
-description: "Use for Go payment-data governance, tokenization, audit, retention, and PCI. Do not use for generic exploits or certification."
+description: "Use for Go payment compliance, sanctions, tokenization, audit, and PCI. Do not use for generic exploits or legal advice."
 license: Apache-2.0
 compatibility: "Go 1.24 or newer; standards and regulatory obligations require current qualified interpretation for the actual system."
 ---
@@ -30,6 +30,8 @@ Record actor, authority, operation, target, before/after state reference, reason
 Threat-model sensitive changes, review generated artifacts and dependencies, pin CI inputs, separate duties for releases, prove rollback/migration behavior, and keep retention/deletion schedules enforceable. A checklist does not certify PCI DSS or any regulation; involve qualified security, compliance, and legal owners.
 
 Read [references/control-boundaries.md](references/control-boundaries.md) for tokenization, scope, retention, and audit failure cases.
+
+For sanctions screening, holds, adjudication, list changes, and provider failure, read [references/sanctions-screening-controls.md](references/sanctions-screening-controls.md). Exact duties and dispositions come from the current risk-based compliance program and qualified legal/compliance owners, not from a match score or this skill.
 
 ## Output contract
 

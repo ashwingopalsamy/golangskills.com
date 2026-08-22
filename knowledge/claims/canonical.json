@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "verified_on": "2026-08-18",
+  "verified_on": "2026-08-24",
   "claims": [
     {
       "id": "eng-language-clarity",
@@ -35,6 +35,25 @@
         {"title": "Go Wiki: Code Review Comments - Interfaces", "url": "https://go.dev/wiki/CodeReviewComments#interfaces", "publisher": "The Go Authors", "kind": "primary", "verified_on": "2026-08-18"}
       ],
       "observed_in": ["cc-skills-golang", "cxuu-golang-skills", "go-skills", "gophers"]
+    },
+    {
+      "id": "eng-api-compatibility",
+      "statement": "Version a public Go module from its complete consumer-visible source and behavioral contract, and prove a major-version cutover from external consumers rather than from the producer repository alone.",
+      "status": "adopted-with-qualifications",
+      "scope": "Exported Go APIs, module paths, release versions, toolchain requirements, errors, defaults, ownership, serialized data, configuration, and consumer migration",
+      "invariant": "A supported consumer can select, import, compile, and exercise the candidate without an unannounced source, identity, behavioral, wire, or operational break; incompatible v2+ packages have a distinct /vN module path and can coexist with the preceding major.",
+      "qualifications": ["The Go 1 compatibility promise governs future Go language and standard-library releases, not every third-party module or external protocol.", "Semantic versioning communicates the intended boundary but does not prove compatibility.", "A type alias preserves type identity, not every constructor, error, side effect, import, or support commitment."],
+      "counterexamples": ["Adding a method to an exported interface breaks external implementations even though the producer repository still compiles.", "A local go.work or replace directive can hide an invalid module path or incomplete published artifact.", "Adding an exported struct field can break unkeyed external literals or change encoding behavior."],
+      "go_versions": ["1.24", "1.25", "1.26"],
+      "owners": ["go-project-and-api-design"],
+      "risk_domains": ["compatibility", "release-integrity", "maintainability"],
+      "primary_evidence": [
+        {"title": "Go Modules Reference", "url": "https://go.dev/ref/mod", "publisher": "The Go Authors", "kind": "normative", "verified_on": "2026-08-24"},
+        {"title": "Module release and versioning workflow", "url": "https://go.dev/doc/modules/release-workflow", "publisher": "The Go Authors", "kind": "primary", "verified_on": "2026-08-24"},
+        {"title": "Go 1 and the Future of Go Programs", "url": "https://go.dev/doc/go1compat", "publisher": "The Go Authors", "kind": "normative", "verified_on": "2026-08-24"},
+        {"title": "Keeping Your Modules Compatible", "url": "https://go.dev/blog/module-compatibility", "publisher": "The Go Authors", "kind": "primary", "verified_on": "2026-08-24"}
+      ],
+      "observed_in": ["cc-skills-golang", "go-skills"]
     },
     {
       "id": "eng-protocol-boundary",
@@ -214,19 +233,22 @@
     },
     {
       "id": "dist-coordination-safety",
-      "statement": "Treat leases and distributed locks as time-bounded evidence, not permanent ownership; protect irreversible effects with fencing or storage-level conditional writes.",
+      "statement": "Treat leases, elections, and regional promotion as time-bounded authority evidence; protect irreversible effects with an application generation, fencing, or storage-level conditional writes.",
       "status": "adopted-with-qualifications",
-      "scope": "Leases, leader election, distributed locks, sagas, and multi-service recovery",
-      "invariant": "A delayed or partitioned former owner cannot commit an effect after a newer owner has taken over.",
-      "qualifications": ["Consensus-backed services reduce but do not remove client pause and stale-owner hazards.", "Sagas provide compensating workflow, not ACID rollback across services."],
-      "counterexamples": ["Mutual exclusion inside one Go process can use a mutex and does not require fencing tokens."],
+      "scope": "Leases, leader election, distributed locks, regional writer failover, coordination recovery, sagas, and multi-service recovery",
+      "invariant": "A delayed, partitioned, or restored former owner cannot commit an effect after a newer application generation has taken over, including across regional promotion and failback.",
+      "qualifications": ["Consensus-backed services reduce but do not remove client pause and stale-owner hazards or fence effects outside their state machine.", "A restored coordination snapshot is a new logical lineage whose counters may not order application authority against surviving old writers.", "Sagas provide compensating workflow, not ACID rollback across services."],
+      "counterexamples": ["Mutual exclusion inside one Go process can use a mutex and does not require fencing tokens.", "DNS steering can move new traffic while a former region continues queued or external work."],
       "go_versions": ["1.24", "1.25", "1.26"],
       "owners": ["go-distributed-coordination"],
       "risk_domains": ["coordination", "partition", "ordering", "recovery"],
       "primary_evidence": [
         {"title": "etcd concurrency API", "url": "https://pkg.go.dev/go.etcd.io/etcd/client/v3/concurrency", "publisher": "etcd Authors", "kind": "primary", "verified_on": "2026-08-18"},
         {"title": "Kubernetes Leases", "url": "https://kubernetes.io/docs/concepts/architecture/leases/", "publisher": "Cloud Native Computing Foundation", "kind": "protocol", "verified_on": "2026-08-18"},
-        {"title": "Go time package", "url": "https://pkg.go.dev/time", "publisher": "The Go Authors", "kind": "normative", "verified_on": "2026-08-24"}
+        {"title": "Go time package", "url": "https://pkg.go.dev/time", "publisher": "The Go Authors", "kind": "normative", "verified_on": "2026-08-24"},
+        {"title": "In Search of an Understandable Consensus Algorithm", "url": "https://raft.github.io/raft.pdf", "publisher": "USENIX ATC", "kind": "primary", "verified_on": "2026-08-24"},
+        {"title": "etcd disaster recovery", "url": "https://etcd.io/docs/v3.6/op-guide/recovery/", "publisher": "etcd Authors", "kind": "primary", "verified_on": "2026-08-24"},
+        {"title": "etcd runtime reconfiguration design", "url": "https://etcd.io/docs/v3.6/op-guide/runtime-reconf-design/", "publisher": "etcd Authors", "kind": "primary", "verified_on": "2026-08-24"}
       ],
       "observed_in": ["cc-skills-golang"]
     },
@@ -356,6 +378,23 @@
       "primary_evidence": [
         {"title": "PCI Data Security Standard v4.0.1", "url": "https://www.pcisecuritystandards.org/document_library/", "publisher": "PCI Security Standards Council", "kind": "regulatory", "verified_on": "2026-08-24"},
         {"title": "NIST SP 800-63B", "url": "https://pages.nist.gov/800-63-4/sp800-63b.html", "publisher": "NIST", "kind": "regulatory", "verified_on": "2026-08-18"}
+      ],
+      "observed_in": []
+    },
+    {
+      "id": "fin-sanctions-screening-control",
+      "statement": "Treat sanctions screening as versioned evidence feeding a qualified adjudication and financial-disposition workflow, never as an eternal clearance or an automated legal conclusion.",
+      "status": "adopted-with-qualifications",
+      "scope": "Risk-based sanctions screening, provider integration, candidate handling, holds, adjudication, rescreening, false-hit controls, evidence, and privacy",
+      "invariant": "Every disposition is attributable to the governing program, screened facts, list and provider evidence, policy version, qualified authority, and time; unknown or changed evidence cannot silently become clear, and retries cannot duplicate a hold, release, or economic effect.",
+      "qualifications": ["Exact screening scope, thresholds, timing, disposition, reporting, retention, and jurisdictional duties require current qualified legal and compliance interpretation.", "Fuzzy-match scores are retrieval signals whose false-positive and false-negative trade-offs must be calibrated and tested under the actual risk program.", "Fail-open, fail-closed, and manual-review behavior is a program decision, not a universal engineering default."],
+      "counterexamples": ["A provider timeout or partial response is not evidence that a party is clear.", "A permanent name-only false-hit allowlist can suppress a changed list entry or different subject.", "A low match score cannot itself authorize release of held funds."],
+      "go_versions": ["1.24", "1.25", "1.26"],
+      "owners": ["go-fintech-security-compliance"],
+      "risk_domains": ["compliance", "financial-integrity", "auditability", "privacy"],
+      "primary_evidence": [
+        {"title": "A Framework for OFAC Compliance Commitments", "url": "https://ofac.treasury.gov/media/16331/download", "publisher": "U.S. Department of the Treasury, OFAC", "kind": "regulatory", "verified_on": "2026-08-24"},
+        {"title": "False Hit Lists Guidance", "url": "https://ofac.treasury.gov/system/files/126/false_hit.pdf", "publisher": "U.S. Department of the Treasury, OFAC", "kind": "regulatory", "verified_on": "2026-08-24"}
       ],
       "observed_in": []
     },

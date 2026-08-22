@@ -9920,43 +9920,43 @@
       "repository": "cc-skills-golang",
       "item_id": "mi-c89e98dab1276541",
       "status": "adopted-with-qualifications",
-      "claim_id": "eng-dependency-direction",
-      "rationale": "Mapped to a conditional canonical claim; primary evidence and counterexamples control, not source wording."
+      "claim_id": "eng-api-compatibility",
+      "rationale": "Independent rewrite preserves the release compatibility invariant; primary Go evidence and counterexamples qualify source wording."
     },
     {
       "repository": "cc-skills-golang",
       "item_id": "mi-068d3ba8dd528ce1",
       "status": "adopted-with-qualifications",
-      "claim_id": "eng-dependency-direction",
-      "rationale": "Mapped to a conditional canonical claim; primary evidence and counterexamples control, not source wording."
+      "claim_id": "eng-api-compatibility",
+      "rationale": "Independent rewrite preserves the release compatibility invariant; primary Go evidence and counterexamples qualify source wording."
     },
     {
       "repository": "cc-skills-golang",
       "item_id": "mi-eb9ffbcc4a6ee92e",
       "status": "adopted-with-qualifications",
-      "claim_id": "eng-dependency-direction",
-      "rationale": "Mapped to a conditional canonical claim; primary evidence and counterexamples control, not source wording."
+      "claim_id": "eng-api-compatibility",
+      "rationale": "Independent rewrite preserves the release compatibility invariant; primary Go evidence and counterexamples qualify source wording."
     },
     {
       "repository": "cc-skills-golang",
       "item_id": "mi-f3fa0e273388d949",
       "status": "adopted-with-qualifications",
-      "claim_id": "eng-dependency-direction",
-      "rationale": "Mapped to a conditional canonical claim; primary evidence and counterexamples control, not source wording."
+      "claim_id": "eng-api-compatibility",
+      "rationale": "Independent rewrite preserves the release compatibility invariant; primary Go evidence and counterexamples qualify source wording."
     },
     {
       "repository": "cc-skills-golang",
       "item_id": "mi-2b813f31a74e2531",
       "status": "adopted-with-qualifications",
-      "claim_id": "eng-dependency-direction",
-      "rationale": "Mapped to a conditional canonical claim; primary evidence and counterexamples control, not source wording."
+      "claim_id": "eng-api-compatibility",
+      "rationale": "Independent rewrite preserves the release compatibility invariant; primary Go evidence and counterexamples qualify source wording."
     },
     {
       "repository": "cc-skills-golang",
       "item_id": "mi-9fe246d45e812de2",
       "status": "adopted-with-qualifications",
-      "claim_id": "eng-dependency-direction",
-      "rationale": "Mapped to a conditional canonical claim; primary evidence and counterexamples control, not source wording."
+      "claim_id": "eng-api-compatibility",
+      "rationale": "Independent rewrite preserves the release compatibility invariant; primary Go evidence and counterexamples qualify source wording."
     },
     {
       "repository": "cc-skills-golang",
@@ -46579,85 +46579,85 @@
       "repository": "go-skills",
       "item_id": "mi-aafdcd03d4f01a94",
       "status": "adopted-with-qualifications",
-      "claim_id": "dist-coordination-safety",
-      "rationale": "Mapped to a conditional canonical claim; primary evidence and counterexamples control, not source wording."
+      "claim_id": "eng-api-compatibility",
+      "rationale": "Independent rewrite preserves the release compatibility invariant; primary Go evidence and counterexamples qualify source wording."
     },
     {
       "repository": "go-skills",
       "item_id": "mi-cd1eea5a21d460a1",
       "status": "adopted-with-qualifications",
-      "claim_id": "dist-coordination-safety",
-      "rationale": "Mapped to a conditional canonical claim; primary evidence and counterexamples control, not source wording."
+      "claim_id": "eng-api-compatibility",
+      "rationale": "Independent rewrite preserves the release compatibility invariant; primary Go evidence and counterexamples qualify source wording."
     },
     {
       "repository": "go-skills",
       "item_id": "mi-8d0b037535db22de",
       "status": "adopted-with-qualifications",
-      "claim_id": "dist-coordination-safety",
-      "rationale": "Mapped to a conditional canonical claim; primary evidence and counterexamples control, not source wording."
+      "claim_id": "eng-api-compatibility",
+      "rationale": "Independent rewrite preserves the release compatibility invariant; primary Go evidence and counterexamples qualify source wording."
     },
     {
       "repository": "go-skills",
       "item_id": "mi-987383a3565a77f1",
       "status": "adopted-with-qualifications",
-      "claim_id": "dist-coordination-safety",
-      "rationale": "Mapped to a conditional canonical claim; primary evidence and counterexamples control, not source wording."
+      "claim_id": "eng-api-compatibility",
+      "rationale": "Independent rewrite preserves the release compatibility invariant; primary Go evidence and counterexamples qualify source wording."
     },
     {
       "repository": "go-skills",
       "item_id": "mi-8a87197e2d7fe749",
       "status": "adopted-with-qualifications",
-      "claim_id": "dist-coordination-safety",
-      "rationale": "Mapped to a conditional canonical claim; primary evidence and counterexamples control, not source wording."
+      "claim_id": "eng-api-compatibility",
+      "rationale": "Independent rewrite preserves the release compatibility invariant; primary Go evidence and counterexamples qualify source wording."
     },
     {
       "repository": "go-skills",
       "item_id": "mi-b44e97b0d51b7517",
       "status": "adopted-with-qualifications",
-      "claim_id": "dist-coordination-safety",
-      "rationale": "Mapped to a conditional canonical claim; primary evidence and counterexamples control, not source wording."
+      "claim_id": "eng-api-compatibility",
+      "rationale": "Independent rewrite preserves the release compatibility invariant; primary Go evidence and counterexamples qualify source wording."
     },
     {
       "repository": "go-skills",
       "item_id": "mi-aed7779397815ead",
       "status": "adopted-with-qualifications",
-      "claim_id": "dist-coordination-safety",
-      "rationale": "Mapped to a conditional canonical claim; primary evidence and counterexamples control, not source wording."
+      "claim_id": "eng-api-compatibility",
+      "rationale": "Independent rewrite preserves the release compatibility invariant; primary Go evidence and counterexamples qualify source wording."
     },
     {
       "repository": "go-skills",
       "item_id": "mi-f786d40a3b68bfeb",
       "status": "adopted-with-qualifications",
-      "claim_id": "dist-coordination-safety",
-      "rationale": "Mapped to a conditional canonical claim; primary evidence and counterexamples control, not source wording."
+      "claim_id": "eng-api-compatibility",
+      "rationale": "Independent rewrite preserves the release compatibility invariant; primary Go evidence and counterexamples qualify source wording."
     },
     {
       "repository": "go-skills",
       "item_id": "mi-c7e924a4cf8261d2",
       "status": "adopted-with-qualifications",
-      "claim_id": "dist-coordination-safety",
-      "rationale": "Mapped to a conditional canonical claim; primary evidence and counterexamples control, not source wording."
+      "claim_id": "eng-api-compatibility",
+      "rationale": "Independent rewrite preserves the release compatibility invariant; primary Go evidence and counterexamples qualify source wording."
     },
     {
       "repository": "go-skills",
       "item_id": "mi-6e48f3bb5cd96a52",
       "status": "adopted-with-qualifications",
-      "claim_id": "dist-coordination-safety",
-      "rationale": "Mapped to a conditional canonical claim; primary evidence and counterexamples control, not source wording."
+      "claim_id": "eng-api-compatibility",
+      "rationale": "Independent rewrite preserves the release compatibility invariant; primary Go evidence and counterexamples qualify source wording."
     },
     {
       "repository": "go-skills",
       "item_id": "mi-4929230d64c4cef8",
       "status": "adopted-with-qualifications",
-      "claim_id": "dist-coordination-safety",
-      "rationale": "Mapped to a conditional canonical claim; primary evidence and counterexamples control, not source wording."
+      "claim_id": "eng-api-compatibility",
+      "rationale": "Independent rewrite preserves the release compatibility invariant; primary Go evidence and counterexamples qualify source wording."
     },
     {
       "repository": "go-skills",
       "item_id": "mi-7cf64e94a0f51f84",
       "status": "adopted-with-qualifications",
-      "claim_id": "dist-coordination-safety",
-      "rationale": "Mapped to a conditional canonical claim; primary evidence and counterexamples control, not source wording."
+      "claim_id": "eng-api-compatibility",
+      "rationale": "Independent rewrite preserves the release compatibility invariant; primary Go evidence and counterexamples qualify source wording."
     },
     {
       "repository": "go-skills",
