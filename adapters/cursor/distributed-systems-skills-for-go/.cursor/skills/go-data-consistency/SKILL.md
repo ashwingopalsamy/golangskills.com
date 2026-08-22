@@ -33,7 +33,7 @@ Use expand, mixed-version deployment, bounded restartable backfill, switchover, 
 
 Treat backfill progress as resumability metadata, not completeness proof. Partition by a stable key, update conditionally so a stale batch cannot overwrite a newer write, validate the authoritative rows before cutover, and remove the old representation only after old binaries, queued work, consumers, and rollback paths can no longer use it. Verify engine-version lock, rewrite, and failed-DDL behavior before choosing an online mechanism.
 
-Read [references/isolation-and-ambiguity.md](references/isolation-and-ambiguity.md) for transaction counterexamples, [references/online-changes.md](references/online-changes.md) for expand/backfill/cutover failure schedules, and [references/replica-read-authority.md](references/replica-read-authority.md) when correctness depends on asynchronous replica visibility or failover.
+Read [references/isolation-and-ambiguity.md](references/isolation-and-ambiguity.md) for transaction counterexamples, [references/online-changes.md](references/online-changes.md) for expand/backfill/cutover failure schedules, and [references/replica-read-authority.md](references/replica-read-authority.md) when correctness depends on asynchronous replica visibility or failover. For cursor APIs over changing or replicated data, read [references/pagination-under-mutation.md](references/pagination-under-mutation.md) and choose explicitly between live traversal and stable-snapshot semantics.
 
 ## Output contract
 

@@ -86,10 +86,12 @@
         "clearing",
         "settlement",
         "reconciliation",
-        "payouts",
-        "exceptions",
         "fedwire",
-        "finality"
+        "finality",
+        "ach",
+        "returns",
+        "notifications-of-change",
+        "reversals"
       ],
       "go_versions": {
         "minimum": "1.24",
@@ -169,10 +171,46 @@
             "cancellation and contingency reconciliation",
             "protracted-outage finality"
           ]
+        },
+        {
+          "title": "Operating Circular 4: Automated Clearing House Items",
+          "url": "https://www.frbservices.org/binaries/content/assets/crsocms/resources/rules-regulations/010526-operating-circular-4.pdf",
+          "publisher": "Federal Reserve Banks",
+          "kind": "primary",
+          "verified_on": "2026-08-24",
+          "supports": [
+            "FedACH acknowledgement and settlement evidence",
+            "returns and disputed returns",
+            "NOC nonvalue classification"
+          ]
+        },
+        {
+          "title": "FedACH Derived Returns and Notifications of Change FAQ",
+          "url": "https://www.frbservices.org/resources/financial-services/ach/faq/derived-returns-nocs.html",
+          "publisher": "Federal Reserve Financial Services",
+          "kind": "primary",
+          "verified_on": "2026-08-24",
+          "supports": [
+            "return and NOC processing evidence",
+            "multiple NOCs",
+            "dishonored and contested returns"
+          ]
+        },
+        {
+          "title": "A Second Chance: Understanding ACH Reversals",
+          "url": "https://www.nacha.org/news/second-chance-understanding-ach-reversals",
+          "publisher": "Nacha",
+          "kind": "primary",
+          "verified_on": "2026-08-24",
+          "supports": [
+            "permitted reversal purpose",
+            "reversal versus return",
+            "rule-governed timeframes"
+          ]
         }
       ],
-      "source_count": 3,
-      "evaluation_count": 5
+      "source_count": 6,
+      "evaluation_count": 6
     },
     {
       "name": "go-concurrency-lifecycle",
@@ -293,7 +331,9 @@
         "constraints",
         "caches",
         "replication",
-        "read-consistency"
+        "read-consistency",
+        "pagination",
+        "cursors"
       ],
       "go_versions": {
         "minimum": "1.24",
@@ -359,7 +399,8 @@
           "verified_on": "2026-08-18",
           "supports": [
             "isolation anomalies",
-            "serializable behavior"
+            "serializable behavior",
+            "cross-command snapshot behavior"
           ]
         },
         {
@@ -394,10 +435,32 @@
             "asynchronous replica visibility",
             "synchronous replication and remote apply"
           ]
+        },
+        {
+          "title": "PostgreSQL Sorting Rows",
+          "url": "https://www.postgresql.org/docs/current/queries-order.html",
+          "publisher": "PostgreSQL Global Development Group",
+          "kind": "primary",
+          "verified_on": "2026-08-24",
+          "supports": [
+            "explicit deterministic ordering",
+            "multi-column sort semantics"
+          ]
+        },
+        {
+          "title": "PostgreSQL LIMIT and OFFSET",
+          "url": "https://www.postgresql.org/docs/current/queries-limit.html",
+          "publisher": "PostgreSQL Global Development Group",
+          "kind": "primary",
+          "verified_on": "2026-08-24",
+          "supports": [
+            "unique ordering for pagination",
+            "offset cost and inconsistency"
+          ]
         }
       ],
-      "source_count": 5,
-      "evaluation_count": 7
+      "source_count": 7,
+      "evaluation_count": 8
     },
     {
       "name": "go-distributed-coordination",
@@ -1552,6 +1615,8 @@
         "authorization",
         "ssrf",
         "cryptography",
+        "encryption",
+        "key-management",
         "supply-chain"
       ],
       "go_versions": {
@@ -1677,10 +1742,55 @@
             "trusted TLS-terminating proxy",
             "client certificate field sanitization"
           ]
+        },
+        {
+          "title": "NIST SP 800-57 Part 1 Rev. 5",
+          "url": "https://csrc.nist.gov/pubs/sp/800/57/pt1/r5/final",
+          "publisher": "NIST",
+          "kind": "primary",
+          "verified_on": "2026-08-24",
+          "supports": [
+            "key lifecycle",
+            "cryptoperiods",
+            "compromise and destruction"
+          ]
+        },
+        {
+          "title": "Tink client-side encryption",
+          "url": "https://developers.google.com/tink/client-side-encryption",
+          "publisher": "Google",
+          "kind": "primary",
+          "verified_on": "2026-08-24",
+          "supports": [
+            "DEK and KEK separation",
+            "managed envelope encryption"
+          ]
+        },
+        {
+          "title": "Tink keysets",
+          "url": "https://developers.google.com/tink/design/keysets",
+          "publisher": "Google",
+          "kind": "primary",
+          "verified_on": "2026-08-24",
+          "supports": [
+            "mixed-key reader rollout",
+            "rotation primary cutover"
+          ]
+        },
+        {
+          "title": "Package crypto/cipher for Go 1.26",
+          "url": "https://pkg.go.dev/crypto/cipher@go1.26.3",
+          "publisher": "The Go Authors",
+          "kind": "primary",
+          "verified_on": "2026-08-24",
+          "supports": [
+            "AEAD nonce uniqueness",
+            "random-nonce GCM usage limit"
+          ]
         }
       ],
-      "source_count": 7,
-      "evaluation_count": 6
+      "source_count": 11,
+      "evaluation_count": 7
     },
     {
       "name": "go-service-boundaries",

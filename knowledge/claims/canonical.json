@@ -97,8 +97,8 @@
       "status": "adopted",
       "scope": "Application, supply-chain, authentication, authorization, cryptography, and secret handling",
       "invariant": "Untrusted data cannot acquire authority merely by reaching an internal type or generated path.",
-      "qualifications": ["Security controls must follow a threat model and deployment context.", "Use maintained cryptographic protocols and libraries rather than custom primitives.", "Forwarded and client-certificate headers acquire authority only from an authenticated, non-bypassable proxy path that sanitizes attacker-supplied fields and owns the interpreted hop chain."],
-      "counterexamples": ["Input validation alone cannot repair an authorization decision made at the wrong resource boundary.", "A syntactically valid X-Forwarded-For or Client-Cert value supplied through an unauthenticated or direct backend path is attacker-controlled metadata, not transport identity."],
+      "qualifications": ["Security controls must follow a threat model and deployment context.", "Use maintained cryptographic protocols and libraries rather than custom primitives.", "Forwarded and client-certificate headers acquire authority only from an authenticated, non-bypassable proxy path that sanitizes attacker-supplied fields and owns the interpreted hop chain.", "Envelope encryption makes routine KEK rotation a rewrap only when the DEK and data construction remain acceptable; DEK compromise, excessive key use, or algorithm and format migration can require re-encrypting data.", "Old key destruction requires decryptability and retention evidence across live data, replicas, queues, backups, recovery, and rollback paths; scan completion alone is insufficient."],
+      "counterexamples": ["Input validation alone cannot repair an authorization decision made at the wrong resource boundary.", "A syntactically valid X-Forwarded-For or Client-Cert value supplied through an unauthenticated or direct backend path is attacker-controlled metadata, not transport identity.", "Rewrapping a leaked DEK under a new KEK preserves the compromised data key, while destroying the old KEK before backups and rollback readers migrate can make retained data unrecoverable."],
       "go_versions": ["1.24", "1.25", "1.26"],
       "owners": ["go-security-hardening"],
       "risk_domains": ["security", "privacy", "supply-chain"],
@@ -109,7 +109,11 @@
         {"title": "SLSA Build Track Basics", "url": "https://slsa.dev/spec/v1.2/build-track-basics", "publisher": "OpenSSF", "kind": "primary", "verified_on": "2026-08-24"},
         {"title": "Package net/http/httputil", "url": "https://pkg.go.dev/net/http/httputil", "publisher": "The Go Authors", "kind": "primary", "verified_on": "2026-08-24"},
         {"title": "RFC 7239 Forwarded HTTP Extension", "url": "https://www.rfc-editor.org/rfc/rfc7239", "publisher": "IETF", "kind": "protocol", "verified_on": "2026-08-24"},
-        {"title": "RFC 9440 Client-Cert HTTP Header Field", "url": "https://www.rfc-editor.org/rfc/rfc9440", "publisher": "IETF", "kind": "protocol", "verified_on": "2026-08-24"}
+        {"title": "RFC 9440 Client-Cert HTTP Header Field", "url": "https://www.rfc-editor.org/rfc/rfc9440", "publisher": "IETF", "kind": "protocol", "verified_on": "2026-08-24"},
+        {"title": "NIST SP 800-57 Part 1 Rev. 5", "url": "https://csrc.nist.gov/pubs/sp/800/57/pt1/r5/final", "publisher": "NIST", "kind": "regulatory", "verified_on": "2026-08-24"},
+        {"title": "Tink client-side encryption", "url": "https://developers.google.com/tink/client-side-encryption", "publisher": "Google", "kind": "primary", "verified_on": "2026-08-24"},
+        {"title": "Tink keysets", "url": "https://developers.google.com/tink/design/keysets", "publisher": "Google", "kind": "primary", "verified_on": "2026-08-24"},
+        {"title": "Package crypto/cipher for Go 1.26", "url": "https://pkg.go.dev/crypto/cipher@go1.26.3", "publisher": "The Go Authors", "kind": "primary", "verified_on": "2026-08-24"}
       ],
       "observed_in": ["cc-skills-golang", "gophers"]
     },
@@ -153,10 +157,10 @@
       "id": "dist-transaction-invariant",
       "statement": "Choose transaction boundaries, isolation behavior, and read authority from the business invariant; make the full read-check-write effect atomic and never infer write outcome from a weaker read.",
       "status": "adopted",
-      "scope": "SQL transactions, isolation, locking, optimistic concurrency, replica reads, cache consistency, and online data changes",
+      "scope": "SQL transactions, isolation, locking, optimistic concurrency, replica reads, cache consistency, pagination, and online data changes",
       "invariant": "Every committed outcome, correctness-dependent read, and mixed-version migration state satisfies the domain invariant under permitted concurrent executions.",
-      "qualifications": ["Isolation names do not guarantee identical behavior across database engines.", "Serializable transactions may require safe retries and do not make external side effects transactional.", "Online migrations are mixed-version protocols whose DDL locks, rewrites, validation, and failure artifacts must be verified for the deployed engine version.", "Replication durability acknowledgement and replica query visibility are separate contracts; PostgreSQL remote_apply semantics do not establish a portable database rule."],
-      "counterexamples": ["Read Committed can be sufficient for independent predetermined row updates but unsafe for cross-row invariants implemented as read-then-write.", "An offset-paginated unconditional backfill can skip rows and overwrite newer writes while still reaching an apparent final page.", "A row absent from an asynchronous replica after primary commit is a stale observation, not proof that the transaction rolled back."],
+      "qualifications": ["Isolation names do not guarantee identical behavior across database engines.", "Serializable transactions may require safe retries and do not make external side effects transactional.", "Online migrations are mixed-version protocols whose DDL locks, rewrites, validation, and failure artifacts must be verified for the deployed engine version.", "Replication durability acknowledgement and replica query visibility are separate contracts; PostgreSQL remote_apply semantics do not establish a portable database rule.", "Keyset pagination removes OFFSET position shifts only relative to a deterministic total order; mutable sort keys can still duplicate or omit rows, and a stable cross-request snapshot requires an explicit retained data version."],
+      "counterexamples": ["Read Committed can be sufficient for independent predetermined row updates but unsafe for cross-row invariants implemented as read-then-write.", "An offset-paginated unconditional backfill can skip rows and overwrite newer writes while still reaching an apparent final page.", "A row absent from an asynchronous replica after primary commit is a stale observation, not proof that the transaction rolled back.", "A base64 cursor containing only a non-unique timestamp is neither a total-order boundary nor protection against tenant, filter, or sort tampering."],
       "go_versions": ["1.24", "1.25", "1.26"],
       "owners": ["go-data-consistency"],
       "risk_domains": ["consistency", "atomicity", "durability"],
@@ -165,7 +169,9 @@
         {"title": "PostgreSQL Transaction Isolation", "url": "https://www.postgresql.org/docs/current/transaction-iso.html", "publisher": "PostgreSQL Global Development Group", "kind": "primary", "verified_on": "2026-08-18"},
         {"title": "PostgreSQL ALTER TABLE", "url": "https://www.postgresql.org/docs/current/sql-altertable.html", "publisher": "PostgreSQL Global Development Group", "kind": "primary", "verified_on": "2026-08-24"},
         {"title": "PostgreSQL CREATE INDEX", "url": "https://www.postgresql.org/docs/current/sql-createindex.html", "publisher": "PostgreSQL Global Development Group", "kind": "primary", "verified_on": "2026-08-24"},
-        {"title": "PostgreSQL Log-Shipping Standby Servers", "url": "https://www.postgresql.org/docs/current/warm-standby.html", "publisher": "PostgreSQL Global Development Group", "kind": "primary", "verified_on": "2026-08-24"}
+        {"title": "PostgreSQL Log-Shipping Standby Servers", "url": "https://www.postgresql.org/docs/current/warm-standby.html", "publisher": "PostgreSQL Global Development Group", "kind": "primary", "verified_on": "2026-08-24"},
+        {"title": "PostgreSQL Sorting Rows", "url": "https://www.postgresql.org/docs/current/queries-order.html", "publisher": "PostgreSQL Global Development Group", "kind": "primary", "verified_on": "2026-08-24"},
+        {"title": "PostgreSQL LIMIT and OFFSET", "url": "https://www.postgresql.org/docs/current/queries-limit.html", "publisher": "PostgreSQL Global Development Group", "kind": "primary", "verified_on": "2026-08-24"}
       ],
       "observed_in": ["cc-skills-golang", "gophers"]
     },
@@ -304,15 +310,18 @@
       "status": "adopted-with-qualifications",
       "scope": "Clearing, settlement, payout, reserves, and external account movement",
       "invariant": "Every external movement and fee can be traced to immutable source evidence and its corresponding ledger postings.",
-      "qualifications": ["Rail-specific cutoffs, calendars, netting, and finality must come from the applicable scheme and processor contract.", "Fedwire acceptance, cancellation, contingency reconciliation, and protracted-outage finality are specific to the active Operating Circular 6 and Regulation J contract."],
-      "counterexamples": ["A synchronous internal transfer within one ledger may settle atomically and need no external clearing state.", "A missing Fedwire acknowledgment after a connection failure is not a rejection; an unreconciled contingency resend can produce a second accepted payment order."],
+      "qualifications": ["Rail-specific cutoffs, calendars, netting, and finality must come from the applicable scheme and processor contract.", "Fedwire acceptance, cancellation, contingency reconciliation, and protracted-outage finality are specific to the active Operating Circular 6 and Regulation J contract.", "For FedACH, a return is a separate value-bearing item, a Notification of Change is a nonvalue correction message, and a reversal is a narrowly permitted corrective entry; deadlines and permissions depend on active rules, code, account and entry class, role, calendar, and processing schedule."],
+      "counterexamples": ["A synchronous internal transfer within one ledger may settle atomically and need no external clearing state.", "A missing Fedwire acknowledgment after a connection failure is not a rejection; an unreconciled contingency resend can produce a second accepted payment order.", "FedACH forward settlement does not erase the original when a later return settles, while an NOC moves no funds and a generic reversal cannot serve as guaranteed cancellation after a timeout, suspected fraud, or funding failure."],
       "go_versions": ["1.24", "1.25", "1.26"],
       "owners": ["go-clearing-settlement-reconciliation"],
       "risk_domains": ["settlement", "financial-integrity", "auditability"],
       "primary_evidence": [
         {"title": "Stripe Balance Transactions", "url": "https://docs.stripe.com/reports/balance-transaction-types", "publisher": "Stripe", "kind": "protocol", "verified_on": "2026-08-18"},
         {"title": "Federal Reserve Funds Transfer Through Fedwire", "url": "https://www.federalreserve.gov/paymentsystems/fedfunds_about.htm", "publisher": "Federal Reserve Board", "kind": "regulatory", "verified_on": "2026-08-18"},
-        {"title": "Operating Circular 6: Funds Transfers through the Fedwire Funds Service", "url": "https://www.frbservices.org/binaries/content/assets/crsocms/resources/rules-regulations/010526-operating-circular-6.pdf", "publisher": "Federal Reserve Banks", "kind": "regulatory", "verified_on": "2026-08-24"}
+        {"title": "Operating Circular 6: Funds Transfers through the Fedwire Funds Service", "url": "https://www.frbservices.org/binaries/content/assets/crsocms/resources/rules-regulations/010526-operating-circular-6.pdf", "publisher": "Federal Reserve Banks", "kind": "regulatory", "verified_on": "2026-08-24"},
+        {"title": "Operating Circular 4: Automated Clearing House Items", "url": "https://www.frbservices.org/binaries/content/assets/crsocms/resources/rules-regulations/010526-operating-circular-4.pdf", "publisher": "Federal Reserve Banks", "kind": "regulatory", "verified_on": "2026-08-24"},
+        {"title": "FedACH Derived Returns and Notifications of Change FAQ", "url": "https://www.frbservices.org/resources/financial-services/ach/faq/derived-returns-nocs.html", "publisher": "Federal Reserve Financial Services", "kind": "protocol", "verified_on": "2026-08-24"},
+        {"title": "A Second Chance: Understanding ACH Reversals", "url": "https://www.nacha.org/news/second-chance-understanding-ach-reversals", "publisher": "Nacha", "kind": "protocol", "verified_on": "2026-08-24"}
       ],
       "observed_in": []
     },

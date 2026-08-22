@@ -13,10 +13,12 @@
       "clearing",
       "settlement",
       "reconciliation",
-      "payouts",
-      "exceptions",
       "fedwire",
-      "finality"
+      "finality",
+      "ach",
+      "returns",
+      "notifications-of-change",
+      "reversals"
     ]
   },
   {
@@ -54,7 +56,9 @@
       "constraints",
       "caches",
       "replication",
-      "read-consistency"
+      "read-consistency",
+      "pagination",
+      "cursors"
     ]
   },
   {
@@ -257,6 +261,8 @@
       "authorization",
       "ssrf",
       "cryptography",
+      "encryption",
+      "key-management",
       "supply-chain"
     ]
   },
