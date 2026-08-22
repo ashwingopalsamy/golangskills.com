@@ -80,6 +80,8 @@ Use an inbox/deduplication record for inbound effects when the same local transa
 
 Read [references/outbox-and-inbox.md](references/outbox-and-inbox.md) for relay and retention decisions.
 
+For initial loads, replica rebuilds, or change-data-capture bootstrap, read [references/cdc-snapshot-handoff.md](references/cdc-snapshot-handoff.md). A table scan and a later stream position do not form a safe cutover unless one source-consistent boundary prevents gaps and resolves snapshot/stream collisions.
+
 ## Acknowledge from the owner
 
 The component that knows the durable outcome owns acknowledgment. Do not acknowledge merely because a callback returned or a message entered an in-memory worker queue.

@@ -31,6 +31,8 @@ For dependency or release-pipeline changes, read [references/dependency-integrit
 
 Read [references/threat-paths.md](references/threat-paths.md) for concrete review paths.
 
+When an HTTP backend derives identity, scheme, host, or client certificate from proxy metadata, read [references/trusted-proxy-identity.md](references/trusted-proxy-identity.md). Treat forwarded fields as assertions whose authority comes from an authenticated, non-bypassable proxy path—not from the header name.
+
 ## Output contract
 
 For each finding, state attacker control, required preconditions, protected effect, impact, and smallest correction. Separate exploitability from defense-in-depth.
