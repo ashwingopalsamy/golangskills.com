@@ -14,7 +14,9 @@
       "settlement",
       "reconciliation",
       "payouts",
-      "exceptions"
+      "exceptions",
+      "fedwire",
+      "finality"
     ]
   },
   {
@@ -50,7 +52,9 @@
       "transactions",
       "isolation",
       "constraints",
-      "caches"
+      "caches",
+      "replication",
+      "read-consistency"
     ]
   },
   {
@@ -197,7 +201,9 @@
       "benchmarks",
       "allocations",
       "latency",
-      "contention"
+      "contention",
+      "gc",
+      "memory-limits"
     ]
   },
   {

@@ -78,14 +78,16 @@
       "status": "adopted",
       "scope": "CPU, allocation, memory, contention, scheduling, I/O, and latency diagnostics",
       "invariant": "An optimization improves the target production constraint without violating correctness or moving an unacceptable cost elsewhere.",
-      "qualifications": ["Microbenchmarks require stable setup and statistical comparison.", "Profile-guided optimization does not replace end-to-end latency and capacity evidence."],
-      "counterexamples": ["Replacing readable code with allocation tricks before identifying allocation pressure can reduce maintainability with no material gain."],
+      "qualifications": ["Microbenchmarks require stable setup and statistical comparison.", "Profile-guided optimization does not replace end-to-end latency and capacity evidence.", "The Go soft memory limit covers runtime-managed memory rather than process RSS; binary, cgo, mmap, and operating-system memory require measured headroom."],
+      "counterexamples": ["Replacing readable code with allocation tricks before identifying allocation pressure can reduce maintainability with no material gain.", "Setting GOMEMLIMIT equal to a container hard limit and forcing memory return periodically can add continuous GC cost while leaving external memory unbounded."],
       "go_versions": ["1.24", "1.25", "1.26"],
       "owners": ["go-performance-and-diagnostics"],
       "risk_domains": ["performance", "reliability", "maintainability"],
       "primary_evidence": [
         {"title": "Profiling Go Programs", "url": "https://go.dev/blog/pprof", "publisher": "The Go Authors", "kind": "primary", "verified_on": "2026-08-18"},
-        {"title": "Package testing", "url": "https://pkg.go.dev/testing", "publisher": "The Go Authors", "kind": "primary", "verified_on": "2026-08-18"}
+        {"title": "Package testing", "url": "https://pkg.go.dev/testing", "publisher": "The Go Authors", "kind": "primary", "verified_on": "2026-08-18"},
+        {"title": "Package runtime/metrics", "url": "https://pkg.go.dev/runtime/metrics", "publisher": "The Go Authors", "kind": "normative", "verified_on": "2026-08-24"},
+        {"title": "A Guide to the Go Garbage Collector", "url": "https://go.dev/doc/gc-guide", "publisher": "The Go Authors", "kind": "primary", "verified_on": "2026-08-24"}
       ],
       "observed_in": ["cc-skills-golang", "cxuu-golang-skills", "gophers", "uber-go-style-guide"]
     },
@@ -146,12 +148,12 @@
     },
     {
       "id": "dist-transaction-invariant",
-      "statement": "Choose a transaction boundary and isolation behavior from the business invariant, and make the full read-check-write effect atomic at that boundary.",
+      "statement": "Choose transaction boundaries, isolation behavior, and read authority from the business invariant; make the full read-check-write effect atomic and never infer write outcome from a weaker read.",
       "status": "adopted",
-      "scope": "SQL transactions, isolation, locking, optimistic concurrency, cache consistency, and online data changes",
-      "invariant": "Every committed outcome and mixed-version migration state satisfies the domain invariant under permitted concurrent executions.",
-      "qualifications": ["Isolation names do not guarantee identical behavior across database engines.", "Serializable transactions may require safe retries and do not make external side effects transactional.", "Online migrations are mixed-version protocols whose DDL locks, rewrites, validation, and failure artifacts must be verified for the deployed engine version."],
-      "counterexamples": ["Read Committed can be sufficient for independent predetermined row updates but unsafe for cross-row invariants implemented as read-then-write.", "An offset-paginated unconditional backfill can skip rows and overwrite newer writes while still reaching an apparent final page."],
+      "scope": "SQL transactions, isolation, locking, optimistic concurrency, replica reads, cache consistency, and online data changes",
+      "invariant": "Every committed outcome, correctness-dependent read, and mixed-version migration state satisfies the domain invariant under permitted concurrent executions.",
+      "qualifications": ["Isolation names do not guarantee identical behavior across database engines.", "Serializable transactions may require safe retries and do not make external side effects transactional.", "Online migrations are mixed-version protocols whose DDL locks, rewrites, validation, and failure artifacts must be verified for the deployed engine version.", "Replication durability acknowledgement and replica query visibility are separate contracts; PostgreSQL remote_apply semantics do not establish a portable database rule."],
+      "counterexamples": ["Read Committed can be sufficient for independent predetermined row updates but unsafe for cross-row invariants implemented as read-then-write.", "An offset-paginated unconditional backfill can skip rows and overwrite newer writes while still reaching an apparent final page.", "A row absent from an asynchronous replica after primary commit is a stale observation, not proof that the transaction rolled back."],
       "go_versions": ["1.24", "1.25", "1.26"],
       "owners": ["go-data-consistency"],
       "risk_domains": ["consistency", "atomicity", "durability"],
@@ -159,7 +161,8 @@
         {"title": "Executing transactions", "url": "https://go.dev/doc/database/execute-transactions", "publisher": "The Go Authors", "kind": "primary", "verified_on": "2026-08-18"},
         {"title": "PostgreSQL Transaction Isolation", "url": "https://www.postgresql.org/docs/current/transaction-iso.html", "publisher": "PostgreSQL Global Development Group", "kind": "primary", "verified_on": "2026-08-18"},
         {"title": "PostgreSQL ALTER TABLE", "url": "https://www.postgresql.org/docs/current/sql-altertable.html", "publisher": "PostgreSQL Global Development Group", "kind": "primary", "verified_on": "2026-08-24"},
-        {"title": "PostgreSQL CREATE INDEX", "url": "https://www.postgresql.org/docs/current/sql-createindex.html", "publisher": "PostgreSQL Global Development Group", "kind": "primary", "verified_on": "2026-08-24"}
+        {"title": "PostgreSQL CREATE INDEX", "url": "https://www.postgresql.org/docs/current/sql-createindex.html", "publisher": "PostgreSQL Global Development Group", "kind": "primary", "verified_on": "2026-08-24"},
+        {"title": "PostgreSQL Log-Shipping Standby Servers", "url": "https://www.postgresql.org/docs/current/warm-standby.html", "publisher": "PostgreSQL Global Development Group", "kind": "primary", "verified_on": "2026-08-24"}
       ],
       "observed_in": ["cc-skills-golang", "gophers"]
     },
@@ -293,14 +296,15 @@
       "status": "adopted-with-qualifications",
       "scope": "Clearing, settlement, payout, reserves, and external account movement",
       "invariant": "Every external movement and fee can be traced to immutable source evidence and its corresponding ledger postings.",
-      "qualifications": ["Rail-specific cutoffs, calendars, netting, and finality must come from the applicable scheme and processor contract."],
-      "counterexamples": ["A synchronous internal transfer within one ledger may settle atomically and need no external clearing state."],
+      "qualifications": ["Rail-specific cutoffs, calendars, netting, and finality must come from the applicable scheme and processor contract.", "Fedwire acceptance, cancellation, contingency reconciliation, and protracted-outage finality are specific to the active Operating Circular 6 and Regulation J contract."],
+      "counterexamples": ["A synchronous internal transfer within one ledger may settle atomically and need no external clearing state.", "A missing Fedwire acknowledgment after a connection failure is not a rejection; an unreconciled contingency resend can produce a second accepted payment order."],
       "go_versions": ["1.24", "1.25", "1.26"],
       "owners": ["go-clearing-settlement-reconciliation"],
       "risk_domains": ["settlement", "financial-integrity", "auditability"],
       "primary_evidence": [
         {"title": "Stripe Balance Transactions", "url": "https://docs.stripe.com/reports/balance-transaction-types", "publisher": "Stripe", "kind": "protocol", "verified_on": "2026-08-18"},
-        {"title": "Federal Reserve Funds Transfer Through Fedwire", "url": "https://www.federalreserve.gov/paymentsystems/fedfunds_about.htm", "publisher": "Federal Reserve Board", "kind": "regulatory", "verified_on": "2026-08-18"}
+        {"title": "Federal Reserve Funds Transfer Through Fedwire", "url": "https://www.federalreserve.gov/paymentsystems/fedfunds_about.htm", "publisher": "Federal Reserve Board", "kind": "regulatory", "verified_on": "2026-08-18"},
+        {"title": "Operating Circular 6: Funds Transfers through the Fedwire Funds Service", "url": "https://www.frbservices.org/binaries/content/assets/crsocms/resources/rules-regulations/010526-operating-circular-6.pdf", "publisher": "Federal Reserve Banks", "kind": "regulatory", "verified_on": "2026-08-24"}
       ],
       "observed_in": []
     },

@@ -29,7 +29,7 @@ Age timing breaks by rail calendars and cutoffs. Separate automated detection fr
 
 Use restartable batches, checkpoints, deterministic matching, bounded concurrency, and work queues with ownership. Publish completeness, unmatched amount/count, age, duplicate count, and source freshness without leaking sensitive data.
 
-Read [references/reconciliation-model.md](references/reconciliation-model.md) for stages and controls.
+Read [references/reconciliation-model.md](references/reconciliation-model.md) for stages and controls. For Fedwire acceptance, cancellation, outage, and resend semantics, read [references/fedwire-finality-and-contingency.md](references/fedwire-finality-and-contingency.md) and verify the deployed circular version.
 
 ## Output contract
 
