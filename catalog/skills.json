@@ -713,7 +713,9 @@
       "screening",
       "authorization",
       "audit",
-      "tokenization"
+      "tokenization",
+      "webhooks",
+      "signatures"
     ],
     "go_versions": {
       "minimum": "1.24",
@@ -724,12 +726,15 @@
     },
     "claim_ids": [
       "fin-data-boundaries",
-      "fin-sanctions-screening-control"
+      "fin-sanctions-screening-control",
+      "fin-webhook-authenticity"
     ],
     "relations": {
       "complements": [
         "go-security-hardening",
-        "review-go-fintech-change"
+        "review-go-fintech-change",
+        "go-payment-lifecycles",
+        "go-financial-idempotency"
       ],
       "overlaps": []
     },
@@ -810,10 +815,47 @@
           "periodic reassessment",
           "invalidation after list or subject changes"
         ]
+      },
+      {
+        "title": "Stripe webhooks",
+        "url": "https://docs.stripe.com/webhooks",
+        "publisher": "Stripe",
+        "kind": "primary",
+        "verified_on": "2026-08-24",
+        "supports": [
+          "raw-body signature verification",
+          "endpoint secrets",
+          "timestamp replay mitigation",
+          "duplicate and unordered events"
+        ]
+      },
+      {
+        "title": "Adyen: Verify HMAC signatures",
+        "url": "https://docs.adyen.com/development-resources/webhooks/secure-webhooks/verify-hmac-signatures",
+        "publisher": "Adyen",
+        "kind": "primary",
+        "verified_on": "2026-08-24",
+        "supports": [
+          "webhook-specific signed material",
+          "endpoint and environment keys",
+          "rotation overlap"
+        ]
+      },
+      {
+        "title": "PayPal: Verify webhook signature",
+        "url": "https://developer.paypal.com/api/webhooks/v1/verify-webhook-signature-post/",
+        "publisher": "PayPal",
+        "kind": "primary",
+        "verified_on": "2026-08-24",
+        "supports": [
+          "transmission evidence",
+          "webhook identity",
+          "remote signature verification"
+        ]
       }
     ],
-    "source_count": 4,
-    "evaluation_count": 6
+    "source_count": 7,
+    "evaluation_count": 7
   },
   {
     "name": "go-language-engineering",
@@ -1508,10 +1550,45 @@
           "soft memory limit",
           "GC cost trade-offs"
         ]
+      },
+      {
+        "title": "Diagnostics",
+        "url": "https://go.dev/doc/diagnostics",
+        "publisher": "The Go Authors",
+        "kind": "primary",
+        "verified_on": "2026-08-24",
+        "supports": [
+          "production profiling",
+          "diagnostic interference",
+          "replica sampling"
+        ]
+      },
+      {
+        "title": "Package net/http/pprof",
+        "url": "https://pkg.go.dev/net/http/pprof",
+        "publisher": "The Go Authors",
+        "kind": "primary",
+        "verified_on": "2026-08-24",
+        "supports": [
+          "HTTP profiling handlers",
+          "profile durations",
+          "forced heap collection"
+        ]
+      },
+      {
+        "title": "Package runtime",
+        "url": "https://pkg.go.dev/runtime",
+        "publisher": "The Go Authors",
+        "kind": "primary",
+        "verified_on": "2026-08-24",
+        "supports": [
+          "block profile sampling",
+          "mutex profile sampling"
+        ]
       }
     ],
-    "source_count": 4,
-    "evaluation_count": 5
+    "source_count": 7,
+    "evaluation_count": 6
   },
   {
     "name": "go-production-operations",
@@ -2192,10 +2269,45 @@
           "budgets",
           "jitter"
         ]
+      },
+      {
+        "title": "RFC 9110: HTTP Semantics",
+        "url": "https://www.rfc-editor.org/rfc/rfc9110.html",
+        "publisher": "IETF",
+        "kind": "primary",
+        "verified_on": "2026-08-24",
+        "supports": [
+          "503 semantics",
+          "Retry-After syntax and meaning"
+        ]
+      },
+      {
+        "title": "RFC 6585: Additional HTTP Status Codes",
+        "url": "https://www.rfc-editor.org/rfc/rfc6585.html",
+        "publisher": "IETF",
+        "kind": "primary",
+        "verified_on": "2026-08-24",
+        "supports": [
+          "429 semantics",
+          "rate-limit scope",
+          "Retry-After"
+        ]
+      },
+      {
+        "title": "gRPC Status Codes",
+        "url": "https://grpc.io/docs/guides/status-codes/",
+        "publisher": "Cloud Native Computing Foundation",
+        "kind": "primary",
+        "verified_on": "2026-08-24",
+        "supports": [
+          "resource exhaustion",
+          "unavailability",
+          "deadline ambiguity"
+        ]
       }
     ],
-    "source_count": 2,
-    "evaluation_count": 5
+    "source_count": 5,
+    "evaluation_count": 6
   },
   {
     "name": "go-testing-and-verification",

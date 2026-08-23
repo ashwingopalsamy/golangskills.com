@@ -28,7 +28,7 @@ Common valid moves include capacity hints for known sizes, avoiding repeated con
 
 Compare before and after with repeated benchmarks and confidence-aware tooling. Report effect size, allocations, variance, and costs transferred to memory, tail latency, complexity, or dependencies.
 
-Read [references/diagnostic-tree.md](references/diagnostic-tree.md) for profile selection and benchmark traps. For rising RSS, container OOMs, GC pressure, or `GOMEMLIMIT` changes, read [references/memory-and-gc.md](references/memory-and-gc.md).
+Read [references/diagnostic-tree.md](references/diagnostic-tree.md) for profile selection and benchmark traps. For rising RSS, container OOMs, GC pressure, or `GOMEMLIMIT` changes, read [references/memory-and-gc.md](references/memory-and-gc.md). Before exposing or collecting live diagnostics, read [references/production-profiling.md](references/production-profiling.md) for access, sampling, interference, cohort, and artifact controls.
 
 ## Output contract
 

@@ -80,7 +80,7 @@ Separate concurrency pools only when isolation matches real failure domains. Per
 
 Bound both logical operations and active dependency attempts. An operation-lifecycle permit bounds callers sleeping in backoff; an attempt permit bounds active dependency load and is released before backoff, then reacquired cancellation-aware. Holding scarce dependency capacity during sleep starves fresh work and recovery probes; releasing it without an operation bound creates unbounded sleepers.
 
-Read [references/overload.md](references/overload.md) for load shedding, circuit behavior, and recovery.
+Read [references/overload.md](references/overload.md) for load shedding, circuit behavior, and recovery. Read [references/overload-signals-and-scope.md](references/overload-signals-and-scope.md) when admission spans replicas, tenants, priorities, proxies, or protocol retry signals.
 
 ## Treat circuit breakers as state machines
 
