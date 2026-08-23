@@ -53,12 +53,12 @@
       "sql",
       "transactions",
       "isolation",
-      "constraints",
       "caches",
       "replication",
       "read-consistency",
       "pagination",
-      "cursors"
+      "watches",
+      "resync"
     ]
   },
   {
@@ -192,7 +192,9 @@
       "authorization",
       "capture",
       "refund",
-      "chargeback"
+      "chargeback",
+      "multicapture",
+      "fulfillment"
     ]
   },
   {
@@ -284,6 +286,7 @@
     "tags": [
       "go",
       "http",
+      "json",
       "grpc",
       "graphql",
       "openapi",
