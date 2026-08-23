@@ -45,17 +45,18 @@ Before finalizing, give every applicable boundary an explicit disposition:
 | Consumer acknowledgement or cumulative offset | State when it is safe, how failure or an unknown result replays, and which durable outcome makes replay harmless; never infer this from an outbox alone. |
 | Lease renewal or release | Treat an unknown renewal as uncertain authority, stop unsafe work before expiry, enforce a monotonic fence at every authoritative effect, and prevent a stale release from revoking a successor. |
 
-When retries or redeliveries exist at several layers, compute the configured maximum leaf attempts as their product; if a bound is unknown, leave it symbolic rather than inventing one. Assign retry ownership to one bounded layer, enforce one end-to-end deadline, and distinguish transient faults from permanent or ambiguous outcomes.
+For every retry, enforce one end-to-end deadline and distinguish transient faults from permanent failures and ambiguous outcomes before replay. When retries or redeliveries exist at several layers, compute the configured maximum leaf attempts as their product; if a bound is unknown, leave it symbolic rather than inventing one. Assign retry ownership to one bounded layer.
 
-For each goroutine, name its owner, cancellation source, and join point. Work that can outlive the request or lease must have a deliberate lifecycle and must not perform an unfenced effect after authority is lost.
+For each goroutine, name its owner, derive cancellation from that lifecycle, bound each blocking operation, and join before the owner returns. Work that can outlive the request or lease must have a deliberate lifecycle and must not perform an unfenced effect after authority is lost.
 
 ## Completeness gate
 
 Do not emit the final review while either applicable disposition is only implied:
 
 - If consumer acknowledgement appears, state when it becomes safe, how a failed or unknown acknowledgement causes replay, and which durable outcome makes that replay harmless. Scope any exactly-once statement to the boundary that actually provides it.
-- If two or more layers can retry or redeliver, state the product bound and a repair that selects one retry owner, one end-to-end deadline, retryable error classes, and reconciliation for ambiguous outcomes. A numeric bound without the ownership repair is incomplete.
-- If a lease appears, state the paused-owner takeover schedule, the authoritative fence, behavior after an unknown renewal, and how renewal work terminates before release or return.
+- If any retry appears, state one end-to-end deadline, transient and permanent error classes, and reconciliation before replaying an ambiguous outcome.
+- If two or more layers can retry or redeliver, state the product bound and select one retry owner. A numeric bound without the ownership repair is incomplete.
+- If a lease appears, state the paused-owner takeover schedule, the authoritative fence, behavior after an unknown renewal, and how the renewer derives cancellation from its owner, bounds each renewal call, and terminates before release or return.
 
 ## Findings
 
