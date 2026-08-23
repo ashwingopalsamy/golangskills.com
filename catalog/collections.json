@@ -3,7 +3,9 @@
     "name": "engineering-skills-for-go",
     "display_name": "Engineering Skills for Go",
     "description": "Evidence-backed Go language, API, service, testing, performance, security, operations, and engineering-review skills.",
-    "version": "0.2.0",
+    "version": "0.3.0",
+    "npm_name": "@golangskills/engineering",
+    "npm_registry": "https://www.npmjs.com/package/@golangskills/engineering",
     "skill_count": 8,
     "skills": [
       "go-language-engineering",
@@ -23,7 +25,9 @@
     "name": "distributed-systems-skills-for-go",
     "display_name": "Distributed Systems Skills for Go",
     "description": "Invariant-driven Go concurrency, consistency, messaging, resilience, coordination, and distributed-change review skills.",
-    "version": "0.2.0",
+    "version": "0.3.0",
+    "npm_name": "@golangskills/distributed-systems",
+    "npm_registry": "https://www.npmjs.com/package/@golangskills/distributed-systems",
     "skill_count": 6,
     "skills": [
       "go-concurrency-lifecycle",
@@ -41,7 +45,9 @@
     "name": "fintech-skills-for-go",
     "display_name": "Fintech Skills for Go",
     "description": "Financial-integrity skills for money, ledgers, payment lifecycles, idempotency, settlement, reconciliation, security, and compliance.",
-    "version": "0.2.0",
+    "version": "0.3.0",
+    "npm_name": "@golangskills/fintech",
+    "npm_registry": "https://www.npmjs.com/package/@golangskills/fintech",
     "skill_count": 6,
     "skills": [
       "go-clearing-settlement-reconciliation",

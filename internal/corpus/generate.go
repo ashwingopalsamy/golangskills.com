@@ -13,10 +13,11 @@ import (
 	"strings"
 )
 
-const collectionVersion = "0.2.0"
+const collectionVersion = "0.3.0"
 
 type collectionSpec struct {
 	Name             string
+	NPMSlug          string
 	DisplayName      string
 	ShortDescription string
 	LongDescription  string
@@ -26,6 +27,7 @@ type collectionSpec struct {
 var collectionSpecs = []collectionSpec{
 	{
 		Name:             "engineering-skills-for-go",
+		NPMSlug:          "engineering",
 		DisplayName:      "Engineering Skills for Go",
 		ShortDescription: "Engineer and review production Go software.",
 		LongDescription:  "Evidence-backed Go language, API, service, testing, performance, security, operations, and engineering-review skills.",
@@ -33,6 +35,7 @@ var collectionSpecs = []collectionSpec{
 	},
 	{
 		Name:             "distributed-systems-skills-for-go",
+		NPMSlug:          "distributed-systems",
 		DisplayName:      "Distributed Systems Skills for Go",
 		ShortDescription: "Design failure-safe distributed Go systems.",
 		LongDescription:  "Invariant-driven Go concurrency, consistency, messaging, resilience, coordination, and distributed-change review skills.",
@@ -40,6 +43,7 @@ var collectionSpecs = []collectionSpec{
 	},
 	{
 		Name:             "fintech-skills-for-go",
+		NPMSlug:          "fintech",
 		DisplayName:      "Fintech Skills for Go",
 		ShortDescription: "Build financially correct Go systems.",
 		LongDescription:  "Financial-integrity skills for money, ledgers, payment lifecycles, idempotency, settlement, reconciliation, security, and compliance.",
@@ -62,6 +66,8 @@ type catalogCollection struct {
 	DisplayName      string   `json:"display_name"`
 	Description      string   `json:"description"`
 	Version          string   `json:"version"`
+	NPMName          string   `json:"npm_name"`
+	NPMRegistry      string   `json:"npm_registry"`
 	SkillCount       int      `json:"skill_count"`
 	Skills           []string `json:"skills"`
 	PluginPath       string   `json:"plugin_path"`
@@ -360,7 +366,9 @@ func buildCatalog(collection Collection) catalog {
 	for _, spec := range collectionSpecs {
 		entry := catalogCollection{
 			Name: spec.Name, DisplayName: spec.DisplayName, Description: spec.LongDescription,
-			Version: collectionVersion, PluginPath: "plugins/" + spec.Name,
+			Version: collectionVersion, NPMName: "@golangskills/" + spec.NPMSlug,
+			NPMRegistry:   "https://www.npmjs.com/package/@golangskills/" + spec.NPMSlug,
+			PluginPath:    "plugins/" + spec.Name,
 			DiscoveryPath: "skills/", InstallationPath: "plugins/" + spec.Name,
 		}
 		for _, skill := range byCollection[spec.Name] {
@@ -472,6 +480,8 @@ func renderLLMs(value catalog) []byte {
 		output.WriteString(collection.DisplayName)
 		output.WriteString("\n\n")
 		output.WriteString(collection.Description)
+		output.WriteString("\n\nNPM package: ")
+		output.WriteString(collection.NPMName)
 		output.WriteString("\n\nCanonical catalog: catalog/catalog.json\n\n")
 	}
 	output.WriteString("## Evidence\n\n- Claim ledger: knowledge/claims/canonical.json\n- Reference lock: research/corpus-lock.json\n- Benchmark status: catalog/benchmark-status.json\n")

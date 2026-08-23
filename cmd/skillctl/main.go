@@ -29,7 +29,7 @@ func main() {
 
 func run(arguments []string, output io.Writer) error {
 	if len(arguments) == 0 {
-		return errors.New("usage: skillctl <audit refs|check|generate|stats> [options]")
+		return errors.New("usage: skillctl <audit refs|check|generate|stats|npm> [options]")
 	}
 	if arguments[0] == "audit" {
 		return runAudit(arguments[1:], output)
@@ -42,6 +42,9 @@ func run(arguments []string, output io.Writer) error {
 	}
 	if arguments[0] == "package" {
 		return runPackage(arguments[1:], output)
+	}
+	if arguments[0] == "npm" {
+		return runNPM(arguments[1:], output)
 	}
 	command := arguments[0]
 	flags := flag.NewFlagSet(command, flag.ContinueOnError)
@@ -107,11 +110,49 @@ func run(arguments []string, output io.Writer) error {
 	}
 }
 
+func runNPM(arguments []string, output io.Writer) error {
+	if len(arguments) == 0 {
+		return errors.New("usage: skillctl npm <package|check> [options]")
+	}
+	if arguments[0] != "package" && arguments[0] != "check" {
+		return fmt.Errorf("unknown npm command %q; expected package or check", arguments[0])
+	}
+	flags := flag.NewFlagSet("npm "+arguments[0], flag.ContinueOnError)
+	flags.SetOutput(io.Discard)
+	root := flags.String("root", "", "repository root")
+	version := flags.String("version", "0.3.0", "npm package version")
+	if err := flags.Parse(arguments[1:]); err != nil {
+		return err
+	}
+	if flags.NArg() != 0 {
+		return fmt.Errorf("unexpected arguments: %v", flags.Args())
+	}
+	repositoryRoot, err := corpus.FindRepoRoot(*root)
+	if err != nil {
+		return err
+	}
+	if arguments[0] == "check" {
+		if err := artifact.CheckNPM(repositoryRoot, *version); err != nil {
+			return err
+		}
+		fmt.Fprintln(output, "npm package staging is valid")
+		return nil
+	}
+	paths, err := artifact.PackageNPM(repositoryRoot, *version)
+	if err != nil {
+		return err
+	}
+	for _, path := range paths {
+		fmt.Fprintln(output, path)
+	}
+	return nil
+}
+
 func runPackage(arguments []string, output io.Writer) error {
 	flags := flag.NewFlagSet("package", flag.ContinueOnError)
 	flags.SetOutput(io.Discard)
 	root := flags.String("root", "", "repository root")
-	version := flags.String("version", "0.2.0", "archive version")
+	version := flags.String("version", "0.3.0", "archive version")
 	if err := flags.Parse(arguments); err != nil {
 		return err
 	}
@@ -622,6 +663,7 @@ func runRelease(arguments []string, output io.Writer) error {
 	flags.SetOutput(io.Discard)
 	root := flags.String("root", "", "repository root")
 	reportPath := flags.String("report", "evaluations/reports/release-gates.json", "machine-evaluable leadership gate report")
+	npmVersion := flags.String("npm-version", "0.3.0", "expected npm package version")
 	if err := flags.Parse(arguments[1:]); err != nil {
 		return err
 	}
@@ -639,6 +681,9 @@ func runRelease(arguments []string, output io.Writer) error {
 	}
 	if err := corpus.CheckGenerated(collection, outputs); err != nil {
 		return err
+	}
+	if err := artifact.CheckNPM(collection.RepoRoot, *npmVersion); err != nil {
+		return fmt.Errorf("npm packaging gate failed: %w", err)
 	}
 	absoluteReport := filepath.Join(collection.RepoRoot, filepath.FromSlash(*reportPath))
 	_, blockers, err := evaluation.CheckReleaseEvidence(collection.RepoRoot, absoluteReport)

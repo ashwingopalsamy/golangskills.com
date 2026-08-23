@@ -44,9 +44,12 @@ func Package(repoRoot, version string) ([]string, error) {
 		paths = append(paths, path)
 	}
 	var checksumText strings.Builder
-	for _, plugin := range plugins {
-		filename := plugin + "-" + version + ".tar.gz"
-		fmt.Fprintf(&checksumText, "%s  %s\n", checksums[filename], filename)
+	archiveChecksums, err := checksumsForArchives(dist)
+	if err != nil {
+		return nil, err
+	}
+	for _, filename := range sortedKeys(archiveChecksums) {
+		fmt.Fprintf(&checksumText, "%s  %s\n", archiveChecksums[filename], filename)
 	}
 	checksumPath := filepath.Join(dist, "SHA256SUMS")
 	if err := os.WriteFile(checksumPath, []byte(checksumText.String()), 0o644); err != nil {
@@ -67,6 +70,35 @@ func Package(repoRoot, version string) ([]string, error) {
 		return nil, err
 	}
 	return append(paths, provenancePath), nil
+}
+
+func checksumsForArchives(dist string) (map[string]string, error) {
+	entries, err := os.ReadDir(dist)
+	if err != nil {
+		return nil, err
+	}
+	checksums := make(map[string]string)
+	for _, entry := range entries {
+		if entry.IsDir() || !strings.HasSuffix(entry.Name(), ".tar.gz") {
+			continue
+		}
+		path := filepath.Join(dist, entry.Name())
+		digest, err := fileHash(path)
+		if err != nil {
+			return nil, err
+		}
+		checksums[entry.Name()] = digest
+	}
+	return checksums, nil
+}
+
+func sortedKeys(values map[string]string) []string {
+	keys := make([]string, 0, len(values))
+	for key := range values {
+		keys = append(keys, key)
+	}
+	sort.Strings(keys)
+	return keys
 }
 
 func archive(source, destination, prefix string) error {

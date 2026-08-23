@@ -2,7 +2,7 @@
 
 Current implementation status and benchmark evidence are tracked in the public catalog and evaluation reports.
 
-Evidence-backed Agent Skills for production Go, distributed systems, and fintech—authored by [Ashwin Gopalsamy](https://ashwingopalsamy.in).
+Evidence-backed Agent Skills for production Go, distributed systems, and fintech, authored by [Ashwin Gopalsamy](https://ashwingopalsamy.in).
 
 The ecosystem ships three non-overlapping installable collections:
 
@@ -16,7 +16,7 @@ Install one, two, or all three. No skill appears in more than one collection.
 
 ## Why this is different
 
-- 20 focused skills with progressive one-hop references, not a monolithic prompt.
+- 20 focused skills with progressive one-hop references.
 - 7,774 conservative discovery characters for all three collections, including a 160-character path allowance per skill; every collection is below 4,000.
 - 130 development scenarios covering routing, confusion negatives, and deterministic quality criteria, including 15 executable failure-mode fixtures.
 - 24 primary-evidence claims with scope, qualifications, counterexamples, Go versions, owners, and provenance.
@@ -24,15 +24,25 @@ Install one, two, or all three. No skill appears in more than one collection.
 - One canonical corpus generates Codex, Claude Code, Cursor, OpenCode, catalog, search, site, and `llms.txt` artifacts.
 - Published skills contain no executable resources or portable tool grants.
 
-These are verified structural properties, not a claim of empirical superiority. `catalog/benchmark-status.json` remains `evidence-pending`, and `skillctl release check` refuses a category-leadership release until the benchmark gates pass.
+Structural verification covers the properties listed here. Empirical superiority remains pending. `catalog/benchmark-status.json` remains `evidence-pending`, and `skillctl release check` refuses a category-leadership release until the benchmark gates pass.
 
 ## Install
 
-See [docs/install.md](docs/install.md) for client-specific layouts. The repository marketplace contains:
+See [docs/install.md](docs/install.md) for client-specific layouts and [docs/npm-publishing.md](docs/npm-publishing.md) for release setup. The repository marketplace contains:
 
 - `engineering-skills-for-go`
 - `distributed-systems-skills-for-go`
 - `fintech-skills-for-go`
+
+The public npm organization is `@golangskills`. Install a versioned collection with npm:
+
+```sh
+npm install @golangskills/engineering
+npm install @golangskills/distributed-systems
+npm install @golangskills/fintech
+```
+
+Each npm package is data-only and contains the generated client layouts. See the package README for the selected collection and [docs/install.md](docs/install.md) for copy and plugin paths.
 
 The canonical root also supports selected-skill installation through open Agent Skills tooling:
 
@@ -47,8 +57,9 @@ go run ./cmd/skillctl audit refs -refs /path/to/go-refs
 go run ./cmd/skillctl check
 go run ./cmd/skillctl generate
 go run ./cmd/skillctl package
+go run ./cmd/skillctl npm package -version 0.3.0
+go run ./cmd/skillctl npm check -version 0.3.0
 go run ./cmd/skillctl eval preflight
-go run ./cmd/skillctl eval freeze -id rc1 -model gpt-5.6-sol -judge-model gpt-5.6-sol -private-holdout .private/evaluations/rc1/holdout.json -holdout-key .private/evaluations/rc1/holdout.key
 go run ./cmd/skillctl eval verify-freeze -freeze evaluations/releases/rc1.lock.json -public-only
 go run ./cmd/skillctl eval run -runner codex -arm ours -kind routing -output evaluations/runs/ours-routing.jsonl
 go run ./cmd/skillctl eval matrix -runner codex -model gpt-5.6-sol -fixtures-only -output evaluations/runs/fixture-matrix.jsonl

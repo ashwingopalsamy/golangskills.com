@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "package_name": "@golangskills/distributed-systems",
+  "collection": "distributed-systems-skills-for-go",
+  "version": "0.3.0-rc.1",
+  "source_repository": "https://github.com/ashwingopalsamy/golangskills.com",
+  "source_commit": "bcc3a13d0abad95387a6bba0b3ab63781b59d680",
+  "skills": [
+    "go-concurrency-lifecycle",
+    "go-data-consistency",
+    "go-distributed-coordination",
+    "go-message-processing",
+    "go-service-resilience",
+    "review-go-distributed-change"
+  ],
+  "client_layouts": {
+    "claude-code": ".claude-plugin/ plus skills/",
+    "codex": ".codex-plugin/ plus skills/",
+    "cursor": "cursor/.cursor/skills/",
+    "opencode": "opencode/.agents/skills/"
+  },
+  "install_safety": [
+    "data-only package with no npm lifecycle scripts",
+    "no network access after package download",
+    "agent configuration is unchanged until the user copies or installs a layout"
+  ]
+}

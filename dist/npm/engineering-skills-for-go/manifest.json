@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "package_name": "@golangskills/engineering",
+  "collection": "engineering-skills-for-go",
+  "version": "0.3.0-rc.1",
+  "source_repository": "https://github.com/ashwingopalsamy/golangskills.com",
+  "source_commit": "bcc3a13d0abad95387a6bba0b3ab63781b59d680",
+  "skills": [
+    "go-language-engineering",
+    "go-performance-and-diagnostics",
+    "go-production-operations",
+    "go-project-and-api-design",
+    "go-security-hardening",
+    "go-service-boundaries",
+    "go-testing-and-verification",
+    "review-go-engineering-change"
+  ],
+  "client_layouts": {
+    "claude-code": ".claude-plugin/ plus skills/",
+    "codex": ".codex-plugin/ plus skills/",
+    "cursor": "cursor/.cursor/skills/",
+    "opencode": "opencode/.agents/skills/"
+  },
+  "install_safety": [
+    "data-only package with no npm lifecycle scripts",
+    "no network access after package download",
+    "agent configuration is unchanged until the user copies or installs a layout"
+  ]
+}
