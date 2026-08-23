@@ -48,13 +48,13 @@
     {
       "id": "paired-superiority",
       "status": "blocked",
-      "summary": "Public routing clears paired thresholds, but cxuu-golang-skills won the fintech review cell, every skill arm tied on Engineering review, and every arm tied on Distributed review; aggregate behavioral superiority is not established.",
-      "evidence": ["evaluations/reports/development/full-routing-ours-vs-cxuu-golang-skills.json", "evaluations/reports/development/fintech-authorization-review-ours-vs-cxuu-golang-skills.json", "evaluations/reports/development/engineering-shutdown-review-ours.json", "evaluations/reports/development/distributed-dual-write-review-ours.json", "evaluations/reports/latest.json"]
+      "summary": "Public routing clears paired thresholds and ours wins the corrected batch-offset review cell against every arm, but cxuu-golang-skills won the fintech cell, every skill arm tied on Engineering review, and every arm tied on the first Distributed review; aggregate behavioral superiority is not established.",
+      "evidence": ["evaluations/reports/development/full-routing-ours-vs-cxuu-golang-skills.json", "evaluations/reports/development/fintech-authorization-review-ours-vs-cxuu-golang-skills.json", "evaluations/reports/development/engineering-shutdown-review-ours.json", "evaluations/reports/development/distributed-dual-write-review-ours.json", "evaluations/reports/development/distributed-batch-offset-review-corrected-ours.json", "evaluations/reports/latest.json"]
     },
     {
       "id": "domain-non-inferiority",
       "status": "blocked",
-      "summary": "Collection-level non-inferiority is not established; the fintech cell exposed a missing mismatch-rejection finding, and the Distributed review tied all arms before a post-fix sequence that passed only three of five repetitions.",
+      "summary": "Collection-level non-inferiority is not established; the corrected Distributed transfer cell is an ours-only pass, but the fintech cell exposed a missing mismatch-rejection finding and the first Distributed review tied all arms before a post-fix sequence that passed only three of five repetitions.",
       "evidence": ["evaluations/reports/latest.json"]
     },
     {
