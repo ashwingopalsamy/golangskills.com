@@ -314,6 +314,77 @@
     },
     "qualification": "The frozen seven-arm development result is a genuine one-case loss to cxuu-golang-skills. The targeted post-fix pass is regression evidence only and is not substituted into the comparison. Transfer must be established on a precommitted holdout."
   },
+  "production_engineering_review_screen": {
+    "case": "review-go-engineering-change/quality-service-shutdown-diff",
+    "mode": "native",
+    "fixture_commit": "646d221677b115921c961c0879b984af68a8cc21",
+    "model": "gpt-5.6-sol",
+    "client_version": "codex-cli 0.149.0-alpha.4.1",
+    "scorer_version": "skillctl-eval-v3-semantic",
+    "judgment_schema_version": 2,
+    "rubric_version": "skillctl-rubric-v2-explicit-support",
+    "arms": 7,
+    "cells": 7,
+    "runner_errors": 0,
+    "judgment_errors": 0,
+    "resumed_cells_on_identical_rerun": 0,
+    "resumed_judgments_on_identical_rerun": 0,
+    "semantic_scores": {
+      "ours": 1.0,
+      "cc-skills-golang": 1.0,
+      "cxuu-golang-skills": 1.0,
+      "go-skills": 1.0,
+      "golang-ddd-skills": 1.0,
+      "gophers": 1.0,
+      "baseline": 0.875
+    },
+    "ours_input_tokens": 60234,
+    "raw_artifact": "evaluations/runs/2026-08-24-engineering-shutdown-review-native.jsonl",
+    "judgment_artifact": "evaluations/judgments/2026-08-24-engineering-shutdown-review-native-codex.jsonl",
+    "score_artifact": "evaluations/scores/2026-08-24-engineering-shutdown-review-native.jsonl",
+    "ours_report": "evaluations/reports/development/engineering-shutdown-review-ours.json",
+    "qualification": "Ours beats baseline on this one public case but ties every skill competitor. Several tied competitors use fewer input tokens, so this is mostly saturated development evidence rather than category separation or token leadership."
+  },
+  "production_distributed_review_screen": {
+    "case": "review-go-distributed-change/quality-consumer-dual-write-diff",
+    "mode": "native",
+    "fixture_commit": "646d221677b115921c961c0879b984af68a8cc21",
+    "model": "gpt-5.6-sol",
+    "client_version": "codex-cli 0.149.0-alpha.4.1",
+    "scorer_version": "skillctl-eval-v3-semantic",
+    "judgment_schema_version": 2,
+    "rubric_version": "skillctl-rubric-v2-explicit-support",
+    "arms": 7,
+    "cells": 7,
+    "runner_errors": 0,
+    "judgment_errors": 0,
+    "resumed_cells_on_identical_rerun": 0,
+    "resumed_judgments_on_identical_rerun": 0,
+    "semantic_scores": {
+      "ours": 0.75,
+      "baseline": 0.75,
+      "cc-skills-golang": 0.75,
+      "cxuu-golang-skills": 0.75,
+      "go-skills": 0.75,
+      "golang-ddd-skills": 0.75,
+      "gophers": 0.75
+    },
+    "ours_input_tokens": 78155,
+    "raw_artifact": "evaluations/runs/2026-08-24-distributed-dual-write-review-native.jsonl",
+    "judgment_artifact": "evaluations/judgments/2026-08-24-distributed-dual-write-review-native-codex.jsonl",
+    "score_artifact": "evaluations/scores/2026-08-24-distributed-dual-write-review-native.jsonl",
+    "ours_report": "evaluations/reports/development/distributed-dual-write-review-ours.json",
+    "post_fix_regression": {
+      "skill_commit": "57a70e27ce09085aefa9f8f5bcd45128b9cafd80",
+      "repetitions": 5,
+      "semantic_scores": [1.0, 0.875, 1.0, 0.875, 1.0],
+      "mean_score": 0.95,
+      "passed_cells": 3,
+      "failed_cells": 2,
+      "qualification": "Same-public-case regression evidence only. One repeat omitted unknown-ack replay and one omitted the 45-call bound; transfer and reliability remain unproven."
+    },
+    "qualification": "Every frozen arm tied, and ours used the most input tokens. The original rubric also contains compound invariants that hide partial progress. This cell is a diagnostic loss and cannot support superiority."
+  },
   "targeted_rerun": {
     "case": "go-clearing-settlement-reconciliation/avoid-initial-auth",
     "passed": true,
@@ -345,8 +416,9 @@
     "the quality half of the 86-scenario full-arm matrix and hard-case repetitions are not yet completed",
     "public routing macro-F1 clears its threshold, but private unrelated-prompt false activation is not established",
     "six post-edit hidden-oracle cases, including three behavior-rich multi-file additions, tied every arm; a less solution-revealing benchmark design is required",
-    "the semantic judge is operational, but only one public quality case has current schema-v2 judgment evidence",
+    "the semantic judge is operational across four public case families, but Engineering is saturated and the Distributed case tied every arm with unstable post-fix behavior",
     "the first production-shaped fintech review cell was won by cxuu-golang-skills; our public-case fix passes only a targeted regression and needs holdout transfer evidence",
-    "paired win-rate confidence intervals and token-efficiency frontier not yet established"
+    "the Engineering review tied all skill competitors and the Distributed review tied all arms while ours used more input tokens, so token-efficiency leadership is not established",
+    "paired win-rate confidence intervals and the overall token-efficiency frontier are not yet established"
   ]
 }

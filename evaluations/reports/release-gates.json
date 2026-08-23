@@ -48,26 +48,26 @@
     {
       "id": "paired-superiority",
       "status": "blocked",
-      "summary": "Public routing clears paired thresholds, but cxuu-golang-skills won the first production-shaped fintech review cell and aggregate behavioral superiority is not established.",
-      "evidence": ["evaluations/reports/development/full-routing-ours-vs-cxuu-golang-skills.json", "evaluations/reports/development/fintech-authorization-review-ours-vs-cxuu-golang-skills.json", "evaluations/reports/latest.json"]
+      "summary": "Public routing clears paired thresholds, but cxuu-golang-skills won the fintech review cell, every skill arm tied on Engineering review, and every arm tied on Distributed review; aggregate behavioral superiority is not established.",
+      "evidence": ["evaluations/reports/development/full-routing-ours-vs-cxuu-golang-skills.json", "evaluations/reports/development/fintech-authorization-review-ours-vs-cxuu-golang-skills.json", "evaluations/reports/development/engineering-shutdown-review-ours.json", "evaluations/reports/development/distributed-dual-write-review-ours.json", "evaluations/reports/latest.json"]
     },
     {
       "id": "domain-non-inferiority",
       "status": "blocked",
-      "summary": "Collection-level non-inferiority is not established; the first production fintech review cell exposed one missing mismatch-rejection finding before a targeted public-case fix.",
+      "summary": "Collection-level non-inferiority is not established; the fintech cell exposed a missing mismatch-rejection finding, and the Distributed review tied all arms before a post-fix sequence that passed only three of five repetitions.",
       "evidence": ["evaluations/reports/latest.json"]
     },
     {
       "id": "baseline-improvement",
       "status": "blocked",
-      "summary": "A statistically positive paired improvement over the no-skill baseline is not established.",
+      "summary": "The Engineering review beat baseline on one public cell, but Distributed review tied baseline and no statistically positive paired behavioral improvement is established.",
       "evidence": ["evaluations/reports/latest.json"]
     },
     {
       "id": "token-efficiency",
       "status": "blocked",
-      "summary": "The complete routing matrix exposes token rates, but cxuu-golang-skills quality-and-token dominated the frozen one-case fintech review comparison and the full behavioral frontier is not established.",
-      "evidence": ["evaluations/reports/development/full-routing-ours.json", "evaluations/reports/development/fintech-authorization-review-ours-vs-cxuu-golang-skills.json", "evaluations/reports/latest.json"]
+      "summary": "cxuu-golang-skills quality-and-token dominated the fintech review cell; several tied Engineering competitors used fewer input tokens; and ours used the most input tokens in the all-arm Distributed tie. The behavioral frontier is not established.",
+      "evidence": ["evaluations/reports/development/full-routing-ours.json", "evaluations/reports/development/fintech-authorization-review-ours-vs-cxuu-golang-skills.json", "evaluations/reports/development/engineering-shutdown-review-ours.json", "evaluations/reports/development/distributed-dual-write-review-ours.json", "evaluations/reports/latest.json"]
     },
     {
       "id": "artifact-traceability",
