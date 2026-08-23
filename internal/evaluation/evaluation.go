@@ -550,7 +550,7 @@ func validateJudgment(result Result, judgment Judgment, score float64, passed, c
 	if judgment.Error != "" {
 		return errors.New("evaluator failed")
 	}
-	if judgment.SchemaVersion != 1 || judgment.RubricVersion != rubricVersion {
+	if judgment.SchemaVersion != judgmentSchemaVersion || judgment.RubricVersion != rubricVersion {
 		return errors.New("schema or rubric version mismatch")
 	}
 	if judgment.Arm != result.Arm || judgment.Skill != result.Skill || judgment.CaseID != result.CaseID || judgment.Mode != result.Mode || judgment.Repetition != result.Repetition {
@@ -564,6 +564,9 @@ func validateJudgment(result Result, judgment Judgment, score float64, passed, c
 	}
 	if judgment.Metadata["source_digest"] != semanticSourceDigest(result) {
 		return errors.New("source digest mismatch")
+	}
+	if !gitCommitPattern.MatchString(judgment.Metadata["evaluator_commit"]) {
+		return errors.New("evaluator commit missing or invalid")
 	}
 	if err := validateRubricVerdict(result, judgment.Verdict); err != nil {
 		return err

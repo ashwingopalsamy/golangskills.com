@@ -78,15 +78,34 @@ func TestApplyJudgmentRejectsSourceDigestMismatch(t *testing.T) {
 	verdict := RubricVerdict{Invariants: []bool{true}, ForbiddenObserved: []bool{false}, Evidence: []string{"yes", "absent"}, Summary: "ok"}
 	judgmentID := semanticJudgmentID(result, "codex", "judge-model")
 	judgment := Judgment{
-		SchemaVersion: 1, JudgmentID: judgmentID, Arm: result.Arm, Skill: result.Skill,
+		SchemaVersion: judgmentSchemaVersion, JudgmentID: judgmentID, Arm: result.Arm, Skill: result.Skill,
 		CaseID: result.CaseID, Mode: result.Mode, Runner: "codex", Model: "judge-model",
 		RubricVersion: rubricVersion, SamePlatform: true, Verdict: verdict,
-		Score: 1, Passed: true, Metadata: map[string]string{"source_digest": "wrong"},
+		Score: 1, Passed: true, Metadata: map[string]string{"source_digest": "wrong", "evaluator_commit": strings.Repeat("a", 40)},
 	}
 	score := scoreResult(result)
 	applyJudgment(&score, judgment)
 	if score.Passed || score.Semantic == nil || score.Semantic.Passed || !strings.Contains(strings.Join(score.Failures, " "), "source digest mismatch") {
 		t.Errorf("applyJudgment() score = %#v, want fail-closed digest rejection", score)
+	}
+}
+
+func TestApplyJudgmentRejectsMissingEvaluatorCommit(t *testing.T) {
+	t.Parallel()
+	result := Result{
+		Arm: "ours", Runner: "codex", Skill: "go-data-consistency", CaseID: "quality", Kind: "quality",
+		Prompt: "task", Response: "answer", Invariants: []string{"one"}, Forbidden: []string{"bad"},
+	}
+	verdict := RubricVerdict{
+		Invariants: []bool{true}, ForbiddenObserved: []bool{false},
+		Evidence: []string{"present", "absent"}, Summary: "all criteria pass",
+	}
+	judgment := validJudgment(result, "codex", "judge-model", verdict)
+	delete(judgment.Metadata, "evaluator_commit")
+	score := scoreResult(result)
+	applyJudgment(&score, judgment)
+	if score.Passed || !strings.Contains(strings.Join(score.Failures, " "), "evaluator commit missing or invalid") {
+		t.Errorf("applyJudgment() score = %#v, want fail-closed evaluator commit rejection", score)
 	}
 }
 
@@ -108,7 +127,7 @@ func TestScoreFileWithJudgmentsRejectsMissingRequiredJudgment(t *testing.T) {
 	if err := os.WriteFile(inputPath, append(content, '\n'), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	placeholder := Judgment{SchemaVersion: 1, JudgmentID: "unrelated", Runner: "codex", Model: "judge-model"}
+	placeholder := Judgment{SchemaVersion: judgmentSchemaVersion, JudgmentID: "unrelated", Runner: "codex", Model: "judge-model"}
 	content, err = json.Marshal(placeholder)
 	if err != nil {
 		t.Fatal(err)
@@ -224,12 +243,12 @@ func TestSemanticSourceDigestBindsRubricArrayBoundaries(t *testing.T) {
 func validJudgment(result Result, runner, model string, verdict RubricVerdict) Judgment {
 	score, passed, critical := computeRubricScore(verdict)
 	return Judgment{
-		SchemaVersion: 1, JudgmentID: semanticJudgmentID(result, runner, model),
+		SchemaVersion: judgmentSchemaVersion, JudgmentID: semanticJudgmentID(result, runner, model),
 		Arm: result.Arm, Skill: result.Skill, CaseID: result.CaseID, Mode: result.Mode,
 		Runner: runner, Model: model, RubricVersion: rubricVersion,
 		SamePlatform: strings.EqualFold(result.Runner, runner), Verdict: verdict,
 		Score: score, Passed: passed, Critical: critical,
-		Metadata: map[string]string{"source_digest": semanticSourceDigest(result)},
+		Metadata: map[string]string{"source_digest": semanticSourceDigest(result), "evaluator_commit": strings.Repeat("a", 40)},
 	}
 }
 

@@ -20,9 +20,13 @@ import (
 	"time"
 )
 
-const rubricVersion = "skillctl-rubric-v2-explicit-support"
+const (
+	judgmentSchemaVersion = 2
+	rubricVersion         = "skillctl-rubric-v2-explicit-support"
+)
 
 var (
+	gitCommitPattern      = regexp.MustCompile(`^[0-9a-f]{40}$`)
 	skillMentionPattern   = regexp.MustCompile(`(?i)(\$|\.agents/skills/)[a-z0-9][a-z0-9-]*`)
 	installedSkillPattern = regexp.MustCompile(`\.agents/skills/([a-z0-9][a-z0-9-]*)`)
 	armIdentityAliases    = map[string][]string{
@@ -107,6 +111,14 @@ func RunJudgments(ctx context.Context, options JudgmentOptions) (int, error) {
 	if options.Timeout <= 0 {
 		options.Timeout = 5 * time.Minute
 	}
+	workingDirectory, err := os.Getwd()
+	if err != nil {
+		return 0, fmt.Errorf("resolve evaluator working directory: %w", err)
+	}
+	evaluatorCommit := gitHead(workingDirectory)
+	if !gitCommitPattern.MatchString(evaluatorCommit) {
+		return 0, errors.New("semantic evaluator requires a committed Git revision")
+	}
 
 	results, err := readResults(options.InputPath)
 	if err != nil {
@@ -151,7 +163,7 @@ func RunJudgments(ctx context.Context, options JudgmentOptions) (int, error) {
 		if completed[candidate.judgmentID] {
 			continue
 		}
-		judgment := runJudgment(ctx, options, clientVersion, candidate)
+		judgment := runJudgment(ctx, options, clientVersion, evaluatorCommit, candidate)
 		if err := encoder.Encode(judgment); err != nil {
 			return written, err
 		}
@@ -163,11 +175,11 @@ func RunJudgments(ctx context.Context, options JudgmentOptions) (int, error) {
 	return written, nil
 }
 
-func runJudgment(ctx context.Context, options JudgmentOptions, clientVersion string, candidate judgmentCandidate) Judgment {
+func runJudgment(ctx context.Context, options JudgmentOptions, clientVersion, evaluatorCommit string, candidate judgmentCandidate) Judgment {
 	started := time.Now()
 	result := candidate.result
 	judgment := Judgment{
-		SchemaVersion: 1,
+		SchemaVersion: judgmentSchemaVersion,
 		JudgmentID:    candidate.judgmentID,
 		BlindLabel:    candidate.blindLabel,
 		Arm:           result.Arm,
@@ -185,6 +197,7 @@ func runJudgment(ctx context.Context, options JudgmentOptions, clientVersion str
 			"source_run_id":         result.RunID,
 			"source_fixture_commit": result.Metadata["fixture_commit"],
 			"source_digest":         semanticSourceDigest(result),
+			"evaluator_commit":      evaluatorCommit,
 		},
 	}
 	defer func() { judgment.DurationMS = time.Since(started).Milliseconds() }()
@@ -419,7 +432,7 @@ func completedJudgments(path string) (map[string]bool, error) {
 func semanticJudgmentID(result Result, runner, model string) string {
 	identity := strings.Join([]string{
 		benchmarkKey(result.Arm, result.Skill, result.CaseID, result.Mode, result.Repetition),
-		semanticSourceDigest(result), runner, model, rubricVersion,
+		semanticSourceDigest(result), runner, model, strconv.Itoa(judgmentSchemaVersion), rubricVersion,
 	}, "\x00")
 	return digestString(identity)
 }
