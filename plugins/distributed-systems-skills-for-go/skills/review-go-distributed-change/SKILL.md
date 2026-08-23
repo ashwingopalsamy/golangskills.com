@@ -1,6 +1,6 @@
 ---
 name: review-go-distributed-change
-description: "Use for distributed Go diff/PR review. Do not use when fintech correctness dominates."
+description: "Use to review Go diffs/PRs for distributed failures in transactions, brokers, retries, leases, or effects. Do not use for fintech."
 license: Apache-2.0
 compatibility: "Go 1.24 or newer; repository and deployed-system guarantees control the review."
 ---

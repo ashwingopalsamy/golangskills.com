@@ -384,7 +384,7 @@
     "name": "go-financial-idempotency",
     "collection": "fintech-skills-for-go",
     "path": "skills/go-financial-idempotency",
-    "description": "Use for financial request identity, fingerprints, replay, retention, and ambiguity. Do not use for broker dedupe.",
+    "description": "Use only for financial request identity, replay, retention, and ambiguity. Do not use for non-financial effects.",
     "compatibility": "Go 1.24 or newer; external idempotency guarantees must match the active provider contract.",
     "display_name": "Go Financial Idempotency",
     "short_description": "Prevent duplicate financial effects",
@@ -473,7 +473,7 @@
       }
     ],
     "source_count": 2,
-    "evaluation_count": 5
+    "evaluation_count": 6
   },
   {
     "name": "go-fintech-security-compliance",
@@ -874,7 +874,7 @@
     "name": "go-payment-lifecycles",
     "collection": "fintech-skills-for-go",
     "path": "skills/go-payment-lifecycles",
-    "description": "Use for provider/rail payment authorization, capture, refund, webhook, and ambiguous states. Do not use for request replay identity.",
+    "description": "Use only for payment/rail authorization, capture, refund, webhook, and ambiguity. Do not use for non-financial effects.",
     "compatibility": "Go 1.24 or newer; provider, rail, and scheme state semantics are version- and region-specific.",
     "display_name": "Go Payment Lifecycles",
     "short_description": "Model payment evidence and transitions",
@@ -963,7 +963,7 @@
       }
     ],
     "source_count": 2,
-    "evaluation_count": 4
+    "evaluation_count": 5
   },
   {
     "name": "go-performance-and-diagnostics",
@@ -1641,7 +1641,7 @@
     "name": "review-go-distributed-change",
     "collection": "distributed-systems-skills-for-go",
     "path": "skills/review-go-distributed-change",
-    "description": "Use for distributed Go diff/PR review. Do not use when fintech correctness dominates.",
+    "description": "Use to review Go diffs/PRs for distributed failures in transactions, brokers, retries, leases, or effects. Do not use for fintech.",
     "compatibility": "Go 1.24 or newer; repository and deployed-system guarantees control the review.",
     "display_name": "Review Go Distributed Change",
     "short_description": "Find distributed failure schedules",

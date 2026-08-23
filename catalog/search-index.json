@@ -74,7 +74,7 @@
   },
   {
     "collection": "fintech-skills-for-go",
-    "description": "Use for financial request identity, fingerprints, replay, retention, and ambiguity. Do not use for broker dedupe.",
+    "description": "Use only for financial request identity, replay, retention, and ambiguity. Do not use for non-financial effects.",
     "name": "go-financial-idempotency",
     "risk_domains": [
       "financial-integrity",
@@ -166,7 +166,7 @@
   },
   {
     "collection": "fintech-skills-for-go",
-    "description": "Use for provider/rail payment authorization, capture, refund, webhook, and ambiguous states. Do not use for request replay identity.",
+    "description": "Use only for payment/rail authorization, capture, refund, webhook, and ambiguity. Do not use for non-financial effects.",
     "name": "go-payment-lifecycles",
     "risk_domains": [
       "financial-integrity",
@@ -312,7 +312,7 @@
   },
   {
     "collection": "distributed-systems-skills-for-go",
-    "description": "Use for distributed Go diff/PR review. Do not use when fintech correctness dominates.",
+    "description": "Use to review Go diffs/PRs for distributed failures in transactions, brokers, retries, leases, or effects. Do not use for fintech.",
     "name": "review-go-distributed-change",
     "risk_domains": [
       "concurrency",
