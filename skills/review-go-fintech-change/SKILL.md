@@ -15,7 +15,7 @@ Follow authenticated command, money representation, idempotency identity, state 
 
 For every caller, payment, provider, or replay identity, verify its authority scope and canonical payload binding. State all three behaviors explicitly: equivalent input replays the same outcome; different input is rejected before a new effect or prior-result disclosure; wrong authority learns nothing. Saying an identity is “bound to a fingerprint” is not an enforceable finding unless the mismatch path is defined.
 
-Load the focused skills that own the changed invariant. Common compositions are payment lifecycle + financial idempotency + data consistency for money-moving mutations; settlement + money/ledger + message processing for replayed adjustments; and fintech security/compliance + security hardening for payment-data code with an implementation exploit.
+Treat product, provider, rail, report, and repository semantics already supplied by the task as the review contract. Do not load auxiliary skills or references when that contract is sufficient. When a missing contract blocks a finding, load only the matching focused skill: `go-money-and-ledgers` for arithmetic or journal invariants, `go-payment-lifecycles` for provider states, `go-financial-idempotency` for financial replay identity, `go-clearing-settlement-reconciliation` for post-capture evidence, or `go-fintech-security-compliance` for regulated data and audit controls. Stop once the missing contract is resolved; load a cross-collection skill only when its deployed-system semantics directly change the financial finding.
 
 ## Critical schedules
 
@@ -32,10 +32,12 @@ Load the focused skills that own the changed invariant. Common compositions are 
 
 ## Findings
 
-Zero tolerance: silent precision loss, unbalanced committed entries, duplicate financial effects, illegal state transitions presented as success, missing reconciliation evidence, or sensitive authentication data leakage. Tie every finding to a reachable schedule and authoritative invariant. Do not treat provider documentation as universal across rails.
+Zero tolerance: silent precision loss, unbalanced committed entries, duplicate financial effects, illegal state transitions presented as success, missing reconciliation evidence, or sensitive authentication data leakage. Tie every finding to a reachable schedule and authoritative invariant. State the exact identity, amount, currency, evidence state, authority, known/failed/ambiguous outcome, durable consequence, smallest repair, and required backfill or reconciliation. Do not treat provider documentation as universal across rails.
 
-Read [references/financial-finding-standard.md](references/financial-finding-standard.md) before finalizing.
+Read [references/financial-finding-standard.md](references/financial-finding-standard.md) only when the task requires a formal audit format or a finding still lacks one of those dispositions.
 
 ## Output contract
 
 Lead with critical financial-integrity findings, then security/compliance and operational risks. State when scheme, legal, or compliance interpretation requires a qualified owner; never infer certification.
+
+Audit the final prose against every applicable financial-effect boundary. Do not rely on naming idempotency, reconciliation, or an adjustment to imply payload mismatch handling, evidence lineage, replay safety, exact arithmetic, or immutable correction.

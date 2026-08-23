@@ -575,7 +575,7 @@
   "blocking_gates": [
     "private release holdout not yet frozen and scored",
     "full baseline and multi-competitor behavioral quality matrix not yet completed",
-    "the quality half of the 90-scenario full-arm matrix and hard-case repetitions are not yet completed",
+    "the quality half of the 91-scenario full-arm matrix and hard-case repetitions are not yet completed",
     "public routing macro-F1 clears its threshold, but private unrelated-prompt false activation is not established",
     "six post-edit hidden-oracle cases, including three behavior-rich multi-file additions, tied every arm; a less solution-revealing benchmark design is required",
     "the semantic judge is operational across six public case families; the final batch-offset version gives ours a stable relative lead, but the lease/fencing transfer tied baseline, passed zero repetitions, and exposed a systematic review-activation failure before a non-comparative public-case fix",
