@@ -438,6 +438,34 @@
     "rubric_error": "The code invokes ApplyRemote at most 12 times while internal retries can make 36 remote-effect attempts. The invariant says 36 ApplyRemote calls and denied a response that correctly said 36 remote effects.",
     "qualification": "Ineligible for behavioral comparison despite ours leading all three repetitions. Refreeze unambiguous remote-effect-attempt wording and rerun every arm."
   },
+  "final_batch_offset_transfer_screen": {
+    "case": "review-go-distributed-change/quality-batch-offset-diff",
+    "fixture_commit": "d63ea08bc6ef118c3821e13fbbc1c3200b2e7daa",
+    "model": "gpt-5.6-sol",
+    "client_version": "codex-cli 0.149.0-alpha.4.1",
+    "arms": 7,
+    "cells": 7,
+    "runner_errors": 0,
+    "current_judgments": 7,
+    "rejected_judgment_attempts_retained": 2,
+    "resumed_cells_on_identical_rerun": 0,
+    "resumed_judgments_on_identical_rerun": 0,
+    "semantic_scores": {
+      "ours": 0.8571428571428571,
+      "cxuu-golang-skills": 0.7142857142857143,
+      "golang-ddd-skills": 0.7142857142857143,
+      "gophers": 0.7142857142857143,
+      "baseline": 0.6428571428571429,
+      "cc-skills-golang": 0.6428571428571429,
+      "go-skills": 0.6428571428571429
+    },
+    "ours_input_tokens": 57710,
+    "raw_artifact": "evaluations/runs/2026-08-24-distributed-batch-offset-review-final-native.jsonl",
+    "judgment_artifact": "evaluations/judgments/2026-08-24-distributed-batch-offset-review-final-native-codex.jsonl",
+    "score_artifact": "evaluations/scores/2026-08-24-distributed-batch-offset-review-final-native.jsonl",
+    "ours_report": "evaluations/reports/development/distributed-batch-offset-review-final-ours.json",
+    "qualification": "Ours wins quality against every arm but is not a strict pass and uses more input tokens than every arm. This is one final-version repetition and requires at least two more hard-case repeats."
+  },
   "targeted_rerun": {
     "case": "go-clearing-settlement-reconciliation/avoid-initial-auth",
     "passed": true,
@@ -469,7 +497,7 @@
     "the quality half of the 87-scenario full-arm matrix and hard-case repetitions are not yet completed",
     "public routing macro-F1 clears its threshold, but private unrelated-prompt false activation is not established",
     "six post-edit hidden-oracle cases, including three behavior-rich multi-file additions, tied every arm; a less solution-revealing benchmark design is required",
-    "the semantic judge is operational across five public case families, but both batch-offset screens were invalidated by retry-bound wording defects, Engineering is saturated, and the earlier Distributed case tied every arm with unstable post-fix behavior",
+    "the semantic judge is operational across five public case families; the final batch-offset version gives ours a one-repetition relative lead but not a strict pass, both earlier versions were invalidated, Engineering is saturated, and the earlier Distributed case tied every arm with unstable post-fix behavior",
     "the first production-shaped fintech review cell was won by cxuu-golang-skills; our public-case fix passes only a targeted regression and needs holdout transfer evidence",
     "the Engineering review tied all skill competitors and the Distributed review tied all arms while ours used more input tokens, so token-efficiency leadership is not established",
     "paired win-rate confidence intervals and the overall token-efficiency frontier are not yet established"
