@@ -364,6 +364,9 @@ func caseKey(score Score) string {
 }
 
 func isCritical(score Score) bool {
+	if score.Semantic != nil && score.Semantic.Critical {
+		return true
+	}
 	collection := score.Collection
 	if collection == "" {
 		collection = collectionForSkill(score.Skill)

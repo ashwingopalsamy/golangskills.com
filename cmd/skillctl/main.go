@@ -232,13 +232,37 @@ func runEval(arguments []string, output io.Writer) error {
 		flags.SetOutput(io.Discard)
 		input := flags.String("input", "", "raw JSONL artifact")
 		outputPath := flags.String("output", "", "scored JSONL artifact")
+		judgmentsPath := flags.String("judgments", "", "resumable blinded semantic judgment JSONL artifact")
+		judgeRunner := flags.String("judge-runner", "codex", "semantic evaluator runner")
+		judgeModel := flags.String("judge-model", "", "semantic evaluator model; enables blinded judgment")
+		judgeSeed := flags.Int64("judge-seed", 1, "semantic candidate randomization seed")
+		judgeTimeout := flags.Duration("judge-timeout", 5*time.Minute, "per-candidate semantic evaluator timeout")
 		if err := flags.Parse(arguments[1:]); err != nil {
 			return err
 		}
 		if *input == "" || *outputPath == "" {
 			return errors.New("eval score requires -input and -output")
 		}
-		count, err := evaluation.ScoreFile(*input, *outputPath)
+		if *judgeModel != "" {
+			if *judgmentsPath == "" {
+				return errors.New("eval score with -judge-model requires -judgments")
+			}
+			written, err := evaluation.RunJudgments(context.Background(), evaluation.JudgmentOptions{
+				Runner: *judgeRunner, Model: *judgeModel, InputPath: *input, OutputPath: *judgmentsPath,
+				Seed: *judgeSeed, Timeout: *judgeTimeout,
+			})
+			if err != nil {
+				return err
+			}
+			fmt.Fprintf(output, "wrote %d blinded semantic judgments\n", written)
+		}
+		var count int
+		var err error
+		if *judgmentsPath == "" {
+			count, err = evaluation.ScoreFile(*input, *outputPath)
+		} else {
+			count, err = evaluation.ScoreFileWithJudgments(*input, *judgmentsPath, *outputPath)
+		}
 		if err != nil {
 			return err
 		}

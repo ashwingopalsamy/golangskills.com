@@ -110,7 +110,21 @@ type Score struct {
 	Passed        bool            `json:"passed"`
 	Score         float64         `json:"score"`
 	GraderScore   map[string]bool `json:"grader_score"`
+	Semantic      *SemanticScore  `json:"semantic,omitempty"`
 	Failures      []string        `json:"failures,omitempty"`
+}
+
+// SemanticScore is the compact, traceable semantic component merged into a
+// score. Full evaluator evidence remains in the separate judgment artifact.
+type SemanticScore struct {
+	JudgmentID    string  `json:"judgment_id"`
+	RubricVersion string  `json:"rubric_version"`
+	Runner        string  `json:"runner"`
+	Model         string  `json:"model"`
+	SamePlatform  bool    `json:"same_platform"`
+	Score         float64 `json:"score"`
+	Passed        bool    `json:"passed"`
+	Critical      bool    `json:"critical"`
 }
 
 // Preflight inspects supported local runners without changing authentication.
@@ -384,11 +398,28 @@ func canonicalExpectedRoutes(item caseItem) []string {
 
 // ScoreFile applies only deterministic graders and writes JSONL scores.
 func ScoreFile(inputPath, outputPath string) (int, error) {
+	return scoreFile(inputPath, "", outputPath)
+}
+
+// ScoreFileWithJudgments combines deterministic graders with a complete
+// semantic judgment artifact. Missing required judgments fail closed.
+func ScoreFileWithJudgments(inputPath, judgmentsPath, outputPath string) (int, error) {
+	if judgmentsPath == "" {
+		return 0, errors.New("judgments path is required")
+	}
+	return scoreFile(inputPath, judgmentsPath, outputPath)
+}
+
+func scoreFile(inputPath, judgmentsPath, outputPath string) (int, error) {
 	input, err := os.Open(inputPath)
 	if err != nil {
 		return 0, err
 	}
 	defer input.Close()
+	judgments, err := readJudgments(judgmentsPath)
+	if err != nil {
+		return 0, err
+	}
 	if err := os.MkdirAll(filepath.Dir(outputPath), 0o755); err != nil {
 		return 0, err
 	}
@@ -407,12 +438,129 @@ func ScoreFile(inputPath, outputPath string) (int, error) {
 			return count, err
 		}
 		score := scoreResult(result)
+		if judgmentsPath != "" && requiresSemanticJudgment(result) {
+			judgmentID := semanticJudgmentID(result, judgments.runner, judgments.model)
+			judgment, exists := judgments.byID[judgmentID]
+			if !exists {
+				applyMissingJudgment(&score)
+			} else {
+				applyJudgment(&score, judgment)
+			}
+		}
 		if err := encoder.Encode(score); err != nil {
 			return count, err
 		}
 		count++
 	}
 	return count, scanner.Err()
+}
+
+type judgmentIndex struct {
+	runner string
+	model  string
+	byID   map[string]Judgment
+}
+
+func readJudgments(path string) (judgmentIndex, error) {
+	index := judgmentIndex{byID: make(map[string]Judgment)}
+	if path == "" {
+		return index, nil
+	}
+	file, err := os.Open(path)
+	if err != nil {
+		return index, err
+	}
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+	scanner.Buffer(make([]byte, 64*1024), 16*1024*1024)
+	for scanner.Scan() {
+		var judgment Judgment
+		if err := json.Unmarshal(scanner.Bytes(), &judgment); err != nil {
+			return index, err
+		}
+		if judgment.JudgmentID == "" || judgment.Runner == "" || judgment.Model == "" {
+			return index, errors.New("judgment artifact is missing identity fields")
+		}
+		if index.runner == "" {
+			index.runner, index.model = judgment.Runner, judgment.Model
+		}
+		if judgment.Runner != index.runner || judgment.Model != index.model {
+			return index, errors.New("judgment artifact mixes evaluator runner or model")
+		}
+		if previous, duplicate := index.byID[judgment.JudgmentID]; duplicate {
+			switch {
+			case previous.Error != "" && judgment.Error == "":
+				index.byID[judgment.JudgmentID] = judgment
+			case previous.Error != "" && judgment.Error != "":
+				index.byID[judgment.JudgmentID] = judgment
+			default:
+				return index, fmt.Errorf("duplicate successful judgment_id %q", judgment.JudgmentID)
+			}
+			continue
+		}
+		index.byID[judgment.JudgmentID] = judgment
+	}
+	return index, scanner.Err()
+}
+
+func applyMissingJudgment(score *Score) {
+	score.Semantic = &SemanticScore{}
+	score.ScorerVersion = "skillctl-eval-v3-semantic"
+	score.Score = 0
+	score.Passed = false
+	score.Failures = append(score.Failures, "semantic judgment missing")
+}
+
+func applyJudgment(score *Score, judgment Judgment) {
+	semanticScore, semanticPassed, semanticCritical := computeRubricScore(judgment.Verdict)
+	semantic := &SemanticScore{
+		JudgmentID: judgment.JudgmentID, RubricVersion: judgment.RubricVersion,
+		Runner: judgment.Runner, Model: judgment.Model, SamePlatform: judgment.SamePlatform,
+		Score: semanticScore, Passed: semanticPassed, Critical: semanticCritical,
+	}
+	score.Semantic = semantic
+	score.ScorerVersion = "skillctl-eval-v3-semantic"
+	if err := validateJudgment(score.Result, judgment, semanticScore, semanticPassed, semanticCritical); err != nil {
+		semantic.Score, semantic.Passed, semantic.Critical = 0, false, false
+		score.Score = 0
+		score.Passed = false
+		score.Failures = append(score.Failures, "semantic judgment invalid: "+err.Error())
+		return
+	}
+	score.Score = semanticScore
+	score.Passed = score.Passed && semanticPassed
+	if !semanticPassed {
+		score.Failures = append(score.Failures, "semantic rubric failed")
+	}
+}
+
+func validateJudgment(result Result, judgment Judgment, score float64, passed, critical bool) error {
+	if judgment.Error != "" {
+		return errors.New("evaluator failed")
+	}
+	if judgment.SchemaVersion != 1 || judgment.RubricVersion != rubricVersion {
+		return errors.New("schema or rubric version mismatch")
+	}
+	if judgment.Arm != result.Arm || judgment.Skill != result.Skill || judgment.CaseID != result.CaseID || judgment.Mode != result.Mode || judgment.Repetition != result.Repetition {
+		return errors.New("candidate identity mismatch")
+	}
+	if judgment.JudgmentID != semanticJudgmentID(result, judgment.Runner, judgment.Model) {
+		return errors.New("judgment ID does not bind the candidate")
+	}
+	if judgment.SamePlatform != strings.EqualFold(result.Runner, judgment.Runner) {
+		return errors.New("same-platform label mismatch")
+	}
+	if judgment.Metadata["source_digest"] != semanticSourceDigest(result) {
+		return errors.New("source digest mismatch")
+	}
+	if err := validateRubricVerdict(result, judgment.Verdict); err != nil {
+		return err
+	}
+	if judgment.Score != score || judgment.Passed != passed || judgment.Critical != critical {
+		return errors.New("stored semantic totals do not match rubric booleans")
+	}
+	return nil
 }
 
 func scoreResult(result Result) Score {
