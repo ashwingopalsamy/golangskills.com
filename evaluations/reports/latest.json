@@ -487,6 +487,66 @@
     "aggregate_summary": "evaluations/reports/development/distributed-batch-offset-review-final-summary.json",
     "qualification": "Ours led every arm in all three same-public-case repetitions and quality-and-token dominated golang-ddd-skills in aggregate. It strictly passed zero repetitions and used more input tokens than the other five arms. This is stable relative development evidence, not independent-scenario or release-level superiority."
   },
+  "lease_fencing_transfer_screen": {
+    "case": "review-go-distributed-change/quality-lease-fencing-diff",
+    "fixture_commit": "523b925df5540fa1b32a203310aa075d8065c7b5",
+    "model": "gpt-5.6-sol",
+    "client_version": "codex-cli 0.149.0-alpha.4.1",
+    "arms": 7,
+    "repetitions": 3,
+    "cells": 21,
+    "runner_errors": 0,
+    "judgment_errors": 0,
+    "resumed_cells_on_identical_rerun": 0,
+    "aggregate_criteria": {
+      "ours": 33,
+      "baseline": 33,
+      "cc-skills-golang": 30,
+      "cxuu-golang-skills": 29,
+      "go-skills": 29,
+      "golang-ddd-skills": 31,
+      "gophers": 30,
+      "possible_per_arm": 48
+    },
+    "aggregate_input_tokens": {
+      "ours": 147597,
+      "baseline": 47057,
+      "cc-skills-golang": 194716,
+      "cxuu-golang-skills": 183506,
+      "go-skills": 153513,
+      "golang-ddd-skills": 154648,
+      "gophers": 134912
+    },
+    "ours_strict_passes": 0,
+    "native_activation": {
+      "review_skill_loaded": 0,
+      "irrelevant_fintech_skill_loaded": 3,
+      "repetitions": 3
+    },
+    "score_artifact": "evaluations/scores/2026-08-24-distributed-lease-fencing-review-native-summary.jsonl",
+    "ours_report": "evaluations/reports/development/distributed-lease-fencing-review-ours.json",
+    "qualification": "Ours tied baseline and exceeded every skill competitor in aggregate, but strictly passed zero repetitions. Baseline dominates ours on quality and tokens. The repeated native failure was review-skill omission plus irrelevant Fintech activation, not lack of lease knowledge.",
+    "activation_regression": {
+      "skill_commit": "846691a72aff82f8b1f4105e337edbe7ed61d2cd",
+      "repetitions": 3,
+      "criteria": 40,
+      "criteria_possible": 48,
+      "input_tokens": 108638,
+      "review_skill_loaded": 3,
+      "irrelevant_fintech_skill_loaded": 0,
+      "strict_passes": 0,
+      "report": "evaluations/reports/development/distributed-lease-fencing-review-ours-postfix.json",
+      "qualification": "Same-public-case routing and context regression only; it is never substituted into the frozen comparison."
+    },
+    "final_completeness_regression": {
+      "skill_commit": "ae3b0073efc1be2cd4201b70566edae3451b0cd6",
+      "score": 0.8125,
+      "input_tokens": 36260,
+      "strict_passed": false,
+      "report": "evaluations/reports/development/distributed-lease-fencing-review-ours-postfix-v2.json",
+      "qualification": "Final contaminated-case regression. Stop tuning this case and require transfer on a new family."
+    }
+  },
   "targeted_rerun": {
     "case": "go-clearing-settlement-reconciliation/avoid-initial-auth",
     "passed": true,
@@ -518,9 +578,9 @@
     "the quality half of the 90-scenario full-arm matrix and hard-case repetitions are not yet completed",
     "public routing macro-F1 clears its threshold, but private unrelated-prompt false activation is not established",
     "six post-edit hidden-oracle cases, including three behavior-rich multi-file additions, tied every arm; a less solution-revealing benchmark design is required",
-    "the semantic judge is operational across five public case families; the final batch-offset version gives ours a stable three-repetition relative lead but zero strict passes, both earlier versions were invalidated, Engineering is saturated, and the earlier Distributed case tied every arm with unstable post-fix behavior",
+    "the semantic judge is operational across six public case families; the final batch-offset version gives ours a stable relative lead, but the lease/fencing transfer tied baseline, passed zero repetitions, and exposed a systematic review-activation failure before a non-comparative public-case fix",
     "the first production-shaped fintech review cell was won by cxuu-golang-skills; our public-case fix passes only a targeted regression and needs holdout transfer evidence",
-    "the Engineering review tied all skill competitors and the Distributed review tied all arms while ours used more input tokens, so token-efficiency leadership is not established",
+    "the Engineering review tied all skill competitors, the first Distributed review tied all arms at our highest token cost, and baseline quality-and-token dominated ours on the frozen lease/fencing transfer; token-efficiency leadership is not established",
     "paired win-rate confidence intervals and the overall token-efficiency frontier are not yet established"
   ]
 }
