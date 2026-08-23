@@ -300,7 +300,7 @@
   "blocking_gates": [
     "private release holdout not yet frozen and scored",
     "full baseline and multi-competitor behavioral quality matrix not yet completed",
-    "the quality half of the 83-scenario full-arm matrix and hard-case repetitions are not yet completed",
+    "the quality half of the 84-scenario full-arm matrix and hard-case repetitions are not yet completed",
     "public routing macro-F1 clears its threshold, but private unrelated-prompt false activation is not established",
     "six post-edit hidden-oracle cases, including three behavior-rich multi-file additions, tied every arm; a less solution-revealing benchmark design is required",
     "the semantic judge is operational, but only one public quality case has current schema-v2 judgment evidence",
