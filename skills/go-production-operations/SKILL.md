@@ -35,6 +35,8 @@ Build reproducibly, pin CI inputs, generate checksums and provenance, scan archi
 
 Read [references/incident-contract.md](references/incident-contract.md) for lifecycle, cardinality, backpressure, and telemetry-loss traps.
 
+For staged deployment, controller progress, canary evidence, data migration, and rollback safety, read [references/rollout-and-rollback.md](references/rollout-and-rollback.md). Platform availability is necessary rollout evidence, not proof that the new artifact preserves business or data invariants.
+
 ## Output contract
 
 State the lifecycle order, deployment assumptions, and signals that prove each state. Avoid copied Kubernetes or logging templates without causal fit.

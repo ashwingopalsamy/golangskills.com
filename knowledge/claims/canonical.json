@@ -138,17 +138,19 @@
     },
     {
       "id": "eng-operational-lifecycle",
-      "statement": "A Go service owns startup validation, readiness, bounded shutdown, telemetry continuity, and dependency failure behavior as part of its public production contract.",
+      "statement": "A Go service owns startup validation, readiness, bounded shutdown, telemetry continuity, deployment evidence, and rollback safety as part of its public production contract.",
       "status": "adopted",
       "scope": "Configuration, logging, metrics, traces, health, shutdown, containers, Kubernetes, CI, and releases",
-      "invariant": "The process never advertises readiness before it can serve safely, does not abandon accepted work without an explicit shutdown policy, and does not let telemetry failure create unbounded work or indefinite request and shutdown blocking.",
-      "qualifications": ["Readiness and liveness probe semantics depend on orchestration and failure-recovery strategy.", "Telemetry must remain bounded and avoid sensitive or high-cardinality dimensions.", "Dropping or sampling telemetry can be safer than blocking, but loss, saturation, and sampling must themselves be observable through an independent bounded path."],
-      "counterexamples": ["A liveness probe that fails on every downstream outage can turn a dependency incident into a restart storm.", "An unbounded exporter queue can turn collector failure into process memory exhaustion while an unlimited flush can defeat the shutdown budget."],
+      "invariant": "The process never advertises readiness before it can serve safely, does not abandon accepted work without an explicit shutdown policy, does not let telemetry failure create unbounded work, and does not treat replica progress or binary rollback as proof of application or data correctness.",
+      "qualifications": ["Readiness and liveness probe semantics depend on orchestration and failure-recovery strategy.", "Deployment progress and availability describe platform reconciliation, not complete business correctness or data compatibility.", "Rollback restores only the resources covered by the deployment mechanism and may be unsafe after new data, messages, configuration, or irreversible effects.", "Telemetry must remain bounded and avoid sensitive or high-cardinality dimensions.", "Dropping or sampling telemetry can be safer than blocking, but loss, saturation, and sampling must themselves be observable through an independent bounded path."],
+      "counterexamples": ["A liveness probe that fails on every downstream outage can turn a dependency incident into a restart storm.", "An unbounded exporter queue can turn collector failure into process memory exhaustion while an unlimited flush can defeat the shutdown budget.", "A Kubernetes Deployment can be Available while a canary violates a financial invariant, and rolling back its Pod template does not undo database writes or an external ConfigMap change."],
       "go_versions": ["1.24", "1.25", "1.26"],
       "owners": ["go-production-operations"],
       "risk_domains": ["availability", "observability", "deployment"],
       "primary_evidence": [
         {"title": "Kubernetes Pod Lifecycle", "url": "https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/", "publisher": "Cloud Native Computing Foundation", "kind": "operational", "verified_on": "2026-08-18"},
+        {"title": "Kubernetes Deployments", "url": "https://kubernetes.io/docs/concepts/workloads/controllers/deployment/", "publisher": "Cloud Native Computing Foundation", "kind": "operational", "verified_on": "2026-08-24"},
+        {"title": "Kubernetes Liveness, Readiness, and Startup Probes", "url": "https://kubernetes.io/docs/concepts/workloads/pods/probes/", "publisher": "Cloud Native Computing Foundation", "kind": "operational", "verified_on": "2026-08-24"},
         {"title": "OpenTelemetry Tracing API", "url": "https://opentelemetry.io/docs/specs/otel/trace/api/", "publisher": "OpenTelemetry", "kind": "protocol", "verified_on": "2026-08-18"},
         {"title": "OpenTelemetry Performance and Blocking", "url": "https://opentelemetry.io/docs/specs/otel/performance/", "publisher": "OpenTelemetry", "kind": "protocol", "verified_on": "2026-08-24"},
         {"title": "Prometheus Metric and Label Naming", "url": "https://prometheus.io/docs/practices/naming/", "publisher": "Prometheus Authors", "kind": "primary", "verified_on": "2026-08-24"}
@@ -199,9 +201,9 @@
       "statement": "Assume messages can be duplicated, delayed, reordered, or redelivered unless the complete broker-consumer-state boundary proves stronger semantics.",
       "status": "adopted",
       "scope": "Queues, logs, consumers, outbox/inbox, acknowledgements, ordering, and poison messages",
-      "invariant": "Redelivery or crash at any acknowledgement boundary cannot violate the business invariant or silently lose required work.",
-      "qualifications": ["Exactly-once features are scoped to particular systems and transaction boundaries.", "Global ordering is expensive and usually unnecessary; identify the ordering key.", "A consumer-group generation or member epoch may reject stale offset progress without fencing an external business effect already started by the revoked owner.", "A CDC bootstrap needs a source-consistent snapshot and retained stream boundary plus collision handling; the exact snapshot, position, and watermark primitives are connector-specific."],
-      "counterexamples": ["A broker transaction cannot make an arbitrary third-party API side effect exactly once.", "A Read Committed table scan followed by the current log head can lose writes committed during the scan, while last-arrival-wins can let an older snapshot row overwrite a newer stream event."],
+      "invariant": "Redelivery, quarantine, redrive, or crash at any acknowledgement boundary cannot violate the business invariant or silently lose required work.",
+      "qualifications": ["Exactly-once features are scoped to particular systems and transaction boundaries.", "Global ordering is expensive and usually unnecessary; identify the ordering key.", "Dead-letter movement and redrive can change broker identity, enqueue time, retention, and relative order; preserve application identity and treat replay as a controlled release.", "A consumer-group generation or member epoch may reject stale offset progress without fencing an external business effect already started by the revoked owner.", "A CDC bootstrap needs a source-consistent snapshot and retained stream boundary plus collision handling; the exact snapshot, position, and watermark primitives are connector-specific."],
+      "counterexamples": ["A broker transaction cannot make an arbitrary third-party API side effect exactly once.", "Emptying a DLQ at maximum velocity can interleave old and new events, outlive deduplication retention, and reproduce downstream overload.", "A Read Committed table scan followed by the current log head can lose writes committed during the scan, while last-arrival-wins can let an older snapshot row overwrite a newer stream event."],
       "go_versions": ["1.24", "1.25", "1.26"],
       "owners": ["go-message-processing"],
       "risk_domains": ["delivery", "ordering", "idempotency", "recovery"],
@@ -210,7 +212,9 @@
         {"title": "NATS JetStream Consumers", "url": "https://docs.nats.io/nats-concepts/jetstream/consumers", "publisher": "Synadia", "kind": "protocol", "verified_on": "2026-08-18"},
         {"title": "Apache Kafka 4.0 Protocol", "url": "https://kafka.apache.org/40/design/protocol/", "publisher": "Apache Software Foundation", "kind": "protocol", "verified_on": "2026-08-24"},
         {"title": "PostgreSQL Logical Decoding Concepts", "url": "https://www.postgresql.org/docs/current/logicaldecoding-explanation.html", "publisher": "PostgreSQL Global Development Group", "kind": "primary", "verified_on": "2026-08-24"},
-        {"title": "Debezium PostgreSQL Connector", "url": "https://debezium.io/documentation/reference/stable/connectors/postgresql.html", "publisher": "Debezium Community", "kind": "protocol", "verified_on": "2026-08-24"}
+        {"title": "Debezium PostgreSQL Connector", "url": "https://debezium.io/documentation/reference/stable/connectors/postgresql.html", "publisher": "Debezium Community", "kind": "protocol", "verified_on": "2026-08-24"},
+        {"title": "Amazon SQS dead-letter queues", "url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-dead-letter-queues.html", "publisher": "Amazon Web Services", "kind": "operational", "verified_on": "2026-08-24"},
+        {"title": "Amazon SQS dead-letter queue redrive", "url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-configure-dead-letter-queue-redrive.html", "publisher": "Amazon Web Services", "kind": "operational", "verified_on": "2026-08-24"}
       ],
       "observed_in": ["cc-skills-golang"]
     },
@@ -315,14 +319,16 @@
       "status": "adopted",
       "scope": "Money-moving commands, API retries, provider calls, webhooks, and replay",
       "invariant": "Any number of equivalent retries produces at most one committed financial effect and returns an outcome consistent with that effect.",
-      "qualifications": ["Retention must cover the maximum credible retry and replay window.", "Provider idempotency does not replace local idempotency around local state changes."],
-      "counterexamples": ["A check-then-insert implementation without a uniqueness constraint races under concurrent requests."],
+      "qualifications": ["Retention must cover the maximum credible retry and replay window.", "Provider key support, operation scope, account or region scope, retention, concurrent-duplicate behavior, and replayed response semantics are endpoint- and version-specific.", "Provider idempotency does not replace local idempotency around local state changes or authorize disclosure of a stored result."],
+      "counterexamples": ["A check-then-insert implementation without a uniqueness constraint races under concurrent requests.", "Reusing a provider key after its retention window or in a region outside its deduplication scope can create a new financial effect.", "A simultaneous duplicate conflict can mean the first request is still processing rather than that no effect occurred."],
       "go_versions": ["1.24", "1.25", "1.26"],
       "owners": ["go-financial-idempotency"],
       "risk_domains": ["financial-integrity", "idempotency", "concurrency"],
       "primary_evidence": [
-        {"title": "Stripe idempotent requests", "url": "https://docs.stripe.com/api/idempotent_requests", "publisher": "Stripe", "kind": "protocol", "verified_on": "2026-08-18"},
-        {"title": "PostgreSQL INSERT ON CONFLICT", "url": "https://www.postgresql.org/docs/current/sql-insert.html", "publisher": "PostgreSQL Global Development Group", "kind": "primary", "verified_on": "2026-08-18"}
+        {"title": "Stripe idempotent requests", "url": "https://docs.stripe.com/api/idempotent_requests", "publisher": "Stripe", "kind": "protocol", "verified_on": "2026-08-24"},
+        {"title": "PostgreSQL INSERT ON CONFLICT", "url": "https://www.postgresql.org/docs/current/sql-insert.html", "publisher": "PostgreSQL Global Development Group", "kind": "primary", "verified_on": "2026-08-18"},
+        {"title": "PayPal REST idempotency", "url": "https://developer.paypal.com/api/rest/reference/idempotency/", "publisher": "PayPal", "kind": "protocol", "verified_on": "2026-08-24"},
+        {"title": "Adyen API idempotency", "url": "https://docs.adyen.com/development-resources/api-idempotency/", "publisher": "Adyen", "kind": "protocol", "verified_on": "2026-08-24"}
       ],
       "observed_in": []
     },
