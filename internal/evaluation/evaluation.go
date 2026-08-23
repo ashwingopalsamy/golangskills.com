@@ -529,10 +529,21 @@ func applyJudgment(score *Score, judgment Judgment) {
 		return
 	}
 	score.Score = semanticScore
-	score.Passed = score.Passed && semanticPassed
+	score.Passed = semanticPassed
+	score.Failures = withoutResponseGraderFailures(score.Failures)
 	if !semanticPassed {
 		score.Failures = append(score.Failures, "semantic rubric failed")
 	}
+}
+
+func withoutResponseGraderFailures(failures []string) []string {
+	filtered := failures[:0]
+	for _, failure := range failures {
+		if !strings.HasPrefix(failure, "grader ") {
+			filtered = append(filtered, failure)
+		}
+	}
+	return filtered
 }
 
 func validateJudgment(result Result, judgment Judgment, score float64, passed, critical bool) error {

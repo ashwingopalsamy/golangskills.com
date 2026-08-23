@@ -99,7 +99,7 @@ func TestScoreFileWithJudgmentsRejectsMissingRequiredJudgment(t *testing.T) {
 	result := Result{
 		Arm: "ours", Runner: "codex", Skill: "go-data-consistency", CaseID: "quality", Kind: "quality",
 		Prompt: "task", Response: "answer", Invariants: []string{"one"}, Forbidden: []string{"bad"},
-		Graders: []corpus.Grader{{ID: "terms", Kind: "contains", Required: []string{"answer"}, Weight: 1}},
+		Graders: []corpus.Grader{{ID: "terms", Kind: "contains", Required: []string{"literal-not-present"}, Weight: 1}},
 	}
 	content, err := json.Marshal(result)
 	if err != nil {
@@ -137,7 +137,7 @@ func TestScoreFileWithJudgmentsMergesValidSemanticScore(t *testing.T) {
 	result := Result{
 		Arm: "ours", Runner: "codex", Skill: "go-data-consistency", CaseID: "quality", Kind: "quality",
 		Prompt: "task", Response: "answer", Invariants: []string{"one"}, Forbidden: []string{"bad"},
-		Graders: []corpus.Grader{{ID: "terms", Kind: "contains", Required: []string{"answer"}, Weight: 1}},
+		Graders: []corpus.Grader{{ID: "terms", Kind: "contains", Required: []string{"literal-not-present"}, Weight: 1}},
 	}
 	writeJSONLine(t, inputPath, result)
 	verdict := RubricVerdict{
@@ -154,8 +154,26 @@ func TestScoreFileWithJudgmentsMergesValidSemanticScore(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if len(scores) != 1 || !scores[0].Passed || scores[0].Score != 1 || scores[0].ScorerVersion != "skillctl-eval-v3-semantic" {
+	if len(scores) != 1 || !scores[0].Passed || scores[0].Score != 1 || scores[0].GraderScore["terms"] || len(scores[0].Failures) != 0 || scores[0].ScorerVersion != "skillctl-eval-v3-semantic" {
 		t.Errorf("ScoreFileWithJudgments() = %#v, want valid semantic score", scores)
+	}
+}
+
+func TestRequiresSemanticJudgmentSkipsFailedRunnerAndExecutableOracle(t *testing.T) {
+	t.Parallel()
+	base := Result{Kind: "quality", Invariants: []string{"one"}}
+	if !requiresSemanticJudgment(base) {
+		t.Fatal("requiresSemanticJudgment() rejected eligible quality case")
+	}
+	failed := base
+	failed.ExitCode = 1
+	if requiresSemanticJudgment(failed) {
+		t.Fatal("requiresSemanticJudgment() accepted failed runner result")
+	}
+	executable := base
+	executable.Graders = []corpus.Grader{{Kind: "go-test"}}
+	if requiresSemanticJudgment(executable) {
+		t.Fatal("requiresSemanticJudgment() accepted executable oracle case")
 	}
 }
 
