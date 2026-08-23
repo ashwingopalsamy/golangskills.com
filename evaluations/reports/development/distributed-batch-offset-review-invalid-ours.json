@@ -1,0 +1,39 @@
+{
+  "schema_version": 2,
+  "arm": "ours",
+  "cases": 1,
+  "passed": 0,
+  "pass_rate": 0,
+  "mean_score": 0.8571428571428571,
+  "ci_lower_95": 0,
+  "ci_upper_95": 0.7934506856227626,
+  "critical_failures": 0,
+  "collections": [
+    {
+      "collection": "distributed-systems-skills-for-go",
+      "cases": 1,
+      "passed": 0,
+      "pass_rate": 0,
+      "mean_score": 0.8571428571428571
+    }
+  ],
+  "routing": {
+    "cases": 0,
+    "macro_f1": 0,
+    "unrelated_cases": 0,
+    "false_activations": 0,
+    "false_activation_rate": 0
+  },
+  "tokens": {
+    "input_tokens": 58552,
+    "cached_input_tokens": 44288,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 1474,
+    "reasoning_output_tokens": 628,
+    "score_per_k_input_tokens": 0.014639002205609665
+  },
+  "failure_cases": [
+    "review-go-distributed-change/quality-batch-offset-diff"
+  ],
+  "input": "evaluations/scores/2026-08-24-distributed-batch-offset-review-native.jsonl"
+}
