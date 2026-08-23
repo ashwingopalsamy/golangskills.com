@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "case": "review-go-distributed-change/quality-batch-offset-diff",
+  "model": "gpt-5.6-sol",
+  "client_version": "codex-cli 0.149.0-alpha.4.1",
+  "rubric_version": "skillctl-rubric-v2-explicit-support",
+  "same_platform": true,
+  "same_public_case_repetitions": true,
+  "repetitions": 3,
+  "source_commits": [
+    "d63ea08bc6ef118c3821e13fbbc1c3200b2e7daa",
+    "aaa4346ee8566fbcfec94bf0827df970f49a7ddb"
+  ],
+  "runs": [
+    "evaluations/runs/2026-08-24-distributed-batch-offset-review-final-native.jsonl",
+    "evaluations/runs/2026-08-24-distributed-batch-offset-review-final-native-r1.jsonl",
+    "evaluations/runs/2026-08-24-distributed-batch-offset-review-final-native-r2.jsonl"
+  ],
+  "judgments": [
+    "evaluations/judgments/2026-08-24-distributed-batch-offset-review-final-native-codex.jsonl",
+    "evaluations/judgments/2026-08-24-distributed-batch-offset-review-final-native-r1-codex.jsonl",
+    "evaluations/judgments/2026-08-24-distributed-batch-offset-review-final-native-r2-codex.jsonl"
+  ],
+  "scores": [
+    "evaluations/scores/2026-08-24-distributed-batch-offset-review-final-native.jsonl",
+    "evaluations/scores/2026-08-24-distributed-batch-offset-review-final-native-r1.jsonl",
+    "evaluations/scores/2026-08-24-distributed-batch-offset-review-final-native-r2.jsonl"
+  ],
+  "judgment_attempts": 24,
+  "current_judgments": 21,
+  "rejected_judgment_attempts_retained": 3,
+  "arms": {
+    "ours": {
+      "criteria_passed": 36,
+      "criteria_possible": 42,
+      "mean_score": 0.8571428571428571,
+      "strict_passes": 0,
+      "input_tokens": 171186,
+      "mean_input_tokens": 57062
+    },
+    "baseline": {
+      "criteria_passed": 29,
+      "criteria_possible": 42,
+      "mean_score": 0.6904761904761905,
+      "strict_passes": 0,
+      "input_tokens": 46714,
+      "mean_input_tokens": 15571.333333333334
+    },
+    "cc-skills-golang": {
+      "criteria_passed": 27,
+      "criteria_possible": 42,
+      "mean_score": 0.6428571428571429,
+      "strict_passes": 0,
+      "input_tokens": 169768,
+      "mean_input_tokens": 56589.333333333336
+    },
+    "cxuu-golang-skills": {
+      "criteria_passed": 30,
+      "criteria_possible": 42,
+      "mean_score": 0.7142857142857143,
+      "strict_passes": 0,
+      "input_tokens": 129794,
+      "mean_input_tokens": 43264.666666666664
+    },
+    "go-skills": {
+      "criteria_passed": 28,
+      "criteria_possible": 42,
+      "mean_score": 0.6666666666666666,
+      "strict_passes": 0,
+      "input_tokens": 107213,
+      "mean_input_tokens": 35737.666666666664
+    },
+    "golang-ddd-skills": {
+      "criteria_passed": 30,
+      "criteria_possible": 42,
+      "mean_score": 0.7142857142857143,
+      "strict_passes": 0,
+      "input_tokens": 171899,
+      "mean_input_tokens": 57299.666666666664
+    },
+    "gophers": {
+      "criteria_passed": 30,
+      "criteria_possible": 42,
+      "mean_score": 0.7142857142857143,
+      "strict_passes": 0,
+      "input_tokens": 136327,
+      "mean_input_tokens": 45442.333333333336
+    }
+  },
+  "result": "Ours led every arm in every repetition and quality-and-token dominated golang-ddd-skills in aggregate. It did not strictly pass any repetition and used more input tokens than the other five arms, so this is stable relative development evidence rather than absolute correctness, Pareto leadership, or aggregate category superiority."
+}

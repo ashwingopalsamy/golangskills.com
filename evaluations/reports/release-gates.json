@@ -48,13 +48,13 @@
     {
       "id": "paired-superiority",
       "status": "blocked",
-      "summary": "Public routing clears paired thresholds and ours leads the one-repetition final batch-offset screen, but the two earlier versions are invalid, cxuu-golang-skills won the fintech cell, every skill arm tied on Engineering review, and every arm tied on the first Distributed review; aggregate behavioral superiority is not established.",
+      "summary": "Public routing clears paired thresholds and ours leads every arm in three final batch-offset repetitions, but those are one public case with zero strict ours passes; cxuu-golang-skills won the fintech cell, every skill arm tied on Engineering review, and every arm tied on the first Distributed review. Aggregate behavioral superiority is not established.",
       "evidence": ["evaluations/reports/development/full-routing-ours-vs-cxuu-golang-skills.json", "evaluations/reports/development/fintech-authorization-review-ours-vs-cxuu-golang-skills.json", "evaluations/reports/development/engineering-shutdown-review-ours.json", "evaluations/reports/development/distributed-dual-write-review-ours.json", "evaluations/reports/development/distributed-batch-offset-review-final-ours.json", "evaluations/reports/latest.json"]
     },
     {
       "id": "domain-non-inferiority",
       "status": "blocked",
-      "summary": "Collection-level non-inferiority is not established; ours leads one final-version Distributed transfer repetition but is not a strict pass, the fintech cell exposed a missing mismatch-rejection finding, and the first Distributed review tied all arms before a post-fix sequence that passed only three of five repetitions.",
+      "summary": "Collection-level non-inferiority is not established; ours leads all three final-version Distributed transfer repetitions but strictly passes none, the fintech cell exposed a missing mismatch-rejection finding, and the first Distributed review tied all arms before a post-fix sequence that passed only three of five repetitions.",
       "evidence": ["evaluations/reports/latest.json"]
     },
     {
@@ -66,7 +66,7 @@
     {
       "id": "token-efficiency",
       "status": "blocked",
-      "summary": "cxuu-golang-skills quality-and-token dominated the fintech review cell; several tied Engineering competitors used fewer input tokens; ours used the most input tokens in the first Distributed tie; and every final batch-offset pair is a quality/token trade-off. The behavioral frontier is not established.",
+      "summary": "cxuu-golang-skills quality-and-token dominated the fintech review cell; several tied Engineering competitors used fewer input tokens; ours used the most input tokens in the first Distributed tie; and in the final batch-offset aggregate ours dominates only golang-ddd-skills while trading quality for tokens against the other five arms. The behavioral frontier is not established.",
       "evidence": ["evaluations/reports/development/full-routing-ours.json", "evaluations/reports/development/fintech-authorization-review-ours-vs-cxuu-golang-skills.json", "evaluations/reports/development/engineering-shutdown-review-ours.json", "evaluations/reports/development/distributed-dual-write-review-ours.json", "evaluations/reports/development/distributed-batch-offset-review-final-ours.json", "evaluations/reports/latest.json"]
     },
     {

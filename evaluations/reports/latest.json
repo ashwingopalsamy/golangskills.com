@@ -444,13 +444,14 @@
     "model": "gpt-5.6-sol",
     "client_version": "codex-cli 0.149.0-alpha.4.1",
     "arms": 7,
-    "cells": 7,
+    "repetitions": 3,
+    "cells": 21,
     "runner_errors": 0,
-    "current_judgments": 7,
-    "rejected_judgment_attempts_retained": 2,
+    "current_judgments": 21,
+    "rejected_judgment_attempts_retained": 3,
     "resumed_cells_on_identical_rerun": 0,
     "resumed_judgments_on_identical_rerun": 0,
-    "semantic_scores": {
+    "first_repetition_semantic_scores": {
       "ours": 0.8571428571428571,
       "cxuu-golang-skills": 0.7142857142857143,
       "golang-ddd-skills": 0.7142857142857143,
@@ -459,12 +460,32 @@
       "cc-skills-golang": 0.6428571428571429,
       "go-skills": 0.6428571428571429
     },
-    "ours_input_tokens": 57710,
+    "aggregate_criteria": {
+      "ours": 36,
+      "baseline": 29,
+      "cc-skills-golang": 27,
+      "cxuu-golang-skills": 30,
+      "go-skills": 28,
+      "golang-ddd-skills": 30,
+      "gophers": 30,
+      "possible_per_arm": 42
+    },
+    "aggregate_input_tokens": {
+      "ours": 171186,
+      "baseline": 46714,
+      "cc-skills-golang": 169768,
+      "cxuu-golang-skills": 129794,
+      "go-skills": 107213,
+      "golang-ddd-skills": 171899,
+      "gophers": 136327
+    },
+    "ours_strict_passes": 0,
     "raw_artifact": "evaluations/runs/2026-08-24-distributed-batch-offset-review-final-native.jsonl",
     "judgment_artifact": "evaluations/judgments/2026-08-24-distributed-batch-offset-review-final-native-codex.jsonl",
     "score_artifact": "evaluations/scores/2026-08-24-distributed-batch-offset-review-final-native.jsonl",
     "ours_report": "evaluations/reports/development/distributed-batch-offset-review-final-ours.json",
-    "qualification": "Ours wins quality against every arm but is not a strict pass and uses more input tokens than every arm. This is one final-version repetition and requires at least two more hard-case repeats."
+    "aggregate_summary": "evaluations/reports/development/distributed-batch-offset-review-final-summary.json",
+    "qualification": "Ours led every arm in all three same-public-case repetitions and quality-and-token dominated golang-ddd-skills in aggregate. It strictly passed zero repetitions and used more input tokens than the other five arms. This is stable relative development evidence, not independent-scenario or release-level superiority."
   },
   "targeted_rerun": {
     "case": "go-clearing-settlement-reconciliation/avoid-initial-auth",
@@ -497,7 +518,7 @@
     "the quality half of the 87-scenario full-arm matrix and hard-case repetitions are not yet completed",
     "public routing macro-F1 clears its threshold, but private unrelated-prompt false activation is not established",
     "six post-edit hidden-oracle cases, including three behavior-rich multi-file additions, tied every arm; a less solution-revealing benchmark design is required",
-    "the semantic judge is operational across five public case families; the final batch-offset version gives ours a one-repetition relative lead but not a strict pass, both earlier versions were invalidated, Engineering is saturated, and the earlier Distributed case tied every arm with unstable post-fix behavior",
+    "the semantic judge is operational across five public case families; the final batch-offset version gives ours a stable three-repetition relative lead but zero strict passes, both earlier versions were invalidated, Engineering is saturated, and the earlier Distributed case tied every arm with unstable post-fix behavior",
     "the first production-shaped fintech review cell was won by cxuu-golang-skills; our public-case fix passes only a targeted regression and needs holdout transfer evidence",
     "the Engineering review tied all skill competitors and the Distributed review tied all arms while ours used more input tokens, so token-efficiency leadership is not established",
     "paired win-rate confidence intervals and the overall token-efficiency frontier are not yet established"
