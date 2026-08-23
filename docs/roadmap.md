@@ -2,7 +2,7 @@
 
 ## Before `v1.0.0-rc.1`
 
-- Run all 12 executable failure-mode fixtures across the frozen baseline and competitor arms.
+- Run all 15 executable failure-mode fixtures across the frozen baseline and competitor arms, prioritizing the three unscreened hard scenarios before any complete matrix.
 - Run the frozen specialist DDD comparator through the full matrix.
 - Run full Codex baseline, native-discovery, and explicit-skill arms with repetitions.
 - Add clean-clone plugin installation evidence and archive scanning.
