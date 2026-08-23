@@ -51,3 +51,5 @@ Read [references/schedule-catalog.md](references/schedule-catalog.md) before fin
 ## Output contract
 
 Lead with correctness and availability findings. Route monetary, ledger, settlement, or compliance consequences to `review-go-fintech-change` for domain adjudication.
+
+Audit the final prose—not only the analysis—against every applicable completeness-gate clause. Add any missing clause to the nearest causal finding; do not rely on an inbox/outbox recommendation or attempt count to imply acknowledgement replay, retry ownership, deadline, or error classification.
