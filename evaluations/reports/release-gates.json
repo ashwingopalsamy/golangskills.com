@@ -48,13 +48,13 @@
     {
       "id": "paired-superiority",
       "status": "blocked",
-      "summary": "Public routing clears paired thresholds against skill competitors, but aggregate behavioral quality superiority is not established.",
-      "evidence": ["evaluations/reports/development/full-routing-ours-vs-cxuu-golang-skills.json", "evaluations/reports/latest.json"]
+      "summary": "Public routing clears paired thresholds, but cxuu-golang-skills won the first production-shaped fintech review cell and aggregate behavioral superiority is not established.",
+      "evidence": ["evaluations/reports/development/full-routing-ours-vs-cxuu-golang-skills.json", "evaluations/reports/development/fintech-authorization-review-ours-vs-cxuu-golang-skills.json", "evaluations/reports/latest.json"]
     },
     {
       "id": "domain-non-inferiority",
       "status": "blocked",
-      "summary": "Collection-level non-inferiority is not established on the complete quality matrix.",
+      "summary": "Collection-level non-inferiority is not established; the first production fintech review cell exposed one missing mismatch-rejection finding before a targeted public-case fix.",
       "evidence": ["evaluations/reports/latest.json"]
     },
     {
@@ -66,8 +66,8 @@
     {
       "id": "token-efficiency",
       "status": "blocked",
-      "summary": "The complete routing matrix exposes token rates, but the behavioral quality frontier is not established.",
-      "evidence": ["evaluations/reports/development/full-routing-ours.json", "evaluations/reports/latest.json"]
+      "summary": "The complete routing matrix exposes token rates, but cxuu-golang-skills quality-and-token dominated the frozen one-case fintech review comparison and the full behavioral frontier is not established.",
+      "evidence": ["evaluations/reports/development/full-routing-ours.json", "evaluations/reports/development/fintech-authorization-review-ours-vs-cxuu-golang-skills.json", "evaluations/reports/latest.json"]
     },
     {
       "id": "artifact-traceability",

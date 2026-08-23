@@ -272,6 +272,48 @@
     ],
     "qualification": "All three behavior-rich fixtures still saturated across every native arm. They are valid hidden-oracle minimum-competence evidence, not fixture-superiority evidence. Explicit-mode repeats were intentionally skipped because they cannot restore discrimination after a complete native tie."
   },
+  "production_fintech_review_screen": {
+    "case": "review-go-fintech-change/quality-authorization-diff",
+    "mode": "native",
+    "fixture_commit": "ce7c47eff4231f267ce18d997513dfa462e509f2",
+    "model": "gpt-5.6-sol",
+    "client_version": "codex-cli 0.149.0-alpha.4.1",
+    "scorer_version": "skillctl-eval-v3-semantic",
+    "judgment_schema_version": 2,
+    "rubric_version": "skillctl-rubric-v2-explicit-support",
+    "arms": 7,
+    "cells": 7,
+    "runner_errors": 0,
+    "judgment_errors": 0,
+    "resumed_judgments_on_identical_rerun": 0,
+    "semantic_scores": {
+      "cxuu-golang-skills": 1.0,
+      "ours": 0.8571428571428571,
+      "baseline": 0.8571428571428571,
+      "cc-skills-golang": 0.8571428571428571,
+      "go-skills": 0.8571428571428571,
+      "golang-ddd-skills": 0.8571428571428571,
+      "gophers": 0.7142857142857143
+    },
+    "raw_artifact": "evaluations/runs/2026-08-24-fintech-authorization-review-native.jsonl",
+    "judgment_artifact": "evaluations/judgments/2026-08-24-fintech-authorization-review-native-codex.jsonl",
+    "score_artifact": "evaluations/scores/2026-08-24-fintech-authorization-review-native.jsonl",
+    "ours_report": "evaluations/reports/development/fintech-authorization-review-ours.json",
+    "paired_report": "evaluations/reports/development/fintech-authorization-review-ours-vs-cxuu-golang-skills.json",
+    "finding": "Our response bound the payment identity to an immutable fingerprint but did not explicitly require rejection of a different canonical payload. The blinded evaluator correctly withheld that invariant; cxuu-golang-skills won the frozen cell and was more input-token efficient.",
+    "post_fix_regression": {
+      "skill_commit": "188c1f1a155a03e7012138152e62e601eda0fe58",
+      "cells": 1,
+      "semantic_score": 1.0,
+      "passed": true,
+      "resumed_judgments_on_identical_rerun": 0,
+      "raw_artifact": "evaluations/runs/2026-08-24-fintech-authorization-review-ours-postfix.jsonl",
+      "judgment_artifact": "evaluations/judgments/2026-08-24-fintech-authorization-review-ours-postfix-codex.jsonl",
+      "score_artifact": "evaluations/scores/2026-08-24-fintech-authorization-review-ours-postfix.jsonl",
+      "report": "evaluations/reports/development/fintech-authorization-review-ours-postfix.json"
+    },
+    "qualification": "The frozen seven-arm development result is a genuine one-case loss to cxuu-golang-skills. The targeted post-fix pass is regression evidence only and is not substituted into the comparison. Transfer must be established on a precommitted holdout."
+  },
   "targeted_rerun": {
     "case": "go-clearing-settlement-reconciliation/avoid-initial-auth",
     "passed": true,
@@ -304,6 +346,7 @@
     "public routing macro-F1 clears its threshold, but private unrelated-prompt false activation is not established",
     "six post-edit hidden-oracle cases, including three behavior-rich multi-file additions, tied every arm; a less solution-revealing benchmark design is required",
     "the semantic judge is operational, but only one public quality case has current schema-v2 judgment evidence",
+    "the first production-shaped fintech review cell was won by cxuu-golang-skills; our public-case fix passes only a targeted regression and needs holdout transfer evidence",
     "paired win-rate confidence intervals and token-efficiency frontier not yet established"
   ]
 }
