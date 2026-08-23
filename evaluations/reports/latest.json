@@ -428,7 +428,15 @@
     "judgment_artifact": "evaluations/judgments/2026-08-24-distributed-batch-offset-review-corrected-native-codex.jsonl",
     "score_artifact": "evaluations/scores/2026-08-24-distributed-batch-offset-review-corrected-native.jsonl",
     "ours_report": "evaluations/reports/development/distributed-batch-offset-review-corrected-ours.json",
-    "qualification": "Ours is the only strict pass and wins quality against every arm. It uses more input tokens than Gophers, so that pair remains a trade-off. This is one public development case and requires hard-case repetitions."
+    "repetitions": {
+      "count": 3,
+      "ours_scores": [1.0, 0.9285714285714286, 0.7857142857142857],
+      "ours_criteria": 38,
+      "criteria_possible": 42,
+      "next_best_aggregate_criteria": 29
+    },
+    "rubric_error": "The code invokes ApplyRemote at most 12 times while internal retries can make 36 remote-effect attempts. The invariant says 36 ApplyRemote calls and denied a response that correctly said 36 remote effects.",
+    "qualification": "Ineligible for behavioral comparison despite ours leading all three repetitions. Refreeze unambiguous remote-effect-attempt wording and rerun every arm."
   },
   "targeted_rerun": {
     "case": "go-clearing-settlement-reconciliation/avoid-initial-auth",
@@ -461,7 +469,7 @@
     "the quality half of the 87-scenario full-arm matrix and hard-case repetitions are not yet completed",
     "public routing macro-F1 clears its threshold, but private unrelated-prompt false activation is not established",
     "six post-edit hidden-oracle cases, including three behavior-rich multi-file additions, tied every arm; a less solution-revealing benchmark design is required",
-    "the semantic judge is operational across five public case families; the corrected batch-offset transfer cell is an ours-only strict pass, but Engineering is saturated and the earlier Distributed case tied every arm with unstable post-fix behavior",
+    "the semantic judge is operational across five public case families, but both batch-offset screens were invalidated by retry-bound wording defects, Engineering is saturated, and the earlier Distributed case tied every arm with unstable post-fix behavior",
     "the first production-shaped fintech review cell was won by cxuu-golang-skills; our public-case fix passes only a targeted regression and needs holdout transfer evidence",
     "the Engineering review tied all skill competitors and the Distributed review tied all arms while ours used more input tokens, so token-efficiency leadership is not established",
     "paired win-rate confidence intervals and the overall token-efficiency frontier are not yet established"
