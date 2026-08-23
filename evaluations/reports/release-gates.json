@@ -42,7 +42,7 @@
     {
       "id": "fixture-superiority",
       "status": "blocked",
-      "summary": "Post-edit oracle isolation works, but three earlier smokes saturated across all arms and the three new harder fixtures have not yet been screened; discriminatory fixture evidence is not established.",
+      "summary": "Post-edit oracle isolation works, but six smokes—including three behavior-rich multi-file cases—saturated across every native arm; discriminatory fixture evidence is not established.",
       "evidence": ["docs/evaluations.md", "evaluations/reports/latest.json"]
     },
     {

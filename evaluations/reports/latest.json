@@ -228,6 +228,50 @@
     "superseded_attempts_retained": "The append-only judgment artifact retains 14 schema-v1 attempts that exposed and then rechecked a leniency defect; scoring selects the seven current schema-v2 judgments.",
     "qualification": "Development harness evidence only. One public case has no comparative or statistical inferential value, and Codex-on-Codex judgment is same-platform rather than independent."
   },
+  "harder_fixture_smoke_matrix": {
+    "fixture_commit": "66c0ba617c0a3e4c4f2096dfc8c59221cd108309",
+    "model": "gpt-5.6-sol",
+    "client_version": "codex-cli 0.149.0-alpha.4.1",
+    "grader_version": "skillctl-runner-v2-hidden-oracle",
+    "cases": [
+      "go-language-engineering/quality-config-ownership",
+      "go-data-consistency/quality-versioned-cache",
+      "go-financial-idempotency/quality-replica-replay"
+    ],
+    "arms": 7,
+    "cells": 21,
+    "runner_errors": 0,
+    "distinct_opaque_labels": 21,
+    "resumed_cells_on_identical_rerun": 0,
+    "pass_rates": {
+      "baseline": 1.0,
+      "ours": 1.0,
+      "cc-skills-golang": 1.0,
+      "cxuu-golang-skills": 1.0,
+      "go-skills": 1.0,
+      "gophers": 1.0,
+      "golang-ddd-skills": 1.0
+    },
+    "raw_artifacts": [
+      "evaluations/runs/2026-08-24-hard-config-ownership-native.jsonl",
+      "evaluations/runs/2026-08-24-hard-versioned-cache-native.jsonl",
+      "evaluations/runs/2026-08-24-hard-replica-replay-native.jsonl"
+    ],
+    "score_artifacts": [
+      "evaluations/scores/2026-08-24-hard-config-ownership-native.jsonl",
+      "evaluations/scores/2026-08-24-hard-versioned-cache-native.jsonl",
+      "evaluations/scores/2026-08-24-hard-replica-replay-native.jsonl"
+    ],
+    "reports": [
+      "evaluations/reports/development/hard-config-ownership-ours.json",
+      "evaluations/reports/development/hard-config-ownership-ours-vs-baseline.json",
+      "evaluations/reports/development/hard-versioned-cache-ours.json",
+      "evaluations/reports/development/hard-versioned-cache-ours-vs-baseline.json",
+      "evaluations/reports/development/hard-replica-replay-ours.json",
+      "evaluations/reports/development/hard-replica-replay-ours-vs-baseline.json"
+    ],
+    "qualification": "All three behavior-rich fixtures still saturated across every native arm. They are valid hidden-oracle minimum-competence evidence, not fixture-superiority evidence. Explicit-mode repeats were intentionally skipped because they cannot restore discrimination after a complete native tie."
+  },
   "targeted_rerun": {
     "case": "go-clearing-settlement-reconciliation/avoid-initial-auth",
     "passed": true,
@@ -258,7 +302,7 @@
     "full baseline and multi-competitor behavioral quality matrix not yet completed",
     "the quality half of the 83-scenario full-arm matrix and hard-case repetitions are not yet completed",
     "public routing macro-F1 clears its threshold, but private unrelated-prompt false activation is not established",
-    "three earlier post-edit hidden-oracle cases tied every arm; three harder fixtures are frozen but not yet screened across arms",
+    "six post-edit hidden-oracle cases, including three behavior-rich multi-file additions, tied every arm; a less solution-revealing benchmark design is required",
     "the semantic judge is operational, but only one public quality case has current schema-v2 judgment evidence",
     "paired win-rate confidence intervals and token-efficiency frontier not yet established"
   ]
