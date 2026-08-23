@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_on": "2026-08-18",
+  "generated_on": "2026-08-24",
   "leadership_claim_eligible": false,
   "status": "development-screen-only",
   "codex_screen": {
@@ -154,6 +154,40 @@
     ],
     "qualification": "Every arm passed every visible-test fixture. This is valid harness evidence but a failed benchmark design with zero discriminatory value; post-edit hidden oracles are required before rerunning."
   },
+  "hidden_oracle_smoke_matrix": {
+    "fixture_commit": "6c1c473b272cb048408f685f118c409c58761672",
+    "model": "gpt-5.6-sol",
+    "client_version": "codex-cli 0.148.0-alpha.9",
+    "scorer_version": "skillctl-eval-v2",
+    "cases": [
+      "go-testing-and-verification/quality-fuzz-parser",
+      "go-clearing-settlement-reconciliation/quality-item-match",
+      "go-concurrency-lifecycle/quality-compound-state"
+    ],
+    "arms": 7,
+    "cells": 21,
+    "runner_errors": 0,
+    "pass_rates": {
+      "baseline": 1.0,
+      "ours": 1.0,
+      "cc-skills-golang": 1.0,
+      "cxuu-golang-skills": 1.0,
+      "go-skills": 1.0,
+      "gophers": 1.0,
+      "golang-ddd-skills": 1.0
+    },
+    "raw_artifacts": [
+      "evaluations/runs/2026-08-18-hidden-oracle-smoke.jsonl",
+      "evaluations/runs/2026-08-18-hidden-oracle-reconciliation-smoke.jsonl",
+      "evaluations/runs/2026-08-18-hidden-oracle-race-smoke.jsonl"
+    ],
+    "score_artifacts": [
+      "evaluations/scores/2026-08-18-hidden-oracle-smoke.jsonl",
+      "evaluations/scores/2026-08-18-hidden-oracle-reconciliation-smoke.jsonl",
+      "evaluations/scores/2026-08-18-hidden-oracle-race-smoke.jsonl"
+    ],
+    "qualification": "Post-edit oracle isolation is operational, but all three cases saturated across all arms. These cells are harness and minimum-competence evidence only; they provide no fixture-superiority inference."
+  },
   "targeted_rerun": {
     "case": "go-clearing-settlement-reconciliation/avoid-initial-auth",
     "passed": true,
@@ -184,7 +218,7 @@
     "full baseline and multi-competitor behavioral quality matrix not yet completed",
     "the quality half of the 80-scenario full-arm matrix and hard-case repetitions are not yet completed",
     "public routing macro-F1 clears its threshold, but private unrelated-prompt false activation is not established",
-    "visible-test fixtures tied every arm; the post-edit hidden-oracle fixture matrix is not yet scored",
+    "three post-edit hidden-oracle cases tied every arm; harder frozen fixtures are required before a full quality matrix",
     "paired win-rate confidence intervals and token-efficiency frontier not yet established"
   ]
 }

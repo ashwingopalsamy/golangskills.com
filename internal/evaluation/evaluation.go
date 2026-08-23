@@ -21,6 +21,8 @@ import (
 	"github.com/ashwingopalsamy/golangskills.com/internal/corpus"
 )
 
+const runnerGraderVersion = "skillctl-runner-v2-hidden-oracle"
+
 // ClientStatus is a read-only runner availability and authentication result.
 type ClientStatus struct {
 	Client        string `json:"client"`
@@ -255,7 +257,7 @@ func runCase(parent context.Context, repoRoot string, options RunOptions, runID,
 		Skill: item.skill.Name, Collection: item.skill.Metadata.Collection, RiskDomains: append([]string(nil), item.skill.Metadata.RiskDomains...),
 		CaseID: item.eval.ID, Mode: benchmarkMode(options.ExplicitSkill), Repetition: options.Repetition, Kind: item.eval.Kind, Prompt: item.eval.Prompt,
 		Graders: graders, Invariants: item.eval.ExpectedInvariants, Forbidden: item.eval.ForbiddenOutcomes,
-		Metadata: map[string]string{"fixture_commit": gitHead(repoRoot), "grader_version": "skillctl-eval-v1"},
+		Metadata: map[string]string{"fixture_commit": gitHead(repoRoot), "grader_version": runnerGraderVersion},
 	}
 	if item.eval.Kind == "routing" {
 		result.ExpectedRoutes = expectedRoutes(options, item)
