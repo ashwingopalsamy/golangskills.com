@@ -31,7 +31,7 @@ When the product exposes available balance, authorizations, or internal holds, r
 
 Use `go-data-consistency` for the database anomaly and `go-financial-idempotency` for operation identity and replay.
 
-Read [references/money-ledger-invariants.md](references/money-ledger-invariants.md) for arithmetic and schema checks and [references/fx-booking.md](references/fx-booking.md) for conversion, allocation, and reversal evidence.
+Read [references/money-ledger-invariants.md](references/money-ledger-invariants.md) for arithmetic and schema checks, [references/fx-booking.md](references/fx-booking.md) for conversion evidence, and [references/corrections-and-effective-time.md](references/corrections-and-effective-time.md) for reversals, backdating, closed periods, and as-of replay.
 
 ## Output contract
 

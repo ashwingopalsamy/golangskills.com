@@ -4,18 +4,20 @@
   "claims": [
     {
       "id": "eng-language-clarity",
-      "statement": "Choose Go constructs by semantic clarity and ownership, then simplify control flow; formatting and naming conventions serve that goal rather than acting as correctness laws.",
+      "statement": "Choose Go constructs by semantic clarity and explicit ownership; reference-bearing values crossing a trust or lifetime boundary must expose whether storage is borrowed, transferred, shared under synchronization, or independently copied.",
       "status": "adopted-with-qualifications",
-      "scope": "Go language, declarations, data structures, errors, interfaces, generics, and naming",
-      "invariant": "A maintainer can determine value ownership, mutation, failure, and control flow from the local API and implementation.",
-      "qualifications": ["The Go specification defines validity, not house style.", "Existing public APIs and repository conventions can outweigh a local preference."],
-      "counterexamples": ["Changing an established exported name solely to satisfy a style preference can be a compatibility regression.", "A pointer is not automatically preferable for a large value when identity and mutation are not part of the contract."],
+      "scope": "Go language, declarations, data structures, errors, interfaces, generics, naming, and memory ownership",
+      "invariant": "A maintainer can determine value ownership, mutation, failure, and control flow from the local API, and no retained or returned alias permits uncontracted mutation, lifetime extension, or concurrent access.",
+      "qualifications": ["The Go specification defines validity, not house style.", "Existing public APIs and repository conventions can outweigh a local preference.", "Copying is conditional on ownership, trust, and lifetime; a synchronous borrow need not allocate when retention and mutation are excluded.", "A full slice expression narrows append authority but does not create independently owned storage."],
+      "counterexamples": ["Changing an established exported name solely to satisfy a style preference can be a compatibility regression.", "A pointer is not automatically preferable for a large value when identity and mutation are not part of the contract.", "Cloning only an outer map can retain aliases to mutable slices in its values.", "Returning a buffer to sync.Pool while an asynchronous consumer retains it transfers live storage to an unrelated task."],
       "go_versions": ["1.24", "1.25", "1.26"],
       "owners": ["go-language-engineering"],
       "risk_domains": ["correctness", "compatibility", "maintainability"],
       "primary_evidence": [
-        {"title": "The Go Programming Language Specification", "url": "https://go.dev/ref/spec", "publisher": "The Go Authors", "kind": "normative", "verified_on": "2026-08-18"},
-        {"title": "Go Code Review Comments", "url": "https://go.dev/wiki/CodeReviewComments", "publisher": "The Go Authors", "kind": "primary", "verified_on": "2026-08-18"}
+        {"title": "The Go Programming Language Specification", "url": "https://go.dev/ref/spec", "publisher": "The Go Authors", "kind": "normative", "verified_on": "2026-08-24"},
+        {"title": "Go Code Review Comments", "url": "https://go.dev/wiki/CodeReviewComments", "publisher": "The Go Authors", "kind": "primary", "verified_on": "2026-08-18"},
+        {"title": "Go Slices: usage and internals", "url": "https://go.dev/blog/slices-intro", "publisher": "The Go Authors", "kind": "primary", "verified_on": "2026-08-24"},
+        {"title": "Package sync", "url": "https://pkg.go.dev/sync", "publisher": "The Go Authors", "kind": "primary", "verified_on": "2026-08-24"}
       ],
       "observed_in": ["cc-skills-golang", "cxuu-golang-skills", "go-skills", "google-go-style-guide", "gophers", "uber-go-style-guide"]
     },
@@ -159,18 +161,20 @@
     },
     {
       "id": "dist-bounded-concurrency",
-      "statement": "Every goroutine needs a bounded creation rate, an owner, a completion condition, and cancellation or shutdown semantics; shared memory requires a documented synchronization relation.",
+      "statement": "Every goroutine needs a bounded creation rate, an owner, a completion condition, and an explicit error, panic, cancellation, and shutdown contract; shared memory requires a documented synchronization relation.",
       "status": "adopted",
-      "scope": "Goroutines, channels, mutexes, atomics, worker pools, and context propagation",
-      "invariant": "Load, cancellation, or partial failure cannot create an unbounded number of live goroutines or unsynchronized conflicting memory access.",
-      "qualifications": ["Not every goroutine needs its own context when ownership provides a stronger completion mechanism.", "Channels and mutexes solve different ownership problems; neither is categorically superior."],
-      "counterexamples": ["A process-lifetime telemetry goroutine can be owned by process shutdown rather than a request context."],
+      "scope": "Goroutines, channels, mutexes, atomics, worker pools, supervision, panic isolation, and context propagation",
+      "invariant": "Load, cancellation, panic, or partial failure cannot create unbounded live goroutines, unobserved terminal failures, unsafe resource release, or unsynchronized conflicting memory access.",
+      "qualifications": ["Not every goroutine needs its own context when ownership provides a stronger completion mechanism.", "Channels and mutexes solve different ownership problems; neither is categorically superior.", "WaitGroup.Go is available in Go 1.25 and later, carries no error result, and requires that its function not panic.", "Recover is valid only in the panicking goroutine at an intentional isolation boundary where safe continuation is established."],
+      "counterexamples": ["A process-lifetime telemetry goroutine can be owned by process shutdown rather than a request context.", "A defer in a parent goroutine cannot recover a panic in a worker goroutine.", "Logging a recovered panic and restarting with partially mutated state is not supervision."],
       "go_versions": ["1.24", "1.25", "1.26"],
       "owners": ["go-concurrency-lifecycle"],
       "risk_domains": ["concurrency", "availability", "resource-exhaustion"],
       "primary_evidence": [
         {"title": "The Go Memory Model", "url": "https://go.dev/ref/mem", "publisher": "The Go Authors", "kind": "normative", "verified_on": "2026-08-18"},
-        {"title": "Package context", "url": "https://pkg.go.dev/context", "publisher": "The Go Authors", "kind": "primary", "verified_on": "2026-08-18"}
+        {"title": "Package context", "url": "https://pkg.go.dev/context", "publisher": "The Go Authors", "kind": "primary", "verified_on": "2026-08-24"},
+        {"title": "The Go Programming Language Specification", "url": "https://go.dev/ref/spec", "publisher": "The Go Authors", "kind": "normative", "verified_on": "2026-08-24"},
+        {"title": "Package sync", "url": "https://pkg.go.dev/sync", "publisher": "The Go Authors", "kind": "primary", "verified_on": "2026-08-24"}
       ],
       "observed_in": ["cc-skills-golang", "cxuu-golang-skills", "gophers", "uber-go-style-guide"]
     },
@@ -275,19 +279,21 @@
     },
     {
       "id": "fin-ledger-invariants",
-      "statement": "Record immutable balanced journal entries with explicit accounts, currency, effective time, and external correlation; derive balances from postings or a transactionally consistent projection.",
+      "statement": "Record immutable balanced journal entries with explicit accounts, currency, economic effective time, posted and recorded time, and external correlation; correct history through linked replay-safe journals and derive balances from postings or a transactionally consistent projection.",
       "status": "adopted-with-qualifications",
-      "scope": "Double-entry ledgers, journals, balances, reversals, and audit history",
-      "invariant": "For each journal and currency, signed debits and credits net to zero and committed history is changed only by compensating entries.",
-      "qualifications": ["Account normal-balance conventions must be defined by the ledger model.", "A high-throughput projection may be authoritative only if its rebuild and reconciliation semantics are explicit."],
-      "counterexamples": ["A simple single-party stored-value counter may not need a general ledger, but then it cannot claim double-entry controls."],
+      "scope": "Double-entry ledgers, journals, balances, reversals, corrections, temporal views, and audit history",
+      "invariant": "For each journal and currency, signed debits and credits net to zero; committed history changes only through compensating entries, and correction replay preserves both the current effective view and any promised known-at historical view.",
+      "qualifications": ["Account normal-balance conventions must be defined by the ledger model.", "A high-throughput projection may be authoritative only if its rebuild and reconciliation semantics are explicit.", "The applicable accounting policy determines materiality, closed-period handling, retrospective restatement, authorization, and jurisdictional treatment.", "Effective, posted, recorded, and source time names must be bound to product semantics rather than assumed to be universal accounting vocabulary."],
+      "counterexamples": ["A simple single-party stored-value counter may not need a general ledger, but then it cannot claim double-entry controls.", "Changing a posted journal's amount or effective date can make a current balance appear correct while destroying historical and audit reproducibility.", "Recomputing a reversal at the current FX rate or allocation policy creates new economics rather than undoing the original booking."],
       "go_versions": ["1.24", "1.25", "1.26"],
       "owners": ["go-money-and-ledgers"],
       "risk_domains": ["financial-integrity", "auditability", "durability"],
       "primary_evidence": [
         {"title": "Modern Treasury: How to Scale a Ledger", "url": "https://www.moderntreasury.com/journal/how-to-scale-a-ledger-part-i", "publisher": "Modern Treasury", "kind": "operational", "verified_on": "2026-08-18"},
         {"title": "PostgreSQL Constraints", "url": "https://www.postgresql.org/docs/current/ddl-constraints.html", "publisher": "PostgreSQL Global Development Group", "kind": "primary", "verified_on": "2026-08-18"},
-        {"title": "How to Handle Concurrent Transactions", "url": "https://www.moderntreasury.com/journal/how-to-handle-concurrent-transactions", "publisher": "Modern Treasury", "kind": "operational", "verified_on": "2026-08-24"}
+        {"title": "How to Handle Concurrent Transactions", "url": "https://www.moderntreasury.com/journal/how-to-handle-concurrent-transactions", "publisher": "Modern Treasury", "kind": "operational", "verified_on": "2026-08-24"},
+        {"title": "IAS 8 Basis of Preparation of Financial Statements", "url": "https://www.ifrs.org/issued-standards/list-of-standards/ias-8-basis-of-preparation-of-financial-statements/", "publisher": "IFRS Foundation", "kind": "normative", "verified_on": "2026-08-24"},
+        {"title": "Modern Treasury: Ledger Transactions", "url": "https://docs.moderntreasury.com/platform/reference/ledger-transaction-object", "publisher": "Modern Treasury", "kind": "operational", "verified_on": "2026-08-24"}
       ],
       "observed_in": []
     },

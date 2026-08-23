@@ -302,10 +302,32 @@
             "cancellation",
             "context ownership"
           ]
+        },
+        {
+          "title": "The Go Programming Language Specification",
+          "url": "https://go.dev/ref/spec",
+          "publisher": "The Go Authors",
+          "kind": "normative",
+          "verified_on": "2026-08-24",
+          "supports": [
+            "goroutine execution",
+            "panic and recover semantics"
+          ]
+        },
+        {
+          "title": "Package sync",
+          "url": "https://pkg.go.dev/sync",
+          "publisher": "The Go Authors",
+          "kind": "primary",
+          "verified_on": "2026-08-24",
+          "supports": [
+            "WaitGroup.Go contract",
+            "task completion ordering"
+          ]
         }
       ],
-      "source_count": 2,
-      "evaluation_count": 4
+      "source_count": 4,
+      "evaluation_count": 5
     },
     {
       "name": "go-data-consistency",
@@ -950,10 +972,43 @@
             "errors",
             "interfaces"
           ]
+        },
+        {
+          "title": "Go Slices: usage and internals",
+          "url": "https://go.dev/blog/slices-intro",
+          "publisher": "The Go Authors",
+          "kind": "primary",
+          "verified_on": "2026-08-24",
+          "supports": [
+            "slice descriptors",
+            "backing-array sharing",
+            "length and capacity"
+          ]
+        },
+        {
+          "title": "Package slices",
+          "url": "https://pkg.go.dev/slices",
+          "publisher": "The Go Authors",
+          "kind": "primary",
+          "verified_on": "2026-08-24",
+          "supports": [
+            "slice cloning"
+          ]
+        },
+        {
+          "title": "Package sync",
+          "url": "https://pkg.go.dev/sync",
+          "publisher": "The Go Authors",
+          "kind": "primary",
+          "verified_on": "2026-08-24",
+          "supports": [
+            "temporary object pooling",
+            "pool synchronization"
+          ]
         }
       ],
-      "source_count": 2,
-      "evaluation_count": 5
+      "source_count": 5,
+      "evaluation_count": 6
     },
     {
       "name": "go-message-processing",
@@ -1225,10 +1280,33 @@
             "concurrent spend",
             "balance versions"
           ]
+        },
+        {
+          "title": "IAS 8 Basis of Preparation of Financial Statements",
+          "url": "https://www.ifrs.org/issued-standards/list-of-standards/ias-8-basis-of-preparation-of-financial-statements/",
+          "publisher": "IFRS Foundation",
+          "kind": "normative",
+          "verified_on": "2026-08-24",
+          "supports": [
+            "prior-period errors",
+            "retrospective correction"
+          ]
+        },
+        {
+          "title": "Modern Treasury: Ledger Transactions",
+          "url": "https://docs.moderntreasury.com/platform/reference/ledger-transaction-object",
+          "publisher": "Modern Treasury",
+          "kind": "operational",
+          "verified_on": "2026-08-24",
+          "supports": [
+            "posted transaction immutability",
+            "effective time",
+            "linked reversals"
+          ]
         }
       ],
-      "source_count": 4,
-      "evaluation_count": 6
+      "source_count": 6,
+      "evaluation_count": 7
     },
     {
       "name": "go-payment-lifecycles",
