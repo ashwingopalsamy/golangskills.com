@@ -188,6 +188,46 @@
     ],
     "qualification": "Post-edit oracle isolation is operational, but all three cases saturated across all arms. These cells are harness and minimum-competence evidence only; they provide no fixture-superiority inference."
   },
+  "semantic_judgment_smoke": {
+    "source_fixture_commit": "16cf9bf2a8315cc52ac8fc30e6f36c0e8e3a2ee7",
+    "evaluator_commit": "5a33e126b2fabeda3a74c2df0579a44e7cc4d82e",
+    "model": "gpt-5.6-sol",
+    "client_version": "codex-cli 0.149.0-alpha.4.1",
+    "scorer_version": "skillctl-eval-v3-semantic",
+    "judgment_schema_version": 2,
+    "rubric_version": "skillctl-rubric-v2-explicit-support",
+    "case": "review-go-fintech-change/quality-duplicate-charge",
+    "mode": "native",
+    "arms": 7,
+    "cells": 7,
+    "runner_errors": 0,
+    "judgment_errors": 0,
+    "same_platform": true,
+    "resumed_judgments_on_identical_rerun": 0,
+    "semantic_scores": {
+      "ours": 1.0,
+      "baseline": 0.6666666666666666,
+      "cc-skills-golang": 0.6666666666666666,
+      "golang-ddd-skills": 0.6666666666666666,
+      "cxuu-golang-skills": 0.3333333333333333,
+      "go-skills": 0.3333333333333333,
+      "gophers": 0.3333333333333333
+    },
+    "raw_artifact": "evaluations/runs/2026-08-24-semantic-judge-smoke-native.jsonl",
+    "judgment_artifact": "evaluations/judgments/2026-08-24-semantic-judge-smoke-native-codex.jsonl",
+    "score_artifact": "evaluations/scores/2026-08-24-semantic-judge-smoke-native.jsonl",
+    "arm_report": "evaluations/reports/development/semantic-judge-smoke-ours.json",
+    "paired_reports": [
+      "evaluations/reports/development/semantic-judge-smoke-ours-vs-baseline.json",
+      "evaluations/reports/development/semantic-judge-smoke-ours-vs-cc-skills-golang.json",
+      "evaluations/reports/development/semantic-judge-smoke-ours-vs-cxuu-golang-skills.json",
+      "evaluations/reports/development/semantic-judge-smoke-ours-vs-go-skills.json",
+      "evaluations/reports/development/semantic-judge-smoke-ours-vs-gophers.json",
+      "evaluations/reports/development/semantic-judge-smoke-ours-vs-golang-ddd-skills.json"
+    ],
+    "superseded_attempts_retained": "The append-only judgment artifact retains 14 schema-v1 attempts that exposed and then rechecked a leniency defect; scoring selects the seven current schema-v2 judgments.",
+    "qualification": "Development harness evidence only. One public case has no comparative or statistical inferential value, and Codex-on-Codex judgment is same-platform rather than independent."
+  },
   "targeted_rerun": {
     "case": "go-clearing-settlement-reconciliation/avoid-initial-auth",
     "passed": true,
@@ -219,6 +259,7 @@
     "the quality half of the 80-scenario full-arm matrix and hard-case repetitions are not yet completed",
     "public routing macro-F1 clears its threshold, but private unrelated-prompt false activation is not established",
     "three post-edit hidden-oracle cases tied every arm; harder frozen fixtures are required before a full quality matrix",
+    "the semantic judge is operational, but only one public quality case has current schema-v2 judgment evidence",
     "paired win-rate confidence intervals and token-efficiency frontier not yet established"
   ]
 }
