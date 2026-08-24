@@ -29,6 +29,8 @@ Retain records for the maximum credible client, webhook, and operational replay 
 
 Read [references/idempotency-record.md](references/idempotency-record.md) for a state model.
 
+When the effect crosses a payment-provider API, read [references/provider-idempotency-contract.md](references/provider-idempotency-contract.md). Provider keys differ in supported operations, scope, retention, concurrency, response replay, and regional behavior; encode the deployed endpoint contract instead of assuming a generic header supplies permanent deduplication.
+
 ## Output contract
 
 State key scope, fingerprint, concurrency control, atomic boundary, result replay, ambiguity, and retention. Treat mismatched reuse and duplicate financial effects as critical failures.

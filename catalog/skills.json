@@ -616,11 +616,12 @@
         "url": "https://docs.stripe.com/api/idempotent_requests",
         "publisher": "Stripe",
         "kind": "primary",
-        "verified_on": "2026-08-18",
+        "verified_on": "2026-08-24",
         "supports": [
-          "key reuse",
+          "key retention",
           "parameter binding",
-          "result replay"
+          "stored result replay",
+          "concurrent execution"
         ]
       },
       {
@@ -633,10 +634,37 @@
           "unique conflicts",
           "atomic insert"
         ]
+      },
+      {
+        "title": "PayPal REST idempotency",
+        "url": "https://developer.paypal.com/api/rest/reference/idempotency/",
+        "publisher": "PayPal",
+        "kind": "primary",
+        "verified_on": "2026-08-24",
+        "supports": [
+          "operation-specific support",
+          "retention by API",
+          "simultaneous duplicates",
+          "current-status replay"
+        ]
+      },
+      {
+        "title": "Adyen API idempotency",
+        "url": "https://docs.adyen.com/development-resources/api-idempotency/",
+        "publisher": "Adyen",
+        "kind": "primary",
+        "verified_on": "2026-08-24",
+        "supports": [
+          "account scope",
+          "retention",
+          "regional limitation",
+          "transient concurrency errors",
+          "response access"
+        ]
       }
     ],
-    "source_count": 2,
-    "evaluation_count": 6
+    "source_count": 4,
+    "evaluation_count": 7
   },
   {
     "name": "go-fintech-security-compliance",
@@ -987,10 +1015,36 @@
           "initial snapshot handoff",
           "incremental snapshot collision handling"
         ]
+      },
+      {
+        "title": "Amazon SQS dead-letter queues",
+        "url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-dead-letter-queues.html",
+        "publisher": "Amazon Web Services",
+        "kind": "primary",
+        "verified_on": "2026-08-24",
+        "supports": [
+          "receive count",
+          "retention",
+          "ordering caveat",
+          "redrive policy"
+        ]
+      },
+      {
+        "title": "Amazon SQS dead-letter queue redrive",
+        "url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-configure-dead-letter-queue-redrive.html",
+        "publisher": "Amazon Web Services",
+        "kind": "primary",
+        "verified_on": "2026-08-24",
+        "supports": [
+          "identity changes",
+          "interleaving",
+          "velocity control",
+          "partial cancellation"
+        ]
       }
     ],
-    "source_count": 5,
-    "evaluation_count": 6
+    "source_count": 7,
+    "evaluation_count": 7
   },
   {
     "name": "go-money-and-ledgers",
@@ -1494,10 +1548,35 @@
           "termination",
           "restart"
         ]
+      },
+      {
+        "title": "Kubernetes Deployments",
+        "url": "https://kubernetes.io/docs/concepts/workloads/controllers/deployment/",
+        "publisher": "Kubernetes",
+        "kind": "primary",
+        "verified_on": "2026-08-24",
+        "supports": [
+          "rolling updates",
+          "availability",
+          "progress deadlines",
+          "rollback scope"
+        ]
+      },
+      {
+        "title": "Kubernetes Liveness, Readiness, and Startup Probes",
+        "url": "https://kubernetes.io/docs/concepts/workloads/pods/probes/",
+        "publisher": "Kubernetes",
+        "kind": "primary",
+        "verified_on": "2026-08-24",
+        "supports": [
+          "admission readiness",
+          "restart liveness",
+          "startup gating"
+        ]
       }
     ],
-    "source_count": 4,
-    "evaluation_count": 5
+    "source_count": 6,
+    "evaluation_count": 6
   },
   {
     "name": "go-project-and-api-design",

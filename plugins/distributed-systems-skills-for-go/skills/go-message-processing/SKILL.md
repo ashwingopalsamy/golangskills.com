@@ -138,6 +138,8 @@ Classify failures:
 
 Dead-lettering is not resolution. Record original identity, schema/version, failure class, attempt count, timestamps, and safe diagnostic context. Provide a replay process that preserves or intentionally replaces identity and cannot bypass current validation.
 
+For quarantine evidence, ordering impact, retention, access control, and bounded redrive, read [references/poison-and-redrive.md](references/poison-and-redrive.md). Broker-assigned identity and enqueue time may change during redrive; preserve the application identity needed for deduplication and audit.
+
 ## Schema and compatibility
 
 Treat messages as public persisted contracts:
