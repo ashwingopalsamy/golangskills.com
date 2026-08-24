@@ -4,13 +4,13 @@
   "leadership_claim_eligible": false,
   "status": "development-screen-only",
   "current_corpus": {
-    "source_commit": "0bfa05ef2e8ff36792d6678bea38d7dd0712f6b1",
+    "source_commit": "e6a165f93ac1e2f807f1805ec9ec8a297a42a3ac",
     "skills": 20,
-    "development_cases": 115,
+    "development_cases": 118,
     "executable_fixtures": 15,
-    "sources": 78,
-    "claims": 21,
-    "discovery_characters": 7777,
+    "sources": 86,
+    "claims": 23,
+    "discovery_characters": 7774,
     "maximum_description_overlap": 0.267,
     "fresh_unrun_cases": [
       "go-service-boundaries/quality-mtls-generation-cutover",
@@ -33,19 +33,22 @@
       "go-payment-lifecycles/quality-stripe-dispute-evidence-review",
       "go-security-hardening/quality-envelope-key-rotation-review",
       "go-data-consistency/quality-pagination-consistency-review",
-      "go-clearing-settlement-reconciliation/quality-ach-return-reversal-review"
+      "go-clearing-settlement-reconciliation/quality-ach-return-reversal-review",
+      "go-project-and-api-design/quality-module-v2-compatibility-review",
+      "go-distributed-coordination/quality-regional-failover-authority-review",
+      "go-fintech-security-compliance/quality-sanctions-screening-review"
     ],
-    "qualification": "The twenty-one fresh cases are committed public development inputs with no treatment results. They support no comparative claim until the release-candidate batch."
+    "qualification": "The twenty-four fresh cases are committed public development inputs with no treatment results. They support no comparative claim until the release-candidate batch."
   },
   "current_packages": {
     "version": "0.2.0",
-    "source_commit": "0bfa05ef2e8ff36792d6678bea38d7dd0712f6b1",
-    "package_commit": "22c81072a274f8fdd6e2feeeb8596d8ebbeb35a8",
+    "source_commit": "e6a165f93ac1e2f807f1805ec9ec8a297a42a3ac",
+    "package_commit": "2b270fa890b4e2e4e76917c0b34af44c720bc31d",
     "reproduced_twice_byte_identically": true,
     "checksums": {
-      "engineering-skills-for-go": "5e00c14660e0dada9d5e8caa1d33d1108be690ba72cc3a8a63d3ada5f2f6e5c7",
-      "distributed-systems-skills-for-go": "0ee7352eca94107922814f76c0dd519fe74f3d972bdecbf75f4422e9581fab7f",
-      "fintech-skills-for-go": "edfb826bfe3037de7af91bfcfeb088278a6f18378cb577db64755dd9b8d3e035"
+      "engineering-skills-for-go": "6fcca2f3260329689a1ee952df31476e89951db1a25d86591d187289dbe036b7",
+      "distributed-systems-skills-for-go": "52b20f6a50ca2cb8688d69f4da39791023cdf2987d33d02bd6452aea0d138743",
+      "fintech-skills-for-go": "9bf597feb9a5c19e84b1aa665d39cfaeb2b83832882a531ddafe630b62c0961f"
     },
     "qualification": "Reproducible development packages; no release tag or new clean-clone behavioral result."
   },
@@ -736,8 +739,8 @@
   "blocking_gates": [
     "private release holdout not yet frozen and scored",
     "full baseline and multi-competitor behavioral quality matrix not yet completed",
-    "twenty-one newly committed cross-domain development cases have no treatment results and are reserved for the release-candidate batch",
-    "the quality half of the 115-scenario full-arm matrix and release-candidate hard-case repetitions are not yet completed",
+    "twenty-four newly committed cross-domain development cases have no treatment results and are reserved for the release-candidate batch",
+    "the quality half of the 118-scenario full-arm matrix and release-candidate hard-case repetitions are not yet completed",
     "public routing macro-F1 clears its threshold, but private unrelated-prompt false activation is not established",
     "six post-edit hidden-oracle cases, including three behavior-rich multi-file additions, tied every arm; a less solution-revealing benchmark design is required",
     "the semantic judge is operational across eight public case families under a versioned protocol; the fresh settlement manifest family gives ours a quality-and-token lead over every skill competitor, but ours strictly passes zero repetitions and the lease/fencing transfer still ties baseline",
