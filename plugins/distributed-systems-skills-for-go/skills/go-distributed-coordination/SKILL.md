@@ -1,6 +1,6 @@
 ---
 name: go-distributed-coordination
-description: "Use for Go cross-process ownership, leases, fencing, locks, sagas, and recovery. Do not use for local mutexes."
+description: "Use for Go cross-process ownership, leases, fencing, failover, sagas, and recovery. Do not use for local mutexes."
 license: Apache-2.0
 compatibility: "Go 1.24 or newer; coordination guarantees are specific to the deployed service and client version."
 ---
@@ -32,6 +32,8 @@ When ownership depends on timestamps or survives serialization/restart, read [re
 Persist each workflow transition and command identity. Make steps and compensations idempotent. Compensation is a new business action, not rollback: it can fail, race with late success, or be legally impossible. Define forward recovery, manual exception handling, and terminal evidence.
 
 Read [references/fencing-and-sagas.md](references/fencing-and-sagas.md) for failure schedules.
+
+For regional writer promotion, coordination-cluster recovery, or failback, read [references/multi-region-failover.md](references/multi-region-failover.md). Routing a request to one region is not proof that every old writer and external effect has lost authority.
 
 ## Output contract
 

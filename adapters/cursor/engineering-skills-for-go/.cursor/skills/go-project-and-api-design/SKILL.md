@@ -35,7 +35,7 @@ Treat exported Go APIs, serialized fields, schemas, config keys, CLI flags, and 
 
 Pin CI and release inputs by immutable versions. Keep generated files reproducible and make the source of truth explicit. Do not add dependencies or frameworks without a demonstrated capability or maintenance benefit.
 
-Read [references/api-evolution.md](references/api-evolution.md) for compatibility and constructor decisions.
+Read [references/api-evolution.md](references/api-evolution.md) for compatibility and constructor decisions. For a public-module release or major-version migration, use [references/module-release-compatibility.md](references/module-release-compatibility.md) to inventory consumer-visible contracts and prove the cutover outside the producer repository.
 
 ## Output contract
 

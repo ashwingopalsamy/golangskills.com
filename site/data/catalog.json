@@ -466,7 +466,7 @@
       "name": "go-distributed-coordination",
       "collection": "distributed-systems-skills-for-go",
       "path": "skills/go-distributed-coordination",
-      "description": "Use for Go cross-process ownership, leases, fencing, locks, sagas, and recovery. Do not use for local mutexes.",
+      "description": "Use for Go cross-process ownership, leases, fencing, failover, sagas, and recovery. Do not use for local mutexes.",
       "compatibility": "Go 1.24 or newer; coordination guarantees are specific to the deployed service and client version.",
       "display_name": "Go Distributed Coordination",
       "short_description": "Fence stale distributed owners",
@@ -484,6 +484,7 @@
         "leases",
         "fencing",
         "leader-election",
+        "failover",
         "sagas",
         "coordination"
       ],
@@ -565,10 +566,48 @@
             "serialization",
             "time comparison"
           ]
+        },
+        {
+          "title": "In Search of an Understandable Consensus Algorithm",
+          "url": "https://raft.github.io/raft.pdf",
+          "publisher": "USENIX ATC",
+          "kind": "primary",
+          "verified_on": "2026-08-24",
+          "supports": [
+            "terms",
+            "majority election",
+            "committed log entries",
+            "leader changes"
+          ]
+        },
+        {
+          "title": "etcd disaster recovery",
+          "url": "https://etcd.io/docs/v3.6/op-guide/recovery/",
+          "publisher": "etcd Authors",
+          "kind": "primary",
+          "verified_on": "2026-08-24",
+          "supports": [
+            "snapshot restore",
+            "new logical cluster",
+            "revision bump",
+            "updated membership"
+          ]
+        },
+        {
+          "title": "etcd runtime reconfiguration design",
+          "url": "https://etcd.io/docs/v3.6/op-guide/runtime-reconf-design/",
+          "publisher": "etcd Authors",
+          "kind": "primary",
+          "verified_on": "2026-08-24",
+          "supports": [
+            "explicit membership changes",
+            "quorum loss",
+            "unsafe forced removal"
+          ]
         }
       ],
-      "source_count": 3,
-      "evaluation_count": 5
+      "source_count": 6,
+      "evaluation_count": 6
     },
     {
       "name": "go-financial-idempotency",
@@ -669,7 +708,7 @@
       "name": "go-fintech-security-compliance",
       "collection": "fintech-skills-for-go",
       "path": "skills/go-fintech-security-compliance",
-      "description": "Use for Go payment-data governance, tokenization, audit, retention, and PCI. Do not use for generic exploits or certification.",
+      "description": "Use for Go payment compliance, sanctions, tokenization, audit, and PCI. Do not use for generic exploits or legal advice.",
       "compatibility": "Go 1.24 or newer; standards and regulatory obligations require current qualified interpretation for the actual system.",
       "display_name": "Go Fintech Security and Compliance",
       "short_description": "Constrain financial trust and data scope",
@@ -686,6 +725,8 @@
         "go",
         "fintech",
         "pci-dss",
+        "sanctions",
+        "screening",
         "authorization",
         "audit",
         "tokenization"
@@ -698,7 +739,8 @@
         ]
       },
       "claim_ids": [
-        "fin-data-boundaries"
+        "fin-data-boundaries",
+        "fin-sanctions-screening-control"
       ],
       "relations": {
         "complements": [
@@ -758,10 +800,36 @@
             "authentication assurance",
             "authenticators"
           ]
+        },
+        {
+          "title": "A Framework for OFAC Compliance Commitments",
+          "url": "https://ofac.treasury.gov/media/16331/download",
+          "publisher": "U.S. Department of the Treasury, OFAC",
+          "kind": "primary",
+          "verified_on": "2026-08-24",
+          "supports": [
+            "risk-based sanctions program",
+            "screening controls",
+            "list updates",
+            "due diligence",
+            "testing and audit"
+          ]
+        },
+        {
+          "title": "False Hit Lists Guidance",
+          "url": "https://ofac.treasury.gov/system/files/126/false_hit.pdf",
+          "publisher": "U.S. Department of the Treasury, OFAC",
+          "kind": "primary",
+          "verified_on": "2026-08-24",
+          "supports": [
+            "false-hit oversight",
+            "periodic reassessment",
+            "invalidation after list or subject changes"
+          ]
         }
       ],
-      "source_count": 2,
-      "evaluation_count": 5
+      "source_count": 4,
+      "evaluation_count": 6
     },
     {
       "name": "go-language-engineering",
@@ -1529,7 +1597,8 @@
         ]
       },
       "claim_ids": [
-        "eng-dependency-direction"
+        "eng-dependency-direction",
+        "eng-api-compatibility"
       ],
       "relations": {
         "complements": [
@@ -1582,16 +1651,51 @@
           "url": "https://go.dev/ref/mod",
           "publisher": "The Go Authors",
           "kind": "normative",
-          "verified_on": "2026-08-18",
+          "verified_on": "2026-08-24",
           "supports": [
             "module graph",
             "toolchain",
+            "major version suffixes",
             "versioning"
+          ]
+        },
+        {
+          "title": "Module release and versioning workflow",
+          "url": "https://go.dev/doc/modules/release-workflow",
+          "publisher": "The Go Authors",
+          "kind": "primary",
+          "verified_on": "2026-08-24",
+          "supports": [
+            "release types",
+            "pre-releases",
+            "breaking releases"
+          ]
+        },
+        {
+          "title": "Go 1 and the Future of Go Programs",
+          "url": "https://go.dev/doc/go1compat",
+          "publisher": "The Go Authors",
+          "kind": "normative",
+          "verified_on": "2026-08-24",
+          "supports": [
+            "Go 1 compatibility scope",
+            "tool and performance exclusions"
+          ]
+        },
+        {
+          "title": "Keeping Your Modules Compatible",
+          "url": "https://go.dev/blog/module-compatibility",
+          "publisher": "The Go Authors",
+          "kind": "primary",
+          "verified_on": "2026-08-24",
+          "supports": [
+            "additive API evolution",
+            "compatibility techniques"
           ]
         }
       ],
-      "source_count": 2,
-      "evaluation_count": 4
+      "source_count": 5,
+      "evaluation_count": 5
     },
     {
       "name": "go-security-hardening",

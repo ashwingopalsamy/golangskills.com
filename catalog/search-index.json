@@ -63,7 +63,7 @@
   },
   {
     "collection": "distributed-systems-skills-for-go",
-    "description": "Use for Go cross-process ownership, leases, fencing, locks, sagas, and recovery. Do not use for local mutexes.",
+    "description": "Use for Go cross-process ownership, leases, fencing, failover, sagas, and recovery. Do not use for local mutexes.",
     "name": "go-distributed-coordination",
     "risk_domains": [
       "coordination",
@@ -76,6 +76,7 @@
       "leases",
       "fencing",
       "leader-election",
+      "failover",
       "sagas",
       "coordination"
     ]
@@ -100,7 +101,7 @@
   },
   {
     "collection": "fintech-skills-for-go",
-    "description": "Use for Go payment-data governance, tokenization, audit, retention, and PCI. Do not use for generic exploits or certification.",
+    "description": "Use for Go payment compliance, sanctions, tokenization, audit, and PCI. Do not use for generic exploits or legal advice.",
     "name": "go-fintech-security-compliance",
     "risk_domains": [
       "security",
@@ -112,6 +113,8 @@
       "go",
       "fintech",
       "pci-dss",
+      "sanctions",
+      "screening",
       "authorization",
       "audit",
       "tokenization"
