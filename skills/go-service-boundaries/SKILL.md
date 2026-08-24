@@ -17,6 +17,8 @@ Record authentication and authorization ownership, request and response size lim
 
 Use explicit `http.Server`, client, and transport ownership. Bound headers and finite bodies. Reuse clients and close response bodies. Propagate `r.Context()`. Choose total, phase, or idle timeouts from endpoint semantics; a global write timeout can break streaming. Treat redirects and proxy headers as new trust decisions.
 
+For JSON APIs, bound the body before decoding, accept exactly the documented media and content encodings, decode one complete value into a private typed DTO, and apply no domain effect after any decode or validation error. Unknown-field tolerance is a versioning choice; duplicate critical names are an interoperability and security ambiguity that `encoding/json` v1 does not reject by default. Read [references/http-json-message-boundaries.md](references/http-json-message-boundaries.md) for the strict boundary procedure.
+
 Treat a transport configuration as immutable after concurrent use begins. When TLS identity, trust roots, proxy, dial policy, or another connection-affecting setting changes, construct a private replacement and publish it with every policy decision that must share its version. Each admitted operation captures one generation. Stop new admission to the old generation, let its in-flight operations keep their captured client, close its idle connections, and release it only when its owned streams and bodies are done. A pointer swap without old-generation retirement prevents mixed configuration but still leaks connection state.
 
 ## gRPC

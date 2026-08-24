@@ -25,6 +25,8 @@ Verify authenticity before parsing into trusted events. Deduplicate by provider 
 
 Enforce cumulative capture and refund limits with exact money. Partial capture/refund and multiple disputes can coexist. “Succeeded” may be locally terminal for fulfillment while chargebacks and settlement adjustments remain possible.
 
+For multi-capture or partial-refund flows, allocate each amount-bearing operation to stable payment, capture, shipment or item, and provider identities. Fulfill only the durably captured allocation, never a payment-wide Boolean. Persist provider capability and final-capture semantics, serialize concurrent amount decisions, and reconcile aggregate fields to item-level evidence. Read [references/partial-capture-and-refund-accounting.md](references/partial-capture-and-refund-accounting.md); its Stripe rules remain Stripe-specific.
+
 Read [references/payment-machine.md](references/payment-machine.md) for transition and ambiguity rules.
 
 For partial authorization, incremental authorization, capture, void, or authorization-reversal changes, read [references/authorization-adjustments.md](references/authorization-adjustments.md). Preserve requested, approved, capturable, captured, and released amounts separately; provider-specific remainder-release behavior is not a portable payment rule.

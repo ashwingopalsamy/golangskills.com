@@ -284,12 +284,12 @@
       "sql",
       "transactions",
       "isolation",
-      "constraints",
       "caches",
       "replication",
       "read-consistency",
       "pagination",
-      "cursors"
+      "watches",
+      "resync"
     ],
     "go_versions": {
       "minimum": "1.24",
@@ -413,10 +413,49 @@
           "unique ordering for pagination",
           "offset cost and inconsistency"
         ]
+      },
+      {
+        "title": "etcd API",
+        "url": "https://etcd.io/docs/v3.6/learning/api/",
+        "publisher": "etcd Authors",
+        "kind": "primary",
+        "verified_on": "2026-08-24",
+        "supports": [
+          "cluster revisions",
+          "historical range reads",
+          "watch start revisions",
+          "compaction cancellation"
+        ]
+      },
+      {
+        "title": "etcd API guarantees",
+        "url": "https://etcd.io/docs/v3.5/learning/api_guarantees/",
+        "publisher": "etcd Authors",
+        "kind": "primary",
+        "verified_on": "2026-08-24",
+        "supports": [
+          "watch ordering",
+          "revision atomicity",
+          "reliability",
+          "resumption",
+          "progress bookmarks"
+        ]
+      },
+      {
+        "title": "etcd disaster recovery",
+        "url": "https://etcd.io/docs/v3.6/op-guide/recovery/",
+        "publisher": "etcd Authors",
+        "kind": "primary",
+        "verified_on": "2026-08-24",
+        "supports": [
+          "restored cluster identity",
+          "revision bump",
+          "watcher recovery"
+        ]
       }
     ],
-    "source_count": 7,
-    "evaluation_count": 8
+    "source_count": 10,
+    "evaluation_count": 9
   },
   {
     "name": "go-distributed-coordination",
@@ -1306,7 +1345,9 @@
       "authorization",
       "capture",
       "refund",
-      "chargeback"
+      "chargeback",
+      "multicapture",
+      "fulfillment"
     ],
     "go_versions": {
       "minimum": "1.24",
@@ -1368,11 +1409,38 @@
         "url": "https://docs.stripe.com/payments/place-a-hold-on-a-payment-method",
         "publisher": "Stripe",
         "kind": "primary",
-        "verified_on": "2026-08-18",
+        "verified_on": "2026-08-24",
         "supports": [
           "authorization",
-          "capture",
+          "single capture",
+          "remainder release",
           "expiry"
+        ]
+      },
+      {
+        "title": "Stripe multi-capture payments",
+        "url": "https://docs.stripe.com/payments/multicapture",
+        "publisher": "Stripe",
+        "kind": "primary",
+        "verified_on": "2026-08-24",
+        "supports": [
+          "multiple-capture eligibility",
+          "final capture",
+          "capturable amount",
+          "partial refunds",
+          "connected-account restrictions"
+        ]
+      },
+      {
+        "title": "Stripe PaymentIntent object",
+        "url": "https://docs.stripe.com/api/payment_intents/object",
+        "publisher": "Stripe",
+        "kind": "primary",
+        "verified_on": "2026-08-24",
+        "supports": [
+          "amount capturable",
+          "amount received",
+          "manual capture"
         ]
       },
       {
@@ -1434,8 +1502,8 @@
         ]
       }
     ],
-    "source_count": 7,
-    "evaluation_count": 7
+    "source_count": 9,
+    "evaluation_count": 8
   },
   {
     "name": "go-performance-and-diagnostics",
@@ -2084,6 +2152,7 @@
     "tags": [
       "go",
       "http",
+      "json",
       "grpc",
       "graphql",
       "openapi",
@@ -2139,13 +2208,39 @@
         "url": "https://pkg.go.dev/net/http",
         "publisher": "The Go Authors",
         "kind": "normative",
-        "verified_on": "2026-08-18",
+        "verified_on": "2026-08-24",
         "supports": [
           "server lifecycle",
           "client ownership",
           "timeouts",
           "transport cloning",
-          "idle connection retirement"
+          "idle connection retirement",
+          "request body limits"
+        ]
+      },
+      {
+        "title": "Package encoding/json",
+        "url": "https://pkg.go.dev/encoding/json",
+        "publisher": "The Go Authors",
+        "kind": "normative",
+        "verified_on": "2026-08-24",
+        "supports": [
+          "stream decoding",
+          "unknown fields",
+          "number decoding",
+          "duplicate member handling"
+        ]
+      },
+      {
+        "title": "RFC 8259: The JavaScript Object Notation Data Interchange Format",
+        "url": "https://www.rfc-editor.org/rfc/rfc8259",
+        "publisher": "Internet Engineering Task Force",
+        "kind": "primary",
+        "verified_on": "2026-08-24",
+        "supports": [
+          "JSON interoperability",
+          "unique object member guidance",
+          "number interoperability"
         ]
       },
       {
@@ -2173,8 +2268,8 @@
         ]
       }
     ],
-    "source_count": 3,
-    "evaluation_count": 5
+    "source_count": 5,
+    "evaluation_count": 6
   },
   {
     "name": "go-service-resilience",
