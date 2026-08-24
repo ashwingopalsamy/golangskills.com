@@ -21,7 +21,9 @@
       "settlement",
       "reconciliation",
       "payouts",
-      "exceptions"
+      "exceptions",
+      "fedwire",
+      "finality"
     ],
     "go_versions": {
       "minimum": "1.24",
@@ -89,10 +91,22 @@
           "settlement",
           "finality"
         ]
+      },
+      {
+        "title": "Operating Circular 6: Funds Transfers through the Fedwire Funds Service",
+        "url": "https://www.frbservices.org/binaries/content/assets/crsocms/resources/rules-regulations/010526-operating-circular-6.pdf",
+        "publisher": "Federal Reserve Banks",
+        "kind": "primary",
+        "verified_on": "2026-08-24",
+        "supports": [
+          "acceptance and payment evidence",
+          "cancellation and contingency reconciliation",
+          "protracted-outage finality"
+        ]
       }
     ],
-    "source_count": 2,
-    "evaluation_count": 4
+    "source_count": 3,
+    "evaluation_count": 5
   },
   {
     "name": "go-concurrency-lifecycle",
@@ -211,7 +225,9 @@
       "transactions",
       "isolation",
       "constraints",
-      "caches"
+      "caches",
+      "replication",
+      "read-consistency"
     ],
     "go_versions": {
       "minimum": "1.24",
@@ -301,10 +317,21 @@
           "concurrent index construction",
           "invalid-index recovery"
         ]
+      },
+      {
+        "title": "PostgreSQL Log-Shipping Standby Servers",
+        "url": "https://www.postgresql.org/docs/current/warm-standby.html",
+        "publisher": "PostgreSQL Global Development Group",
+        "kind": "primary",
+        "verified_on": "2026-08-24",
+        "supports": [
+          "asynchronous replica visibility",
+          "synchronous replication and remote apply"
+        ]
       }
     ],
-    "source_count": 4,
-    "evaluation_count": 6
+    "source_count": 5,
+    "evaluation_count": 7
   },
   {
     "name": "go-distributed-coordination",
@@ -1071,7 +1098,9 @@
       "benchmarks",
       "allocations",
       "latency",
-      "contention"
+      "contention",
+      "gc",
+      "memory-limits"
     ],
     "go_versions": {
       "minimum": "1.24",
@@ -1138,10 +1167,32 @@
           "profile types",
           "runtime collection"
         ]
+      },
+      {
+        "title": "Package runtime/metrics",
+        "url": "https://pkg.go.dev/runtime/metrics",
+        "publisher": "The Go Authors",
+        "kind": "normative",
+        "verified_on": "2026-08-24",
+        "supports": [
+          "runtime memory classes",
+          "GC and limiter metrics"
+        ]
+      },
+      {
+        "title": "A Guide to the Go Garbage Collector",
+        "url": "https://go.dev/doc/gc-guide",
+        "publisher": "The Go Authors",
+        "kind": "primary",
+        "verified_on": "2026-08-24",
+        "supports": [
+          "soft memory limit",
+          "GC cost trade-offs"
+        ]
       }
     ],
-    "source_count": 2,
-    "evaluation_count": 4
+    "source_count": 4,
+    "evaluation_count": 5
   },
   {
     "name": "go-production-operations",
