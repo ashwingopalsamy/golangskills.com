@@ -33,6 +33,8 @@ Read [references/control-boundaries.md](references/control-boundaries.md) for to
 
 For sanctions screening, holds, adjudication, list changes, and provider failure, read [references/sanctions-screening-controls.md](references/sanctions-screening-controls.md). Exact duties and dispositions come from the current risk-based compliance program and qualified legal/compliance owners, not from a match score or this skill.
 
+For payment-provider callbacks, read [references/webhook-authenticity.md](references/webhook-authenticity.md). Verify the provider's exact signed representation and endpoint/account/environment key before trusting the payload, then separately enforce durable deduplication, ordering, authorization, and financial state invariants.
+
 ## Output contract
 
 State data classification, trust boundary, authority decision, control owner, evidence, and residual compliance uncertainty. Never claim certification from code review.

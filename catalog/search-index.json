@@ -117,7 +117,9 @@
       "screening",
       "authorization",
       "audit",
-      "tokenization"
+      "tokenization",
+      "webhooks",
+      "signatures"
     ]
   },
   {

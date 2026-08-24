@@ -95,12 +95,12 @@
     },
     {
       "id": "eng-measure-before-optimize",
-      "statement": "Establish a reproducible workload and profile the dominant resource before optimizing Go code; report both effect size and cost transfer.",
+      "statement": "Establish a reproducible workload and profile the dominant resource before optimizing Go code; make live diagnostic collection access-controlled, bounded, comparable, and attributable, then report both effect size and cost transfer.",
       "status": "adopted",
-      "scope": "CPU, allocation, memory, contention, scheduling, I/O, and latency diagnostics",
-      "invariant": "An optimization improves the target production constraint without violating correctness or moving an unacceptable cost elsewhere.",
-      "qualifications": ["Microbenchmarks require stable setup and statistical comparison.", "Profile-guided optimization does not replace end-to-end latency and capacity evidence.", "The Go soft memory limit covers runtime-managed memory rather than process RSS; binary, cgo, mmap, and operating-system memory require measured headroom."],
-      "counterexamples": ["Replacing readable code with allocation tricks before identifying allocation pressure can reduce maintainability with no material gain.", "Setting GOMEMLIMIT equal to a container hard limit and forcing memory return periodically can add continuous GC cost while leaving external memory unbounded."],
+      "scope": "CPU, allocation, memory, contention, scheduling, I/O, latency, benchmarks, and production diagnostics",
+      "invariant": "An optimization improves the target production constraint without violating correctness or moving an unacceptable cost elsewhere, and the evidence comes from a controlled profile whose build, workload, sampling, interference, and collection authority are known.",
+      "qualifications": ["Microbenchmarks require stable setup and statistical comparison.", "Profile-guided optimization does not replace end-to-end latency and capacity evidence.", "The Go soft memory limit covers runtime-managed memory rather than process RSS; binary, cgo, mmap, and operating-system memory require measured headroom.", "Profilers can interfere with the workload and each other; choose a bounded representative cohort and one owning collector.", "Profiles, traces, command-line data, labels, and stacks can be sensitive operational artifacts even when they contain no request body."],
+      "counterexamples": ["Replacing readable code with allocation tricks before identifying allocation pressure can reduce maintainability with no material gain.", "Setting GOMEMLIMIT equal to a container hard limit and forcing memory return periodically can add continuous GC cost while leaving external memory unbounded.", "Blank-importing net/http/pprof onto a public default mux exposes a diagnostic surface but provides no production access or artifact policy.", "A forced-GC heap profile from a different binary and traffic phase is not a clean before-and-after comparison."],
       "go_versions": ["1.24", "1.25", "1.26"],
       "owners": ["go-performance-and-diagnostics"],
       "risk_domains": ["performance", "reliability", "maintainability"],
@@ -108,7 +108,10 @@
         {"title": "Profiling Go Programs", "url": "https://go.dev/blog/pprof", "publisher": "The Go Authors", "kind": "primary", "verified_on": "2026-08-18"},
         {"title": "Package testing", "url": "https://pkg.go.dev/testing", "publisher": "The Go Authors", "kind": "primary", "verified_on": "2026-08-18"},
         {"title": "Package runtime/metrics", "url": "https://pkg.go.dev/runtime/metrics", "publisher": "The Go Authors", "kind": "normative", "verified_on": "2026-08-24"},
-        {"title": "A Guide to the Go Garbage Collector", "url": "https://go.dev/doc/gc-guide", "publisher": "The Go Authors", "kind": "primary", "verified_on": "2026-08-24"}
+        {"title": "A Guide to the Go Garbage Collector", "url": "https://go.dev/doc/gc-guide", "publisher": "The Go Authors", "kind": "primary", "verified_on": "2026-08-24"},
+        {"title": "Diagnostics", "url": "https://go.dev/doc/diagnostics", "publisher": "The Go Authors", "kind": "primary", "verified_on": "2026-08-24"},
+        {"title": "Package net/http/pprof", "url": "https://pkg.go.dev/net/http/pprof", "publisher": "The Go Authors", "kind": "primary", "verified_on": "2026-08-24"},
+        {"title": "Package runtime", "url": "https://pkg.go.dev/runtime", "publisher": "The Go Authors", "kind": "primary", "verified_on": "2026-08-24"}
       ],
       "observed_in": ["cc-skills-golang", "cxuu-golang-skills", "gophers", "uber-go-style-guide"]
     },
@@ -224,18 +227,21 @@
     },
     {
       "id": "dist-retry-budget",
-      "statement": "Retry only operations whose duplicate effects are safe, within one end-to-end deadline and retry budget that accounts for amplification across layers.",
+      "statement": "Retry only operations whose duplicate effects are safe, within one end-to-end deadline and retry budget; bind admission and overload signals to the constrained resource, authenticated class, fleet scope, and protocol so recovery work cannot amplify across layers.",
       "status": "adopted",
-      "scope": "Timeouts, cancellation, retries, circuit breaking, load shedding, and backpressure",
-      "invariant": "Recovery traffic cannot exceed the capacity reserved to recover, and a caller never interprets an ambiguous side effect as a known failure.",
-      "qualifications": ["Backoff with jitter reduces synchronization but does not create capacity.", "A circuit breaker is useful only when its state and fallback semantics match the dependency failure mode."],
-      "counterexamples": ["Retrying at client, proxy, and service layers can multiply attempts even when each layer uses a small retry count."],
+      "scope": "Timeouts, cancellation, retries, circuit breaking, load shedding, quota, admission, degradation, and backpressure",
+      "invariant": "Normal, queued, retry, and recovery traffic cannot exceed the named capacity reserved at the enforced scope; overload remains distinguishable from permanent failure, ambiguous effect, and degraded success.",
+      "qualifications": ["Backoff with jitter reduces synchronization but does not create capacity.", "A circuit breaker is useful only when its state and fallback semantics match the dependency failure mode.", "A per-process limit is not a fleet limit and changes total admission as replicas scale.", "Retry-After and protocol status are hints interpreted within local replay safety, caller deadline, retry ownership, and caps; they do not create permission to retry."],
+      "counterexamples": ["Retrying at client, proxy, and service layers can multiply attempts even when each layer uses a small retry count.", "Trusting an unauthenticated priority header lets an attacker consume reserved capacity.", "Mapping quota, temporary unavailability, deadline, and ambiguous mutation to one generic retryable error creates unsafe client behavior."],
       "go_versions": ["1.24", "1.25", "1.26"],
       "owners": ["go-service-resilience"],
       "risk_domains": ["availability", "overload", "latency", "partial-failure"],
       "primary_evidence": [
-        {"title": "gRPC Retry Guide", "url": "https://grpc.io/docs/guides/retry/", "publisher": "Cloud Native Computing Foundation", "kind": "protocol", "verified_on": "2026-08-18"},
-        {"title": "AWS Builders Library: Timeouts, retries, and backoff with jitter", "url": "https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/", "publisher": "Amazon Web Services", "kind": "operational", "verified_on": "2026-08-18"}
+        {"title": "gRPC Retry Guide", "url": "https://grpc.io/docs/guides/retry/", "publisher": "Cloud Native Computing Foundation", "kind": "protocol", "verified_on": "2026-08-24"},
+        {"title": "AWS Builders Library: Timeouts, retries, and backoff with jitter", "url": "https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/", "publisher": "Amazon Web Services", "kind": "operational", "verified_on": "2026-08-18"},
+        {"title": "RFC 9110: HTTP Semantics", "url": "https://www.rfc-editor.org/rfc/rfc9110.html", "publisher": "IETF", "kind": "protocol", "verified_on": "2026-08-24"},
+        {"title": "RFC 6585: Additional HTTP Status Codes", "url": "https://www.rfc-editor.org/rfc/rfc6585.html", "publisher": "IETF", "kind": "protocol", "verified_on": "2026-08-24"},
+        {"title": "gRPC Status Codes", "url": "https://grpc.io/docs/guides/status-codes/", "publisher": "Cloud Native Computing Foundation", "kind": "protocol", "verified_on": "2026-08-24"}
       ],
       "observed_in": ["cc-skills-golang"]
     },
@@ -407,6 +413,24 @@
       "primary_evidence": [
         {"title": "A Framework for OFAC Compliance Commitments", "url": "https://ofac.treasury.gov/media/16331/download", "publisher": "U.S. Department of the Treasury, OFAC", "kind": "regulatory", "verified_on": "2026-08-24"},
         {"title": "False Hit Lists Guidance", "url": "https://ofac.treasury.gov/system/files/126/false_hit.pdf", "publisher": "U.S. Department of the Treasury, OFAC", "kind": "regulatory", "verified_on": "2026-08-24"}
+      ],
+      "observed_in": []
+    },
+    {
+      "id": "fin-webhook-authenticity",
+      "statement": "Authenticate financial webhooks from the exact provider-specific signed representation, endpoint or webhook identity, account, environment, and key generation before trusting the payload; enforce replay, ordering, authorization, and financial state separately.",
+      "status": "adopted-with-qualifications",
+      "scope": "Inbound payment-provider webhooks, signatures, HMAC keys, certificates, timestamp windows, key rotation, durable receipt, duplicate delivery, and local authorization",
+      "invariant": "An unsigned, mismatched, cross-environment, replayed, duplicate, late, or out-of-order delivery cannot create an unauthorized or repeated financial effect, and acknowledgement cannot lose a verified event before durable handoff.",
+      "qualifications": ["Signed material, algorithms, secret scope, timestamp behavior, acknowledgement, and delivery identity are provider-, webhook-type-, endpoint-, environment-, and version-specific.", "Cryptographic authenticity does not prove local tenant or resource authorization, event freshness, ordering, or state-transition legality.", "A timestamp tolerance mitigates replay of a delivery but does not replace durable event or semantic-effect deduplication."],
+      "counterexamples": ["Parsing and re-encoding a Stripe payload before verification changes the signed raw bytes.", "Using one HMAC key across Adyen endpoints and test or live environments violates the provider key scope.", "A valid recent signature can still be a duplicate delivery or reference a resource outside the local tenant and current lifecycle generation."],
+      "go_versions": ["1.24", "1.25", "1.26"],
+      "owners": ["go-fintech-security-compliance"],
+      "risk_domains": ["security", "financial-integrity", "idempotency", "auditability"],
+      "primary_evidence": [
+        {"title": "Stripe webhooks", "url": "https://docs.stripe.com/webhooks", "publisher": "Stripe", "kind": "protocol", "verified_on": "2026-08-24"},
+        {"title": "Adyen: Verify HMAC signatures", "url": "https://docs.adyen.com/development-resources/webhooks/secure-webhooks/verify-hmac-signatures", "publisher": "Adyen", "kind": "protocol", "verified_on": "2026-08-24"},
+        {"title": "PayPal: Verify webhook signature", "url": "https://developer.paypal.com/api/webhooks/v1/verify-webhook-signature-post/", "publisher": "PayPal", "kind": "protocol", "verified_on": "2026-08-24"}
       ],
       "observed_in": []
     },
