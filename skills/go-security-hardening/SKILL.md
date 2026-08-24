@@ -33,6 +33,8 @@ Read [references/threat-paths.md](references/threat-paths.md) for concrete revie
 
 When an HTTP backend derives identity, scheme, host, or client certificate from proxy metadata, read [references/trusted-proxy-identity.md](references/trusted-proxy-identity.md). Treat forwarded fields as assertions whose authority comes from an authenticated, non-bypassable proxy path—not from the header name.
 
+When designing or rotating encryption at rest, read [references/envelope-encryption-lifecycle.md](references/envelope-encryption-lifecycle.md). Separate KEK rewrap, DEK replacement, and algorithm migration; they repair different risks and require different evidence before old keys retire.
+
 ## Output contract
 
 For each finding, state attacker control, required preconditions, protected effect, impact, and smallest correction. Separate exploitability from defense-in-depth.

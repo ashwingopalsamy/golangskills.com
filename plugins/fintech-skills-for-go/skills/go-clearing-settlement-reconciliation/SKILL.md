@@ -31,6 +31,8 @@ Use restartable batches, checkpoints, deterministic matching, bounded concurrenc
 
 Read [references/reconciliation-model.md](references/reconciliation-model.md) for stages and controls. For Fedwire acceptance, cancellation, outage, and resend semantics, read [references/fedwire-finality-and-contingency.md](references/fedwire-finality-and-contingency.md) and verify the deployed circular version.
 
+For FedACH post-origination processing, read [references/ach-returns-and-corrections.md](references/ach-returns-and-corrections.md). Keep returns, Notifications of Change, reversals, and disputed returns distinct; their value effects, roles, and permitted timing are not interchangeable.
+
 ## Output contract
 
 State source evidence, matching key, timing policy, exception taxonomy, adjustment authorization, and replay behavior. Missing or silently auto-matched money is a critical defect.
