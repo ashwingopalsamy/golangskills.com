@@ -810,7 +810,7 @@
       }
     ],
     "source_count": 3,
-    "evaluation_count": 4
+    "evaluation_count": 5
   },
   {
     "name": "go-money-and-ledgers",
@@ -1047,7 +1047,7 @@
       }
     ],
     "source_count": 4,
-    "evaluation_count": 5
+    "evaluation_count": 6
   },
   {
     "name": "go-performance-and-diagnostics",
@@ -1792,7 +1792,7 @@
       }
     ],
     "source_count": 3,
-    "evaluation_count": 4
+    "evaluation_count": 5
   },
   {
     "name": "review-go-distributed-change",
