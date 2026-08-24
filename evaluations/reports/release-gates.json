@@ -18,7 +18,7 @@
     {
       "id": "structural-validation",
       "status": "pass",
-      "summary": "The 100-case canonical corpus, four-client adapters, and current archives pass structural checks; archives reproduce byte-identically from source commit 6d0e921, and an earlier milestone has clean-clone Codex installation evidence.",
+      "summary": "The 103-case canonical corpus, four-client adapters, and current archives pass structural checks; archives reproduce byte-identically from source commit b5e49f3, and an earlier milestone has clean-clone Codex installation evidence.",
       "evidence": ["docs/compatibility.md", "dist/provenance.json", "evaluations/reports/latest.json"]
     },
     {
@@ -36,7 +36,7 @@
     {
       "id": "critical-correctness",
       "status": "blocked",
-      "summary": "Zero critical failures is not established across the full quality and holdout matrix. Ours strictly passed zero repetitions in both settlement families, scored 12/13 in the only completed corrected runtime-reload repetition, and the six newest scenarios have no treatment evidence.",
+      "summary": "Zero critical failures is not established across the full quality and holdout matrix. Ours strictly passed zero repetitions in both settlement families, scored 12/13 in the only completed corrected runtime-reload repetition, and the nine newest scenarios have no treatment evidence.",
       "evidence": ["evaluations/reports/latest.json"]
     },
     {
