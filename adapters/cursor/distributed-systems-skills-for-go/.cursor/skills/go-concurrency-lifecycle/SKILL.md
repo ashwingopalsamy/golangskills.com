@@ -60,7 +60,7 @@ Read [references/synchronization.md](references/synchronization.md) when selecti
 
 Detached work is valid only when its lifetime, failure reporting, and resource ownership are intentionally process-scoped. A context is not automatically required for a short, non-blocking goroutine; conversely, passing a context does not prevent a leak if blocking operations ignore it.
 
-Read [references/lifecycles.md](references/lifecycles.md) for worker, pipeline, and shutdown patterns.
+Read [references/lifecycles.md](references/lifecycles.md) for worker, pipeline, and shutdown patterns. Read [references/supervision-and-failure.md](references/supervision-and-failure.md) when goroutines can fail, panic, cancel siblings, or outlive the caller.
 
 ## Bound work before spawning
 

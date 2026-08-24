@@ -37,7 +37,7 @@ Prefer guard clauses when they make the main path visible. Keep variables in the
 
 Do not require pointers for every struct, interfaces for every dependency, constructors for every type, channels over mutexes, or named returns by default. Each is conditional. Preserve compatible repository conventions when alternatives are equally correct.
 
-Read [references/decision-record.md](references/decision-record.md) for aliasing, API, generics, and error counterexamples.
+Read [references/decision-record.md](references/decision-record.md) for API, generics, and error counterexamples. When a slice, map, view, or pooled buffer crosses a lifetime or trust boundary, read [references/memory-ownership-and-aliasing.md](references/memory-ownership-and-aliasing.md) and name the borrow, transfer, sharing, or snapshot contract.
 
 ## Output contract
 
