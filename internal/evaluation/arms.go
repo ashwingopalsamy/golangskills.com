@@ -25,9 +25,20 @@ type armSpec struct {
 	SkillMap         string `json:"skill_map"`
 }
 
-// ValidateArmFiles ensures frozen competitor mappings match the audited
-// repository commits and reference actual skill directories.
+// ValidateArmManifest ensures frozen competitor mappings match the audited
+// repository commits without requiring the local reference snapshots. It is
+// suitable for clean-clone and CI repository validation.
+func ValidateArmManifest(collection corpus.Collection) error {
+	return validateArmFiles(collection, false)
+}
+
+// ValidateArmFiles additionally requires every mapped competitor skill to be
+// present. Benchmark planning and freezing use this fail-closed validation.
 func ValidateArmFiles(collection corpus.Collection) error {
+	return validateArmFiles(collection, true)
+}
+
+func validateArmFiles(collection corpus.Collection, requireInstalled bool) error {
 	manifestPath := filepath.Join(collection.RepoRoot, "evaluations", "arms", "manifest.json")
 	var manifest armManifest
 	if err := decodeStrictFile(manifestPath, &manifest); err != nil {
@@ -63,6 +74,8 @@ func ValidateArmFiles(collection corpus.Collection) error {
 		}
 		if !filepath.IsAbs(arm.SkillsRoot) {
 			issues = append(issues, fmt.Sprintf("arm %s skills_root must be absolute", arm.Name))
+		} else if exists && !pathWithin(repository.Path, arm.SkillsRoot) {
+			issues = append(issues, fmt.Sprintf("arm %s skills_root is outside its locked repository", arm.Name))
 		}
 		var skillMap map[string]string
 		mapPath := filepath.Join(collection.RepoRoot, filepath.FromSlash(arm.SkillMap))
@@ -79,8 +92,13 @@ func ValidateArmFiles(collection corpus.Collection) error {
 			if target == "NONE" {
 				continue
 			}
-			if _, err := os.Stat(filepath.Join(arm.SkillsRoot, target, "SKILL.md")); err != nil {
-				issues = append(issues, fmt.Sprintf("arm %s maps %s to missing skill %s", arm.Name, canonical, target))
+			if exists && !repositoryHasSkill(repository, target) {
+				issues = append(issues, fmt.Sprintf("arm %s maps %s to skill %s absent from the locked inventory", arm.Name, canonical, target))
+			}
+			if requireInstalled {
+				if _, err := os.Stat(filepath.Join(arm.SkillsRoot, target, "SKILL.md")); err != nil {
+					issues = append(issues, fmt.Sprintf("arm %s maps %s to missing skill %s", arm.Name, canonical, target))
+				}
 			}
 		}
 		for canonical := range skillMap {
@@ -97,6 +115,23 @@ func ValidateArmFiles(collection corpus.Collection) error {
 		return fmt.Errorf("evaluation arm validation failed: %s", strings.Join(issues, "; "))
 	}
 	return nil
+}
+
+func repositoryHasSkill(repository research.Repository, name string) bool {
+	for _, skill := range repository.Skills {
+		if skill.Name == name {
+			return true
+		}
+	}
+	return false
+}
+
+func pathWithin(root, candidate string) bool {
+	relative, err := filepath.Rel(filepath.Clean(root), filepath.Clean(candidate))
+	if err != nil {
+		return false
+	}
+	return relative != ".." && !strings.HasPrefix(relative, ".."+string(filepath.Separator))
 }
 
 func decodeStrictFile(path string, destination any) error {

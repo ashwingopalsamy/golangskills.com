@@ -6,6 +6,8 @@ Every skill ships public development cases. The current corpus contains 106: eve
 
 `skillctl eval matrix` selects the same canonical cases for baseline, this project, and every frozen competitor, then globally randomizes all arm/case cells. Each arm receives a distinct deterministic opaque label. `-fixtures-only` selects all 15 executable cases; `-explicit` switches every arm to explicitly matched skills; and `-repetition N` makes repeat identity part of resumability. A mixed score artifact is reported with `-arm`; `-arm ours -against-arm gophers` performs an in-file paired comparison.
 
+Repository validation and benchmark execution intentionally enforce different availability boundaries. `skillctl check` validates each arm's commit eligibility, absolute root containment, complete canonical mapping, and mapped target against the committed corpus-lock inventory, so a clean clone does not require Ashwin's local reference directory. `eval matrix` and `eval freeze` additionally require every mapped competitor `SKILL.md` to exist at the locked installation path and fail closed when a snapshot is unavailable.
+
 ## Cost-bounded evaluation protocol
 
 Benchmarking is a gated decision process, not an unattended queue. Every new case first runs as a small development pilot with `-max-cells` and a short timeout. The matrix defaults exposed by `skillctl` stop after the first runner failure and immediately stop on a timeout; semantic judging applies the same one-failure/timeout stop. The completed JSONL cell is flushed before stopping, so resuming the same path is safe and does not repeat successful work. Increase `-max-failures` only after the failure is classified as an environment or transient issue and recorded.
