@@ -96,6 +96,8 @@ If acknowledgment result itself can fail, retain enough durable processing state
 
 For cumulative offsets, track completion per partition and commit only through the highest contiguous completed offset; later completion must never skip unfinished lower offsets. On rebalance, stop admission and either drain within the revocation budget or fence unfinished ownership before committing progress.
 
+For consumer-group assignment, revocation, or cooperative rebalance changes, read [references/rebalance-ownership.md](references/rebalance-ownership.md). Bind every worker and completion frontier to one assignment generation; a stale worker must not advance a successor's progress or perform an unfenced effect merely because it was admitted earlier.
+
 ## Preserve ordering only where needed
 
 Global ordering is expensive and often unavailable. Define the business key whose events must be serialized, such as account ID or aggregate ID. Then verify:

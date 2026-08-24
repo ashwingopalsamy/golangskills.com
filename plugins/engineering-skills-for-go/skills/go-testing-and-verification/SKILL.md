@@ -31,6 +31,8 @@ Seed representative valid and invalid values. Keep targets deterministic, fast, 
 
 Read [references/oracle-design.md](references/oracle-design.md) for distributed and financial oracles.
 
+For timer, deadline, or asynchronous goroutine tests on Go 1.25 or 1.26, read [references/deterministic-concurrency.md](references/deterministic-concurrency.md). A `synctest` bubble virtualizes only work it owns; external I/O and goroutines are not made deterministic merely because the assertion runs inside `synctest.Test`.
+
 ## Output contract
 
 Name the invariant, chosen test layer, and remaining blind spots. Do not inflate coverage metrics or mock interactions into claims of system correctness.
