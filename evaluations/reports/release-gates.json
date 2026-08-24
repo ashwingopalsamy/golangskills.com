@@ -18,7 +18,7 @@
     {
       "id": "structural-validation",
       "status": "pass",
-      "summary": "Canonical skills, four-client packaging, archives, and clean-clone Codex installation have structural evidence.",
+      "summary": "The 100-case canonical corpus, four-client adapters, and current archives pass structural checks; archives reproduce byte-identically from source commit 6d0e921, and an earlier milestone has clean-clone Codex installation evidence.",
       "evidence": ["docs/compatibility.md", "dist/provenance.json", "evaluations/reports/latest.json"]
     },
     {
@@ -36,7 +36,7 @@
     {
       "id": "critical-correctness",
       "status": "blocked",
-      "summary": "Zero critical failures is not established across the full quality and holdout matrix. Ours strictly passed zero repetitions in both settlement families despite leading their aggregate criteria.",
+      "summary": "Zero critical failures is not established across the full quality and holdout matrix. Ours strictly passed zero repetitions in both settlement families, scored 12/13 in the only completed corrected runtime-reload repetition, and the six newest scenarios have no treatment evidence.",
       "evidence": ["evaluations/reports/latest.json"]
     },
     {
@@ -48,31 +48,31 @@
     {
       "id": "paired-superiority",
       "status": "blocked",
-      "summary": "Public routing clears paired thresholds. Ours leads the final batch-offset and both settlement families in aggregate, and quality-and-token dominates every skill competitor on the fresh manifest-close transfer. Those are repeated public cases with zero strict ours passes; lease/fencing still ties baseline. Aggregate behavioral superiority and confidence bounds remain unestablished.",
+      "summary": "Public routing clears paired thresholds. Ours leads the final batch-offset and both settlement families in aggregate, but the completed corrected runtime-reload repetition was won 13/13 by golang-ddd-skills and the campaign was intentionally stopped. Aggregate behavioral superiority and confidence bounds remain unestablished.",
       "evidence": ["evaluations/reports/development/full-routing-ours-vs-cxuu-golang-skills.json", "evaluations/reports/development/fintech-authorization-review-ours-vs-cxuu-golang-skills.json", "evaluations/reports/development/engineering-shutdown-review-ours.json", "evaluations/reports/development/distributed-dual-write-review-ours.json", "evaluations/reports/development/distributed-batch-offset-review-final-ours.json", "evaluations/reports/development/distributed-lease-fencing-review-ours.json", "evaluations/reports/development/fintech-settlement-correction-v3-ours.json", "evaluations/reports/development/fintech-settlement-manifest-close-v3-ours.json", "evaluations/reports/latest.json"]
     },
     {
       "id": "domain-non-inferiority",
       "status": "blocked",
-      "summary": "Collection-level non-inferiority is not established. Fintech now has a strong fresh transfer lead over every skill competitor, but ours strictly passes zero settlement repetitions; Distributed Systems still includes the lease/fencing baseline tie, and the original fintech authorization loss remains preserved.",
+      "summary": "Collection-level non-inferiority is not established. Fintech has a strong manifest-close transfer lead but zero strict settlement passes; Distributed Systems includes the lease/fencing baseline tie; Engineering includes a saturated compatibility case and one corrected runtime-reload loss to golang-ddd-skills.",
       "evidence": ["evaluations/reports/latest.json"]
     },
     {
       "id": "baseline-improvement",
       "status": "blocked",
-      "summary": "Ours beat baseline in all three manifest-close repetitions and narrowly led the settlement-correction aggregate, but the Engineering evidence is one public cell and Distributed Systems includes ties. No statistically positive cross-scenario paired behavioral improvement is established.",
+      "summary": "Ours beat baseline in all three manifest-close repetitions and narrowly led settlement correction, but tied baseline 12/13 in the completed corrected runtime-reload repetition and Distributed Systems includes ties. No statistically positive cross-scenario paired behavioral improvement is established.",
       "evidence": ["evaluations/reports/development/fintech-settlement-correction-v3-ours-vs-baseline.json", "evaluations/reports/development/fintech-settlement-manifest-close-v3-ours-vs-baseline.json", "evaluations/reports/latest.json"]
     },
     {
       "id": "token-efficiency",
       "status": "blocked",
-      "summary": "Ours quality-and-token dominates every skill competitor on the fresh manifest-close transfer and four on settlement correction. However cxuu-golang-skills dominated the authorization cell, ours used the most tokens in the first Distributed tie, and baseline dominates the frozen lease/fencing transfer while remaining far cheaper on Fintech cases. The global behavioral frontier is not established.",
+      "summary": "Ours quality-and-token dominates every skill competitor on manifest-close and four on settlement correction. However cxuu-golang-skills dominated authorization, the client-compatibility case saturated while ours used more input than all but Gophers, and baseline remains much cheaper across hard transfers. The global behavioral frontier is not established.",
       "evidence": ["evaluations/reports/development/full-routing-ours.json", "evaluations/reports/development/fintech-authorization-review-ours-vs-cxuu-golang-skills.json", "evaluations/reports/development/engineering-shutdown-review-ours.json", "evaluations/reports/development/distributed-dual-write-review-ours.json", "evaluations/reports/development/distributed-batch-offset-review-final-ours.json", "evaluations/reports/development/distributed-lease-fencing-review-ours.json", "evaluations/reports/development/fintech-settlement-correction-v3-ours.json", "evaluations/reports/development/fintech-settlement-manifest-close-v3-ours.json", "evaluations/reports/latest.json"]
     },
     {
       "id": "artifact-traceability",
       "status": "blocked",
-      "summary": "Development artifacts are traceable, but the complete release and holdout artifacts do not yet exist.",
+      "summary": "Development artifacts, including the intentionally incomplete runtime-reload series and current package provenance, are traceable; the complete release-candidate and private-holdout artifacts do not yet exist.",
       "evidence": ["evaluations/reports/latest.json", "dist/provenance.json"]
     }
   ]
