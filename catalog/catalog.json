@@ -900,10 +900,32 @@
             "member epochs",
             "offset commits"
           ]
+        },
+        {
+          "title": "PostgreSQL Logical Decoding Concepts",
+          "url": "https://www.postgresql.org/docs/current/logicaldecoding-explanation.html",
+          "publisher": "PostgreSQL Global Development Group",
+          "kind": "primary",
+          "verified_on": "2026-08-24",
+          "supports": [
+            "exported snapshot boundary",
+            "replication slot replay and retention"
+          ]
+        },
+        {
+          "title": "Debezium PostgreSQL Connector",
+          "url": "https://debezium.io/documentation/reference/stable/connectors/postgresql.html",
+          "publisher": "Debezium Community",
+          "kind": "primary",
+          "verified_on": "2026-08-24",
+          "supports": [
+            "initial snapshot handoff",
+            "incremental snapshot collision handling"
+          ]
         }
       ],
-      "source_count": 3,
-      "evaluation_count": 5
+      "source_count": 5,
+      "evaluation_count": 6
     },
     {
       "name": "go-money-and-ledgers",
@@ -1137,10 +1159,44 @@
             "authorization hold distinction",
             "follow-on linkage"
           ]
+        },
+        {
+          "title": "Stripe Dispute Lifecycle",
+          "url": "https://docs.stripe.com/disputes/how-disputes-work",
+          "publisher": "Stripe",
+          "kind": "primary",
+          "verified_on": "2026-08-24",
+          "supports": [
+            "evidence deadline",
+            "dispute decision and withdrawal"
+          ]
+        },
+        {
+          "title": "Stripe Disputes API Guide",
+          "url": "https://docs.stripe.com/disputes/api",
+          "publisher": "Stripe",
+          "kind": "primary",
+          "verified_on": "2026-08-24",
+          "supports": [
+            "unique dispute identity",
+            "multiple and partial disputes",
+            "evidence details"
+          ]
+        },
+        {
+          "title": "Stripe Event Types",
+          "url": "https://docs.stripe.com/api/events/types",
+          "publisher": "Stripe",
+          "kind": "primary",
+          "verified_on": "2026-08-24",
+          "supports": [
+            "dispute events",
+            "funds withdrawn and reinstated"
+          ]
         }
       ],
-      "source_count": 4,
-      "evaluation_count": 6
+      "source_count": 7,
+      "evaluation_count": 7
     },
     {
       "name": "go-performance-and-diagnostics",
@@ -1588,10 +1644,43 @@
             "resolved inputs",
             "builder trust"
           ]
+        },
+        {
+          "title": "Package net/http/httputil",
+          "url": "https://pkg.go.dev/net/http/httputil",
+          "publisher": "The Go Authors",
+          "kind": "primary",
+          "verified_on": "2026-08-24",
+          "supports": [
+            "forwarded-header sanitization",
+            "reverse proxy rewrite"
+          ]
+        },
+        {
+          "title": "RFC 7239 Forwarded HTTP Extension",
+          "url": "https://www.rfc-editor.org/rfc/rfc7239",
+          "publisher": "IETF",
+          "kind": "primary",
+          "verified_on": "2026-08-24",
+          "supports": [
+            "forwarded chain semantics",
+            "proxy metadata privacy"
+          ]
+        },
+        {
+          "title": "RFC 9440 Client-Cert HTTP Header Field",
+          "url": "https://www.rfc-editor.org/rfc/rfc9440",
+          "publisher": "IETF",
+          "kind": "primary",
+          "verified_on": "2026-08-24",
+          "supports": [
+            "trusted TLS-terminating proxy",
+            "client certificate field sanitization"
+          ]
         }
       ],
-      "source_count": 4,
-      "evaluation_count": 5
+      "source_count": 7,
+      "evaluation_count": 6
     },
     {
       "name": "go-service-boundaries",

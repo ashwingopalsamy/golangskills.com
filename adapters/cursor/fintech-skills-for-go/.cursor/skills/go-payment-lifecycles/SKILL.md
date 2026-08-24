@@ -29,6 +29,8 @@ Read [references/payment-machine.md](references/payment-machine.md) for transiti
 
 For partial authorization, incremental authorization, capture, void, or authorization-reversal changes, read [references/authorization-adjustments.md](references/authorization-adjustments.md). Preserve requested, approved, capturable, captured, and released amounts separately; provider-specific remainder-release behavior is not a portable payment rule.
 
+For card disputes, chargebacks, evidence, or representment, read [references/disputes-and-evidence.md](references/disputes-and-evidence.md). A dispute is its own amount-bearing case and deadline lifecycle; it is not a Boolean on the original payment or proof that a refund resolved the issuer process.
+
 Use `go-financial-idempotency` for repeated-request identity, and `go-clearing-settlement-reconciliation` for post-capture external reports and settlement breaks.
 
 ## Output contract

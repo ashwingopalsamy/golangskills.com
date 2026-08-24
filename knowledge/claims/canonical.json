@@ -97,8 +97,8 @@
       "status": "adopted",
       "scope": "Application, supply-chain, authentication, authorization, cryptography, and secret handling",
       "invariant": "Untrusted data cannot acquire authority merely by reaching an internal type or generated path.",
-      "qualifications": ["Security controls must follow a threat model and deployment context.", "Use maintained cryptographic protocols and libraries rather than custom primitives."],
-      "counterexamples": ["Input validation alone cannot repair an authorization decision made at the wrong resource boundary."],
+      "qualifications": ["Security controls must follow a threat model and deployment context.", "Use maintained cryptographic protocols and libraries rather than custom primitives.", "Forwarded and client-certificate headers acquire authority only from an authenticated, non-bypassable proxy path that sanitizes attacker-supplied fields and owns the interpreted hop chain."],
+      "counterexamples": ["Input validation alone cannot repair an authorization decision made at the wrong resource boundary.", "A syntactically valid X-Forwarded-For or Client-Cert value supplied through an unauthenticated or direct backend path is attacker-controlled metadata, not transport identity."],
       "go_versions": ["1.24", "1.25", "1.26"],
       "owners": ["go-security-hardening"],
       "risk_domains": ["security", "privacy", "supply-chain"],
@@ -106,7 +106,10 @@
         {"title": "Go Security Best Practices", "url": "https://go.dev/doc/security/best-practices", "publisher": "The Go Authors", "kind": "primary", "verified_on": "2026-08-18"},
         {"title": "NIST Secure Software Development Framework", "url": "https://csrc.nist.gov/pubs/sp/800/218/final", "publisher": "NIST", "kind": "regulatory", "verified_on": "2026-08-18"},
         {"title": "Go Modules Reference", "url": "https://go.dev/ref/mod", "publisher": "The Go Authors", "kind": "primary", "verified_on": "2026-08-24"},
-        {"title": "SLSA Build Track Basics", "url": "https://slsa.dev/spec/v1.2/build-track-basics", "publisher": "OpenSSF", "kind": "primary", "verified_on": "2026-08-24"}
+        {"title": "SLSA Build Track Basics", "url": "https://slsa.dev/spec/v1.2/build-track-basics", "publisher": "OpenSSF", "kind": "primary", "verified_on": "2026-08-24"},
+        {"title": "Package net/http/httputil", "url": "https://pkg.go.dev/net/http/httputil", "publisher": "The Go Authors", "kind": "primary", "verified_on": "2026-08-24"},
+        {"title": "RFC 7239 Forwarded HTTP Extension", "url": "https://www.rfc-editor.org/rfc/rfc7239", "publisher": "IETF", "kind": "protocol", "verified_on": "2026-08-24"},
+        {"title": "RFC 9440 Client-Cert HTTP Header Field", "url": "https://www.rfc-editor.org/rfc/rfc9440", "publisher": "IETF", "kind": "protocol", "verified_on": "2026-08-24"}
       ],
       "observed_in": ["cc-skills-golang", "gophers"]
     },
@@ -172,15 +175,17 @@
       "status": "adopted",
       "scope": "Queues, logs, consumers, outbox/inbox, acknowledgements, ordering, and poison messages",
       "invariant": "Redelivery or crash at any acknowledgement boundary cannot violate the business invariant or silently lose required work.",
-      "qualifications": ["Exactly-once features are scoped to particular systems and transaction boundaries.", "Global ordering is expensive and usually unnecessary; identify the ordering key.", "A consumer-group generation or member epoch may reject stale offset progress without fencing an external business effect already started by the revoked owner."],
-      "counterexamples": ["A broker transaction cannot make an arbitrary third-party API side effect exactly once."],
+      "qualifications": ["Exactly-once features are scoped to particular systems and transaction boundaries.", "Global ordering is expensive and usually unnecessary; identify the ordering key.", "A consumer-group generation or member epoch may reject stale offset progress without fencing an external business effect already started by the revoked owner.", "A CDC bootstrap needs a source-consistent snapshot and retained stream boundary plus collision handling; the exact snapshot, position, and watermark primitives are connector-specific."],
+      "counterexamples": ["A broker transaction cannot make an arbitrary third-party API side effect exactly once.", "A Read Committed table scan followed by the current log head can lose writes committed during the scan, while last-arrival-wins can let an older snapshot row overwrite a newer stream event."],
       "go_versions": ["1.24", "1.25", "1.26"],
       "owners": ["go-message-processing"],
       "risk_domains": ["delivery", "ordering", "idempotency", "recovery"],
       "primary_evidence": [
         {"title": "Apache Kafka Design", "url": "https://kafka.apache.org/documentation/#design", "publisher": "Apache Software Foundation", "kind": "protocol", "verified_on": "2026-08-18"},
         {"title": "NATS JetStream Consumers", "url": "https://docs.nats.io/nats-concepts/jetstream/consumers", "publisher": "Synadia", "kind": "protocol", "verified_on": "2026-08-18"},
-        {"title": "Apache Kafka 4.0 Protocol", "url": "https://kafka.apache.org/40/design/protocol/", "publisher": "Apache Software Foundation", "kind": "protocol", "verified_on": "2026-08-24"}
+        {"title": "Apache Kafka 4.0 Protocol", "url": "https://kafka.apache.org/40/design/protocol/", "publisher": "Apache Software Foundation", "kind": "protocol", "verified_on": "2026-08-24"},
+        {"title": "PostgreSQL Logical Decoding Concepts", "url": "https://www.postgresql.org/docs/current/logicaldecoding-explanation.html", "publisher": "PostgreSQL Global Development Group", "kind": "primary", "verified_on": "2026-08-24"},
+        {"title": "Debezium PostgreSQL Connector", "url": "https://debezium.io/documentation/reference/stable/connectors/postgresql.html", "publisher": "Debezium Community", "kind": "protocol", "verified_on": "2026-08-24"}
       ],
       "observed_in": ["cc-skills-golang"]
     },
@@ -260,8 +265,8 @@
       "status": "adopted-with-qualifications",
       "scope": "Provider or rail payment lifecycles whose current state contract has been verified; conditional modeling otherwise",
       "invariant": "No transition invents a successful movement of funds, and late provider events remain safely applicable or explicitly quarantined.",
-      "qualifications": ["Provider state names and legal finality differ by rail and region.", "A locally terminal state can still receive chargebacks or settlement adjustments.", "Stripe evidence supports Stripe behavior only; it does not establish ACH or other rail idempotency, query, expiry, or finality semantics.", "Partial capture, void, authorization reversal, and unused-hold release semantics must come from the verified provider and payment-method contract."],
-      "counterexamples": ["Treating an HTTP timeout as a declined payment can trigger a second successful authorization."],
+      "qualifications": ["Provider state names and legal finality differ by rail and region.", "A locally terminal state can still receive chargebacks or settlement adjustments.", "Stripe evidence supports Stripe behavior only; it does not establish ACH or other rail idempotency, query, expiry, finality, dispute, or fee semantics.", "Partial capture, void, authorization reversal, and unused-hold release semantics must come from the verified provider and payment-method contract.", "A dispute is an independent amount-bearing case with its own identity, evidence deadline, decision, and funds events; multiple partial disputes can reference one payment."],
+      "counterexamples": ["Treating an HTTP timeout as a declined payment can trigger a second successful authorization.", "A refund, customer withdrawal message, or local deadline timer does not by itself prove a Stripe dispute was won or that funds were reinstated."],
       "go_versions": ["1.24", "1.25", "1.26"],
       "owners": ["go-payment-lifecycles"],
       "risk_domains": ["financial-integrity", "state-machine", "ambiguous-outcome"],
@@ -269,7 +274,10 @@
         {"title": "Stripe PaymentIntent lifecycle", "url": "https://docs.stripe.com/payments/paymentintents/lifecycle", "publisher": "Stripe", "kind": "protocol", "verified_on": "2026-08-18"},
         {"title": "Stripe separate authorization and capture", "url": "https://docs.stripe.com/payments/place-a-hold-on-a-payment-method", "publisher": "Stripe", "kind": "protocol", "verified_on": "2026-08-18"},
         {"title": "Visa Acceptance partial authorization reversal", "url": "https://developer.visaacceptance.com/docs/cybs/en-us/payments/developer/ctv/rest/payments/payments-processing-basic-intro/payments-processing-basic-inc-auth-reversal-intro.html", "publisher": "Visa Acceptance Solutions", "kind": "protocol", "verified_on": "2026-08-24"},
-        {"title": "Visa Acceptance voids", "url": "https://developer.visaacceptance.com/docs/vas/en-us/payments/developer/vital/rest/payments/payments-intro/payments-services-intro/payments-intro-processing-void.html", "publisher": "Visa Acceptance Solutions", "kind": "protocol", "verified_on": "2026-08-24"}
+        {"title": "Visa Acceptance voids", "url": "https://developer.visaacceptance.com/docs/vas/en-us/payments/developer/vital/rest/payments/payments-intro/payments-services-intro/payments-intro-processing-void.html", "publisher": "Visa Acceptance Solutions", "kind": "protocol", "verified_on": "2026-08-24"},
+        {"title": "Stripe Dispute Lifecycle", "url": "https://docs.stripe.com/disputes/how-disputes-work", "publisher": "Stripe", "kind": "protocol", "verified_on": "2026-08-24"},
+        {"title": "Stripe Disputes API Guide", "url": "https://docs.stripe.com/disputes/api", "publisher": "Stripe", "kind": "protocol", "verified_on": "2026-08-24"},
+        {"title": "Stripe Event Types", "url": "https://docs.stripe.com/api/events/types", "publisher": "Stripe", "kind": "protocol", "verified_on": "2026-08-24"}
       ],
       "observed_in": []
     },
