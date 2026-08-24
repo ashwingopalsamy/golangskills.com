@@ -14,6 +14,8 @@ For paired reports, match arms by canonical skill and case ID. A strict win rece
 
 Freeze routing and skill maps before treatment runs. Canonical positive cases map to the arm's matching skill; confusion-negative cases map to the declared adjacent skill rather than `NONE`. Committed canonical-to-arm skill maps drive both routing and explicit cells, with per-case routing overrides where needed. Missing mappings fail closed, and arm manifests must match the audited competitor commits and real skill directories.
 
+For a release-candidate batch, create and commit a `skillctl eval freeze` lock before any treatment. Frozen cells include the lock digest in their raw-artifact and resume identity; failed attempts remain append-only but do not suppress a successful retry. `eval run`, `eval matrix`, and `eval score` reject drift in repository inputs, arm contents, client/toolchain, models, modes, seeds, repetitions, timeouts, or scorer protocol. A private holdout uses a keyed HMAC commitment rather than an unkeyed prompt hash, preventing practical dictionary tests against low-entropy prompts before the key is disclosed. The complete operator protocol is in [release-candidate-freeze.md](release-candidate-freeze.md).
+
 ## Category-leadership gates
 
 A release may claim leadership only when all gates pass:

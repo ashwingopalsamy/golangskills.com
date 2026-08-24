@@ -198,6 +198,8 @@ func runJudgment(ctx context.Context, options JudgmentOptions, clientVersion, ev
 			"source_fixture_commit": result.Metadata["fixture_commit"],
 			"source_digest":         semanticSourceDigest(result),
 			"evaluator_commit":      evaluatorCommit,
+			"freeze_id":             result.Metadata["freeze_id"],
+			"freeze_digest":         result.Metadata["freeze_digest"],
 		},
 	}
 	defer func() { judgment.DurationMS = time.Since(started).Milliseconds() }()

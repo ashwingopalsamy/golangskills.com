@@ -577,6 +577,9 @@ func validateJudgment(result Result, judgment Judgment, score float64, passed, c
 	if judgment.Metadata["source_digest"] != semanticSourceDigest(result) {
 		return errors.New("source digest mismatch")
 	}
+	if result.Metadata["freeze_digest"] != "" && (judgment.Metadata["freeze_id"] != result.Metadata["freeze_id"] || judgment.Metadata["freeze_digest"] != result.Metadata["freeze_digest"]) {
+		return errors.New("freeze identity mismatch")
+	}
 	if !gitCommitPattern.MatchString(judgment.Metadata["evaluator_commit"]) {
 		return errors.New("evaluator commit missing or invalid")
 	}
