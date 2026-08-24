@@ -547,6 +547,88 @@
       "qualification": "Final contaminated-case regression. Stop tuning this case and require transfer on a new family."
     }
   },
+  "fintech_settlement_correction_screen": {
+    "case": "review-go-fintech-change/quality-settlement-correction-diff",
+    "fixture_commit": "35ef8354ebfab76310fe11b619856454c32273fc",
+    "evaluator_commit": "fea9d956e968346e15f792845d193a39354c4686",
+    "rubric_version": "skillctl-rubric-v3-forbidden-endorsement",
+    "model": "gpt-5.6-sol",
+    "client_version": "codex-cli 0.149.0-alpha.4.1",
+    "arms": 7,
+    "repetitions": 3,
+    "cells": 21,
+    "runner_errors": 0,
+    "current_judgments": 21,
+    "rejected_judgment_attempts_retained": 3,
+    "resumed_cells_on_identical_rerun": 0,
+    "resumed_judgments_on_identical_rerun": 0,
+    "aggregate_criteria": {
+      "ours": 42,
+      "baseline": 41,
+      "cc-skills-golang": 35,
+      "cxuu-golang-skills": 40,
+      "go-skills": 40,
+      "golang-ddd-skills": 39,
+      "gophers": 37,
+      "possible_per_arm": 57
+    },
+    "aggregate_input_tokens": {
+      "ours": 109764,
+      "baseline": 47101,
+      "cc-skills-golang": 304240,
+      "cxuu-golang-skills": 154822,
+      "go-skills": 108065,
+      "golang-ddd-skills": 195748,
+      "gophers": 143109
+    },
+    "ours_strict_passes": 0,
+    "aggregate_score_artifact": "evaluations/scores/2026-08-24-fintech-settlement-correction-review-native-aggregate-v3.jsonl",
+    "ours_report": "evaluations/reports/development/fintech-settlement-correction-v3-ours.json",
+    "qualification": "V3 is the claim-safe score set. Ours narrowly leads aggregate criteria and quality-and-token dominates four skill competitors, but ties or trades off against go-skills and baseline, strictly passes zero repetitions, and does not establish category leadership. Preserve v2 artifacts only as evidence of the corrected forbidden-outcome polarity defect."
+  },
+  "fintech_settlement_manifest_close_screen": {
+    "case": "review-go-fintech-change/quality-settlement-manifest-close-diff",
+    "fixture_commit": "f38ea2bb252f74f811b2e2e7ba5f47970a70bb41",
+    "evaluator_commit": "f38ea2bb252f74f811b2e2e7ba5f47970a70bb41",
+    "rubric_version": "skillctl-rubric-v3-forbidden-endorsement",
+    "model": "gpt-5.6-sol",
+    "client_version": "codex-cli 0.149.0-alpha.4.1",
+    "arms": 7,
+    "repetitions": 3,
+    "cells": 21,
+    "runner_errors": 0,
+    "judgment_errors": 0,
+    "resumed_cells_on_identical_rerun": 0,
+    "resumed_judgments_on_identical_rerun": 0,
+    "native_activation": {
+      "review_skill_loaded": 3,
+      "clearing_settlement_skill_loaded": 3,
+      "other_project_skills_loaded": 0
+    },
+    "aggregate_criteria": {
+      "ours": 40,
+      "baseline": 28,
+      "cc-skills-golang": 34,
+      "cxuu-golang-skills": 31,
+      "go-skills": 32,
+      "golang-ddd-skills": 30,
+      "gophers": 36,
+      "possible_per_arm": 51
+    },
+    "aggregate_input_tokens": {
+      "ours": 109937,
+      "baseline": 47303,
+      "cc-skills-golang": 180813,
+      "cxuu-golang-skills": 174560,
+      "go-skills": 111012,
+      "golang-ddd-skills": 217211,
+      "gophers": 156804
+    },
+    "ours_strict_passes": 0,
+    "aggregate_score_artifact": "evaluations/scores/2026-08-24-fintech-settlement-manifest-close-native-aggregate-v3.jsonl",
+    "ours_report": "evaluations/reports/development/fintech-settlement-manifest-close-v3-ours.json",
+    "qualification": "Ours led every skill competitor in aggregate quality while using fewer input tokens, and beat baseline in every repetition. Baseline remains a quality/token trade-off, ours strictly passed zero repetitions, and this one public family cannot establish paired statistical or category-level superiority."
+  },
   "targeted_rerun": {
     "case": "go-clearing-settlement-reconciliation/avoid-initial-auth",
     "passed": true,
@@ -575,12 +657,12 @@
   "blocking_gates": [
     "private release holdout not yet frozen and scored",
     "full baseline and multi-competitor behavioral quality matrix not yet completed",
-    "the quality half of the 91-scenario full-arm matrix and hard-case repetitions are not yet completed",
+    "the quality half of the 92-scenario full-arm matrix and hard-case repetitions are not yet completed",
     "public routing macro-F1 clears its threshold, but private unrelated-prompt false activation is not established",
     "six post-edit hidden-oracle cases, including three behavior-rich multi-file additions, tied every arm; a less solution-revealing benchmark design is required",
-    "the semantic judge is operational across six public case families; the final batch-offset version gives ours a stable relative lead, but the lease/fencing transfer tied baseline, passed zero repetitions, and exposed a systematic review-activation failure before a non-comparative public-case fix",
-    "the first production-shaped fintech review cell was won by cxuu-golang-skills; our public-case fix passes only a targeted regression and needs holdout transfer evidence",
-    "the Engineering review tied all skill competitors, the first Distributed review tied all arms at our highest token cost, and baseline quality-and-token dominated ours on the frozen lease/fencing transfer; token-efficiency leadership is not established",
+    "the semantic judge is operational across eight public case families under a versioned protocol; the fresh settlement manifest family gives ours a quality-and-token lead over every skill competitor, but ours strictly passes zero repetitions and the lease/fencing transfer still ties baseline",
+    "the first production-shaped fintech review cell was won by cxuu-golang-skills; the two settlement families now favor ours in aggregate, but neither has a strict ours pass and neither replaces private holdout evidence",
+    "the Engineering review tied all skill competitors, the first Distributed review tied all arms at our highest token cost, baseline quality-and-token dominated ours on the frozen lease/fencing transfer, and baseline remains much cheaper on Fintech transfers; global token-efficiency leadership is not established",
     "paired win-rate confidence intervals and the overall token-efficiency frontier are not yet established"
   ]
 }

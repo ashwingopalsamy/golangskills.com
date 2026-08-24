@@ -1,0 +1,32 @@
+{
+  "schema_version": 2,
+  "candidate": "ours",
+  "competitor": "gophers",
+  "candidate_input": "evaluations/scores/2026-08-24-fintech-settlement-correction-review-native-aggregate-v3.jsonl",
+  "competitor_input": "evaluations/scores/2026-08-24-fintech-settlement-correction-review-native-aggregate-v3.jsonl",
+  "complete_pairs": true,
+  "paired_cases": 3,
+  "candidate_wins": 3,
+  "competitor_wins": 0,
+  "ties": 0,
+  "paired_win_rate": 1,
+  "paired_win_ci_lower_95": 1,
+  "paired_win_ci_upper_95": 1,
+  "mean_score_difference": 0.08771929824561404,
+  "mean_difference_ci_lower_95": 0.052631578947368474,
+  "mean_difference_ci_upper_95": 0.1578947368421052,
+  "candidate_critical_failures": 3,
+  "competitor_critical_failures": 3,
+  "candidate_score_per_k_input_tokens": 0.020138900876329885,
+  "competitor_score_per_k_input_tokens": 0.013607588768369783,
+  "pareto_relation": "candidate-dominates",
+  "collections": [
+    {
+      "collection": "fintech-skills-for-go",
+      "cases": 3,
+      "candidate_mean": 0.7368421052631579,
+      "competitor_mean": 0.6491228070175438,
+      "difference": 0.08771929824561409
+    }
+  ]
+}
