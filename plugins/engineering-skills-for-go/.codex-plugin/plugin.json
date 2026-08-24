@@ -1,6 +1,6 @@
 {
   "name": "engineering-skills-for-go",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Evidence-backed Go language, API, service, testing, performance, security, operations, and engineering-review skills.",
   "author": {
     "name": "Ashwin Gopalsamy",

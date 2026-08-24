@@ -1,0 +1,97 @@
+name: Publish npm collections
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Semver version to publish"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: npm-publish-${{ github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    name: Publish @golangskills collections
+    runs-on: ubuntu-latest
+    environment: npm-publish
+
+    steps:
+      - name: Check out signed release
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+
+      - name: Set up Go
+        uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6
+        with:
+          go-version: "1.26.x"
+          cache: true
+
+      - name: Set up Node
+        uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6.0.0
+        with:
+          node-version: "24.x"
+          package-manager-cache: false
+
+      - name: Upgrade npm for trusted publishing
+        run: npm install --global npm@11.5.1 --ignore-scripts
+
+      - name: Resolve release version
+        id: release
+        shell: bash
+        env:
+          DISPATCH_VERSION: ${{ inputs.version }}
+        run: |
+          if [[ "$GITHUB_EVENT_NAME" == "workflow_dispatch" ]]; then
+            version="$DISPATCH_VERSION"
+          else
+            version="${GITHUB_REF_NAME#v}"
+          fi
+          if [[ ! "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+([.-][0-9A-Za-z.-]+)?$ ]]; then
+            echo "invalid release version: $version" >&2
+            exit 1
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+      - name: Verify toolchain
+        run: |
+          test "$(node --version | sed 's/^v//' | cut -d. -f1)" -ge 22
+          npm --version
+          test "$(npm --version)" = "11.5.1"
+
+      - name: Validate canonical corpus
+        run: go run ./cmd/skillctl check
+
+      - name: Verify generated repository artifacts
+        run: |
+          go run ./cmd/skillctl generate
+          git diff --exit-code -- . ':!dist/npm'
+
+      - name: Render npm package staging
+        run: go run ./cmd/skillctl npm package -version "${{ steps.release.outputs.version }}"
+
+      - name: Check npm package boundary
+        run: go run ./cmd/skillctl npm check -version "${{ steps.release.outputs.version }}"
+
+      - name: Review npm package file lists
+        shell: bash
+        run: |
+          for package_dir in dist/npm/*; do
+            echo "Reviewing $package_dir"
+            (cd "$package_dir" && npm pack --dry-run --json > /tmp/npm-pack.json)
+            node -e 'const fs=require("fs"); const rows=JSON.parse(fs.readFileSync("/tmp/npm-pack.json","utf8")); if (!Array.isArray(rows) || rows.length !== 1 || !rows[0].files?.length) process.exit(1);'
+          done
+
+      - name: Publish public packages with npm trusted publishing
+        shell: bash
+        run: |
+          for package_dir in dist/npm/*; do
+            (cd "$package_dir" && npm publish --access public)
+          done

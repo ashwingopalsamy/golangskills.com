@@ -5,5 +5,5 @@
   },
   "description": "Invariant-driven Go concurrency, consistency, messaging, resilience, coordination, and distributed-change review skills.",
   "name": "distributed-systems-skills-for-go",
-  "version": "0.2.0"
+  "version": "0.3.0"
 }

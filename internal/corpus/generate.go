@@ -13,7 +13,7 @@ import (
 	"strings"
 )
 
-const collectionVersion = "0.2.0"
+const collectionVersion = "0.3.0"
 
 type collectionSpec struct {
 	Name             string
@@ -62,6 +62,8 @@ type catalogCollection struct {
 	DisplayName      string   `json:"display_name"`
 	Description      string   `json:"description"`
 	Version          string   `json:"version"`
+	NPMName          string   `json:"npm_name"`
+	NPMRegistry      string   `json:"npm_registry"`
 	SkillCount       int      `json:"skill_count"`
 	Skills           []string `json:"skills"`
 	PluginPath       string   `json:"plugin_path"`
@@ -360,7 +362,9 @@ func buildCatalog(collection Collection) catalog {
 	for _, spec := range collectionSpecs {
 		entry := catalogCollection{
 			Name: spec.Name, DisplayName: spec.DisplayName, Description: spec.LongDescription,
-			Version: collectionVersion, PluginPath: "plugins/" + spec.Name,
+			Version: collectionVersion, NPMName: "@golangskills/" + spec.Name,
+			NPMRegistry:   "https://www.npmjs.com/package/@golangskills/" + spec.Name,
+			PluginPath:    "plugins/" + spec.Name,
 			DiscoveryPath: "skills/", InstallationPath: "plugins/" + spec.Name,
 		}
 		for _, skill := range byCollection[spec.Name] {
@@ -472,6 +476,8 @@ func renderLLMs(value catalog) []byte {
 		output.WriteString(collection.DisplayName)
 		output.WriteString("\n\n")
 		output.WriteString(collection.Description)
+		output.WriteString("\n\nNPM package: ")
+		output.WriteString(collection.NPMName)
 		output.WriteString("\n\nCanonical catalog: catalog/catalog.json\n\n")
 	}
 	output.WriteString("## Evidence\n\n- Claim ledger: knowledge/claims/canonical.json\n- Reference lock: research/corpus-lock.json\n- Benchmark status: catalog/benchmark-status.json\n")

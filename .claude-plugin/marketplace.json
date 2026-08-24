@@ -24,7 +24,7 @@
         "performance",
         "security"
       ],
-      "version": "0.2.0"
+      "version": "0.3.0"
     },
     {
       "category": "language-skills",
@@ -41,7 +41,7 @@
         "messaging",
         "reliability"
       ],
-      "version": "0.2.0"
+      "version": "0.3.0"
     },
     {
       "category": "language-skills",
@@ -58,7 +58,7 @@
         "ledger",
         "financial-integrity"
       ],
-      "version": "0.2.0"
+      "version": "0.3.0"
     }
   ]
 }

@@ -6,17 +6,23 @@
 
 Evidence-backed Go language, API, service, testing, performance, security, operations, and engineering-review skills.
 
+NPM package: @golangskills/engineering-skills-for-go
+
 Canonical catalog: catalog/catalog.json
 
 ## Distributed Systems Skills for Go
 
 Invariant-driven Go concurrency, consistency, messaging, resilience, coordination, and distributed-change review skills.
 
+NPM package: @golangskills/distributed-systems-skills-for-go
+
 Canonical catalog: catalog/catalog.json
 
 ## Fintech Skills for Go
 
 Financial-integrity skills for money, ledgers, payment lifecycles, idempotency, settlement, reconciliation, security, and compliance.
+
+NPM package: @golangskills/fintech-skills-for-go
 
 Canonical catalog: catalog/catalog.json
 

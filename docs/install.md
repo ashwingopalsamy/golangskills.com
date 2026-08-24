@@ -2,6 +2,26 @@
 
 All distributed files are generated from canonical `skills/`. Choose one, two, or all collections; skill IDs never overlap.
 
+## npm
+
+The npm namespace is `@golangskills`. The three public collection packages are:
+
+```sh
+npm install @golangskills/engineering-skills-for-go
+npm install @golangskills/distributed-systems-skills-for-go
+npm install @golangskills/fintech-skills-for-go
+```
+
+The package root contains the Codex and Claude Code plugin manifests. Cursor files are under `cursor/.cursor/skills/`; OpenCode files are under `opencode/.agents/skills/`. npm installation is data-only and does not run a lifecycle script or change an agent configuration.
+
+The npm package is a versioned artifact channel. The open Skills CLI continues to install from the canonical GitHub source:
+
+```sh
+npx skills add ashwingopalsamy/golangskills.com
+```
+
+Maintainers can follow [npm-publishing.md](npm-publishing.md) for package preflight, bootstrap publication, and GitHub Trusted Publishing.
+
 ## Codex
 
 Each collection under `plugins/` has `.codex-plugin/plugin.json`, `skills/`, and generated `agents/openai.yaml`. The repository marketplace at `.agents/plugins/marketplace.json` lists all three local plugins.
