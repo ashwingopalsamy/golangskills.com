@@ -16,6 +16,6 @@ The current tree passes the pinned official Agent Skills validator for all 20 ca
 
 A clean local clone at commit `bb68087` reproduced all three archive checksums, registered the Codex marketplace, installed and enabled all three plugins, and routed a future payment-event prompt to `fintech-skills-for-go:go-payment-lifecycles`. The temporary installations and marketplace registration were removed after the check.
 
-The current `0.2.0` archives were rebuilt twice byte-identically from source commit `a9ca133`: Engineering `0dd6cca2a2adae5824b23463a3be9fec94e33f9c63742f496c55d52b963db814`, Distributed Systems `203bf0005c5b846c9565ef4313038c8384eddf450c34e01b2a0744a312d510c0`, and Fintech `cdfb49abc03bd09e6be923270a266d141c5492ab70c0eeb6687480c454f346e5`. This refresh is reproducible packaging evidence, not a new clean-clone install or cross-client behavioral result.
+The current `0.2.0` archives were rebuilt twice byte-identically from source commit `0bfa05e`: Engineering `5e00c14660e0dada9d5e8caa1d33d1108be690ba72cc3a8a63d3ada5f2f6e5c7`, Distributed Systems `0ee7352eca94107922814f76c0dd519fe74f3d972bdecbf75f4422e9581fab7f`, and Fintech `edfb826bfe3037de7af91bfcfeb088278a6f18378cb577db64755dd9b8d3e035`. This refresh is reproducible packaging evidence, not a new clean-clone install or cross-client behavioral result.
 
 Run `skillctl eval preflight` for the active runner environment. See [install.md](install.md) for layouts.
