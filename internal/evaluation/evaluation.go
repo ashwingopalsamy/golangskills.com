@@ -15,6 +15,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"sort"
+	"strconv"
 	"strings"
 	"time"
 
@@ -40,6 +41,7 @@ type RunOptions struct {
 	Arm           string
 	SkillsRoot    string
 	Kind          string
+	Split         string
 	Case          string
 	FixturesOnly  bool
 	ExplicitSkill bool
@@ -50,6 +52,8 @@ type RunOptions struct {
 	Seed          int64
 	Timeout       time.Duration
 	OutputPath    string
+	FreezeID      string
+	FreezeDigest  string
 }
 
 // Result is one resumable JSONL benchmark cell.
@@ -66,6 +70,7 @@ type Result struct {
 	RiskDomains    []string             `json:"risk_domains,omitempty"`
 	CaseID         string               `json:"case_id"`
 	Mode           string               `json:"mode,omitempty"`
+	Split          string               `json:"split,omitempty"`
 	Repetition     int                  `json:"repetition,omitempty"`
 	Kind           string               `json:"kind"`
 	Prompt         string               `json:"prompt"`
@@ -180,7 +185,7 @@ func Run(ctx context.Context, collection corpus.Collection, options RunOptions) 
 	if options.Repetition < 0 {
 		return 0, errors.New("repetition must be non-negative")
 	}
-	cases := flattenCases(collection, options.Kind, options.Case, options.FixturesOnly)
+	cases := flattenCases(collection, options.Kind, options.Split, options.Case, options.FixturesOnly)
 	if err := validateArmMaps(options, cases); err != nil {
 		return 0, err
 	}
@@ -209,7 +214,7 @@ func Run(ctx context.Context, collection corpus.Collection, options RunOptions) 
 	clientVersion := commandOutput(ctx, "codex", "--version")
 	written := 0
 	for _, item := range cases {
-		key := benchmarkKey(options.Arm, item.skill.Name, item.eval.ID, benchmarkMode(options.ExplicitSkill), options.Repetition)
+		key := benchmarkKeyWithFreeze(options.Arm, item.skill.Name, item.eval.ID, benchmarkMode(options.ExplicitSkill), options.Repetition, options.FreezeDigest)
 		if completed[key] {
 			continue
 		}
@@ -249,12 +254,12 @@ type caseItem struct {
 	eval  corpus.EvalCase
 }
 
-func flattenCases(collection corpus.Collection, kind, selectedCase string, fixturesOnly bool) []caseItem {
+func flattenCases(collection corpus.Collection, kind, split, selectedCase string, fixturesOnly bool) []caseItem {
 	var result []caseItem
 	for _, skill := range collection.Skills {
 		for _, eval := range skill.Evaluations.Cases {
 			caseKey := skill.Name + "/" + eval.ID
-			if (selectedCase == "" || selectedCase == caseKey) && (kind == "" || kind == "all" || eval.Kind == kind) && (!fixturesOnly || eval.Fixture != "") {
+			if (selectedCase == "" || selectedCase == caseKey) && (kind == "" || kind == "all" || eval.Kind == kind) && (split == "" || split == "all" || eval.Split == split) && (!fixturesOnly || eval.Fixture != "") {
 				result = append(result, caseItem{skill: skill, eval: eval})
 			}
 		}
@@ -269,9 +274,16 @@ func runCase(parent context.Context, repoRoot string, options RunOptions, runID,
 		SchemaVersion: 1, RunID: runID, OpaqueArm: opaqueArm, Arm: options.Arm,
 		Runner: options.Runner, Model: options.Model, ClientVersion: clientVersion,
 		Skill: item.skill.Name, Collection: item.skill.Metadata.Collection, RiskDomains: append([]string(nil), item.skill.Metadata.RiskDomains...),
-		CaseID: item.eval.ID, Mode: benchmarkMode(options.ExplicitSkill), Repetition: options.Repetition, Kind: item.eval.Kind, Prompt: item.eval.Prompt,
+		CaseID: item.eval.ID, Mode: benchmarkMode(options.ExplicitSkill), Split: item.eval.Split, Repetition: options.Repetition, Kind: item.eval.Kind, Prompt: item.eval.Prompt,
 		Graders: graders, Invariants: item.eval.ExpectedInvariants, Forbidden: item.eval.ForbiddenOutcomes,
-		Metadata: map[string]string{"fixture_commit": gitHead(repoRoot), "grader_version": runnerGraderVersion},
+		Metadata: map[string]string{
+			"fixture_commit": gitHead(repoRoot), "grader_version": runnerGraderVersion,
+			"treatment_seed": strconv.FormatInt(options.Seed, 10),
+		},
+	}
+	if options.FreezeID != "" {
+		result.Metadata["freeze_id"] = options.FreezeID
+		result.Metadata["freeze_digest"] = options.FreezeDigest
 	}
 	if item.eval.Kind == "routing" {
 		result.ExpectedRoutes = expectedRoutes(options, item)
@@ -659,7 +671,9 @@ func completedCases(path string) (map[string]bool, error) {
 		if err := json.Unmarshal(scanner.Bytes(), &result); err != nil {
 			return nil, err
 		}
-		completed[benchmarkKey(result.Arm, result.Skill, result.CaseID, result.Mode, result.Repetition)] = true
+		if result.Error == "" {
+			completed[benchmarkKeyWithFreeze(result.Arm, result.Skill, result.CaseID, result.Mode, result.Repetition, result.Metadata["freeze_digest"])] = true
+		}
 	}
 	return completed, scanner.Err()
 }
@@ -828,6 +842,14 @@ func benchmarkKey(arm, skill, caseID, mode string, repetition int) string {
 	key := arm + "/" + mode + "/" + skill + "/" + caseID
 	if repetition > 0 {
 		key += fmt.Sprintf("@%d", repetition)
+	}
+	return key
+}
+
+func benchmarkKeyWithFreeze(arm, skill, caseID, mode string, repetition int, freezeDigest string) string {
+	key := benchmarkKey(arm, skill, caseID, mode, repetition)
+	if freezeDigest != "" {
+		key += "#" + freezeDigest
 	}
 	return key
 }

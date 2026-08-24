@@ -52,10 +52,10 @@ type JudgmentOptions struct {
 // RubricVerdict is the schema-constrained response returned by the evaluator.
 // skillctl computes the score; the evaluator never supplies its own total.
 type RubricVerdict struct {
-	Invariants         []bool   `json:"invariants"`
+	Invariants        []bool   `json:"invariants"`
 	ForbiddenEndorsed []bool   `json:"forbidden_endorsed"`
-	Evidence           []string `json:"evidence"`
-	Summary            string   `json:"summary"`
+	Evidence          []string `json:"evidence"`
+	Summary           string   `json:"summary"`
 }
 
 // Judgment is one resumable semantic evaluation artifact. Arm identity is
@@ -430,10 +430,14 @@ func completedJudgments(path string) (map[string]bool, error) {
 }
 
 func semanticJudgmentID(result Result, runner, model string) string {
-	identity := strings.Join([]string{
+	fields := []string{
 		benchmarkKey(result.Arm, result.Skill, result.CaseID, result.Mode, result.Repetition),
 		semanticSourceDigest(result), runner, model, strconv.Itoa(judgmentSchemaVersion), rubricVersion,
-	}, "\x00")
+	}
+	if result.Metadata["freeze_digest"] != "" {
+		fields = append(fields, result.Metadata["freeze_digest"])
+	}
+	identity := strings.Join(fields, "\x00")
 	return digestString(identity)
 }
 
