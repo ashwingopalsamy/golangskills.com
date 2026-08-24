@@ -7,9 +7,9 @@ All distributed files are generated from canonical `skills/`. Choose one, two, o
 The npm namespace is `@golangskills`. The three public collection packages are:
 
 ```sh
-npm install @golangskills/engineering-skills-for-go
-npm install @golangskills/distributed-systems-skills-for-go
-npm install @golangskills/fintech-skills-for-go
+npm install @golangskills/engineering
+npm install @golangskills/distributed-systems
+npm install @golangskills/fintech
 ```
 
 The package root contains the Codex and Claude Code plugin manifests. Cursor files are under `cursor/.cursor/skills/`; OpenCode files are under `opencode/.agents/skills/`. npm installation is data-only and does not run a lifecycle script or change an agent configuration.

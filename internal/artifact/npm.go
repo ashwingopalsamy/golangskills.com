@@ -23,6 +23,7 @@ const (
 
 type npmCollection struct {
 	Name        string   `json:"name"`
+	NPMName     string   `json:"npm_name"`
 	DisplayName string   `json:"display_name"`
 	Description string   `json:"description"`
 	Skills      []string `json:"skills"`
@@ -153,6 +154,10 @@ func validateNPMCollection(collection npmCollection) error {
 	if collection.Name == "" || filepath.Base(collection.Name) != collection.Name || strings.Contains(collection.Name, "..") {
 		return fmt.Errorf("invalid collection name %q", collection.Name)
 	}
+	packageSlug := strings.TrimPrefix(collection.NPMName, npmScope+"/")
+	if !strings.HasPrefix(collection.NPMName, npmScope+"/") || packageSlug == "" || strings.ContainsAny(packageSlug, "/\\") || strings.Contains(packageSlug, "..") {
+		return fmt.Errorf("invalid npm package name %q", collection.NPMName)
+	}
 	if collection.DisplayName == "" || collection.Description == "" || len(collection.Skills) == 0 {
 		return fmt.Errorf("collection %q has incomplete metadata", collection.Name)
 	}
@@ -188,7 +193,7 @@ func renderNPMCollection(repoRoot, stage string, collection npmCollection, versi
 	keywords = append(keywords, "agent-skills", "codex", "claude-code", "cursor", "opencode")
 	keywords = uniqueStrings(keywords)
 
-	packageName := npmScope + "/" + collection.Name
+	packageName := collection.NPMName
 	packageJSON := npmPackageJSON{
 		Name:        packageName,
 		Version:     version,
@@ -286,8 +291,8 @@ func checkNPMCollection(stage string, collection npmCollection, version string) 
 	if err := json.Unmarshal(content, &packageJSON); err != nil {
 		return fmt.Errorf("decode package.json: %w", err)
 	}
-	if packageJSON.Name != npmScope+"/"+collection.Name {
-		return fmt.Errorf("package name %q is not %q", packageJSON.Name, npmScope+"/"+collection.Name)
+	if packageJSON.Name != collection.NPMName {
+		return fmt.Errorf("package name %q is not %q", packageJSON.Name, collection.NPMName)
 	}
 	if packageJSON.Version != version {
 		return fmt.Errorf("package version %q is not %q", packageJSON.Version, version)

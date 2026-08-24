@@ -1,11 +1,11 @@
 # Fintech Skills for Go
 
-`@golangskills/fintech-skills-for-go@0.3.0` is a versioned Agent Skills collection for production Go work. It is authored by [Ashwin Gopalsamy](https://ashwingopalsamy.in) and distributed under Apache-2.0.
+`@golangskills/fintech@0.3.0-rc.1` is a versioned Agent Skills collection for production Go work. It is authored by [Ashwin Gopalsamy](https://ashwingopalsamy.in) and distributed under Apache-2.0.
 
 ## Install
 
 ```sh
-npm install @golangskills/fintech-skills-for-go@0.3.0
+npm install @golangskills/fintech@0.3.0-rc.1
 ```
 
 The package is data-only. npm installation does not run a lifecycle script or change an agent configuration.

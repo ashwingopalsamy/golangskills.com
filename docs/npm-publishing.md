@@ -6,9 +6,9 @@ The npm organization is `golangskills`. The public package scope is `@golangskil
 
 | Collection | Package |
 | --- | --- |
-| Engineering Skills for Go | `@golangskills/engineering-skills-for-go` |
-| Distributed Systems Skills for Go | `@golangskills/distributed-systems-skills-for-go` |
-| Fintech Skills for Go | `@golangskills/fintech-skills-for-go` |
+| Engineering Skills for Go | `@golangskills/engineering` |
+| Distributed Systems Skills for Go | `@golangskills/distributed-systems` |
+| Fintech Skills for Go | `@golangskills/fintech` |
 
 All three packages use the same signed release version.
 
@@ -18,14 +18,14 @@ All three packages use the same signed release version.
 2. Enable two-factor authentication for publishing.
 3. Keep the package names and public visibility unchanged after the first release. A published name and version cannot be reused.
 
-The first publication creates the package records. Use npm's staged publishing flow or an interactive two-factor-authenticated publish for this bootstrap. Do not put an npm token in this repository or in a chat message.
+The first publication creates the package records. npm staged publishing cannot create a brand-new package, so bootstrap with an interactive two-factor-authenticated pre-release. Do not put an npm token in this repository or in a chat message.
 
 ## Local preflight
 
 From the repository root:
 
 ```sh
-VERSION=0.3.0
+VERSION=0.3.0-rc.1
 go run ./cmd/skillctl check
 go run ./cmd/skillctl generate
 go run ./cmd/skillctl npm package -version "$VERSION"
@@ -47,12 +47,15 @@ The staged packages are data-only. They have no lifecycle scripts, dependencies,
 After authenticating locally with npm, publish each staged package with public access. Use the exact version selected for the signed release:
 
 ```sh
+VERSION=0.3.0-rc.1
+go run ./cmd/skillctl npm package -version "$VERSION"
+go run ./cmd/skillctl npm check -version "$VERSION"
 for package_dir in dist/npm/*; do
-  (cd "$package_dir" && npm stage publish)
+  (cd "$package_dir" && npm publish --access public --tag bootstrap)
 done
 ```
 
-Review and approve each staged package in npm with two-factor authentication. Direct publishing is also supported with `npm publish --access public` when the package and account policy permit it.
+The `bootstrap` dist-tag keeps the pre-release away from the normal `latest` channel. After the package records exist, configure Trusted Publishing for each package, regenerate the stable `0.3.0` staging, and push the signed `v0.3.0` tag. The GitHub workflow then publishes the stable version through OIDC.
 
 ## Trusted publishing for later releases
 

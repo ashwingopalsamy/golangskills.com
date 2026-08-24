@@ -37,9 +37,9 @@ See [docs/install.md](docs/install.md) for client-specific layouts and [docs/npm
 The public npm organization is `@golangskills`. Install a versioned collection with npm:
 
 ```sh
-npm install @golangskills/engineering-skills-for-go
-npm install @golangskills/distributed-systems-skills-for-go
-npm install @golangskills/fintech-skills-for-go
+npm install @golangskills/engineering
+npm install @golangskills/distributed-systems
+npm install @golangskills/fintech
 ```
 
 Each npm package is data-only and contains the generated client layouts. See the package README for the selected collection and [docs/install.md](docs/install.md) for copy and plugin paths.

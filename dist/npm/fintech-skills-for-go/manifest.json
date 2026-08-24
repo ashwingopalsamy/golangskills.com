@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "package_name": "@golangskills/fintech-skills-for-go",
+  "package_name": "@golangskills/fintech",
   "collection": "fintech-skills-for-go",
-  "version": "0.3.0",
+  "version": "0.3.0-rc.1",
   "source_repository": "https://github.com/ashwingopalsamy/golangskills.com",
-  "source_commit": "b9cabcdc76c2c0c9b17db8d412313aac44cf1a08",
+  "source_commit": "bcc3a13d0abad95387a6bba0b3ab63781b59d680",
   "skills": [
     "go-clearing-settlement-reconciliation",
     "go-financial-idempotency",

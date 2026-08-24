@@ -1,6 +1,6 @@
 # Naming decision
 
-The public identity is **Engineering Skills for Go**. The distribution slug is `engineering-skills-for-go`; the repository and future discovery site remain `golangskills.com`.
+The public identity is **Engineering Skills for Go**. The canonical collection ID is `engineering-skills-for-go`, while the npm package uses the shorter `@golangskills/engineering` name. The repository and future discovery site remain `golangskills.com`.
 
 ## Shortlist
 

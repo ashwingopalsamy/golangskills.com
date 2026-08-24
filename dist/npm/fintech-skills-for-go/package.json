@@ -1,6 +1,6 @@
 {
-  "name": "@golangskills/fintech-skills-for-go",
-  "version": "0.3.0",
+  "name": "@golangskills/fintech",
+  "version": "0.3.0-rc.1",
   "description": "Financial-integrity skills for money, ledgers, payment lifecycles, idempotency, settlement, reconciliation, security, and compliance.",
   "author": {
     "name": "Ashwin Gopalsamy",
