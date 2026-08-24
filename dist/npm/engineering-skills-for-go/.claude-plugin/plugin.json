@@ -1,0 +1,20 @@
+{
+  "author": {
+    "name": "Ashwin Gopalsamy",
+    "url": "https://ashwingopalsamy.in"
+  },
+  "description": "Evidence-backed Go language, API, service, testing, performance, security, operations, and engineering-review skills.",
+  "homepage": "https://golangskills.com",
+  "keywords": [
+    "go",
+    "golang",
+    "software-engineering",
+    "testing",
+    "performance",
+    "security"
+  ],
+  "license": "Apache-2.0",
+  "name": "engineering-skills-for-go",
+  "repository": "https://github.com/ashwingopalsamy/golangskills.com",
+  "version": "0.3.0"
+}

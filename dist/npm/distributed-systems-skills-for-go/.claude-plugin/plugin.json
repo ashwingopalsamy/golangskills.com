@@ -1,0 +1,20 @@
+{
+  "author": {
+    "name": "Ashwin Gopalsamy",
+    "url": "https://ashwingopalsamy.in"
+  },
+  "description": "Invariant-driven Go concurrency, consistency, messaging, resilience, coordination, and distributed-change review skills.",
+  "homepage": "https://golangskills.com",
+  "keywords": [
+    "go",
+    "golang",
+    "distributed-systems",
+    "concurrency",
+    "messaging",
+    "reliability"
+  ],
+  "license": "Apache-2.0",
+  "name": "distributed-systems-skills-for-go",
+  "repository": "https://github.com/ashwingopalsamy/golangskills.com",
+  "version": "0.3.0"
+}

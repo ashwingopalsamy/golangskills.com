@@ -1,0 +1,37 @@
+{
+  "name": "engineering-skills-for-go",
+  "version": "0.3.0",
+  "description": "Evidence-backed Go language, API, service, testing, performance, security, operations, and engineering-review skills.",
+  "author": {
+    "name": "Ashwin Gopalsamy",
+    "url": "https://ashwingopalsamy.in"
+  },
+  "homepage": "https://golangskills.com",
+  "repository": "https://github.com/ashwingopalsamy/golangskills.com",
+  "license": "Apache-2.0",
+  "keywords": [
+    "go",
+    "golang",
+    "software-engineering",
+    "testing",
+    "performance",
+    "security"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Engineering Skills for Go",
+    "shortDescription": "Engineer and review production Go software.",
+    "longDescription": "Evidence-backed Go language, API, service, testing, performance, security, operations, and engineering-review skills.",
+    "developerName": "Ashwin Gopalsamy",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Engineer Go systems",
+      "Diagnose failure modes",
+      "Review invariant-sensitive changes"
+    ],
+    "websiteURL": "https://golangskills.com",
+    "defaultPrompt": [
+      "Select and use the most relevant skill from Engineering Skills for Go to solve this Go task."
+    ]
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "name": "@golangskills/engineering-skills-for-go",
+  "version": "0.3.0",
+  "description": "Evidence-backed Go language, API, service, testing, performance, security, operations, and engineering-review skills.",
+  "author": {
+    "name": "Ashwin Gopalsamy",
+    "url": "https://ashwingopalsamy.in"
+  },
+  "license": "Apache-2.0",
+  "keywords": [
+    "agent-skills",
+    "claude-code",
+    "codex",
+    "cursor",
+    "go",
+    "golang",
+    "opencode",
+    "performance",
+    "security",
+    "software-engineering",
+    "testing"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ashwingopalsamy/golangskills.com.git"
+  },
+  "homepage": "https://golangskills.com",
+  "files": [
+    "skills/",
+    ".codex-plugin/",
+    ".claude-plugin/",
+    "plugin.json",
+    "cursor/",
+    "opencode/",
+    "manifest.json",
+    "README.md",
+    "LICENSE",
+    "THIRD_PARTY_NOTICES.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}
