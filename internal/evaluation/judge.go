@@ -113,6 +113,10 @@ func RunJudgments(ctx context.Context, options JudgmentOptions) (int, error) {
 	if options.Timeout <= 0 {
 		options.Timeout = 5 * time.Minute
 	}
+	budget, err := newAttemptBudget(0, options.MaxFailures, options.StopOnTimeout)
+	if err != nil {
+		return 0, err
+	}
 	workingDirectory, err := os.Getwd()
 	if err != nil {
 		return 0, fmt.Errorf("resolve evaluator working directory: %w", err)
@@ -160,31 +164,25 @@ func RunJudgments(ctx context.Context, options JudgmentOptions) (int, error) {
 
 	encoder := json.NewEncoder(output)
 	clientVersion := commandOutput(ctx, "codex", "--version")
-	written := 0
-	failures := 0
 	for _, candidate := range candidates {
 		if completed[candidate.judgmentID] {
 			continue
 		}
 		judgment := runJudgment(ctx, options, clientVersion, evaluatorCommit, candidate)
 		if err := encoder.Encode(judgment); err != nil {
-			return written, err
+			return budget.written, err
 		}
 		if err := output.Sync(); err != nil {
-			return written, err
+			return budget.written, err
 		}
-		written++
-		if judgment.Error != "" {
-			failures++
-			if options.StopOnTimeout && judgment.Metadata["timed_out"] == "true" {
-				return written, fmt.Errorf("semantic judging stopped after evaluator timeout for %s", candidate.judgmentID)
-			}
-			if options.MaxFailures > 0 && failures >= options.MaxFailures {
-				return written, fmt.Errorf("semantic judging stopped after %d evaluator failure(s)", failures)
-			}
+		switch budget.record(judgment.Error != "", judgment.Metadata["timed_out"] == "true") {
+		case budgetStopTimeout:
+			return budget.written, fmt.Errorf("semantic judging stopped after evaluator timeout for %s", candidate.judgmentID)
+		case budgetStopFailures:
+			return budget.written, fmt.Errorf("semantic judging stopped after %d evaluator failure(s)", budget.failures)
 		}
 	}
-	return written, nil
+	return budget.written, nil
 }
 
 func runJudgment(ctx context.Context, options JudgmentOptions, clientVersion, evaluatorCommit string, candidate judgmentCandidate) Judgment {

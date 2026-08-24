@@ -83,6 +83,10 @@ func RunMatrix(ctx context.Context, collection corpus.Collection, arms []RunOpti
 	if options.Repetition < 0 {
 		return 0, errors.New("repetition must be non-negative")
 	}
+	budget, err := newAttemptBudget(options.MaxCells, options.MaxFailures, options.StopOnTimeout)
+	if err != nil {
+		return 0, err
+	}
 	cells, err := planMatrixCells(collection, arms, options)
 	if err != nil {
 		return 0, err
@@ -102,8 +106,6 @@ func RunMatrix(ctx context.Context, collection corpus.Collection, arms []RunOpti
 	encoder := json.NewEncoder(file)
 	runID := fmt.Sprintf("%s-matrix-%d-r%d", time.Now().UTC().Format("20060102T150405Z"), options.Seed, options.Repetition)
 	clientVersion := commandOutput(ctx, "codex", "--version")
-	written := 0
-	failures := 0
 	for _, cell := range cells {
 		key := benchmarkKeyWithFreeze(cell.options.Arm, cell.item.skill.Name, cell.item.eval.ID, benchmarkMode(options.ExplicitSkill), options.Repetition, options.FreezeDigest)
 		if completed[key] {
@@ -111,26 +113,25 @@ func RunMatrix(ctx context.Context, collection corpus.Collection, arms []RunOpti
 		}
 		result := runCase(ctx, collection.RepoRoot, cell.options, runID, opaqueLabel(options.Seed, cell.options.Arm), clientVersion, cell.item)
 		if err := encoder.Encode(result); err != nil {
-			return written, err
+			return budget.written, err
 		}
 		if err := file.Sync(); err != nil {
-			return written, err
+			return budget.written, err
 		}
-		written++
-		if result.Error != "" || result.ExitCode != 0 {
-			failures++
-			if options.StopOnTimeout && result.Metadata["timed_out"] == "true" {
-				return written, fmt.Errorf("matrix stopped after runner timeout at %s/%s", result.Arm, result.CaseID)
-			}
-			if options.MaxFailures > 0 && failures >= options.MaxFailures {
-				return written, fmt.Errorf("matrix stopped after %d runner failure(s)", failures)
-			}
-		}
-		if options.MaxCells > 0 && written >= options.MaxCells {
+		failed := result.Error != "" || result.ExitCode != 0
+		switch budget.record(failed, result.Metadata["timed_out"] == "true") {
+		case budgetStopTimeout:
+			return budget.written, fmt.Errorf("matrix stopped after runner timeout at %s/%s", result.Arm, result.CaseID)
+		case budgetStopFailures:
+			return budget.written, fmt.Errorf("matrix stopped after %d runner failure(s)", budget.failures)
+		case budgetStopAttempts:
 			break
+		default:
+			continue
 		}
+		break
 	}
-	return written, nil
+	return budget.written, nil
 }
 
 func planMatrixCells(collection corpus.Collection, arms []RunOptions, options MatrixOptions) ([]matrixCell, error) {
