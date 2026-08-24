@@ -568,12 +568,14 @@
     "sources": [
       {
         "title": "PCI Data Security Standard",
-        "url": "https://www.pcisecuritystandards.org/standards/pci-dss/",
+        "url": "https://www.pcisecuritystandards.org/document_library/",
         "publisher": "PCI Security Standards Council",
         "kind": "primary",
-        "verified_on": "2026-08-18",
+        "verified_on": "2026-08-24",
         "supports": [
+          "PCI DSS v4.0.1",
           "account data",
+          "sensitive authentication data",
           "security controls",
           "scope"
         ]
@@ -591,7 +593,7 @@
       }
     ],
     "source_count": 2,
-    "evaluation_count": 4
+    "evaluation_count": 5
   },
   {
     "name": "go-language-engineering",
@@ -1161,6 +1163,29 @@
         ]
       },
       {
+        "title": "OpenTelemetry Performance and Blocking",
+        "url": "https://opentelemetry.io/docs/specs/otel/performance/",
+        "publisher": "OpenTelemetry",
+        "kind": "normative",
+        "verified_on": "2026-08-24",
+        "supports": [
+          "bounded telemetry behavior",
+          "drop observability",
+          "shutdown flush timeout"
+        ]
+      },
+      {
+        "title": "Prometheus Metric and Label Naming",
+        "url": "https://prometheus.io/docs/practices/naming/",
+        "publisher": "Prometheus Authors",
+        "kind": "primary",
+        "verified_on": "2026-08-24",
+        "supports": [
+          "bounded label cardinality",
+          "metric dimensions"
+        ]
+      },
+      {
         "title": "Kubernetes Pod Lifecycle",
         "url": "https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/",
         "publisher": "Kubernetes",
@@ -1173,8 +1198,8 @@
         ]
       }
     ],
-    "source_count": 2,
-    "evaluation_count": 4
+    "source_count": 4,
+    "evaluation_count": 5
   },
   {
     "name": "go-project-and-api-design",
@@ -1575,7 +1600,7 @@
       }
     ],
     "source_count": 2,
-    "evaluation_count": 4
+    "evaluation_count": 5
   },
   {
     "name": "go-testing-and-verification",

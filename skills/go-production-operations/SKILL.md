@@ -17,6 +17,8 @@ Parse and validate configuration before serving. Distinguish required secrets, i
 
 Use structured events with stable names and bounded fields. Metrics labels must have bounded cardinality. Propagate trace context across supported protocols, record errors without secrets, and correlate request identity without treating it as authorization. Define signals for success, rejection, overload, dependency failure, retry, ambiguity, and degraded behavior.
 
+Make telemetry export a bounded failure domain. Choose queue and batch limits, drop or sampling policy, request-path blocking behavior, exporter deadlines, and shutdown flush budget explicitly. Exporter outage must not create unbounded memory or stall the service indefinitely. Expose dropped records, queue saturation, sampling, and export failure through an independent bounded signal; absence of backend data is otherwise indistinguishable from a quiet system.
+
 ## Health and overload
 
 Readiness means the instance can safely accept its intended traffic. Liveness means restart is likely to restore progress. Do not make liveness fail for every downstream outage. Keep probes cheap and reserve enough capacity for diagnosis and drain.
@@ -31,7 +33,7 @@ Use `go-service-boundaries` as well when shutdown correctness depends on HTTP bo
 
 Build reproducibly, pin CI inputs, generate checksums and provenance, scan archives, run as a non-root minimal image where practical, set realistic resources, and design rolling updates for mixed versions and rollback.
 
-Read [references/incident-contract.md](references/incident-contract.md) for lifecycle and telemetry traps.
+Read [references/incident-contract.md](references/incident-contract.md) for lifecycle, cardinality, backpressure, and telemetry-loss traps.
 
 ## Output contract
 
