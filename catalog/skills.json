@@ -279,10 +279,32 @@
           "isolation anomalies",
           "serializable behavior"
         ]
+      },
+      {
+        "title": "PostgreSQL ALTER TABLE",
+        "url": "https://www.postgresql.org/docs/current/sql-altertable.html",
+        "publisher": "PostgreSQL Global Development Group",
+        "kind": "primary",
+        "verified_on": "2026-08-24",
+        "supports": [
+          "constraint validation",
+          "DDL lock behavior"
+        ]
+      },
+      {
+        "title": "PostgreSQL CREATE INDEX",
+        "url": "https://www.postgresql.org/docs/current/sql-createindex.html",
+        "publisher": "PostgreSQL Global Development Group",
+        "kind": "primary",
+        "verified_on": "2026-08-24",
+        "supports": [
+          "concurrent index construction",
+          "invalid-index recovery"
+        ]
       }
     ],
-    "source_count": 2,
-    "evaluation_count": 5
+    "source_count": 4,
+    "evaluation_count": 6
   },
   {
     "name": "go-distributed-coordination",
@@ -868,7 +890,7 @@
       }
     ],
     "source_count": 3,
-    "evaluation_count": 4
+    "evaluation_count": 5
   },
   {
     "name": "go-payment-lifecycles",
@@ -1424,7 +1446,20 @@
         "supports": [
           "server lifecycle",
           "client ownership",
-          "timeouts"
+          "timeouts",
+          "transport cloning",
+          "idle connection retirement"
+        ]
+      },
+      {
+        "title": "Package crypto/tls",
+        "url": "https://pkg.go.dev/crypto/tls",
+        "publisher": "The Go Authors",
+        "kind": "normative",
+        "verified_on": "2026-08-24",
+        "supports": [
+          "TLS configuration cloning",
+          "certificate and trust configuration"
         ]
       },
       {
@@ -1441,8 +1476,8 @@
         ]
       }
     ],
-    "source_count": 2,
-    "evaluation_count": 4
+    "source_count": 3,
+    "evaluation_count": 5
   },
   {
     "name": "go-service-resilience",
