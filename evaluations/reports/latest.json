@@ -31,7 +31,7 @@
   "current_packages": {
     "version": "0.2.0",
     "source_commit": "f14521682407a2d898eeb8ae4789793611b4dd11",
-    "package_commit": "fb812de9aa9a0f9837d4b1b1a3c6178e97b312d0",
+    "package_commit": "fb812ded88d359068395bc799766861522119689",
     "reproduced_twice_byte_identically": true,
     "checksums": {
       "engineering-skills-for-go": "798d4281a52165cb45234432b37869a91d344fd55fea05d81d26d739f4c1cdf0",
