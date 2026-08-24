@@ -4,11 +4,11 @@
   "leadership_claim_eligible": false,
   "status": "development-screen-only",
   "current_corpus": {
-    "source_commit": "e6a165f93ac1e2f807f1805ec9ec8a297a42a3ac",
+    "source_commit": "7fa454250fbe9acd2ebe21d12dbb67397dc3796c",
     "skills": 20,
-    "development_cases": 118,
+    "development_cases": 121,
     "executable_fixtures": 15,
-    "sources": 86,
+    "sources": 92,
     "claims": 23,
     "discovery_characters": 7774,
     "maximum_description_overlap": 0.267,
@@ -36,19 +36,22 @@
       "go-clearing-settlement-reconciliation/quality-ach-return-reversal-review",
       "go-project-and-api-design/quality-module-v2-compatibility-review",
       "go-distributed-coordination/quality-regional-failover-authority-review",
-      "go-fintech-security-compliance/quality-sanctions-screening-review"
+      "go-fintech-security-compliance/quality-sanctions-screening-review",
+      "go-production-operations/quality-progressive-rollout-review",
+      "go-message-processing/quality-poison-redrive-review",
+      "go-financial-idempotency/quality-provider-idempotency-contract-review"
     ],
-    "qualification": "The twenty-four fresh cases are committed public development inputs with no treatment results. They support no comparative claim until the release-candidate batch."
+    "qualification": "The twenty-seven fresh cases are committed public development inputs with no treatment results. They support no comparative claim until the release-candidate batch."
   },
   "current_packages": {
     "version": "0.2.0",
-    "source_commit": "e6a165f93ac1e2f807f1805ec9ec8a297a42a3ac",
-    "package_commit": "2b270fa890b4e2e4e76917c0b34af44c720bc31d",
+    "source_commit": "7fa454250fbe9acd2ebe21d12dbb67397dc3796c",
+    "package_commit": "9a0c83075aa846c4dcb5d3400cf8dbf20f1f57c9",
     "reproduced_twice_byte_identically": true,
     "checksums": {
-      "engineering-skills-for-go": "6fcca2f3260329689a1ee952df31476e89951db1a25d86591d187289dbe036b7",
-      "distributed-systems-skills-for-go": "52b20f6a50ca2cb8688d69f4da39791023cdf2987d33d02bd6452aea0d138743",
-      "fintech-skills-for-go": "9bf597feb9a5c19e84b1aa665d39cfaeb2b83832882a531ddafe630b62c0961f"
+      "engineering-skills-for-go": "27894fa00986855734567c63f10a7114a2304c276a3c0098955559dff6f9d629",
+      "distributed-systems-skills-for-go": "5dc33bc9a9a1354c67c57a077b02384839d48b54b047a9e4a0da15da7fd41dd9",
+      "fintech-skills-for-go": "aaa621c037911392598e157209083f1cae7ddb3ca5c1fb18ee567b19189f23b4"
     },
     "qualification": "Reproducible development packages; no release tag or new clean-clone behavioral result."
   },
@@ -739,8 +742,8 @@
   "blocking_gates": [
     "private release holdout not yet frozen and scored",
     "full baseline and multi-competitor behavioral quality matrix not yet completed",
-    "twenty-four newly committed cross-domain development cases have no treatment results and are reserved for the release-candidate batch",
-    "the quality half of the 118-scenario full-arm matrix and release-candidate hard-case repetitions are not yet completed",
+    "twenty-seven newly committed cross-domain development cases have no treatment results and are reserved for the release-candidate batch",
+    "the quality half of the 121-scenario full-arm matrix and release-candidate hard-case repetitions are not yet completed",
     "public routing macro-F1 clears its threshold, but private unrelated-prompt false activation is not established",
     "six post-edit hidden-oracle cases, including three behavior-rich multi-file additions, tied every arm; a less solution-revealing benchmark design is required",
     "the semantic judge is operational across eight public case families under a versioned protocol; the fresh settlement manifest family gives ours a quality-and-token lead over every skill competitor, but ours strictly passes zero repetitions and the lease/fencing transfer still ties baseline",
