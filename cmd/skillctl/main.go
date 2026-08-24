@@ -353,6 +353,9 @@ func runEval(arguments []string, output io.Writer) error {
 		explicit := flags.Bool("explicit", false, "install and invoke only the mapped skill")
 		repetition := flags.Int("repetition", 0, "non-negative repeat index recorded in cell identity")
 		limit := flags.Int("limit", 0, "maximum canonical cases selected for every arm")
+		maxCells := flags.Int("max-cells", 0, "stop after this many newly written cells; zero means unlimited")
+		maxFailures := flags.Int("max-failures", 1, "stop after this many runner failures; zero means unlimited")
+		stopOnTimeout := flags.Bool("stop-on-timeout", true, "stop immediately when a cell reaches its timeout")
 		seed := flags.Int64("seed", 1, "case and global cell randomization seed")
 		timeout := flags.Duration("timeout", 5*time.Minute, "per-cell timeout")
 		outputPath := flags.String("output", "evaluations/runs/matrix.jsonl", "resumable mixed-arm JSONL artifact")
@@ -394,6 +397,7 @@ func runEval(arguments []string, output io.Writer) error {
 		matrixOptions := evaluation.MatrixOptions{
 			Runner: *runner, Model: *model, Kind: *kind, Split: *split, Case: *selectedCase, FixturesOnly: *fixturesOnly,
 			ExplicitSkill: *explicit, Repetition: *repetition, Limit: *limit, Seed: *seed, Timeout: *timeout,
+			MaxCells: *maxCells, MaxFailures: *maxFailures, StopOnTimeout: *stopOnTimeout,
 			OutputPath: filepath.Join(collection.RepoRoot, filepath.FromSlash(*outputPath)),
 		}
 		if *freezePath != "" {
@@ -417,6 +421,8 @@ func runEval(arguments []string, output io.Writer) error {
 		judgeModel := flags.String("judge-model", "", "semantic evaluator model; enables blinded judgment")
 		judgeSeed := flags.Int64("judge-seed", 1, "semantic candidate randomization seed")
 		judgeTimeout := flags.Duration("judge-timeout", 5*time.Minute, "per-candidate semantic evaluator timeout")
+		maxFailures := flags.Int("max-failures", 1, "stop after this many evaluator failures; zero means unlimited")
+		stopOnTimeout := flags.Bool("stop-on-timeout", true, "stop immediately when a candidate reaches its timeout")
 		root := flags.String("root", "", "repository root for freeze verification")
 		freezePath := flags.String("freeze", "", "release-candidate freeze lock")
 		privateHoldout := flags.String("private-holdout", "", "private holdout JSON")
@@ -462,7 +468,7 @@ func runEval(arguments []string, output io.Writer) error {
 			}
 			written, err := evaluation.RunJudgments(context.Background(), evaluation.JudgmentOptions{
 				Runner: *judgeRunner, Model: *judgeModel, InputPath: *input, OutputPath: *judgmentsPath,
-				Seed: *judgeSeed, Timeout: *judgeTimeout,
+				Seed: *judgeSeed, Timeout: *judgeTimeout, MaxFailures: *maxFailures, StopOnTimeout: *stopOnTimeout,
 			})
 			if err != nil {
 				return err

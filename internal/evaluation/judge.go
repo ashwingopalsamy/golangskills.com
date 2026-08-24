@@ -41,12 +41,14 @@ var (
 
 // JudgmentOptions selects a resumable arm-blinded semantic evaluation pass.
 type JudgmentOptions struct {
-	Runner     string
-	Model      string
-	InputPath  string
-	OutputPath string
-	Seed       int64
-	Timeout    time.Duration
+	Runner        string
+	Model         string
+	InputPath     string
+	OutputPath    string
+	Seed          int64
+	Timeout       time.Duration
+	MaxFailures   int
+	StopOnTimeout bool
 }
 
 // RubricVerdict is the schema-constrained response returned by the evaluator.
@@ -159,6 +161,7 @@ func RunJudgments(ctx context.Context, options JudgmentOptions) (int, error) {
 	encoder := json.NewEncoder(output)
 	clientVersion := commandOutput(ctx, "codex", "--version")
 	written := 0
+	failures := 0
 	for _, candidate := range candidates {
 		if completed[candidate.judgmentID] {
 			continue
@@ -171,6 +174,15 @@ func RunJudgments(ctx context.Context, options JudgmentOptions) (int, error) {
 			return written, err
 		}
 		written++
+		if judgment.Error != "" {
+			failures++
+			if options.StopOnTimeout && judgment.Metadata["timed_out"] == "true" {
+				return written, fmt.Errorf("semantic judging stopped after evaluator timeout for %s", candidate.judgmentID)
+			}
+			if options.MaxFailures > 0 && failures >= options.MaxFailures {
+				return written, fmt.Errorf("semantic judging stopped after %d evaluator failure(s)", failures)
+			}
+		}
 	}
 	return written, nil
 }
@@ -237,6 +249,9 @@ func runJudgment(ctx context.Context, options JudgmentOptions, clientVersion, ev
 	judgment.Usage = parseUsage(judgment.RunnerEvents)
 	if runErr != nil {
 		judgment.Error = runErr.Error()
+		if errors.Is(caseContext.Err(), context.DeadlineExceeded) {
+			judgment.Metadata["timed_out"] = "true"
+		}
 		return judgment
 	}
 	response, err := os.ReadFile(lastMessage)
