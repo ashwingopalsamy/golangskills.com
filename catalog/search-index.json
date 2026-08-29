@@ -14,11 +14,11 @@
       "settlement",
       "reconciliation",
       "fedwire",
-      "finality",
       "ach",
       "returns",
-      "notifications-of-change",
-      "reversals"
+      "business-time",
+      "cutoffs",
+      "calendars"
     ]
   },
   {
@@ -270,7 +270,8 @@
       "cryptography",
       "encryption",
       "key-management",
-      "supply-chain"
+      "supply-chain",
+      "process-execution"
     ]
   },
   {
@@ -309,7 +310,8 @@
       "retries",
       "backpressure",
       "load-shedding",
-      "recovery"
+      "recovery",
+      "hedging"
     ]
   },
   {

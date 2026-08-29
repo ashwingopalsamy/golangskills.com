@@ -21,11 +21,11 @@
       "settlement",
       "reconciliation",
       "fedwire",
-      "finality",
       "ach",
       "returns",
-      "notifications-of-change",
-      "reversals"
+      "business-time",
+      "cutoffs",
+      "calendars"
     ],
     "go_versions": {
       "minimum": "1.24",
@@ -36,7 +36,8 @@
     },
     "claim_ids": [
       "fin-settlement-evidence",
-      "fin-reconciliation-control"
+      "fin-reconciliation-control",
+      "fin-business-time-authority"
     ],
     "relations": {
       "complements": [
@@ -141,10 +142,35 @@
           "reversal versus return",
           "rule-governed timeframes"
         ]
+      },
+      {
+        "title": "Package time for Go 1.26",
+        "url": "https://pkg.go.dev/time@go1.26.3",
+        "publisher": "The Go Authors",
+        "kind": "normative",
+        "verified_on": "2026-08-29",
+        "supports": [
+          "named locations and zone offsets",
+          "monotonic clock serialization boundary",
+          "time arithmetic"
+        ]
+      },
+      {
+        "title": "Fedwire Funds Service operating hours",
+        "url": "https://www.frbservices.org/resources/financial-services/wires/operating-hours.html",
+        "publisher": "Federal Reserve Financial Services",
+        "kind": "primary",
+        "verified_on": "2026-08-29",
+        "supports": [
+          "funds-transfer business day",
+          "Eastern Time operating window",
+          "holidays",
+          "cutoffs and extensions"
+        ]
       }
     ],
-    "source_count": 6,
-    "evaluation_count": 6
+    "source_count": 8,
+    "evaluation_count": 7
   },
   {
     "name": "go-concurrency-lifecycle",
@@ -1957,7 +1983,8 @@
       "cryptography",
       "encryption",
       "key-management",
-      "supply-chain"
+      "supply-chain",
+      "process-execution"
     ],
     "go_versions": {
       "minimum": "1.24",
@@ -1967,7 +1994,8 @@
       ]
     },
     "claim_ids": [
-      "eng-security-boundary"
+      "eng-security-boundary",
+      "eng-child-process-boundary"
     ],
     "relations": {
       "complements": [
@@ -2127,10 +2155,34 @@
           "AEAD nonce uniqueness",
           "random-nonce GCM usage limit"
         ]
+      },
+      {
+        "title": "Package os/exec for Go 1.26",
+        "url": "https://pkg.go.dev/os/exec@go1.26.3",
+        "publisher": "The Go Authors",
+        "kind": "normative",
+        "verified_on": "2026-08-29",
+        "supports": [
+          "shell-free argument execution",
+          "environment and descriptor inheritance",
+          "cancellation and WaitDelay",
+          "process reaping"
+        ]
+      },
+      {
+        "title": "Command PATH security in Go",
+        "url": "https://go.dev/blog/path-security",
+        "publisher": "The Go Authors",
+        "kind": "primary",
+        "verified_on": "2026-08-29",
+        "supports": [
+          "executable path authority",
+          "ErrDot security boundary"
+        ]
       }
     ],
-    "source_count": 11,
-    "evaluation_count": 7
+    "source_count": 13,
+    "evaluation_count": 8
   },
   {
     "name": "go-service-boundaries",
@@ -2294,7 +2346,8 @@
       "retries",
       "backpressure",
       "load-shedding",
-      "recovery"
+      "recovery",
+      "hedging"
     ],
     "go_versions": {
       "minimum": "1.24",
@@ -2304,7 +2357,8 @@
       ]
     },
     "claim_ids": [
-      "dist-retry-budget"
+      "dist-retry-budget",
+      "dist-hedged-attempt-budget"
     ],
     "relations": {
       "complements": [
@@ -2399,10 +2453,35 @@
           "unavailability",
           "deadline ambiguity"
         ]
+      },
+      {
+        "title": "gRPC Request Hedging",
+        "url": "https://grpc.io/docs/guides/request-hedging/",
+        "publisher": "Cloud Native Computing Foundation",
+        "kind": "primary",
+        "verified_on": "2026-08-29",
+        "supports": [
+          "attempt limits and delay",
+          "whole-call deadline",
+          "loser cancellation",
+          "throttling and pushback",
+          "Go support caveat"
+        ]
+      },
+      {
+        "title": "Package context for Go 1.26",
+        "url": "https://pkg.go.dev/context@go1.26.3",
+        "publisher": "The Go Authors",
+        "kind": "normative",
+        "verified_on": "2026-08-29",
+        "supports": [
+          "cancellation propagation",
+          "deadline ownership"
+        ]
       }
     ],
-    "source_count": 5,
-    "evaluation_count": 6
+    "source_count": 7,
+    "evaluation_count": 7
   },
   {
     "name": "go-testing-and-verification",

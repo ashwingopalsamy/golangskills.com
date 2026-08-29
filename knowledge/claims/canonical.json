@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "verified_on": "2026-08-24",
+  "verified_on": "2026-08-29",
   "claims": [
     {
       "id": "eng-language-clarity",
@@ -438,6 +438,58 @@
         {"title": "Stripe webhooks", "url": "https://docs.stripe.com/webhooks", "publisher": "Stripe", "kind": "protocol", "verified_on": "2026-08-24"},
         {"title": "Adyen: Verify HMAC signatures", "url": "https://docs.adyen.com/development-resources/webhooks/secure-webhooks/verify-hmac-signatures", "publisher": "Adyen", "kind": "protocol", "verified_on": "2026-08-24"},
         {"title": "PayPal: Verify webhook signature", "url": "https://developer.paypal.com/api/webhooks/v1/verify-webhook-signature-post/", "publisher": "PayPal", "kind": "protocol", "verified_on": "2026-08-24"}
+      ],
+      "observed_in": []
+    },
+    {
+      "id": "eng-child-process-boundary",
+      "statement": "Treat every Go-launched program as a separate code, identity, data, resource, and lifecycle authority boundary rather than as a function call with a timeout.",
+      "status": "adopted-with-qualifications",
+      "scope": "Go services and tools that execute external programs, interpreters, generators, converters, or supervised helpers",
+      "invariant": "Executable identity, argument parsing, inherited authority, input and output bounds, immediate-process and descendant ownership, termination, reaping, effect publication, and ambiguous-timeout replay are explicit and testable for every supported operating system.",
+      "qualifications": ["Process-tree control and sandbox mechanisms are operating-system and deployment specific.", "Using a shell is not universally forbidden, but it creates an additional interpreter grammar and authority boundary that must be justified and controlled.", "WaitDelay bounds selected wait and pipe conditions; it does not prove descendant termination or undo external effects."],
+      "counterexamples": ["CommandContext can kill the immediate shell while a forked converter survives and retains an output descriptor.", "Setting Cmd.Dir and a timeout does not isolate filesystem, network, credentials, or memory consumption.", "A nil Cmd.Env can delegate the service's complete secret-bearing environment to a helper."],
+      "go_versions": ["1.24", "1.25", "1.26"],
+      "owners": ["go-security-hardening"],
+      "risk_domains": ["security", "availability", "resource-exhaustion", "ambiguity"],
+      "primary_evidence": [
+        {"title": "Package os/exec for Go 1.26", "url": "https://pkg.go.dev/os/exec@go1.26.3", "publisher": "The Go Authors", "kind": "normative", "verified_on": "2026-08-29"},
+        {"title": "Command PATH security in Go", "url": "https://go.dev/blog/path-security", "publisher": "The Go Authors", "kind": "primary", "verified_on": "2026-08-29"}
+      ],
+      "observed_in": []
+    },
+    {
+      "id": "dist-hedged-attempt-budget",
+      "statement": "Hedged calls are concurrent attempts within one original operation budget, not free tail-latency optimization or independent retry policy.",
+      "status": "adopted-with-qualifications",
+      "scope": "Application-level or transport-supported hedged remote reads and replay-safe operations",
+      "invariant": "One layer bounds total and concurrent attempts, caller time, extra fleet load, winner publication, loser resource cleanup, late completion, and consistency authority; cancellation never substitutes for replay safety or proof that remote work stopped.",
+      "qualifications": ["Hedging is justified only by measured latency and capacity evidence for the specific method.", "A safe operation contract may permit cases beyond ordinary reads, but non-idempotent mutation is not made safe by cancellation.", "The current gRPC hedging guide's language table marks Go unsupported, so deployed library support must be verified rather than inferred from another language."],
+      "counterexamples": ["A client that issues three hedges while each attempt retries three times creates an undocumented multiplicative load policy.", "The fastest replica can violate the requested consistency or staleness contract.", "A canceled losing goroutine can still block publishing to an unbuffered result channel or update a shared cache after the winner."],
+      "go_versions": ["1.24", "1.25", "1.26"],
+      "owners": ["go-service-resilience"],
+      "risk_domains": ["availability", "overload", "latency", "consistency"],
+      "primary_evidence": [
+        {"title": "gRPC Request Hedging", "url": "https://grpc.io/docs/guides/request-hedging/", "publisher": "Cloud Native Computing Foundation", "kind": "protocol", "verified_on": "2026-08-29"},
+        {"title": "Package context for Go 1.26", "url": "https://pkg.go.dev/context@go1.26.3", "publisher": "The Go Authors", "kind": "normative", "verified_on": "2026-08-29"}
+      ],
+      "observed_in": []
+    },
+    {
+      "id": "fin-business-time-authority",
+      "statement": "Financial business days, cutoffs, holidays, and extensions are versioned external contract data, not arithmetic over UTC dates or fixed durations.",
+      "status": "adopted-with-qualifications",
+      "scope": "Rail and institution processing windows, schedule changes, batch identity, cutoff admission, and timing exceptions",
+      "invariant": "Every time-sensitive decision is reproducible from an absolute instant, named timezone, business-day label, schedule and rule version, participant and message scope, and authenticated extension or override evidence; admission never masquerades as receipt, acceptance, rejection, or settlement evidence.",
+      "qualifications": ["Exact calendars, cutoffs, extension authority, late handling, and legal effect are rail-, participant-, message-, contract-, and version-specific.", "Monotonic time supports in-process elapsed measurement but does not survive serialization or define a shared financial calendar.", "Future announced operating schedules must be modeled by effective date and not applied early."],
+      "counterexamples": ["Adding 24 hours can cross a daylight-saving transition without reaching the same local time or the next business day.", "The current Fedwire Funds business day can begin on the preceding calendar day, so a UTC date is not its business-day identity.", "A local pre-cutoff send does not prove the rail received or accepted the instruction."],
+      "go_versions": ["1.24", "1.25", "1.26"],
+      "owners": ["go-clearing-settlement-reconciliation"],
+      "risk_domains": ["settlement", "financial-integrity", "auditability", "operations"],
+      "primary_evidence": [
+        {"title": "Package time for Go 1.26", "url": "https://pkg.go.dev/time@go1.26.3", "publisher": "The Go Authors", "kind": "normative", "verified_on": "2026-08-29"},
+        {"title": "Fedwire Funds Service operating hours", "url": "https://www.frbservices.org/resources/financial-services/wires/operating-hours.html", "publisher": "Federal Reserve Financial Services", "kind": "protocol", "verified_on": "2026-08-29"},
+        {"title": "Operating Circular 6: Funds Transfers through the Fedwire Funds Service", "url": "https://www.frbservices.org/binaries/content/assets/crsocms/resources/rules-regulations/010526-operating-circular-6.pdf", "publisher": "Federal Reserve Banks", "kind": "regulatory", "verified_on": "2026-08-29"}
       ],
       "observed_in": []
     },

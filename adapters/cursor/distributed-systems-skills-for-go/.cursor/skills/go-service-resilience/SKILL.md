@@ -52,7 +52,7 @@ Application idempotency matters more than HTTP method names. A `GET` can trigger
 
 Ambiguous outcomes require reconciliation or same-identity replay, not a new operation.
 
-Read [references/retries.md](references/retries.md) for classification, backoff, jitter, and hedging.
+Read [references/retries.md](references/retries.md) for classification, backoff, jitter, and hedging. Treat every hedge as another live attempt inside one operation budget, and verify actual Go client support instead of assuming a cross-language service-config feature exists.
 
 ## Control amplification
 
