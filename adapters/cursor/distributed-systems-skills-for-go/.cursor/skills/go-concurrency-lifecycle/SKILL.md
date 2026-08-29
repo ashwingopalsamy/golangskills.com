@@ -2,7 +2,7 @@
 name: go-concurrency-lifecycle
 description: "Use for in-process Go concurrency ownership, cancellation, races, leaks, synchronization, and bounds. Do not use for broker semantics."
 license: Apache-2.0
-compatibility: "Go 1.24 or newer. Guidance targets the stable Go 1.25 and 1.26 families and degrades to older repository versions when required."
+compatibility: "Go 1.24 or newer. Guidance targets the stable Go 1.25, 1.26, and 1.27 families and degrades to older repository versions when required."
 ---
 
 # Go concurrency lifecycle

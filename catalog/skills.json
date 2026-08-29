@@ -31,7 +31,8 @@
       "minimum": "1.24",
       "guidance": [
         "1.25",
-        "1.26"
+        "1.26",
+        "1.27"
       ]
     },
     "claim_ids": [
@@ -177,7 +178,7 @@
     "collection": "distributed-systems-skills-for-go",
     "path": "skills/go-concurrency-lifecycle",
     "description": "Use for in-process Go concurrency ownership, cancellation, races, leaks, synchronization, and bounds. Do not use for broker semantics.",
-    "compatibility": "Go 1.24 or newer. Guidance targets the stable Go 1.25 and 1.26 families and degrades to older repository versions when required.",
+    "compatibility": "Go 1.24 or newer. Guidance targets the stable Go 1.25, 1.26, and 1.27 families and degrades to older repository versions when required.",
     "display_name": "Go Concurrency Lifecycle",
     "short_description": "Own goroutines, capacity, and shutdown",
     "version": "0.2.0",
@@ -200,7 +201,8 @@
       "minimum": "1.24",
       "guidance": [
         "1.25",
-        "1.26"
+        "1.26",
+        "1.27"
       ]
     },
     "claim_ids": [
@@ -321,7 +323,8 @@
       "minimum": "1.24",
       "guidance": [
         "1.25",
-        "1.26"
+        "1.26",
+        "1.27"
       ]
     },
     "claim_ids": [
@@ -513,7 +516,8 @@
       "minimum": "1.24",
       "guidance": [
         "1.25",
-        "1.26"
+        "1.26",
+        "1.27"
       ]
     },
     "claim_ids": [
@@ -658,7 +662,8 @@
       "minimum": "1.24",
       "guidance": [
         "1.25",
-        "1.26"
+        "1.26",
+        "1.27"
       ]
     },
     "claim_ids": [
@@ -786,7 +791,8 @@
       "minimum": "1.24",
       "guidance": [
         "1.25",
-        "1.26"
+        "1.26",
+        "1.27"
       ]
     },
     "claim_ids": [
@@ -927,7 +933,7 @@
     "collection": "engineering-skills-for-go",
     "path": "skills/go-language-engineering",
     "description": "Use for local Go semantics, errors, interfaces, generics, and data. Do not use for exported API evolution.",
-    "compatibility": "Go 1.24 or newer; current guidance targets Go 1.25 and 1.26, with older forms labeled legacy.",
+    "compatibility": "Go 1.24 or newer; current guidance targets Go 1.25, 1.26, and 1.27, with older forms labeled legacy.",
     "display_name": "Go Language Engineering",
     "short_description": "Make Go semantics and ownership explicit",
     "version": "0.2.0",
@@ -950,7 +956,8 @@
       "minimum": "1.24",
       "guidance": [
         "1.25",
-        "1.26"
+        "1.26",
+        "1.27"
       ]
     },
     "claim_ids": [
@@ -1080,7 +1087,8 @@
       "minimum": "1.24",
       "guidance": [
         "1.25",
-        "1.26"
+        "1.26",
+        "1.27"
       ]
     },
     "claim_ids": [
@@ -1236,7 +1244,8 @@
       "minimum": "1.24",
       "guidance": [
         "1.25",
-        "1.26"
+        "1.26",
+        "1.27"
       ]
     },
     "claim_ids": [
@@ -1379,7 +1388,8 @@
       "minimum": "1.24",
       "guidance": [
         "1.25",
-        "1.26"
+        "1.26",
+        "1.27"
       ]
     },
     "claim_ids": [
@@ -1561,7 +1571,8 @@
       "minimum": "1.24",
       "guidance": [
         "1.25",
-        "1.26"
+        "1.26",
+        "1.27"
       ]
     },
     "claim_ids": [
@@ -1712,7 +1723,8 @@
       "minimum": "1.24",
       "guidance": [
         "1.25",
-        "1.26"
+        "1.26",
+        "1.27"
       ]
     },
     "claim_ids": [
@@ -1855,7 +1867,8 @@
       "minimum": "1.24",
       "guidance": [
         "1.25",
-        "1.26"
+        "1.26",
+        "1.27"
       ]
     },
     "claim_ids": [
@@ -1990,7 +2003,8 @@
       "minimum": "1.24",
       "guidance": [
         "1.25",
-        "1.26"
+        "1.26",
+        "1.27"
       ]
     },
     "claim_ids": [
@@ -2214,7 +2228,8 @@
       "minimum": "1.24",
       "guidance": [
         "1.25",
-        "1.26"
+        "1.26",
+        "1.27"
       ]
     },
     "claim_ids": [
@@ -2353,7 +2368,8 @@
       "minimum": "1.24",
       "guidance": [
         "1.25",
-        "1.26"
+        "1.26",
+        "1.27"
       ]
     },
     "claim_ids": [
@@ -2488,7 +2504,7 @@
     "collection": "engineering-skills-for-go",
     "path": "skills/go-testing-and-verification",
     "description": "Use when asked to design or debug Go tests, fuzzing, race/leak checks, or deterministic verification. Do not use for profiling.",
-    "compatibility": "Go 1.24 or newer; testing/synctest guidance targets Go 1.25 and 1.26.",
+    "compatibility": "Go 1.24 or newer; testing/synctest guidance targets Go 1.25, 1.26, and 1.27.",
     "display_name": "Go Testing and Verification",
     "short_description": "Build executable Go correctness evidence",
     "version": "0.2.0",
@@ -2511,7 +2527,8 @@
       "minimum": "1.24",
       "guidance": [
         "1.25",
-        "1.26"
+        "1.26",
+        "1.27"
       ]
     },
     "claim_ids": [
@@ -2620,7 +2637,8 @@
       "minimum": "1.24",
       "guidance": [
         "1.25",
-        "1.26"
+        "1.26",
+        "1.27"
       ]
     },
     "claim_ids": [
@@ -2730,7 +2748,8 @@
       "minimum": "1.24",
       "guidance": [
         "1.25",
-        "1.26"
+        "1.26",
+        "1.27"
       ]
     },
     "claim_ids": [
@@ -2844,7 +2863,8 @@
       "minimum": "1.24",
       "guidance": [
         "1.25",
-        "1.26"
+        "1.26",
+        "1.27"
       ]
     },
     "claim_ids": [

@@ -2,7 +2,7 @@
 name: go-testing-and-verification
 description: "Use when asked to design or debug Go tests, fuzzing, race/leak checks, or deterministic verification. Do not use for profiling."
 license: Apache-2.0
-compatibility: "Go 1.24 or newer; testing/synctest guidance targets Go 1.25 and 1.26."
+compatibility: "Go 1.24 or newer; testing/synctest guidance targets Go 1.25, 1.26, and 1.27."
 ---
 
 # Go testing and verification
@@ -31,7 +31,7 @@ Seed representative valid and invalid values. Keep targets deterministic, fast, 
 
 Read [references/oracle-design.md](references/oracle-design.md) for distributed and financial oracles.
 
-For timer, deadline, or asynchronous goroutine tests on Go 1.25 or 1.26, read [references/deterministic-concurrency.md](references/deterministic-concurrency.md). A `synctest` bubble virtualizes only work it owns; external I/O and goroutines are not made deterministic merely because the assertion runs inside `synctest.Test`.
+For timer, deadline, or asynchronous goroutine tests on Go 1.25, 1.26, or 1.27, read [references/deterministic-concurrency.md](references/deterministic-concurrency.md). A `synctest` bubble virtualizes only work it owns; external I/O and goroutines are not made deterministic merely because the assertion runs inside `synctest.Test`.
 
 ## Output contract
 

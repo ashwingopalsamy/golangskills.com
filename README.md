@@ -15,7 +15,7 @@
   <a href="https://github.com/ashwingopalsamy/golangskills.com/releases/tag/v0.4.0"><img src="https://img.shields.io/github/v/release/ashwingopalsamy/golangskills.com?label=release&color=00ADD8" alt="v0.4.0 release" /></a>
   <a href="https://github.com/ashwingopalsamy/golangskills.com/actions"><img src="https://img.shields.io/github/actions/workflow/status/ashwingopalsamy/golangskills.com/validate.yml?label=checks&color=2ea44f" alt="checks" /></a>
   <a href="https://github.com/ashwingopalsamy/golangskills.com/blob/main/LICENSE"><img src="https://img.shields.io/github/license/ashwingopalsamy/golangskills.com?color=blue" alt="Apache-2.0" /></a>
-  <img src="https://img.shields.io/badge/Go-1.24%20%7C%201.25%20%7C%201.26-00ADD8" alt="Go versions" />
+  <img src="https://img.shields.io/badge/Go-1.24%20%7C%201.25%20%7C%201.26%20%7C%201.27-00ADD8" alt="Go versions" />
 </p>
 
 Three focused Go collections for ChatGPT, Codex, Claude Code, Cursor, OpenCode, and `npx skills`.

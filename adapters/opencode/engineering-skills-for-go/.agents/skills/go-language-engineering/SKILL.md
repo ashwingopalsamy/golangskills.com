@@ -2,7 +2,7 @@
 name: go-language-engineering
 description: "Use for local Go semantics, errors, interfaces, generics, and data. Do not use for exported API evolution."
 license: Apache-2.0
-compatibility: "Go 1.24 or newer; current guidance targets Go 1.25 and 1.26, with older forms labeled legacy."
+compatibility: "Go 1.24 or newer; current guidance targets Go 1.25, 1.26, and 1.27, with older forms labeled legacy."
 ---
 
 # Go language engineering

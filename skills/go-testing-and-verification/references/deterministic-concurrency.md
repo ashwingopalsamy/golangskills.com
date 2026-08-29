@@ -1,6 +1,6 @@
 # Deterministic concurrent tests
 
-Use `testing/synctest` on Go 1.25 and 1.26 when the invariant depends on goroutine quiescence, timers, deadlines, or cancellation. Keep the Go 1.24 experimental `synctest.Run` API confined to an explicitly opted-in Go 1.24 compatibility path.
+Use `testing/synctest` on Go 1.25, 1.26, and 1.27 when the invariant depends on goroutine quiescence, timers, deadlines, or cancellation. Keep the Go 1.24 experimental `synctest.Run` API confined to an explicitly opted-in Go 1.24 compatibility path.
 
 ## Know what the bubble owns
 
