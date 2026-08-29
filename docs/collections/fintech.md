@@ -1,4 +1,4 @@
-# Fintech Skills for Go
+# Go: Fintech
 
 This collection owns monetary and payment-domain integrity rather than generic payment API integration.
 

@@ -18,17 +18,17 @@ Category: Developer Tools
 
 Availability: Worldwide, subject to OpenAI platform availability and policy.
 
-## Engineering Skills for Go
+## Go: Production Engineering
 
-Short description: Engineer and review production Go software with evidence-backed guidance.
+Short description: Build, test & operate Go
 
-Long description: Focused Go skills for language semantics, project and API design, service boundaries, testing, diagnostics, security hardening, production operations, and systematic change review. Guidance is conditional on explicit invariants and links claims to primary sources.
+Long description: Evidence-backed Go language, API, service, testing, performance, security, operations, and engineering-review skills.
 
 Starter prompts:
 
-- Review this Go change for correctness, API compatibility, lifecycle ownership, and missing verification evidence.
-- Design a cancellable Go HTTP service boundary with bounded request bodies and graceful shutdown.
-- Diagnose this Go latency regression using measurements before recommending optimizations.
+- Review this Go change for correctness and production risk. Report concrete, causal findings only; skip style comments.
+- Diagnose this Go production issue from evidence. Find the failure mechanism, what to measure next, and the smallest safe fix.
+- Design or implement this Go change. Preserve behavior and compatibility; make the smallest coherent change and verify it.
 
 Positive test cases:
 
@@ -44,17 +44,17 @@ Negative test cases:
 2. Ask for legal interpretation of a contract; the plugin should not claim legal authority.
 3. Ask for speculative micro-optimization without measurements; it should request evidence rather than invent a bottleneck.
 
-## Distributed Systems Skills for Go
+## Go: Distributed Systems
 
-Short description: Design failure-safe distributed Go systems from explicit invariants.
+Short description: Build resilient Go systems
 
-Long description: Focused Go skills for concurrency lifecycle, data consistency, message processing, resilience, coordination, and distributed-change review. They reason about retries, ambiguity, ordering, fencing, overload, recovery, and transport cutovers without promising impossible exactly-once behavior.
+Long description: Invariant-driven Go concurrency, consistency, messaging, resilience, coordination, and distributed-change review skills.
 
 Starter prompts:
 
-- Review this Go consumer for redelivery, ordering, offset-commit ambiguity, and retry amplification.
-- Design a lease-based worker whose stale owner cannot commit after losing ownership.
-- Diagnose a live transport cutover that leaks or reuses obsolete idle connections.
+- Review this distributed Go change for consistency, ordering, retries, and partial-failure risk. Report concrete, causal findings only; skip style comments.
+- Diagnose this distributed Go production issue from evidence. Find the failure mechanism, violated invariant, and smallest safe recovery.
+- Design or implement this distributed Go change. Bound concurrency, retries, and ownership; preserve safety under ambiguity and failure.
 
 Positive test cases:
 
@@ -70,17 +70,17 @@ Negative test cases:
 2. Ask for an unconditional exactly-once guarantee; the plugin should reject the premise and define observable invariants.
 3. Ask for unbounded retry-until-success; the plugin should identify overload and deadline failure modes.
 
-## Fintech Skills for Go
+## Go: Fintech
 
-Short description: Build financially correct Go payment and ledger systems.
+Short description: Build financially correct Go
 
-Long description: Focused Go skills for exact money representation, double-entry ledgers, payment lifecycles, replay-safe financial operations, clearing, settlement, reconciliation, security boundaries, compliance-aware design, and financial-change review.
+Long description: Financial-integrity skills for money, ledgers, payment lifecycles, idempotency, settlement, reconciliation, security, and compliance.
 
 Starter prompts:
 
-- Design a Go ledger posting path that preserves balance, immutability, and replay safety.
-- Review this authorization, capture, refund, and reversal state machine for ambiguous outcomes.
-- Design settlement reconciliation that detects missing, duplicate, late, and conflicting records.
+- Review this Go payment or ledger change for financial-integrity risk. Report concrete, causal findings only; skip style comments.
+- Diagnose this fintech production issue from evidence. Find how money could be lost, duplicated, misstated, or concealed.
+- Design or implement this Go financial workflow. Preserve ledger balance, replay safety, lifecycle validity, and auditability.
 
 Positive test cases:
 

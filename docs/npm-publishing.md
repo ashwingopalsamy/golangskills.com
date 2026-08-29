@@ -6,9 +6,9 @@ The npm organization is `golangskills`. The public package scope is `@golangskil
 
 | Collection | Package |
 | --- | --- |
-| Engineering Skills for Go | `@golangskills/engineering` |
-| Distributed Systems Skills for Go | `@golangskills/distributed-systems` |
-| Fintech Skills for Go | `@golangskills/fintech` |
+| Go: Production Engineering | `@golangskills/engineering` |
+| Go: Distributed Systems | `@golangskills/distributed-systems` |
+| Go: Fintech | `@golangskills/fintech` |
 
 All three packages use the same signed release version.
 
@@ -25,7 +25,7 @@ The first publication creates the package records. npm staged publishing cannot 
 From the repository root:
 
 ```sh
-VERSION=0.3.0-rc.1
+VERSION=0.4.0
 go run ./cmd/skillctl check
 go run ./cmd/skillctl generate
 go run ./cmd/skillctl npm package -version "$VERSION"
@@ -47,7 +47,7 @@ The staged packages are data-only. They have no lifecycle scripts, dependencies,
 After authenticating locally with npm, publish each staged package with public access. Use the exact version selected for the signed release:
 
 ```sh
-VERSION=0.3.0-rc.1
+VERSION=0.4.0
 go run ./cmd/skillctl npm package -version "$VERSION"
 go run ./cmd/skillctl npm check -version "$VERSION"
 for package_dir in dist/npm/*; do
@@ -55,7 +55,7 @@ for package_dir in dist/npm/*; do
 done
 ```
 
-The `bootstrap` dist-tag keeps the pre-release away from the normal `latest` channel. After the package records exist, configure Trusted Publishing for each package, regenerate the stable `0.3.0` staging, and push the signed `v0.3.0` tag. The GitHub workflow then publishes the stable version through OIDC.
+The `bootstrap` dist-tag keeps the first publication separate from the normal `latest` channel. After the package records exist, configure Trusted Publishing for each package and promote the coordinated stable release through the documented GitHub OIDC workflow.
 
 ## Trusted publishing for later releases
 

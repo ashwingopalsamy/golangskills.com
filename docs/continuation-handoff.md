@@ -2,6 +2,18 @@
 
 Status date: 2026-08-29. This is the operational handoff for continuing the category-leadership goal. It records public state and private-artifact metadata only; it intentionally contains no holdout prompts, case IDs, commitment value, or key material.
 
+## Version 0.4.0 publication work
+
+The public family is now branded **Go: Production Engineering**, **Go: Distributed Systems**, and **Go: Fintech** while retaining the stable package IDs `engineering-skills-for-go`, `distributed-systems-skills-for-go`, and `fintech-skills-for-go`. Canonical skill IDs and collection ownership are unchanged.
+
+Canonical generation targets version `0.4.0` and carries collection-specific names, subtitles, descriptions, capabilities, keywords, starter prompts, and CC0 Gopher artwork across Codex/ChatGPT, Claude Code, Cursor, OpenCode, npm, catalogs, site data, and `llms.txt`. The source artwork is recorded in `THIRD_PARTY_NOTICES.md`. Thirteen fresh routing cases were added, bringing the public corpus to 146 cases without changing the deferred release-candidate comparison plan.
+
+The fresh v0.4.0 development routing screen retained its initial 8/13 artifact, corrected five overly broad expected review-skill ownership decisions to the precise canonical domain skills Codex had selected, and then scored 13/13 on the final one-pass screen. The final report records macro-F1 1.0, zero false activations across two unrelated prompts, zero critical failures, and 1.0 collection pass rates. This is metadata-development evidence only and does not satisfy the release-candidate superiority contract.
+
+The existing public Engineering plugin must be updated in place so its plugin ID and installs survive the rename. If its display name is immutable, stop before submitting any coordinated portal changes. The two specialist plugins are new submissions. Draft configuration may be staged, but the Engineering update and both new submissions require one grouped confirmation immediately before the irreversible portal submission actions.
+
+The authoritative publication record—commit hashes, release URL and checksums, plugin IDs, submission IDs, public URLs, states, and moderation feedback—must be appended here after each event. Until then, generated artifacts or staged portal drafts are not evidence of publication.
+
 ## Goal and evidence boundary
 
 Build **Go Engineering Skills by Ashwin Gopalsamy** as three focused collections—Engineering, Distributed Systems, and Fintech—that lead current Go agent-skill alternatives on correctness, reference coverage, routing, behavioral quality, critical-error avoidance, provenance, and context efficiency.

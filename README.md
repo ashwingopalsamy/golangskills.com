@@ -1,16 +1,16 @@
-# Go Engineering Skills by Ashwin Gopalsamy
+# Production Go skills for AI coding agents
 
 Current implementation status and benchmark evidence are tracked in the public catalog and evaluation reports.
 
-Evidence-backed Agent Skills for production Go, distributed systems, and fintech, authored by [Ashwin Gopalsamy](https://ashwingopalsamy.in).
+**Go: Production Engineering**, **Go: Distributed Systems**, and **Go: Fintech** are evidence-backed Agent Skills authored by [Ashwin Gopalsamy](https://ashwingopalsamy.in). Install them in ChatGPT, Codex, Claude Code, Cursor, OpenCode, or through the open `npx skills` workflow.
 
 The ecosystem ships three non-overlapping installable collections:
 
 | Collection | Skills | Owns |
 |---|---:|---|
-| [Engineering Skills for Go](docs/collections/engineering.md) | 8 | Language, APIs, service boundaries, tests, performance, security, operations, general review |
-| [Distributed Systems Skills for Go](docs/collections/distributed-systems.md) | 6 | Concurrency, consistency, messaging, resilience, coordination, distributed review |
-| [Fintech Skills for Go](docs/collections/fintech.md) | 6 | Money, ledgers, payment lifecycles, idempotency, settlement, reconciliation, compliance, fintech review |
+| [Go: Production Engineering](docs/collections/engineering.md) | 8 | Language, APIs, service boundaries, tests, performance, security, operations, general review |
+| [Go: Distributed Systems](docs/collections/distributed-systems.md) | 6 | Concurrency, consistency, messaging, resilience, coordination, distributed review |
+| [Go: Fintech](docs/collections/fintech.md) | 6 | Money, ledgers, payment lifecycles, idempotency, settlement, reconciliation, compliance, fintech review |
 
 Install one, two, or all three. No skill appears in more than one collection.
 
@@ -34,7 +34,7 @@ See [docs/install.md](docs/install.md) for client-specific layouts and [docs/npm
 - `distributed-systems-skills-for-go`
 - `fintech-skills-for-go`
 
-The planned public npm organization is `@golangskills`. The three `0.3.0-rc.1` data-only packages are staged and validated locally but have not been bootstrap-published, so the following commands become available only after that release step:
+The planned public npm organization is `@golangskills`. The data-only packages are staged and validated locally but have not been bootstrap-published, so the following commands become available only after that release step:
 
 ```sh
 npm install @golangskills/engineering
@@ -57,8 +57,8 @@ go run ./cmd/skillctl audit refs -refs /path/to/go-refs
 go run ./cmd/skillctl check
 go run ./cmd/skillctl generate
 go run ./cmd/skillctl package
-go run ./cmd/skillctl npm package -version 0.3.0
-go run ./cmd/skillctl npm check -version 0.3.0
+go run ./cmd/skillctl npm package -version 0.4.0
+go run ./cmd/skillctl npm check -version 0.4.0
 go run ./cmd/skillctl eval preflight
 go run ./cmd/skillctl eval verify-freeze -freeze evaluations/releases/rc1.lock.json -public-only
 go run ./cmd/skillctl eval run -runner codex -arm ours -kind routing -output evaluations/runs/ours-routing.jsonl

@@ -2,6 +2,14 @@
 
 All distributed files are generated from canonical `skills/`. Choose one, two, or all collections; skill IDs never overlap.
 
+| Public plugin | Stable package ID |
+| --- | --- |
+| Go: Production Engineering | `engineering-skills-for-go` |
+| Go: Distributed Systems | `distributed-systems-skills-for-go` |
+| Go: Fintech | `fintech-skills-for-go` |
+
+The packages support ChatGPT and Codex plugin layouts, Claude Code, Cursor, OpenCode, and the open `npx skills` discovery path. Public display names may evolve without changing package IDs or canonical skill IDs.
+
 ## npm
 
 The npm namespace is `@golangskills`. The three collection packages are staged but not yet bootstrap-published; these commands become available after publication:
@@ -19,6 +27,8 @@ The npm package is a versioned artifact channel. The open Skills CLI continues t
 ```sh
 npx skills add ashwingopalsamy/golangskills.com
 ```
+
+That command exposes all three collections. Collection-specific generated packages remain available under `plugins/<stable-package-id>/` when an installer requires an individual plugin root.
 
 Maintainers can follow [npm-publishing.md](npm-publishing.md) for package preflight, bootstrap publication, and GitHub Trusted Publishing.
 
