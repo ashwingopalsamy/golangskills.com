@@ -4,7 +4,7 @@ All distributed files are generated from canonical `skills/`. Choose one, two, o
 
 ## npm
 
-The npm namespace is `@golangskills`. The three public collection packages are:
+The npm namespace is `@golangskills`. The three collection packages are staged but not yet bootstrap-published; these commands become available after publication:
 
 ```sh
 npm install @golangskills/engineering

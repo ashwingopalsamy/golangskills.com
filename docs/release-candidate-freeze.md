@@ -1,6 +1,6 @@
 # Release-candidate benchmark freeze
 
-The release-candidate lock turns “freeze before treatment” into an executable protocol. It does not make the current evidence release-eligible: no real RC lock or private holdout has been committed yet, and the large comparison batch remains deferred.
+The release-candidate lock turns “freeze before treatment” into an executable protocol. It does not make the current evidence release-eligible: a 60-case private holdout is prepared locally and its disposable commitment verification passes, but no real RC lock has been committed or scored, and the large comparison batch remains deferred.
 
 ## What the public lock binds
 

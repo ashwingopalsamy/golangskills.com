@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "generated_on": "2026-08-24",
+  "generated_on": "2026-08-29",
   "leadership_claim_eligible": false,
   "gates": [
     {
@@ -24,7 +24,7 @@
     {
       "id": "hidden-routing",
       "status": "blocked",
-      "summary": "A private release holdout with unrelated prompts has not been frozen and scored.",
+      "summary": "A 60-case private holdout with 16 unrelated routing prompts is prepared locally and passes disposable commitment verification, but no real release lock has been committed and the holdout has not been scored.",
       "evidence": ["evaluations/reports/latest.json"]
     },
     {
@@ -72,7 +72,7 @@
     {
       "id": "artifact-traceability",
       "status": "blocked",
-      "summary": "Development artifacts, including the intentionally incomplete runtime-reload series and current package provenance, are traceable; the complete release-candidate and private-holdout artifacts do not yet exist.",
+      "summary": "Development artifacts, including the intentionally incomplete runtime-reload series and current package provenance, are traceable. The local private holdout passes disposable freeze verification, but the committed release-candidate lock and complete treatment, judgment, score, and report artifacts do not yet exist.",
       "evidence": ["evaluations/reports/latest.json", "dist/provenance.json"]
     }
   ]

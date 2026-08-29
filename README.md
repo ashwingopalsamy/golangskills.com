@@ -34,7 +34,7 @@ See [docs/install.md](docs/install.md) for client-specific layouts and [docs/npm
 - `distributed-systems-skills-for-go`
 - `fintech-skills-for-go`
 
-The public npm organization is `@golangskills`. Install a versioned collection with npm:
+The planned public npm organization is `@golangskills`. The three `0.3.0-rc.1` data-only packages are staged and validated locally but have not been bootstrap-published, so the following commands become available only after that release step:
 
 ```sh
 npm install @golangskills/engineering
