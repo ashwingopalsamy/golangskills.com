@@ -10,9 +10,17 @@ Canonical generation targets version `0.4.0` and carries collection-specific nam
 
 The fresh v0.4.0 development routing screen retained its initial 8/13 artifact, corrected five overly broad expected review-skill ownership decisions to the precise canonical domain skills Codex had selected, and then scored 13/13 on the final one-pass screen. The final report records macro-F1 1.0, zero false activations across two unrelated prompts, zero critical failures, and 1.0 collection pass rates. This is metadata-development evidence only and does not satisfy the release-candidate superiority contract.
 
-The existing public Engineering plugin must be updated in place so its plugin ID and installs survive the rename. If its display name is immutable, stop before submitting any coordinated portal changes. The two specialist plugins are new submissions. Draft configuration may be staged, but the Engineering update and both new submissions require one grouped confirmation immediately before the irreversible portal submission actions.
+All three version 0.4.0 plugins are published. The Production Engineering release updated the existing plugin in place and preserved its plugin ID. The user completed the final specialist publication actions manually in the OpenAI portal.
 
-The authoritative publication record—commit hashes, release URL and checksums, plugin IDs, submission IDs, public URLs, states, and moderation feedback—must be appended here after each event. Until then, generated artifacts or staged portal drafts are not evidence of publication.
+| Public plugin | Stable package ID | OpenAI plugin ID | Submission record | Public URL | State |
+| --- | --- | --- | --- | --- | --- |
+| Go: Production Engineering | `engineering-skills-for-go` | `plugins_6a92c6b7e7948191ab7802aa05afc6f7` | `appsub_6a931763413081918cf2d44be988d8e5` | <https://chatgpt.com/plugins/plugins_6a92c6b7e7948191ab7802aa05afc6f7> | Published |
+| Go: Distributed Systems | `distributed-systems-skills-for-go` | `plugins_6a931917afc48191a2ce571d737eb104` | `appsub_6a931917c48c8191850dc67a76f9a10f` | <https://chatgpt.com/plugins/plugins_6a931917afc48191a2ce571d737eb104> | Published |
+| Go: Fintech | `fintech-skills-for-go` | `plugins_6a9319929b74819193f3f276f98627c4` | `appsub_6a931992ae24819184c6e722a64b7939` | <https://chatgpt.com/plugins/plugins_6a9319929b74819193f3f276f98627c4> | Published |
+
+The three public endpoints resolve. Their unauthenticated HTML shell does not expose listing metadata, so the names and published states above are the owner-confirmed portal record rather than an inference from the public page body. No moderation feedback was reported at publication time.
+
+GitHub release [`v0.4.0`](https://github.com/ashwingopalsamy/golangskills.com/releases/tag/v0.4.0) was published from `acadc48` with all three OpenAI ZIPs, npm tarballs, portable archives, catalogs, provenance, and separate checksum manifests. The coordinated implementation commits are `072dbdc`, `be1b392`, and `acadc48`.
 
 ## Goal and evidence boundary
 
@@ -25,19 +33,19 @@ Do not rerun the public runtime-reload/cutover case three times. Its completed a
 ## Repository and Git state
 
 - Public repository: `ashwingopalsamy/golangskills.com`; use `gh` and git, never the in-app browser, for GitHub operations.
-- Working branch: `codex/category-leader`, based directly on remote `main` at `f4d49ff`.
+- Working branch: `codex/category-leader`; both it and remote `main` contain the v0.4.0 publication commit `acadc48`.
 - Portable-reference milestone: `97ec8ff feat: support portable benchmark reference roots`.
 - Latest canonical source milestone: `043ce19 feat: deepen process hedging and business-time invariants`.
 - Latest provenance-bound package milestone: `c3388ac chore: package process hedging and business-time corpus`.
 - Preserve local `main` at `46b2551`. It contains the unsquashed 127-commit development history and has no common ancestry with the consolidated remote history. Do not reset, delete, rebase, merge, or force-push it.
-- Remote tags are `v0.1.0` and `v0.2.0`. There is intentionally no `v0.3.0-rc.1` or leadership tag.
+- Published tags are `v0.1.0`, `v0.2.0`, `v0.3.0`, and `v0.4.0`. There is intentionally no leadership or release-candidate tag.
 - Safe publication from the work branch is a normal fast-forward of remote `main`; the local historical `main` need not move.
 
 ## Completed product and knowledge work
 
 - 20 non-overlapping canonical skills: 8 Engineering, 6 Distributed Systems, and 6 Fintech.
 - Combined conservative discovery footprint: 7,774 characters; every collection is below 4,000.
-- Canonical corpus: 133 development cases, including 15 executable hidden-oracle fixtures and 39 fresh unrun transfer cases.
+- Canonical corpus: 146 development cases, including 15 executable hidden-oracle fixtures and the fresh v0.4.0 routing screen.
 - Evidence model: 121 source records, 27 adjudicated canonical claims, and all seven reference snapshots inventoried with 759 file hashes, 103 skill entrypoints, and 10,239 material-item dispositions.
 - Generated Codex, Claude Code, Cursor, and OpenCode layouts; catalogs, search/site data, `llms.txt`, archives, checksums, and provenance.
 - Three npm staging packages validate at `0.3.0-rc.1`: `@golangskills/engineering`, `@golangskills/distributed-systems`, and `@golangskills/fintech`. Registry checks on the status date returned 404 for all three; they are not published and must not be advertised as currently installable from npm.
