@@ -43,6 +43,9 @@ func run(arguments []string, output io.Writer) error {
 	if arguments[0] == "package" {
 		return runPackage(arguments[1:], output)
 	}
+	if arguments[0] == "openai" {
+		return runOpenAI(arguments[1:], output)
+	}
 	if arguments[0] == "npm" {
 		return runNPM(arguments[1:], output)
 	}
@@ -108,6 +111,34 @@ func run(arguments []string, output io.Writer) error {
 	default:
 		return fmt.Errorf("unknown command %q; expected check, generate, or stats", command)
 	}
+}
+
+func runOpenAI(arguments []string, output io.Writer) error {
+	if len(arguments) == 0 || arguments[0] != "package" {
+		return errors.New("usage: skillctl openai package [options]")
+	}
+	flags := flag.NewFlagSet("openai package", flag.ContinueOnError)
+	flags.SetOutput(io.Discard)
+	root := flags.String("root", "", "repository root")
+	version := flags.String("version", "0.3.0", "OpenAI plugin version")
+	if err := flags.Parse(arguments[1:]); err != nil {
+		return err
+	}
+	if flags.NArg() != 0 {
+		return fmt.Errorf("unexpected arguments: %v", flags.Args())
+	}
+	repositoryRoot, err := corpus.FindRepoRoot(*root)
+	if err != nil {
+		return err
+	}
+	paths, err := artifact.PackageOpenAI(repositoryRoot, *version)
+	if err != nil {
+		return err
+	}
+	for _, path := range paths {
+		fmt.Fprintln(output, path)
+	}
+	return nil
 }
 
 func runNPM(arguments []string, output io.Writer) error {

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-labelledby="title desc">
+  <title id="title">Go Engineering Skills mark</title>
+  <desc id="desc">A cyan engineering ring and gold distributed-system nodes on a deep navy field.</desc>
+  <rect width="1024" height="1024" rx="224" fill="#071A2B"/>
+  <path d="M744 327A300 300 0 1 0 744 697" fill="none" stroke="#22D3EE" stroke-width="104" stroke-linecap="round"/>
+  <path d="M531 512H800" fill="none" stroke="#22D3EE" stroke-width="104" stroke-linecap="round"/>
+  <path d="M718 425L805 512 718 599" fill="none" stroke="#F4B942" stroke-width="58" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="365" cy="372" r="38" fill="#F4B942"/>
+  <circle cx="313" cy="512" r="38" fill="#F4B942"/>
+  <circle cx="365" cy="652" r="38" fill="#F4B942"/>
+</svg>

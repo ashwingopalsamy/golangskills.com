@@ -3,6 +3,7 @@ package artifact
 
 import (
 	"archive/tar"
+	"archive/zip"
 	"compress/gzip"
 	"crypto/sha256"
 	"encoding/hex"
@@ -21,6 +22,8 @@ var plugins = []string{
 	"engineering-skills-for-go",
 	"fintech-skills-for-go",
 }
+
+var openAIPluginRoots = []string{".codex-plugin", "assets", "skills"}
 
 // Package writes deterministic tar.gz archives, checksums, and provenance.
 func Package(repoRoot, version string) ([]string, error) {
@@ -70,6 +73,91 @@ func Package(repoRoot, version string) ([]string, error) {
 		return nil, err
 	}
 	return append(paths, provenancePath), nil
+}
+
+// PackageOpenAI writes deterministic ZIP bundles containing only the native
+// Codex manifest, skills, and presentation assets accepted by the OpenAI
+// universal plugin directory. Cross-agent compatibility manifests remain in
+// the repository and general archives, but are deliberately excluded here so
+// the submission portal does not normalize or override canonical metadata.
+func PackageOpenAI(repoRoot, version string) ([]string, error) {
+	dist := filepath.Join(repoRoot, "dist", "openai")
+	if err := os.MkdirAll(dist, 0o755); err != nil {
+		return nil, err
+	}
+	checksums := make(map[string]string)
+	var paths []string
+	for _, plugin := range plugins {
+		filename := plugin + "-" + version + ".zip"
+		path := filepath.Join(dist, filename)
+		if err := archiveOpenAIPlugin(filepath.Join(repoRoot, "plugins", plugin), path); err != nil {
+			return nil, err
+		}
+		digest, err := fileHash(path)
+		if err != nil {
+			return nil, err
+		}
+		checksums[filename] = digest
+		paths = append(paths, path)
+	}
+	var checksumText strings.Builder
+	for _, filename := range sortedKeys(checksums) {
+		fmt.Fprintf(&checksumText, "%s  %s\n", checksums[filename], filename)
+	}
+	checksumPath := filepath.Join(dist, "SHA256SUMS")
+	if err := os.WriteFile(checksumPath, []byte(checksumText.String()), 0o644); err != nil {
+		return nil, err
+	}
+	return append(paths, checksumPath), nil
+}
+
+func archiveOpenAIPlugin(source, destination string) error {
+	var files []string
+	for _, root := range openAIPluginRoots {
+		rootPath := filepath.Join(source, root)
+		if err := filepath.WalkDir(rootPath, func(path string, entry os.DirEntry, err error) error {
+			if err != nil {
+				return err
+			}
+			if entry.Type()&os.ModeSymlink != 0 {
+				return fmt.Errorf("refuse symlink %s", path)
+			}
+			if !entry.IsDir() {
+				files = append(files, path)
+			}
+			return nil
+		}); err != nil {
+			return err
+		}
+	}
+	sort.Strings(files)
+	output, err := os.Create(destination)
+	if err != nil {
+		return err
+	}
+	defer output.Close()
+	zipWriter := zip.NewWriter(output)
+	modified := time.Date(1980, time.January, 1, 0, 0, 0, 0, time.UTC)
+	for _, file := range files {
+		content, err := os.ReadFile(file)
+		if err != nil {
+			return err
+		}
+		relative, err := filepath.Rel(source, file)
+		if err != nil {
+			return err
+		}
+		header := &zip.FileHeader{Name: filepath.ToSlash(relative), Method: zip.Deflate, Modified: modified}
+		header.SetMode(0o644)
+		writer, err := zipWriter.CreateHeader(header)
+		if err != nil {
+			return err
+		}
+		if _, err := writer.Write(content); err != nil {
+			return err
+		}
+	}
+	return zipWriter.Close()
 }
 
 func checksumsForArchives(dist string) (map[string]string, error) {

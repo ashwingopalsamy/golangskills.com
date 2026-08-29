@@ -29,9 +29,14 @@
       "Diagnose failure modes",
       "Review invariant-sensitive changes"
     ],
-    "websiteURL": "https://golangskills.com",
+    "websiteURL": "https://github.com/ashwingopalsamy/golangskills.com",
+    "privacyPolicyURL": "https://github.com/ashwingopalsamy/golangskills.com/blob/main/docs/privacy.md",
+    "termsOfServiceURL": "https://github.com/ashwingopalsamy/golangskills.com/blob/main/docs/terms.md",
     "defaultPrompt": [
       "Select and use the most relevant skill from Engineering Skills for Go to solve this Go task."
-    ]
+    ],
+    "brandColor": "#071A2B",
+    "composerIcon": "./assets/composer-icon.png",
+    "logo": "./assets/logo.png"
   }
 }

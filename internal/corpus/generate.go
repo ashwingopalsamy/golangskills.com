@@ -2,6 +2,7 @@ package corpus
 
 import (
 	"bytes"
+	_ "embed"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -14,6 +15,12 @@ import (
 )
 
 const collectionVersion = "0.3.0"
+
+//go:embed assets/generated/composer-icon.png
+var composerIconPNG []byte
+
+//go:embed assets/generated/logo.png
+var pluginLogoPNG []byte
 
 type collectionSpec struct {
 	Name             string
@@ -129,14 +136,19 @@ type pluginAuthor struct {
 }
 
 type pluginInterface struct {
-	DisplayName      string   `json:"displayName"`
-	ShortDescription string   `json:"shortDescription"`
-	LongDescription  string   `json:"longDescription"`
-	DeveloperName    string   `json:"developerName"`
-	Category         string   `json:"category"`
-	Capabilities     []string `json:"capabilities"`
-	WebsiteURL       string   `json:"websiteURL"`
-	DefaultPrompt    []string `json:"defaultPrompt"`
+	DisplayName       string   `json:"displayName"`
+	ShortDescription  string   `json:"shortDescription"`
+	LongDescription   string   `json:"longDescription"`
+	DeveloperName     string   `json:"developerName"`
+	Category          string   `json:"category"`
+	Capabilities      []string `json:"capabilities"`
+	WebsiteURL        string   `json:"websiteURL"`
+	PrivacyPolicyURL  string   `json:"privacyPolicyURL"`
+	TermsOfServiceURL string   `json:"termsOfServiceURL"`
+	DefaultPrompt     []string `json:"defaultPrompt"`
+	BrandColor        string   `json:"brandColor"`
+	ComposerIcon      string   `json:"composerIcon"`
+	Logo              string   `json:"logo"`
 }
 
 // Render builds every deterministic file derived from the canonical corpus.
@@ -182,6 +194,8 @@ func Render(collection Collection) (map[string][]byte, error) {
 			return nil, fmt.Errorf("render %s Agent Plugin manifest: %w", spec.Name, err)
 		}
 		outputs["plugins/"+spec.Name+"/plugin.json"] = agentPlugin
+		outputs["plugins/"+spec.Name+"/assets/composer-icon.png"] = composerIconPNG
+		outputs["plugins/"+spec.Name+"/assets/logo.png"] = pluginLogoPNG
 
 		adapterReadme := renderAdapterReadme(spec, byCollection[spec.Name])
 		outputs["adapters/cursor/"+spec.Name+"/README.md"] = adapterReadme
@@ -400,9 +414,13 @@ func buildCodexPluginManifest(spec collectionSpec) pluginManifest {
 		License: "Apache-2.0", Keywords: spec.Keywords, Skills: "./skills/",
 		Interface: pluginInterface{
 			DisplayName: spec.DisplayName, ShortDescription: spec.ShortDescription, LongDescription: spec.LongDescription,
-			DeveloperName: "Ashwin Gopalsamy", Category: "Developer Tools", WebsiteURL: "https://golangskills.com",
-			Capabilities:  []string{"Engineer Go systems", "Diagnose failure modes", "Review invariant-sensitive changes"},
-			DefaultPrompt: []string{"Select and use the most relevant skill from " + spec.DisplayName + " to solve this Go task."},
+			DeveloperName: "Ashwin Gopalsamy", Category: "Developer Tools",
+			WebsiteURL:        "https://github.com/ashwingopalsamy/golangskills.com",
+			PrivacyPolicyURL:  "https://github.com/ashwingopalsamy/golangskills.com/blob/main/docs/privacy.md",
+			TermsOfServiceURL: "https://github.com/ashwingopalsamy/golangskills.com/blob/main/docs/terms.md",
+			Capabilities:      []string{"Engineer Go systems", "Diagnose failure modes", "Review invariant-sensitive changes"},
+			DefaultPrompt:     []string{"Select and use the most relevant skill from " + spec.DisplayName + " to solve this Go task."},
+			BrandColor:        "#071A2B", ComposerIcon: "./assets/composer-icon.png", Logo: "./assets/logo.png",
 		},
 	}
 }
