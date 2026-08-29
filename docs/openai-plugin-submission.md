@@ -2,13 +2,20 @@
 
 Status: prepared for the OpenAI Platform submission portal. These are skills-only plugins with no MCP server, authentication, remote tools, or publisher-operated data processing.
 
-Publisher: Ashwin Gopalsamy  
-Developer website: https://ashwingopalsamy.in  
-Product website: https://github.com/ashwingopalsamy/golangskills.com  
-Support: https://github.com/ashwingopalsamy/golangskills.com/blob/main/docs/support.md  
-Privacy: https://github.com/ashwingopalsamy/golangskills.com/blob/main/docs/privacy.md  
-Terms: https://github.com/ashwingopalsamy/golangskills.com/blob/main/docs/terms.md  
-Category: Developer Tools  
+Publisher: Ashwin Gopalsamy
+
+Developer website: https://ashwingopalsamy.in
+
+Product website: https://github.com/ashwingopalsamy/golangskills.com
+
+Support: https://github.com/ashwingopalsamy/golangskills.com/blob/main/docs/support.md
+
+Privacy: https://github.com/ashwingopalsamy/golangskills.com/blob/main/docs/privacy.md
+
+Terms: https://github.com/ashwingopalsamy/golangskills.com/blob/main/docs/terms.md
+
+Category: Developer Tools
+
 Availability: Worldwide, subject to OpenAI platform availability and policy.
 
 ## Engineering Skills for Go

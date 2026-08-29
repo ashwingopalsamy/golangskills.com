@@ -11,4 +11,3 @@ The skills may instruct an agent to inspect or modify files that the user has pl
 The plugins contain links to public technical documentation. Following those links may disclose ordinary web-request information to the destination site under that site's privacy policy.
 
 Material changes to this policy will be committed to the public repository with revision history. Privacy questions may be filed through the repository's public support channel.
-
