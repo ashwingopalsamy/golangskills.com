@@ -7,7 +7,7 @@
 </p>
 
 <p align="center">
-  <strong>20 evidence-backed skills · 3 focused collections · 1 canonical corpus</strong><br />
+  <strong>20 Go skills · 3 collections · 1 clean source</strong><br />
   Built by <a href="https://ashwingopalsamy.in">Ashwin Gopalsamy</a> for AI coding agents.
 </p>
 
@@ -18,7 +18,7 @@
   <img src="https://img.shields.io/badge/Go-1.24%20%7C%201.25%20%7C%201.26-00ADD8" alt="Go versions" />
 </p>
 
-Three non-overlapping collections for ChatGPT, Codex, Claude Code, Cursor, OpenCode, and `npx skills`.
+Three focused Go collections for ChatGPT, Codex, Claude Code, Cursor, OpenCode, and `npx skills`.
 
 | Collection | Best for | Skills |
 | --- | --- | ---: |
@@ -44,15 +44,14 @@ Or use a generated collection package in the Codex/ChatGPT plugin directory:
 
 Client layouts and package commands are documented in [docs/install.md](docs/install.md).
 
-## Why teams use it
+## The point
 
-- **Causal guidance:** recommendations are tied to invariants, failure schedules, and observable evidence—not style slogans.
-- **Progressive disclosure:** focused `SKILL.md` entrypoints keep discovery small; deeper decisions live one hop away in references.
-- **Domain ownership:** payment integrity routes to Fintech; cross-process failure routes to Distributed Systems; general Go work routes to Production Engineering.
-- **Portable by construction:** one canonical corpus generates Codex, Claude Code, Cursor, OpenCode, catalogs, search data, and `llms.txt`.
-- **Auditable:** 121 source records, 27 adjudicated claims, locked reference snapshots, provenance, checksums, and 146 development cases.
+- **Sharp boundaries:** payment integrity goes to Fintech. Cross-process failure goes to Distributed Systems. The rest goes to Production Engineering.
+- **Small entrypoints:** each `SKILL.md` gets to the decision quickly; deeper material sits in nearby references.
+- **One source, every client:** Codex, Claude Code, Cursor, OpenCode, catalogs, search data, and `llms.txt` are generated from the same corpus.
+- **Easy to inspect:** 121 sources, 27 claims, locked reference snapshots, provenance, checksums, and 146 development cases.
 
-The current combined discovery footprint is **7,774 characters**; every collection stays below 4,000. Category-leadership claims remain gated on the release-candidate benchmark contract.
+All three together use **7,774 discovery characters**; each collection stays below 4,000. Benchmark status is tracked in [`catalog/benchmark-status.json`](catalog/benchmark-status.json).
 
 ## Maintainer workflow
 
