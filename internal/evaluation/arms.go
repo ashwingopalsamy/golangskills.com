@@ -2,6 +2,7 @@ package evaluation
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -25,6 +26,63 @@ type armSpec struct {
 	SkillMap         string `json:"skill_map"`
 }
 
+const referenceRootOverrideEnv = "GOLANGSKILLS_REFERENCE_ROOT"
+
+// loadRuntimeArmInputs keeps committed manifests portable while allowing a
+// host to mount the same locked repositories at a different absolute root.
+// Only the reference-root prefix changes; repository names, commits, skill
+// inventories, maps, and installed bytes remain independently validated.
+func loadRuntimeArmInputs(repoRoot string) (armManifest, research.CorpusLock, error) {
+	manifestPath := filepath.Join(repoRoot, "evaluations", "arms", "manifest.json")
+	var manifest armManifest
+	if err := decodeStrictFile(manifestPath, &manifest); err != nil {
+		return armManifest{}, research.CorpusLock{}, err
+	}
+
+	var lock research.CorpusLock
+	if err := decodeStrictFile(filepath.Join(repoRoot, "research", "corpus-lock.json"), &lock); err != nil {
+		return armManifest{}, research.CorpusLock{}, err
+	}
+
+	override := strings.TrimSpace(os.Getenv(referenceRootOverrideEnv))
+	if override == "" {
+		return manifest, lock, nil
+	}
+	if !filepath.IsAbs(override) {
+		return armManifest{}, research.CorpusLock{}, fmt.Errorf("%s must be an absolute path", referenceRootOverrideEnv)
+	}
+	if !filepath.IsAbs(lock.ReferenceRoot) {
+		return armManifest{}, research.CorpusLock{}, errors.New("corpus lock reference_root must be absolute")
+	}
+
+	committedRoot := filepath.Clean(lock.ReferenceRoot)
+	runtimeRoot := filepath.Clean(override)
+	for index := range lock.Repositories {
+		resolved, err := rebaseReferencePath(committedRoot, runtimeRoot, lock.Repositories[index].Path)
+		if err != nil {
+			return armManifest{}, research.CorpusLock{}, fmt.Errorf("repository %s: %w", lock.Repositories[index].Name, err)
+		}
+		lock.Repositories[index].Path = resolved
+	}
+	for index := range manifest.Arms {
+		resolved, err := rebaseReferencePath(committedRoot, runtimeRoot, manifest.Arms[index].SkillsRoot)
+		if err != nil {
+			return armManifest{}, research.CorpusLock{}, fmt.Errorf("arm %s: %w", manifest.Arms[index].Name, err)
+		}
+		manifest.Arms[index].SkillsRoot = resolved
+	}
+	lock.ReferenceRoot = runtimeRoot
+	return manifest, lock, nil
+}
+
+func rebaseReferencePath(committedRoot, runtimeRoot, candidate string) (string, error) {
+	relative, err := filepath.Rel(filepath.Clean(committedRoot), filepath.Clean(candidate))
+	if err != nil || relative == ".." || strings.HasPrefix(relative, ".."+string(filepath.Separator)) {
+		return "", fmt.Errorf("path %q is outside committed reference root %q", candidate, committedRoot)
+	}
+	return filepath.Join(runtimeRoot, relative), nil
+}
+
 // ValidateArmManifest ensures frozen competitor mappings match the audited
 // repository commits without requiring the local reference snapshots. It is
 // suitable for clean-clone and CI repository validation.
@@ -39,18 +97,12 @@ func ValidateArmFiles(collection corpus.Collection) error {
 }
 
 func validateArmFiles(collection corpus.Collection, requireInstalled bool) error {
-	manifestPath := filepath.Join(collection.RepoRoot, "evaluations", "arms", "manifest.json")
-	var manifest armManifest
-	if err := decodeStrictFile(manifestPath, &manifest); err != nil {
+	manifest, lock, err := loadRuntimeArmInputs(collection.RepoRoot)
+	if err != nil {
 		return err
 	}
 	if manifest.SchemaVersion != 1 || manifest.FrozenOn == "" {
 		return fmt.Errorf("evaluation arm manifest requires schema version 1 and frozen_on")
-	}
-
-	var lock research.CorpusLock
-	if err := decodeStrictFile(filepath.Join(collection.RepoRoot, "research", "corpus-lock.json"), &lock); err != nil {
-		return err
 	}
 	locked := make(map[string]research.Repository, len(lock.Repositories))
 	for _, repository := range lock.Repositories {

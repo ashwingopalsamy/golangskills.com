@@ -46,9 +46,8 @@ func FrozenMatrixArms(collection corpus.Collection) ([]RunOptions, error) {
 	if err := ValidateArmFiles(collection); err != nil {
 		return nil, err
 	}
-	manifestPath := filepath.Join(collection.RepoRoot, "evaluations", "arms", "manifest.json")
-	var manifest armManifest
-	if err := decodeStrictFile(manifestPath, &manifest); err != nil {
+	manifest, _, err := loadRuntimeArmInputs(collection.RepoRoot)
+	if err != nil {
 		return nil, err
 	}
 	arms := []RunOptions{

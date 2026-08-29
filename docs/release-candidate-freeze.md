@@ -55,6 +55,14 @@ The current private overlay supports routing and non-executable semantic-quality
 
 All public benchmark inputs must already be committed and clean. Freeze creation fails when relevant paths are modified or untracked, when a competitor checkout differs from its audited commit, or when an in-repository secret is not ignored.
 
+If the locked competitors are installed somewhere other than the committed portable root `/reference-checkouts`, point the evaluator at their common absolute parent. Do not edit the corpus lock or arm manifest for a host-specific checkout:
+
+```sh
+export GOLANGSKILLS_REFERENCE_ROOT=/absolute/path/to/go-refs
+```
+
+The override changes runtime path resolution only. Freeze creation still verifies the locked repository identity and commit, rejects dirty checkouts, validates mappings and containment, and records the exact installed-skill digest.
+
 ```sh
 go run ./cmd/skillctl eval freeze \
   -id rc1 \

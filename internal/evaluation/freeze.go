@@ -643,9 +643,8 @@ func freezePublicCases(collection corpus.Collection) ([]FrozenCase, error) {
 }
 
 func freezeArms(collection corpus.Collection) ([]FrozenArm, error) {
-	manifestPath := filepath.Join(collection.RepoRoot, "evaluations", "arms", "manifest.json")
-	var manifest armManifest
-	if err := decodeStrictFile(manifestPath, &manifest); err != nil {
+	manifest, _, err := loadRuntimeArmInputs(collection.RepoRoot)
+	if err != nil {
 		return nil, err
 	}
 	oursDigest, err := digestPath(filepath.Join(collection.RepoRoot, "skills"))

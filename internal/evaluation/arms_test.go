@@ -92,6 +92,74 @@ func TestValidateArmManifestRejectsSkillsRootOutsideLockedRepository(t *testing.
 	}
 }
 
+func TestReferenceRootOverrideRebasesInstalledSnapshots(t *testing.T) {
+	repoRoot := t.TempDir()
+	committedRoot := filepath.Join(string(filepath.Separator), "reference-checkouts")
+	runtimeRoot := filepath.Join(t.TempDir(), "go-refs")
+	manifest := armManifest{SchemaVersion: 1, FrozenOn: "2026-08-29"}
+	lock := research.CorpusLock{SchemaVersion: 1, VerifiedOn: "2026-08-29", ReferenceRoot: committedRoot}
+
+	for index := 0; index < 5; index++ {
+		name := "competitor-" + string(rune('a'+index))
+		committedRepositoryRoot := filepath.Join(committedRoot, name)
+		mapPath := filepath.ToSlash(filepath.Join("evaluations", "arms", name+".skill-map.json"))
+		manifest.Arms = append(manifest.Arms, armSpec{
+			Name:             name,
+			RepositoryCommit: "commit-" + name,
+			SkillsRoot:       filepath.Join(committedRepositoryRoot, "skills"),
+			SkillMap:         mapPath,
+		})
+		lock.Repositories = append(lock.Repositories, research.Repository{
+			Name: name, Path: committedRepositoryRoot, Commit: "commit-" + name, BenchmarkEligible: true,
+			Skills: []research.Skill{{Name: "target-skill"}},
+		})
+		writeJSONForTest(t, filepath.Join(repoRoot, filepath.FromSlash(mapPath)), map[string]string{"canonical-skill": "target-skill"})
+		skillPath := filepath.Join(runtimeRoot, name, "skills", "target-skill", "SKILL.md")
+		if err := os.MkdirAll(filepath.Dir(skillPath), 0o755); err != nil {
+			t.Fatal(err)
+		}
+		if err := os.WriteFile(skillPath, []byte("# Target\n"), 0o644); err != nil {
+			t.Fatal(err)
+		}
+	}
+	writeJSONForTest(t, filepath.Join(repoRoot, "evaluations", "arms", "manifest.json"), manifest)
+	writeJSONForTest(t, filepath.Join(repoRoot, "research", "corpus-lock.json"), lock)
+	t.Setenv(referenceRootOverrideEnv, runtimeRoot)
+
+	collection := corpus.Collection{RepoRoot: repoRoot, Skills: []corpus.Skill{{Name: "canonical-skill"}}}
+	if err := ValidateArmFiles(collection); err != nil {
+		t.Fatalf("ValidateArmFiles() with runtime override error = %v", err)
+	}
+	arms, err := FrozenMatrixArms(collection)
+	if err != nil {
+		t.Fatalf("FrozenMatrixArms() error = %v", err)
+	}
+	if len(arms) != 7 {
+		t.Fatalf("FrozenMatrixArms() returned %d arms, want 7", len(arms))
+	}
+	for _, arm := range arms[2:] {
+		if !pathWithin(runtimeRoot, arm.SkillsRoot) {
+			t.Errorf("arm %s skills root %q is outside runtime root %q", arm.Arm, arm.SkillsRoot, runtimeRoot)
+		}
+	}
+}
+
+func TestReferenceRootOverrideRejectsRelativePath(t *testing.T) {
+	repoRoot := t.TempDir()
+	writeJSONForTest(t, filepath.Join(repoRoot, "evaluations", "arms", "manifest.json"), armManifest{SchemaVersion: 1, FrozenOn: "2026-08-29"})
+	writeJSONForTest(t, filepath.Join(repoRoot, "research", "corpus-lock.json"), research.CorpusLock{
+		SchemaVersion: 1,
+		VerifiedOn:    "2026-08-29",
+		ReferenceRoot: filepath.Join(string(filepath.Separator), "reference-checkouts"),
+	})
+	t.Setenv(referenceRootOverrideEnv, "relative/go-refs")
+
+	_, _, err := loadRuntimeArmInputs(repoRoot)
+	if err == nil || !strings.Contains(err.Error(), "must be an absolute path") {
+		t.Fatalf("loadRuntimeArmInputs() error = %v, want absolute-path error", err)
+	}
+}
+
 func writeJSONForTest(t *testing.T, path string, value any) {
 	t.Helper()
 	if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
