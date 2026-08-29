@@ -311,7 +311,7 @@ func checkNPMCollection(stage string, collection npmCollection, version string) 
 	}
 	for _, required := range []string{
 		"README.md", "LICENSE", "THIRD_PARTY_NOTICES.md", "manifest.json", "plugin.json",
-		".codex-plugin/plugin.json", ".claude-plugin/plugin.json", "skills",
+		".codex-plugin/plugin.json", ".claude-plugin/plugin.json", "assets/composer-icon.png", "assets/logo.png", "skills",
 		"cursor/.cursor/skills", "opencode/.agents/skills",
 	} {
 		info, err := os.Stat(filepath.Join(stage, filepath.FromSlash(required)))
@@ -323,7 +323,7 @@ func checkNPMCollection(stage string, collection npmCollection, version string) 
 		}
 	}
 	allowedPrefixes := []string{
-		"skills/", ".codex-plugin/", ".claude-plugin/", "cursor/", "opencode/",
+		"skills/", ".codex-plugin/", ".claude-plugin/", "assets/", "cursor/", "opencode/",
 		"plugin.json", "manifest.json", "package.json", "README.md", "LICENSE", "THIRD_PARTY_NOTICES.md",
 	}
 	forbiddenContent := []string{

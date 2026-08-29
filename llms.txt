@@ -2,7 +2,7 @@
 
 > Evidence-backed Agent Skills for production Go, distributed systems, and fintech. Not affiliated with Google or the Go project.
 
-## Engineering Skills for Go
+## Go: Production Engineering
 
 Evidence-backed Go language, API, service, testing, performance, security, operations, and engineering-review skills.
 
@@ -10,7 +10,7 @@ NPM package: @golangskills/engineering
 
 Canonical catalog: catalog/catalog.json
 
-## Distributed Systems Skills for Go
+## Go: Distributed Systems
 
 Invariant-driven Go concurrency, consistency, messaging, resilience, coordination, and distributed-change review skills.
 
@@ -18,7 +18,7 @@ NPM package: @golangskills/distributed-systems
 
 Canonical catalog: catalog/catalog.json
 
-## Fintech Skills for Go
+## Go: Fintech
 
 Financial-integrity skills for money, ledgers, payment lifecycles, idempotency, settlement, reconciliation, security, and compliance.
 

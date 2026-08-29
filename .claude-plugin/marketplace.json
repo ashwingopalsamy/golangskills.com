@@ -19,12 +19,14 @@
       "tags": [
         "go",
         "golang",
-        "software-engineering",
+        "backend",
+        "api-development",
         "testing",
         "performance",
-        "security"
+        "security",
+        "code-review"
       ],
-      "version": "0.3.0"
+      "version": "0.4.0"
     },
     {
       "category": "language-skills",
@@ -39,9 +41,11 @@
         "distributed-systems",
         "concurrency",
         "messaging",
-        "reliability"
+        "consistency",
+        "resilience",
+        "coordination"
       ],
-      "version": "0.3.0"
+      "version": "0.4.0"
     },
     {
       "category": "language-skills",
@@ -56,9 +60,11 @@
         "fintech",
         "payments",
         "ledger",
+        "idempotency",
+        "reconciliation",
         "financial-integrity"
       ],
-      "version": "0.3.0"
+      "version": "0.4.0"
     }
   ]
 }

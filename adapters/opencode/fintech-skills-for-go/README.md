@@ -1,4 +1,4 @@
-# Fintech Skills for Go
+# Go: Fintech
 
 Generated portable installation layout. Do not edit this adapter; edit canonical `skills/` and run `skillctl generate`.
 

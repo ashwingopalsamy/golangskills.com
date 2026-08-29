@@ -8,13 +8,15 @@
   "keywords": [
     "go",
     "golang",
-    "software-engineering",
+    "backend",
+    "api-development",
     "testing",
     "performance",
-    "security"
+    "security",
+    "code-review"
   ],
   "license": "Apache-2.0",
   "name": "engineering-skills-for-go",
   "repository": "https://github.com/ashwingopalsamy/golangskills.com",
-  "version": "0.3.0"
+  "version": "0.4.0"
 }

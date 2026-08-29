@@ -1,0 +1,57 @@
+{
+  "schema_version": 2,
+  "arm": "ours",
+  "cases": 13,
+  "passed": 8,
+  "pass_rate": 0.6153846153846154,
+  "mean_score": 0.6153846153846154,
+  "ci_lower_95": 0.35522891512665694,
+  "ci_upper_95": 0.8229029220223743,
+  "critical_failures": 2,
+  "collections": [
+    {
+      "collection": "distributed-systems-skills-for-go",
+      "cases": 4,
+      "passed": 2,
+      "pass_rate": 0.5,
+      "mean_score": 0.5
+    },
+    {
+      "collection": "engineering-skills-for-go",
+      "cases": 4,
+      "passed": 3,
+      "pass_rate": 0.75,
+      "mean_score": 0.75
+    },
+    {
+      "collection": "fintech-skills-for-go",
+      "cases": 5,
+      "passed": 3,
+      "pass_rate": 0.6,
+      "mean_score": 0.6
+    }
+  ],
+  "routing": {
+    "cases": 13,
+    "macro_f1": 0.32098765432098764,
+    "unrelated_cases": 2,
+    "false_activations": 0,
+    "false_activation_rate": 0
+  },
+  "tokens": {
+    "input_tokens": 225377,
+    "cached_input_tokens": 129792,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 334,
+    "reasoning_output_tokens": 225,
+    "score_per_k_input_tokens": 0.03549607990167586
+  },
+  "failure_cases": [
+    "review-go-distributed-change/avoid-local-json-api-review",
+    "review-go-distributed-change/route-ambiguous-outbox-symptom",
+    "review-go-engineering-change/route-production-symptom-review",
+    "review-go-fintech-change/avoid-generic-broker-review",
+    "review-go-fintech-change/route-duplicate-capture-symptom"
+  ],
+  "input": "evaluations/scores/2026-08-29-v0.4.0-routing-screen.jsonl"
+}

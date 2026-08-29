@@ -1,4 +1,4 @@
-# Engineering Skills for Go
+# Go: Production Engineering
 
 Generated portable installation layout. Do not edit this adapter; edit canonical `skills/` and run `skillctl generate`.
 

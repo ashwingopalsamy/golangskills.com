@@ -1,4 +1,4 @@
-// Command skillctl validates and generates the Engineering Skills for Go corpus.
+// Command skillctl validates and generates the Go plugin family corpus.
 package main
 
 import (
@@ -120,7 +120,7 @@ func runOpenAI(arguments []string, output io.Writer) error {
 	flags := flag.NewFlagSet("openai package", flag.ContinueOnError)
 	flags.SetOutput(io.Discard)
 	root := flags.String("root", "", "repository root")
-	version := flags.String("version", "0.3.0", "OpenAI plugin version")
+	version := flags.String("version", "0.4.0", "OpenAI plugin version")
 	if err := flags.Parse(arguments[1:]); err != nil {
 		return err
 	}
@@ -151,7 +151,7 @@ func runNPM(arguments []string, output io.Writer) error {
 	flags := flag.NewFlagSet("npm "+arguments[0], flag.ContinueOnError)
 	flags.SetOutput(io.Discard)
 	root := flags.String("root", "", "repository root")
-	version := flags.String("version", "0.3.0", "npm package version")
+	version := flags.String("version", "0.4.0", "npm package version")
 	if err := flags.Parse(arguments[1:]); err != nil {
 		return err
 	}
@@ -183,7 +183,7 @@ func runPackage(arguments []string, output io.Writer) error {
 	flags := flag.NewFlagSet("package", flag.ContinueOnError)
 	flags.SetOutput(io.Discard)
 	root := flags.String("root", "", "repository root")
-	version := flags.String("version", "0.3.0", "archive version")
+	version := flags.String("version", "0.4.0", "archive version")
 	if err := flags.Parse(arguments); err != nil {
 		return err
 	}
@@ -694,7 +694,7 @@ func runRelease(arguments []string, output io.Writer) error {
 	flags.SetOutput(io.Discard)
 	root := flags.String("root", "", "repository root")
 	reportPath := flags.String("report", "evaluations/reports/release-gates.json", "machine-evaluable leadership gate report")
-	npmVersion := flags.String("npm-version", "0.3.0", "expected npm package version")
+	npmVersion := flags.String("npm-version", "0.4.0", "expected npm package version")
 	if err := flags.Parse(arguments[1:]); err != nil {
 		return err
 	}

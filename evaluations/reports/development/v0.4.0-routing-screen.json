@@ -1,0 +1,50 @@
+{
+  "schema_version": 2,
+  "arm": "ours",
+  "cases": 13,
+  "passed": 13,
+  "pass_rate": 1,
+  "mean_score": 1,
+  "ci_lower_95": 0.7719046276458016,
+  "ci_upper_95": 0.9999999999999999,
+  "critical_failures": 0,
+  "collections": [
+    {
+      "collection": "distributed-systems-skills-for-go",
+      "cases": 4,
+      "passed": 4,
+      "pass_rate": 1,
+      "mean_score": 1
+    },
+    {
+      "collection": "engineering-skills-for-go",
+      "cases": 4,
+      "passed": 4,
+      "pass_rate": 1,
+      "mean_score": 1
+    },
+    {
+      "collection": "fintech-skills-for-go",
+      "cases": 5,
+      "passed": 5,
+      "pass_rate": 1,
+      "mean_score": 1
+    }
+  ],
+  "routing": {
+    "cases": 13,
+    "macro_f1": 1,
+    "unrelated_cases": 2,
+    "false_activations": 0,
+    "false_activation_rate": 0
+  },
+  "tokens": {
+    "input_tokens": 225421,
+    "cached_input_tokens": 129792,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 391,
+    "reasoning_output_tokens": 280,
+    "score_per_k_input_tokens": 0.05766987104129607
+  },
+  "input": "evaluations/scores/2026-08-29-v0.4.0-routing-screen.jsonl"
+}

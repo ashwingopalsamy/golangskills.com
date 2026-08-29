@@ -1,6 +1,6 @@
 {
   "name": "distributed-systems-skills-for-go",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Invariant-driven Go concurrency, consistency, messaging, resilience, coordination, and distributed-change review skills.",
   "author": {
     "name": "Ashwin Gopalsamy",
@@ -15,25 +15,29 @@
     "distributed-systems",
     "concurrency",
     "messaging",
-    "reliability"
+    "consistency",
+    "resilience",
+    "coordination"
   ],
   "skills": "./skills/",
   "interface": {
-    "displayName": "Distributed Systems Skills for Go",
-    "shortDescription": "Design failure-safe distributed Go systems.",
+    "displayName": "Go: Distributed Systems",
+    "shortDescription": "Build resilient Go systems",
     "longDescription": "Invariant-driven Go concurrency, consistency, messaging, resilience, coordination, and distributed-change review skills.",
     "developerName": "Ashwin Gopalsamy",
     "category": "Developer Tools",
     "capabilities": [
-      "Engineer Go systems",
-      "Diagnose failure modes",
-      "Review invariant-sensitive changes"
+      "Design failure-safe Go systems",
+      "Diagnose distributed failures",
+      "Review distributed changes"
     ],
     "websiteURL": "https://github.com/ashwingopalsamy/golangskills.com",
     "privacyPolicyURL": "https://github.com/ashwingopalsamy/golangskills.com/blob/main/docs/privacy.md",
     "termsOfServiceURL": "https://github.com/ashwingopalsamy/golangskills.com/blob/main/docs/terms.md",
     "defaultPrompt": [
-      "Select and use the most relevant skill from Distributed Systems Skills for Go to solve this Go task."
+      "Review this distributed Go change for consistency, ordering, retries, and partial-failure risk. Report concrete, causal findings only; skip style comments.",
+      "Diagnose this distributed Go production issue from evidence. Find the failure mechanism, violated invariant, and smallest safe recovery.",
+      "Design or implement this distributed Go change. Bound concurrency, retries, and ownership; preserve safety under ambiguity and failure."
     ],
     "brandColor": "#071A2B",
     "composerIcon": "./assets/composer-icon.png",

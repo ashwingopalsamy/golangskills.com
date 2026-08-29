@@ -1,4 +1,4 @@
-# Distributed Systems Skills for Go
+# Go: Distributed Systems
 
 Generated portable installation layout. Do not edit this adapter; edit canonical `skills/` and run `skillctl generate`.
 

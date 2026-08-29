@@ -14,13 +14,19 @@ import (
 	"strings"
 )
 
-const collectionVersion = "0.3.0"
+const collectionVersion = "0.4.0"
 
 //go:embed assets/generated/composer-icon.png
 var composerIconPNG []byte
 
-//go:embed assets/generated/logo.png
-var pluginLogoPNG []byte
+//go:embed assets/generated/engineering-logo.png
+var engineeringLogoPNG []byte
+
+//go:embed assets/generated/distributed-systems-logo.png
+var distributedSystemsLogoPNG []byte
+
+//go:embed assets/generated/fintech-logo.png
+var fintechLogoPNG []byte
 
 type collectionSpec struct {
 	Name             string
@@ -29,32 +35,56 @@ type collectionSpec struct {
 	ShortDescription string
 	LongDescription  string
 	Keywords         []string
+	Capabilities     []string
+	DefaultPrompts   []string
+	Logo             []byte
 }
 
 var collectionSpecs = []collectionSpec{
 	{
 		Name:             "engineering-skills-for-go",
 		NPMSlug:          "engineering",
-		DisplayName:      "Engineering Skills for Go",
-		ShortDescription: "Engineer and review production Go software.",
+		DisplayName:      "Go: Production Engineering",
+		ShortDescription: "Build, test & operate Go",
 		LongDescription:  "Evidence-backed Go language, API, service, testing, performance, security, operations, and engineering-review skills.",
-		Keywords:         []string{"go", "golang", "software-engineering", "testing", "performance", "security"},
+		Keywords:         []string{"go", "golang", "backend", "api-development", "testing", "performance", "security", "code-review"},
+		Capabilities:     []string{"Build production Go systems", "Test and diagnose Go software", "Review Go changes"},
+		DefaultPrompts: []string{
+			"Review this Go change for correctness and production risk. Report concrete, causal findings only; skip style comments.",
+			"Diagnose this Go production issue from evidence. Find the failure mechanism, what to measure next, and the smallest safe fix.",
+			"Design or implement this Go change. Preserve behavior and compatibility; make the smallest coherent change and verify it.",
+		},
+		Logo: engineeringLogoPNG,
 	},
 	{
 		Name:             "distributed-systems-skills-for-go",
 		NPMSlug:          "distributed-systems",
-		DisplayName:      "Distributed Systems Skills for Go",
-		ShortDescription: "Design failure-safe distributed Go systems.",
+		DisplayName:      "Go: Distributed Systems",
+		ShortDescription: "Build resilient Go systems",
 		LongDescription:  "Invariant-driven Go concurrency, consistency, messaging, resilience, coordination, and distributed-change review skills.",
-		Keywords:         []string{"go", "golang", "distributed-systems", "concurrency", "messaging", "reliability"},
+		Keywords:         []string{"go", "golang", "distributed-systems", "concurrency", "messaging", "consistency", "resilience", "coordination"},
+		Capabilities:     []string{"Design failure-safe Go systems", "Diagnose distributed failures", "Review distributed changes"},
+		DefaultPrompts: []string{
+			"Review this distributed Go change for consistency, ordering, retries, and partial-failure risk. Report concrete, causal findings only; skip style comments.",
+			"Diagnose this distributed Go production issue from evidence. Find the failure mechanism, violated invariant, and smallest safe recovery.",
+			"Design or implement this distributed Go change. Bound concurrency, retries, and ownership; preserve safety under ambiguity and failure.",
+		},
+		Logo: distributedSystemsLogoPNG,
 	},
 	{
 		Name:             "fintech-skills-for-go",
 		NPMSlug:          "fintech",
-		DisplayName:      "Fintech Skills for Go",
-		ShortDescription: "Build financially correct Go systems.",
+		DisplayName:      "Go: Fintech",
+		ShortDescription: "Build financially correct Go",
 		LongDescription:  "Financial-integrity skills for money, ledgers, payment lifecycles, idempotency, settlement, reconciliation, security, and compliance.",
-		Keywords:         []string{"go", "golang", "fintech", "payments", "ledger", "financial-integrity"},
+		Keywords:         []string{"go", "golang", "fintech", "payments", "ledger", "idempotency", "reconciliation", "financial-integrity"},
+		Capabilities:     []string{"Build payment and ledger systems", "Preserve financial integrity", "Review fintech changes"},
+		DefaultPrompts: []string{
+			"Review this Go payment or ledger change for financial-integrity risk. Report concrete, causal findings only; skip style comments.",
+			"Diagnose this fintech production issue from evidence. Find how money could be lost, duplicated, misstated, or concealed.",
+			"Design or implement this Go financial workflow. Preserve ledger balance, replay safety, lifecycle validity, and auditability.",
+		},
+		Logo: fintechLogoPNG,
 	},
 }
 
@@ -195,7 +225,7 @@ func Render(collection Collection) (map[string][]byte, error) {
 		}
 		outputs["plugins/"+spec.Name+"/plugin.json"] = agentPlugin
 		outputs["plugins/"+spec.Name+"/assets/composer-icon.png"] = composerIconPNG
-		outputs["plugins/"+spec.Name+"/assets/logo.png"] = pluginLogoPNG
+		outputs["plugins/"+spec.Name+"/assets/logo.png"] = spec.Logo
 
 		adapterReadme := renderAdapterReadme(spec, byCollection[spec.Name])
 		outputs["adapters/cursor/"+spec.Name+"/README.md"] = adapterReadme
@@ -418,8 +448,8 @@ func buildCodexPluginManifest(spec collectionSpec) pluginManifest {
 			WebsiteURL:        "https://github.com/ashwingopalsamy/golangskills.com",
 			PrivacyPolicyURL:  "https://github.com/ashwingopalsamy/golangskills.com/blob/main/docs/privacy.md",
 			TermsOfServiceURL: "https://github.com/ashwingopalsamy/golangskills.com/blob/main/docs/terms.md",
-			Capabilities:      []string{"Engineer Go systems", "Diagnose failure modes", "Review invariant-sensitive changes"},
-			DefaultPrompt:     []string{"Select and use the most relevant skill from " + spec.DisplayName + " to solve this Go task."},
+			Capabilities:      spec.Capabilities,
+			DefaultPrompt:     spec.DefaultPrompts,
 			BrandColor:        "#071A2B", ComposerIcon: "./assets/composer-icon.png", Logo: "./assets/logo.png",
 		},
 	}
