@@ -1,13 +1,13 @@
 {
   "archives": {
-    "distributed-systems-skills-for-go-0.3.0.tar.gz": "d3ba70c52a95dc0b88e06222fab8c6dca4ffb69f20a0947cd4e9a28bbfb13744",
-    "engineering-skills-for-go-0.3.0.tar.gz": "9441455e547f8955480425fdd1b4416bc223917fa352baeb8a8bce7e2331149f",
-    "fintech-skills-for-go-0.3.0.tar.gz": "395f352629c7ff9b3af1bb40a2990abc682867de287117e801218eb60e6f91c7"
+    "distributed-systems-skills-for-go-0.3.0.tar.gz": "cba5f17e6d4e2269d67c4ca82e94f574387821d6dc358f1bce8ea9103bc712a5",
+    "engineering-skills-for-go-0.3.0.tar.gz": "8e15a9785287ae50aa83f18df85961fd5f96fe6b99d30b52f2a172236c64f7a8",
+    "fintech-skills-for-go-0.3.0.tar.gz": "af1f6758f2d27bb5b266c3d7504fa69251206fefee4d3e5c10ba9f310423a4f0"
   },
   "claims": "knowledge/claims/canonical.json",
   "corpus_lock": "research/corpus-lock.json",
   "reproducible": true,
   "schema_version": 1,
-  "source_commit": "b9cabcdc76c2c0c9b17db8d412313aac44cf1a08",
+  "source_commit": "043ce19ff42cf87180c18e3bbb8a9d4ab46c04f8",
   "version": "0.3.0"
 }

@@ -33,6 +33,8 @@ Read [references/reconciliation-model.md](references/reconciliation-model.md) fo
 
 For FedACH post-origination processing, read [references/ach-returns-and-corrections.md](references/ach-returns-and-corrections.md). Keep returns, Notifications of Change, reversals, and disputed returns distinct; their value effects, roles, and permitted timing are not interchangeable.
 
+For rail business days, holidays, processing windows, cutoff extensions, and schedule changes, read [references/business-time-and-cutoffs.md](references/business-time-and-cutoffs.md). Persist the governing schedule and timezone version with each decision; a UTC calendar date, fixed offset, or `Add(24*time.Hour)` is not a rail calendar.
+
 ## Output contract
 
 State source evidence, matching key, timing policy, exception taxonomy, adjustment authorization, and replay behavior. Missing or silently auto-matched money is a critical defect.

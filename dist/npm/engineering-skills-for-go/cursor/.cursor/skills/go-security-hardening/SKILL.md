@@ -35,6 +35,8 @@ When an HTTP backend derives identity, scheme, host, or client certificate from 
 
 When designing or rotating encryption at rest, read [references/envelope-encryption-lifecycle.md](references/envelope-encryption-lifecycle.md). Separate KEK rewrap, DEK replacement, and algorithm migration; they repair different risks and require different evidence before old keys retire.
 
+When Go launches another program, read [references/process-execution-boundary.md](references/process-execution-boundary.md). Fix executable identity, avoid unintended shell interpretation, minimize inherited environment and descriptors, bound I/O, and own cancellation, reaping, and any descendant process set explicitly. `CommandContext` and `WaitDelay` are lifecycle mechanisms, not a sandbox or proof that grandchildren stopped.
+
 ## Output contract
 
 For each finding, state attacker control, required preconditions, protected effect, impact, and smallest correction. Separate exploitability from defense-in-depth.
