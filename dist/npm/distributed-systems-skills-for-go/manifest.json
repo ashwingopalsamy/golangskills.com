@@ -2,9 +2,9 @@
   "schema_version": 1,
   "package_name": "@golangskills/distributed-systems",
   "collection": "distributed-systems-skills-for-go",
-  "version": "0.3.0-rc.1",
+  "version": "0.4.0",
   "source_repository": "https://github.com/ashwingopalsamy/golangskills.com",
-  "source_commit": "043ce19ff42cf87180c18e3bbb8a9d4ab46c04f8",
+  "source_commit": "e685c13dce9787bcc4e0f486ad9196833c0fddc6",
   "skills": [
     "go-concurrency-lifecycle",
     "go-data-consistency",

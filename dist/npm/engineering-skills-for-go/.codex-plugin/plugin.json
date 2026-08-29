@@ -1,6 +1,6 @@
 {
   "name": "engineering-skills-for-go",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Evidence-backed Go language, API, service, testing, performance, security, operations, and engineering-review skills.",
   "author": {
     "name": "Ashwin Gopalsamy",
@@ -12,26 +12,35 @@
   "keywords": [
     "go",
     "golang",
-    "software-engineering",
+    "backend",
+    "api-development",
     "testing",
     "performance",
-    "security"
+    "security",
+    "code-review"
   ],
   "skills": "./skills/",
   "interface": {
-    "displayName": "Engineering Skills for Go",
-    "shortDescription": "Engineer and review production Go software.",
+    "displayName": "Go: Production Engineering",
+    "shortDescription": "Build, test \u0026 operate Go",
     "longDescription": "Evidence-backed Go language, API, service, testing, performance, security, operations, and engineering-review skills.",
     "developerName": "Ashwin Gopalsamy",
     "category": "Developer Tools",
     "capabilities": [
-      "Engineer Go systems",
-      "Diagnose failure modes",
-      "Review invariant-sensitive changes"
+      "Build production Go systems",
+      "Test and diagnose Go software",
+      "Review Go changes"
     ],
-    "websiteURL": "https://golangskills.com",
+    "websiteURL": "https://github.com/ashwingopalsamy/golangskills.com",
+    "privacyPolicyURL": "https://github.com/ashwingopalsamy/golangskills.com/blob/main/docs/privacy.md",
+    "termsOfServiceURL": "https://github.com/ashwingopalsamy/golangskills.com/blob/main/docs/terms.md",
     "defaultPrompt": [
-      "Select and use the most relevant skill from Engineering Skills for Go to solve this Go task."
-    ]
+      "Review this Go change for correctness and production risk. Report concrete, causal findings only; skip style comments.",
+      "Diagnose this Go production issue from evidence. Find the failure mechanism, what to measure next, and the smallest safe fix.",
+      "Design or implement this Go change. Preserve behavior and compatibility; make the smallest coherent change and verify it."
+    ],
+    "brandColor": "#071A2B",
+    "composerIcon": "./assets/composer-icon.png",
+    "logo": "./assets/logo.png"
   }
 }

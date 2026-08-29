@@ -1,6 +1,6 @@
 {
   "name": "fintech-skills-for-go",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Financial-integrity skills for money, ledgers, payment lifecycles, idempotency, settlement, reconciliation, security, and compliance.",
   "author": {
     "name": "Ashwin Gopalsamy",
@@ -15,23 +15,32 @@
     "fintech",
     "payments",
     "ledger",
+    "idempotency",
+    "reconciliation",
     "financial-integrity"
   ],
   "skills": "./skills/",
   "interface": {
-    "displayName": "Fintech Skills for Go",
-    "shortDescription": "Build financially correct Go systems.",
+    "displayName": "Go: Fintech",
+    "shortDescription": "Build financially correct Go",
     "longDescription": "Financial-integrity skills for money, ledgers, payment lifecycles, idempotency, settlement, reconciliation, security, and compliance.",
     "developerName": "Ashwin Gopalsamy",
     "category": "Developer Tools",
     "capabilities": [
-      "Engineer Go systems",
-      "Diagnose failure modes",
-      "Review invariant-sensitive changes"
+      "Build payment and ledger systems",
+      "Preserve financial integrity",
+      "Review fintech changes"
     ],
-    "websiteURL": "https://golangskills.com",
+    "websiteURL": "https://github.com/ashwingopalsamy/golangskills.com",
+    "privacyPolicyURL": "https://github.com/ashwingopalsamy/golangskills.com/blob/main/docs/privacy.md",
+    "termsOfServiceURL": "https://github.com/ashwingopalsamy/golangskills.com/blob/main/docs/terms.md",
     "defaultPrompt": [
-      "Select and use the most relevant skill from Fintech Skills for Go to solve this Go task."
-    ]
+      "Review this Go payment or ledger change for financial-integrity risk. Report concrete, causal findings only; skip style comments.",
+      "Diagnose this fintech production issue from evidence. Find how money could be lost, duplicated, misstated, or concealed.",
+      "Design or implement this Go financial workflow. Preserve ledger balance, replay safety, lifecycle validity, and auditability."
+    ],
+    "brandColor": "#071A2B",
+    "composerIcon": "./assets/composer-icon.png",
+    "logo": "./assets/logo.png"
   }
 }

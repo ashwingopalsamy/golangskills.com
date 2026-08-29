@@ -1,6 +1,6 @@
 {
   "name": "@golangskills/engineering",
-  "version": "0.3.0-rc.1",
+  "version": "0.4.0",
   "description": "Evidence-backed Go language, API, service, testing, performance, security, operations, and engineering-review skills.",
   "author": {
     "name": "Ashwin Gopalsamy",
@@ -9,7 +9,10 @@
   "license": "Apache-2.0",
   "keywords": [
     "agent-skills",
+    "api-development",
+    "backend",
     "claude-code",
+    "code-review",
     "codex",
     "cursor",
     "go",
@@ -17,7 +20,6 @@
     "opencode",
     "performance",
     "security",
-    "software-engineering",
     "testing"
   ],
   "repository": {

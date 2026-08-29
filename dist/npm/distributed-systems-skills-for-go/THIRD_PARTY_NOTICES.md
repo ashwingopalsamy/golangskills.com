@@ -15,3 +15,7 @@ The following local snapshots were used for comparative research and coverage an
 | Local Google Go style snapshot | Snapshot hash `43938d97db6c732a3fb77c2436594187fb8d97437d5938d5ab44a45d1cfb32d2` | No license file in the locked snapshot | Reference only; cite official upstream sources |
 
 If third-party text or code is intentionally incorporated later, its exact license notice must be added here before packaging. Names and trademarks remain the property of their respective owners. “Go” and the Go gopher are trademarks of Google LLC; this project is not endorsed by Google or the Go project.
+
+## Visual assets
+
+The three plugin directory logos use characters `59.png`, `51 2 Large.png`, and `61 2 Large.png` from Maria Letta's [Free Gophers Pack](https://github.com/MariaLetta/free-gophers-pack). The pack is dedicated to the public domain under CC0 1.0 Universal. The distributed images are resized without changing the character artwork. Attribution is included voluntarily for provenance; CC0 does not require it.

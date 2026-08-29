@@ -1,6 +1,6 @@
 {
   "name": "@golangskills/distributed-systems",
-  "version": "0.3.0-rc.1",
+  "version": "0.4.0",
   "description": "Invariant-driven Go concurrency, consistency, messaging, resilience, coordination, and distributed-change review skills.",
   "author": {
     "name": "Ashwin Gopalsamy",
@@ -12,13 +12,15 @@
     "claude-code",
     "codex",
     "concurrency",
+    "consistency",
+    "coordination",
     "cursor",
     "distributed-systems",
     "go",
     "golang",
     "messaging",
     "opencode",
-    "reliability"
+    "resilience"
   ],
   "repository": {
     "type": "git",
