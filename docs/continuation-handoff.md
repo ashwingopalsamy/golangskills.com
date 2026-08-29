@@ -15,6 +15,8 @@ Do not rerun the public runtime-reload/cutover case three times. Its completed a
 - Public repository: `ashwingopalsamy/golangskills.com`; use `gh` and git, never the in-app browser, for GitHub operations.
 - Working branch: `codex/category-leader`, based directly on remote `main` at `f4d49ff`.
 - Portable-reference milestone: `97ec8ff feat: support portable benchmark reference roots`.
+- Latest canonical source milestone: `043ce19 feat: deepen process hedging and business-time invariants`.
+- Latest provenance-bound package milestone: `c3388ac chore: package process hedging and business-time corpus`.
 - Preserve local `main` at `46b2551`. It contains the unsquashed 127-commit development history and has no common ancestry with the consolidated remote history. Do not reset, delete, rebase, merge, or force-push it.
 - Remote tags are `v0.1.0` and `v0.2.0`. There is intentionally no `v0.3.0-rc.1` or leadership tag.
 - Safe publication from the work branch is a normal fast-forward of remote `main`; the local historical `main` need not move.
@@ -23,8 +25,8 @@ Do not rerun the public runtime-reload/cutover case three times. Its completed a
 
 - 20 non-overlapping canonical skills: 8 Engineering, 6 Distributed Systems, and 6 Fintech.
 - Combined conservative discovery footprint: 7,774 characters; every collection is below 4,000.
-- Canonical corpus: 130 development cases, including 15 executable hidden-oracle fixtures and 36 fresh unrun transfer cases.
-- Evidence model: 115 sources, 24 adjudicated canonical claims, and all seven reference snapshots inventoried with 759 file hashes, 103 skill entrypoints, and 10,239 material-item dispositions.
+- Canonical corpus: 133 development cases, including 15 executable hidden-oracle fixtures and 39 fresh unrun transfer cases.
+- Evidence model: 121 source records, 27 adjudicated canonical claims, and all seven reference snapshots inventoried with 759 file hashes, 103 skill entrypoints, and 10,239 material-item dispositions.
 - Generated Codex, Claude Code, Cursor, and OpenCode layouts; catalogs, search/site data, `llms.txt`, archives, checksums, and provenance.
 - Three npm staging packages validate at `0.3.0-rc.1`: `@golangskills/engineering`, `@golangskills/distributed-systems`, and `@golangskills/fintech`. Registry checks on the status date returned 404 for all three; they are not published and must not be advertised as currently installable from npm.
 - The transport-cutover finding was generalized into canonical lifecycle guidance: successful reload requires atomic publication of the new transport, routing new work only to it, allowing already-started work to drain, and actively retiring obsolete idle connections after cutover.
@@ -58,7 +60,7 @@ The overlay has 60 unique cases:
 - 16 unrelated negative routing cases whose correct route is `NONE`;
 - 24 semantic-quality cases, eight per collection and exactly two per task type per collection.
 
-A disposable lock outside the repository successfully froze 130 public cases, seven arms, and the 60-case private commitment. Public-only verification, full private/environment verification, and a wrong-key fail-closed check all succeeded. No treatment or evaluator process was launched. This proves tooling readiness only; it is not a real RC freeze and provides no routing or quality score.
+A disposable lock outside the repository successfully froze the then-current 130 public cases, seven arms, and the 60-case private commitment. Public-only verification, full private/environment verification, and a wrong-key fail-closed check all succeeded. No treatment or evaluator process was launched. Three public cases were added afterward, so that disposable lock is intentionally stale and cannot become the real RC lock. This proves tooling readiness only; it provides no routing or quality score.
 
 Do not commit the real `evaluations/releases/rc1.lock.json` until the corpus and fresh scenario set are declared ready. Once committed, do not edit benchmark inputs before running its cells.
 
@@ -74,7 +76,7 @@ go run ./cmd/skillctl npm check -version 0.3.0-rc.1
 git diff --check
 ```
 
-`skillctl check` reports 20 skills, 130 cases, 115 sources, 24 claims, and 7,774 discovery characters. The private freeze verification used Codex CLI `0.149.1`, Go `1.24.2`, model and judge `gpt-5.6-sol`, native plus explicit modes, and three planned repetitions.
+`skillctl check` reports 20 skills, 133 cases, 121 source records, 27 claims, and 7,774 discovery characters. The private freeze verification used Codex CLI `0.149.1`, Go `1.24.2`, model and judge `gpt-5.6-sol`, native plus explicit modes, and three planned repetitions.
 
 ## Current release gates
 

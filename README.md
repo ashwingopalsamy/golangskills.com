@@ -18,8 +18,8 @@ Install one, two, or all three. No skill appears in more than one collection.
 
 - 20 focused skills with progressive one-hop references.
 - 7,774 conservative discovery characters for all three collections, including a 160-character path allowance per skill; every collection is below 4,000.
-- 130 development scenarios covering routing, confusion negatives, and deterministic quality criteria, including 15 executable failure-mode fixtures.
-- 24 primary-evidence claims with scope, qualifications, counterexamples, Go versions, owners, and provenance.
+- 133 development scenarios covering routing, confusion negatives, and deterministic quality criteria, including 15 executable failure-mode fixtures.
+- 27 primary-evidence claims and 121 source records with scope, qualifications, counterexamples, Go versions, owners, and provenance.
 - All seven local Go reference snapshots locked by remote, commit, license, 759 file hashes, 103 canonical skill entrypoints, and 10,239 material-item dispositions.
 - One canonical corpus generates Codex, Claude Code, Cursor, OpenCode, catalog, search, site, and `llms.txt` artifacts.
 - Published skills contain no executable resources or portable tool grants.

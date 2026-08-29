@@ -1,15 +1,15 @@
 {
   "schema_version": 1,
-  "generated_on": "2026-08-24",
+  "generated_on": "2026-08-29",
   "leadership_claim_eligible": false,
   "status": "development-screen-only",
   "current_corpus": {
-    "source_commit": "3953d40b511d3087b4d9ccd3092e65a4e18cc9e8",
+    "source_commit": "043ce19ff42cf87180c18e3bbb8a9d4ab46c04f8",
     "skills": 20,
-    "development_cases": 130,
+    "development_cases": 133,
     "executable_fixtures": 15,
-    "sources": 115,
-    "claims": 24,
+    "sources": 121,
+    "claims": 27,
     "discovery_characters": 7774,
     "maximum_description_overlap": 0.267,
     "fresh_unrun_cases": [
@@ -48,21 +48,24 @@
       "go-fintech-security-compliance/quality-webhook-authenticity-review",
       "go-service-boundaries/quality-http-json-message-boundary-review",
       "go-data-consistency/quality-etcd-watch-resync-review",
-      "go-payment-lifecycles/quality-stripe-multicapture-refund-review"
+      "go-payment-lifecycles/quality-stripe-multicapture-refund-review",
+      "go-security-hardening/quality-external-process-lifecycle-review",
+      "go-service-resilience/quality-hedged-read-attempt-ownership-review",
+      "go-clearing-settlement-reconciliation/quality-fedwire-business-time-cutoff-review"
     ],
-    "qualification": "The thirty-six fresh cases are committed public development inputs with no treatment results. They support no comparative claim until the release-candidate batch."
+    "qualification": "The thirty-nine fresh cases are committed public development inputs with no treatment results. They support no comparative claim until the release-candidate batch."
   },
   "current_packages": {
-    "version": "0.2.0",
-    "source_commit": "3953d40b511d3087b4d9ccd3092e65a4e18cc9e8",
-    "package_commit": "3e5725fc81ad4575d62aa91450771ede71dc3da9",
+    "version": "0.3.0",
+    "source_commit": "043ce19ff42cf87180c18e3bbb8a9d4ab46c04f8",
+    "package_commit": "c3388ac0664518f3507939b58f919a04e8829cf8",
     "reproduced_twice_byte_identically": true,
     "checksums": {
-      "engineering-skills-for-go": "91463b4d6e8a1a4bfa9478cf4718bdbfad87199fde22191af9d2b7c4b16d4149",
-      "distributed-systems-skills-for-go": "ce189c5a249f43f546bb0890a7774fb0a9737e7a950b5580e233126597840b79",
-      "fintech-skills-for-go": "3951610b9bc1d2ceb0fa63ab28e8c17000deea1f42e921ea03e852b95ace0c84"
+      "engineering-skills-for-go": "8e15a9785287ae50aa83f18df85961fd5f96fe6b99d30b52f2a172236c64f7a8",
+      "distributed-systems-skills-for-go": "cba5f17e6d4e2269d67c4ca82e94f574387821d6dc358f1bce8ea9103bc712a5",
+      "fintech-skills-for-go": "af1f6758f2d27bb5b266c3d7504fa69251206fefee4d3e5c10ba9f310423a4f0"
     },
-    "qualification": "Reproducible development packages; no release tag or new clean-clone behavioral result."
+    "qualification": "Stable archives and 0.3.0-rc.1 npm staging reproduced byte-identically; npm remains unpublished and there is no release tag or new clean-clone behavioral result."
   },
   "codex_screen": {
     "model": "gpt-5.6-sol",
@@ -749,10 +752,10 @@
     "temporary_installation_removed": true
   },
   "blocking_gates": [
-    "private release holdout not yet frozen and scored",
+    "the local 60-case private holdout passed disposable commitment verification but no current 133-case release lock has been committed or scored",
     "full baseline and multi-competitor behavioral quality matrix not yet completed",
-    "thirty-six newly committed cross-domain development cases have no treatment results and are reserved for the release-candidate batch",
-    "the quality half of the 130-scenario full-arm matrix and release-candidate hard-case repetitions are not yet completed",
+    "thirty-nine newly committed cross-domain development cases have no treatment results and are reserved for the release-candidate batch",
+    "the quality half of the 133-scenario full-arm matrix and release-candidate hard-case repetitions are not yet completed",
     "public routing macro-F1 clears its threshold, but private unrelated-prompt false activation is not established",
     "six post-edit hidden-oracle cases, including three behavior-rich multi-file additions, tied every arm; a less solution-revealing benchmark design is required",
     "the semantic judge is operational across eight public case families under a versioned protocol; the fresh settlement manifest family gives ours a quality-and-token lead over every skill competitor, but ours strictly passes zero repetitions and the lease/fencing transfer still ties baseline",
