@@ -1,0 +1,104 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SkillCard from "../components/SkillCard.astro";
+import { getSiteData } from "../lib/catalog.js";
+
+const { collections, skills } = getSiteData();
+const listItems = skills.map((skill, index) => ({
+  "@type": "ListItem",
+  position: index + 1,
+  name: skill.display_name,
+  url: `https://golangskills.com${skill.route}`,
+}));
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://golangskills.com/#website",
+      url: "https://golangskills.com/",
+      name: "Go Engineering Skills",
+      description: "A catalog of canonical Go skills for coding agents.",
+      inLanguage: "en",
+      publisher: { "@type": "Person", name: "Ashwin Gopalsamy" },
+    },
+    {
+      "@type": "CollectionPage",
+      "@id": "https://golangskills.com/#catalog",
+      url: "https://golangskills.com/",
+      name: "Go Engineering Skills",
+      isPartOf: { "@id": "https://golangskills.com/#website" },
+      mainEntity: { "@type": "ItemList", itemListElement: listItems },
+    },
+  ],
+};
+---
+<BaseLayout
+  title="Go Engineering Skills | Canonical Go skills for coding agents"
+  description={`Browse ${skills.length} canonical Go skills across production engineering, distributed systems, and fintech. Read each default prompt, compatibility boundary, and source.`}
+  canonicalPath="/"
+  markdownPath="/index.md"
+  imagePath="/assets/engineering-logo.png"
+  imageAlt="Go Engineering Skills mark"
+  basePath="./"
+  jsonLd={jsonLd}
+>
+  <section class="catalog-hero page-width" aria-labelledby="hero-title">
+    <p class="eyebrow"><span class="eyebrow-dot" aria-hidden="true"></span> Canonical context for Go engineering</p>
+    <h1 id="hero-title">The right Go skill<br><span>for the change in front of you.</span></h1>
+    <p class="hero-summary">Focused instructions for production engineering, distributed systems, and fintech. Read the default prompt, inspect its boundary, and open the canonical source.</p>
+    <div class="hero-links">
+      <a class="hero-link hero-link-primary" href="#catalog">Browse all skills <span aria-hidden="true">↓</span></a>
+      <a class="hero-link" href="./skill.html">Installation guide <span aria-hidden="true">↗</span></a>
+      <a class="hero-link" href="./llms.txt">Agent context <span aria-hidden="true">↗</span></a>
+    </div>
+  </section>
+
+  <section class="catalog-section page-width" id="catalog" aria-labelledby="catalog-title">
+    <div class="catalog-heading">
+      <div>
+        <p class="eyebrow">The catalog</p>
+        <h2 id="catalog-title">Browse Go skills</h2>
+      </div>
+      <p class="catalog-intro">Each card shows the canonical default prompt. Open a skill to inspect compatibility, evidence, and its complete Markdown source.</p>
+    </div>
+
+    <div class="cards-toolbar" aria-label="Catalog controls">
+      <nav class="fallback-filters" aria-label="Browse by collection">
+        <a class="filter-pill filter-pill-active" href="#catalog">All skills</a>
+        {collections.map((collection) => (
+          <a class="filter-pill" href={`./collections/${collection.slug}/index.html`}>{collection.display_name.replace(/^Go: /, "")}</a>
+        ))}
+      </nav>
+      <div class="enhanced-filters" role="group" aria-label="Filter skills by collection" hidden>
+        <button class="filter-pill filter-pill-active" type="button" data-filter="all" aria-pressed="true">All skills</button>
+        {collections.map((collection) => (
+          <button class="filter-pill" type="button" data-filter={collection.slug} aria-pressed="false">{collection.display_name.replace(/^Go: /, "")}</button>
+        ))}
+      </div>
+      <div class="toolbar-tools">
+        <a class="search-fallback" href="#catalog">Jump to catalog</a>
+        <label class="search-field enhanced-only" hidden>
+          <span aria-hidden="true">⌕</span>
+          <span class="visually-hidden">Search skills</span>
+          <input type="search" id="skill-search" autocomplete="off" placeholder="Search skills" aria-describedby="search-shortcut">
+          <span id="search-shortcut" class="visually-hidden">Use Command plus K on Mac or Control plus K on Windows to focus search.</span>
+          <kbd aria-hidden="true">⌘ K</kbd>
+        </label>
+        <label class="sort-control enhanced-only" hidden>
+          <span class="visually-hidden">Sort skills</span>
+          <select id="skill-sort" aria-label="Sort skills">
+            <option value="canonical">Canonical</option>
+            <option value="az">A–Z</option>
+          </select>
+        </label>
+      </div>
+    </div>
+
+    <div class="cards" data-skill-grid aria-label="Go skills">
+      {skills.map((skill, index) => <SkillCard skill={skill} index={index} basePath="./" />)}
+    </div>
+    <p class="no-results" data-no-results role="status" aria-live="polite" hidden>No skills match that search.</p>
+    <p class="visually-hidden" data-result-count role="status" aria-live="polite"></p>
+  </section>
+</BaseLayout>

@@ -1,0 +1,11 @@
+{
+  "name": "golangskills-static-site",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "astro build"
+  },
+  "devDependencies": {
+    "astro": "^7.3.5"
+  }
+}

@@ -1,0 +1,59 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import SkillCard from "../../components/SkillCard.astro";
+import { getSiteData } from "../../lib/catalog.js";
+
+export function getStaticPaths() {
+  return getSiteData().collections.map((collection) => ({ params: { slug: collection.slug }, props: { collection } }));
+}
+
+const { collection } = Astro.props;
+const listItems = collection.skills.map((skill, index) => ({
+  "@type": "ListItem",
+  position: index + 1,
+  name: skill.display_name,
+  url: `https://golangskills.com${skill.route}`,
+}));
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "@id": `https://golangskills.com${collection.route}#collection`,
+  url: `https://golangskills.com${collection.route}`,
+  name: collection.display_name,
+  description: collection.description,
+  isPartOf: { "@id": "https://golangskills.com/#website" },
+  mainEntity: { "@type": "ItemList", itemListElement: listItems },
+};
+---
+<BaseLayout
+  title={`${collection.display_name} | Go Engineering Skills`}
+  description={collection.description}
+  canonicalPath={collection.route}
+  markdownPath={`/collections/${collection.slug}.md`}
+  imagePath={collection.logoPath}
+  imageAlt={`${collection.display_name} collection mark`}
+  basePath="../../"
+  jsonLd={jsonLd}
+>
+  <div class="page-width detail-page">
+    <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../../index.html">Catalog</a><span aria-hidden="true">/</span><span>Collections</span><span aria-hidden="true">/</span><span aria-current="page">{collection.display_name}</span></nav>
+    <section class={`detail-hero collection-detail collection-${collection.slug}`}>
+      <img class="detail-mark" src={`../../${collection.logoPath.slice(1)}`} width="64" height="64" alt="" fetchpriority="high">
+      <p class="eyebrow">Collection / {collection.slug} / {collection.skill_count} skills</p>
+      <h1>{collection.display_name}</h1>
+      <p class="detail-lede">{collection.description}</p>
+      <div class="detail-actions"><a class="button button-dark" href="#skills">Browse these skills <span aria-hidden="true">↓</span></a><a class="button button-light" href={collection.sourceUrl}>Collection source <span aria-hidden="true">↗</span></a><a class="button button-light" href="../../skill.html">Install guide <span aria-hidden="true">↗</span></a></div>
+    </section>
+    <section class="detail-section" id="skills" aria-labelledby="skills-title">
+      <div class="detail-section-head"><div><p class="eyebrow">In this collection</p><h2 id="skills-title">Choose by task boundary.</h2></div><span>{collection.skill_count} skills</span></div>
+      <div class="skill-grid collection-skill-grid">
+        {collection.skills.map((skill) => <SkillCard skill={skill} basePath="../../" />)}
+      </div>
+    </section>
+    <section class="collection-boundary">
+      <div><p class="eyebrow">Source and boundary</p><h2>Inspect the collection before installing.</h2></div>
+      <p>The page is generated from the canonical skill catalog. The linked collection guide and each skill source define the exact scope; use them when a task spans more than one domain.</p>
+      <a class="text-link" href={collection.sourceUrl}>Read the canonical collection guide <span aria-hidden="true">↗</span></a>
+    </section>
+  </div>
+</BaseLayout>

@@ -1,0 +1,99 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getSiteData, skillByName } from "../../lib/catalog.js";
+
+export function getStaticPaths() {
+  return getSiteData().skills.map((skill) => ({ params: { id: skill.name }, props: { skill } }));
+}
+
+const { skill } = Astro.props;
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "@id": `https://golangskills.com${skill.route}`,
+  url: `https://golangskills.com${skill.route}`,
+  name: skill.display_name,
+  description: skill.description,
+  isPartOf: { "@id": "https://golangskills.com/#website" },
+  about: ["Go programming", skill.collectionDisplayName],
+  keywords: skill.tags,
+};
+const related = (names) => names.map((name) => skillByName(name)).filter(Boolean);
+const complements = related(skill.complements);
+const overlaps = related(skill.overlaps);
+---
+<BaseLayout
+  title={`${skill.display_name} | Go Engineering Skills`}
+  description={skill.description}
+  canonicalPath={skill.route}
+  markdownPath={skill.markdownRoute}
+  imagePath={skill.collectionLogoPath}
+  imageAlt={`${skill.collectionDisplayName} collection mark`}
+  basePath="../../"
+  jsonLd={jsonLd}
+>
+  <div class="page-width detail-page">
+    <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../../index.html">Catalog</a><span aria-hidden="true">/</span><a href={`../../collections/${skill.collectionSlug}/index.html`}>{skill.collectionDisplayName}</a><span aria-hidden="true">/</span><span aria-current="page">{skill.display_name}</span></nav>
+    <section class={`detail-hero skill-detail collection-${skill.collectionSlug}`}>
+      <p class="eyebrow">{skill.collectionDisplayName} <span aria-hidden="true">/</span> {skill.category}</p>
+      <h1>{skill.display_name}</h1>
+      <p class="detail-subtitle">{skill.short_description}</p>
+      <div class="detail-badges"><span class={`maturity maturity-${skill.maturity}`}>{skill.maturity}</span><span>Skill version {skill.version}</span><span>Go {skill.go_versions.minimum}+</span></div>
+      <div class="use-when"><span>Use when</span><p>{skill.description}</p></div>
+    </section>
+
+    <div class="skill-detail-grid">
+      <div class="detail-main">
+        <section class="detail-section" aria-labelledby="compatibility-title">
+          <p class="eyebrow">Compatibility</p><h2 id="compatibility-title">Go support and boundaries.</h2>
+          <p>{skill.compatibility}</p>
+          {skill.go_versions.guidance?.length > 0 && <p class="muted-copy">Additional Go guidance: {skill.go_versions.guidance.join(", ")}.</p>}
+          <ul class="tag-list" aria-label="Topics">{skill.tags.map((tag) => <li>{tag}</li>)}</ul>
+        </section>
+
+        <section class="detail-section" aria-labelledby="outline-title">
+          <p class="eyebrow">Inside the skill</p><h2 id="outline-title">Decision areas.</h2>
+          <ul class="section-list">{skill.headings.map((heading) => <li>{heading}</li>)}</ul>
+          <a class="text-link" href={skill.sourceUrl}>Read the complete canonical instructions <span aria-hidden="true">↗</span></a>
+        </section>
+
+        <section class="detail-section" aria-labelledby="evidence-title">
+          <div class="detail-section-head"><div><p class="eyebrow">Evidence record</p><h2 id="evidence-title">Sources behind the guidance.</h2></div><span>{skill.source_count} sources</span></div>
+          <p class="muted-copy">The canonical metadata records {skill.evaluation_count} evaluation cases. Case counts are inventory, not a measured effectiveness result.</p>
+          <ul class="source-list">
+            {skill.sources.map((source) => <li><a href={source.url}>{source.title} <span aria-hidden="true">↗</span></a><p>{source.publisher} · {source.kind}{source.verified_on && ` · verified ${source.verified_on}`}</p></li>)}
+          </ul>
+          <p class="muted-copy">Source classifications are recorded in the canonical metadata. A source count does not by itself establish a skill’s effectiveness.</p>
+        </section>
+
+        {(complements.length > 0 || overlaps.length > 0) && (
+          <section class="detail-section related-section" aria-labelledby="related-title">
+            <p class="eyebrow">Adjacent skills</p><h2 id="related-title">Continue by boundary.</h2>
+            {complements.length > 0 && <><h3>Complements</h3><ul class="related-list">{complements.map((item) => <li><a href={`../../skills/${item.name}/index.html`}>{item.display_name} <span aria-hidden="true">↗</span></a></li>)}</ul></>}
+            {overlaps.length > 0 && <><h3>Overlaps</h3><ul class="related-list">{overlaps.map((item) => <li><a href={`../../skills/${item.name}/index.html`}>{item.display_name} <span aria-hidden="true">↗</span></a></li>)}</ul></>}
+          </section>
+        )}
+      </div>
+
+      <aside class="detail-rail" aria-label="Install and source links">
+        <div class="rail-card">
+          <p class="eyebrow">Install the source</p>
+          <p>Use the documented installer, then invoke the skill by its canonical name.</p>
+          <pre class="rail-command"><code>npx skills add ashwingopalsamy/golangskills.com</code></pre>
+          <p class="muted-copy">Select and copy the install command.</p>
+          <a class="text-link" href="../../skill.html">Client installation guide <span aria-hidden="true">↗</span></a>
+        </div>
+        <div class="rail-card prompt-card">
+          <p class="eyebrow">Example invocation</p>
+          <p class="prompt-text">{skill.defaultPrompt}</p>
+        </div>
+        <div class="rail-links">
+          <a href={skill.sourceUrl}>SKILL.md <span>Canonical instructions</span></a>
+          <a href={skill.metadataUrl}>skill.json <span>Scope and evidence metadata</span></a>
+          <a href={skill.evaluationsUrl}>evals.json <span>Routing and quality cases</span></a>
+          <a href={`../../skills/${skill.name}.md`}>Markdown mirror <span>Same canonical instructions</span></a>
+        </div>
+      </aside>
+    </div>
+  </div>
+</BaseLayout>

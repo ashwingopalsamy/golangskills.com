@@ -1,0 +1,46 @@
+---
+const { skill, basePath = "./", index = 0 } = Astro.props;
+const searchText = [
+  skill.display_name,
+  skill.short_description,
+  skill.description,
+  skill.collectionDisplayName,
+  skill.category,
+  ...skill.tags,
+  skill.defaultPrompt,
+].join(" ");
+---
+<article
+  class="skill-card"
+  data-skill-card
+  data-name={skill.display_name}
+  data-collection={skill.collectionSlug}
+  data-index={index}
+  data-search={searchText}
+>
+  <div class="card-stage">
+    <div class="stage-heading">
+      <img src={`${basePath}assets/${skill.collectionSlug}-logo.png`} width="22" height="22" alt="" loading="lazy">
+      <span>{skill.collectionDisplayName}</span>
+      <span class="prompt-kind">default_prompt</span>
+    </div>
+    <blockquote class="prompt-preview" data-prompt-text>{skill.defaultPrompt}</blockquote>
+    <button
+      class="card-copy enhanced-only"
+      type="button"
+      hidden
+      data-copy-prompt
+      aria-label={`Copy default prompt for ${skill.display_name}`}
+    >
+      <svg class="copy-icon" viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8" height="9" rx="1.5"></rect><path d="M10.5 3H4.7A1.7 1.7 0 0 0 3 4.7v6"></path></svg>
+      <span>Copy prompt</span>
+    </button>
+  </div>
+  <div class="card-meta">
+    <h2 class="card-title"><a href={`${basePath}skills/${skill.name}/index.html`}>{skill.display_name}</a></h2>
+    <div class="card-foot">
+      <p>{skill.short_description}</p>
+      <a href={`${basePath}skills/${skill.name}.md`} aria-label={`Open Markdown for ${skill.display_name}`}>Markdown <span aria-hidden="true">↗</span></a>
+    </div>
+  </div>
+</article>

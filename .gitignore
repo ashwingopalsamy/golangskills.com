@@ -1,1 +1,6 @@
 .private/
+/node_modules/
+/.astro/
+/web/node_modules/
+/web/.astro/
+/site/
