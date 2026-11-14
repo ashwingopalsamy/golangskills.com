@@ -6,7 +6,7 @@
     "build": "astro build"
   },
   "devDependencies": {
-    "astro": "^7.3.5"
+    "astro": "^7.4.7"
   },
   "overrides": {
     "vite": ">=8.3.3 <9.0.0",
